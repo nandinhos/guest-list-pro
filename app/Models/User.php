@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'is_active',
     ];
 
     /**
@@ -43,6 +45,32 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => \App\Enums\UserRole::class,
+            'is_active' => 'boolean',
         ];
+    }
+
+    /**
+     * Permissões vinculadas a este usuário (se for Promoter).
+     */
+    public function permissions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PromoterPermission::class);
+    }
+
+    /**
+     * Convidados cadastrados por este usuário (se for Promoter).
+     */
+    public function guestsCreated(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Guest::class, 'promoter_id');
+    }
+
+    /**
+     * Convidados validados por este usuário (se for Validador).
+     */
+    public function guestsValidated(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Guest::class, 'checked_in_by');
     }
 }
