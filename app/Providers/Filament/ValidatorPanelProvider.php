@@ -33,6 +33,8 @@ class ValidatorPanelProvider extends PanelProvider
                 'gray' => Color::Slate,
             ])
             ->font('Inter')
+            ->defaultThemeMode(\Filament\Enums\ThemeMode::Dark)
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Validator/Resources'), for: 'App\Filament\Validator\Resources')
             ->discoverPages(in: app_path('Filament/Validator/Pages'), for: 'App\Filament\Validator\Pages')
             ->pages([

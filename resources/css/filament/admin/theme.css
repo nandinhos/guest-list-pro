@@ -1,0 +1,69 @@
+@import url('https://fonts.bunny.net/css?family=outfit:400,500,600,700');
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*.php';
+@source '../../../../resources/views/filament/**/*.blade.php';
+
+:root {
+    --font-heading: 'Outfit', sans-serif;
+}
+
+/* Heading Fonts */
+.fi-header-heading,
+.fi-widget-heading,
+.fi-page-heading,
+h1,
+h2,
+h3 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.025em;
+}
+
+/* Login Page Styling - Dark Mode */
+.dark .fi-simple-layout {
+    background: linear-gradient(135deg, rgb(15 23 42) 0%, rgb(30 27 75 / 0.4) 50%, rgb(15 23 42) 100%) !important;
+}
+
+/* Login Page Styling - Light Mode */
+.fi-simple-layout {
+    background: linear-gradient(135deg, rgb(248 250 252) 0%, rgb(224 231 255 / 0.4) 50%, rgb(248 250 252) 100%) !important;
+}
+
+/* Dashboard/Main Layout - Dark Mode */
+.dark .fi-body {
+    background: linear-gradient(180deg, rgb(15 23 42) 0%, rgb(30 27 75 / 0.2) 50%, rgb(15 23 42) 100%) !important;
+}
+
+/* Dashboard/Main Layout - Light Mode */
+.fi-body {
+    background: linear-gradient(180deg, rgb(248 250 252) 0%, rgb(224 231 255 / 0.3) 50%, rgb(248 250 252) 100%) !important;
+}
+
+/* Sidebar - Dark Mode */
+.dark .fi-sidebar {
+    background-color: rgba(15, 23, 42, 0.8) !important;
+    backdrop-filter: blur(8px);
+}
+
+/* Sidebar - Light Mode */
+.fi-sidebar {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(8px);
+}
+
+/* Login Card - Dark Mode */
+.dark .fi-simple-main {
+    background-color: rgba(30, 41, 59, 0.8) !important;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+}
+
+/* Login Card - Light Mode */
+.fi-simple-main {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+}

@@ -33,6 +33,8 @@ class PromoterPanelProvider extends PanelProvider
                 'gray' => Color::Slate,
             ])
             ->font('Inter')
+            ->defaultThemeMode(\Filament\Enums\ThemeMode::Dark)
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Promoter/Resources'), for: 'App\Filament\Promoter\Resources')
             ->discoverPages(in: app_path('Filament/Promoter/Pages'), for: 'App\Filament\Promoter\Pages')
             ->pages([
