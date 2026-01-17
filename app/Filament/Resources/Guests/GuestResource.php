@@ -20,6 +20,10 @@ class GuestResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?string $modelLabel = 'Convidado';
+
+    protected static ?string $pluralModelLabel = 'Convidados';
+
     public static function form(Schema $schema): Schema
     {
         return GuestForm::configure($schema);

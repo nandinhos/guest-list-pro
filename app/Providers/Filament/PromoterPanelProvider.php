@@ -29,7 +29,7 @@ class PromoterPanelProvider extends PanelProvider
             ->login()
             ->brandName('Portal do Promoter')
             ->colors([
-                'primary' => Color::Indigo,
+                'primary' => Color::Purple,
                 'gray' => Color::Slate,
             ])
             ->font('Inter')

@@ -20,6 +20,10 @@ class PromoterPermissionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?string $modelLabel = 'Permissão de Promoter';
+
+    protected static ?string $pluralModelLabel = 'Permissões de Promoters';
+
     public static function form(Schema $schema): Schema
     {
         return PromoterPermissionForm::configure($schema);
