@@ -17,7 +17,15 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
      */
     public function canAccessPanel(\Filament\Panel $panel): bool
     {
-        return $this->role === \App\Enums\UserRole::ADMIN && $this->is_active;
+        if ($panel->getId() === 'admin') {
+            return $this->role === \App\Enums\UserRole::ADMIN && $this->is_active;
+        }
+
+        if ($panel->getId() === 'promoter') {
+            return $this->role === \App\Enums\UserRole::PROMOTER && $this->is_active;
+        }
+
+        return false;
     }
 
     /**
