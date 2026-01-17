@@ -25,6 +25,10 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
             return $this->role === \App\Enums\UserRole::PROMOTER && $this->is_active;
         }
 
+        if ($panel->getId() === 'validator') {
+            return $this->role === \App\Enums\UserRole::VALIDATOR && $this->is_active;
+        }
+
         return false;
     }
 
