@@ -1,0 +1,288 @@
+/**
+ * Design System Tokens - Guest List Pro
+ *
+ * Tokens de design para cores, tipografia, espacamento,
+ * glassmorphism, sombras e transicoes.
+ */
+
+@theme {
+    /* ========================================
+       BRAND COLORS - POR PAINEL
+       ======================================== */
+
+    /* Admin - Indigo */
+    --color-brand-admin-50: oklch(0.97 0.02 265);
+    --color-brand-admin-100: oklch(0.94 0.04 265);
+    --color-brand-admin-200: oklch(0.87 0.08 265);
+    --color-brand-admin-300: oklch(0.76 0.12 265);
+    --color-brand-admin-400: oklch(0.64 0.17 265);
+    --color-brand-admin-500: oklch(0.55 0.22 265);
+    --color-brand-admin-600: oklch(0.47 0.22 265);
+    --color-brand-admin-700: oklch(0.40 0.19 265);
+    --color-brand-admin-800: oklch(0.34 0.15 265);
+    --color-brand-admin-900: oklch(0.28 0.11 265);
+    --color-brand-admin-950: oklch(0.20 0.08 265);
+
+    /* Promoter - Purple */
+    --color-brand-promoter-50: oklch(0.98 0.02 295);
+    --color-brand-promoter-100: oklch(0.95 0.04 295);
+    --color-brand-promoter-200: oklch(0.89 0.08 295);
+    --color-brand-promoter-300: oklch(0.79 0.14 295);
+    --color-brand-promoter-400: oklch(0.68 0.19 295);
+    --color-brand-promoter-500: oklch(0.58 0.22 295);
+    --color-brand-promoter-600: oklch(0.50 0.22 295);
+    --color-brand-promoter-700: oklch(0.43 0.19 295);
+    --color-brand-promoter-800: oklch(0.36 0.15 295);
+    --color-brand-promoter-900: oklch(0.29 0.11 295);
+    --color-brand-promoter-950: oklch(0.18 0.08 295);
+
+    /* Validator - Emerald */
+    --color-brand-validator-50: oklch(0.98 0.02 160);
+    --color-brand-validator-100: oklch(0.95 0.05 160);
+    --color-brand-validator-200: oklch(0.90 0.10 160);
+    --color-brand-validator-300: oklch(0.82 0.15 160);
+    --color-brand-validator-400: oklch(0.72 0.18 160);
+    --color-brand-validator-500: oklch(0.60 0.17 160);
+    --color-brand-validator-600: oklch(0.52 0.15 160);
+    --color-brand-validator-700: oklch(0.44 0.13 160);
+    --color-brand-validator-800: oklch(0.37 0.10 160);
+    --color-brand-validator-900: oklch(0.31 0.08 160);
+    --color-brand-validator-950: oklch(0.19 0.05 160);
+
+    /* ========================================
+       SEMANTIC COLORS
+       ======================================== */
+
+    --color-success-50: oklch(0.98 0.02 145);
+    --color-success-100: oklch(0.95 0.05 145);
+    --color-success-500: oklch(0.62 0.17 145);
+    --color-success-600: oklch(0.54 0.15 145);
+    --color-success-700: oklch(0.46 0.13 145);
+
+    --color-warning-50: oklch(0.99 0.02 85);
+    --color-warning-100: oklch(0.97 0.05 85);
+    --color-warning-500: oklch(0.75 0.18 85);
+    --color-warning-600: oklch(0.68 0.17 70);
+    --color-warning-700: oklch(0.55 0.15 55);
+
+    --color-danger-50: oklch(0.98 0.02 25);
+    --color-danger-100: oklch(0.95 0.04 25);
+    --color-danger-500: oklch(0.58 0.22 25);
+    --color-danger-600: oklch(0.50 0.20 25);
+    --color-danger-700: oklch(0.43 0.17 25);
+
+    --color-info-50: oklch(0.98 0.02 230);
+    --color-info-100: oklch(0.95 0.04 230);
+    --color-info-500: oklch(0.60 0.15 230);
+    --color-info-600: oklch(0.52 0.14 230);
+    --color-info-700: oklch(0.44 0.12 230);
+
+    /* ========================================
+       SURFACE COLORS
+       ======================================== */
+
+    --color-surface-50: oklch(0.99 0 0);
+    --color-surface-100: oklch(0.97 0 0);
+    --color-surface-200: oklch(0.93 0 0);
+    --color-surface-800: oklch(0.25 0.01 260);
+    --color-surface-900: oklch(0.20 0.01 260);
+    --color-surface-950: oklch(0.14 0.01 260);
+
+    /* ========================================
+       TYPOGRAPHY
+       ======================================== */
+
+    --font-family-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+    --font-family-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-family-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    /* Font Sizes */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    --font-size-5xl: 3rem;
+
+    /* Line Heights */
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    /* Font Weights */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* ========================================
+       SPACING
+       ======================================== */
+
+    --spacing-px: 1px;
+    --spacing-0: 0;
+    --spacing-0-5: 0.125rem;
+    --spacing-1: 0.25rem;
+    --spacing-1-5: 0.375rem;
+    --spacing-2: 0.5rem;
+    --spacing-2-5: 0.625rem;
+    --spacing-3: 0.75rem;
+    --spacing-3-5: 0.875rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+    --spacing-7: 1.75rem;
+    --spacing-8: 2rem;
+    --spacing-9: 2.25rem;
+    --spacing-10: 2.5rem;
+    --spacing-12: 3rem;
+    --spacing-14: 3.5rem;
+    --spacing-16: 4rem;
+    --spacing-20: 5rem;
+    --spacing-24: 6rem;
+
+    /* ========================================
+       BORDER RADIUS
+       ======================================== */
+
+    --radius-none: 0;
+    --radius-sm: 0.25rem;
+    --radius-default: 0.5rem;
+    --radius-md: 0.625rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.25rem;
+    --radius-3xl: 1.5rem;
+    --radius-full: 9999px;
+
+    /* ========================================
+       SHADOWS
+       ======================================== */
+
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-default: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 6px 10px -2px rgb(0 0 0 / 0.1), 0 3px 6px -3px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+    /* Elevated Shadow */
+    --shadow-elevated:
+        0 0 0 1px rgb(0 0 0 / 0.03),
+        0 2px 4px rgb(0 0 0 / 0.05),
+        0 12px 24px rgb(0 0 0 / 0.05);
+
+    /* ========================================
+       TRANSITIONS
+       ======================================== */
+
+    --ease-linear: linear;
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-premium: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    --duration-instant: 0ms;
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+    --duration-slower: 700ms;
+
+    /* ========================================
+       Z-INDEX
+       ======================================== */
+
+    --z-base: 0;
+    --z-dropdown: 10;
+    --z-sticky: 20;
+    --z-fixed: 30;
+    --z-modal-backdrop: 40;
+    --z-modal: 50;
+    --z-popover: 60;
+    --z-tooltip: 70;
+    --z-toast: 80;
+    --z-max: 9999;
+}
+
+/* ========================================
+   CSS CUSTOM PROPERTIES (Non-Tailwind)
+   ======================================== */
+
+:root {
+    /* Glassmorphism - Light Mode */
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-bg-subtle: rgba(255, 255, 255, 0.6);
+    --glass-bg-strong: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-blur: 12px;
+    --glass-blur-lg: 20px;
+    --glass-blur-xl: 32px;
+
+    /* Glow Shadows - Light Mode */
+    --shadow-glow-admin: 0 0 20px -5px oklch(0.55 0.22 265 / 0.3);
+    --shadow-glow-promoter: 0 0 20px -5px oklch(0.58 0.22 295 / 0.3);
+    --shadow-glow-validator: 0 0 20px -5px oklch(0.60 0.17 160 / 0.3);
+    --shadow-glow-success: 0 0 20px -5px oklch(0.62 0.17 145 / 0.3);
+    --shadow-glow-warning: 0 0 20px -5px oklch(0.75 0.18 85 / 0.3);
+    --shadow-glow-danger: 0 0 20px -5px oklch(0.58 0.22 25 / 0.3);
+
+    /* Glass Shadow */
+    --shadow-glass:
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 1px 2px rgba(0, 0, 0, 0.05),
+        0 4px 16px rgba(0, 0, 0, 0.1);
+
+    /* Gradient Backgrounds */
+    --gradient-admin: linear-gradient(135deg, oklch(0.55 0.22 265) 0%, oklch(0.47 0.22 265) 100%);
+    --gradient-promoter: linear-gradient(135deg, oklch(0.58 0.22 295) 0%, oklch(0.50 0.22 295) 100%);
+    --gradient-validator: linear-gradient(135deg, oklch(0.60 0.17 160) 0%, oklch(0.52 0.15 160) 100%);
+
+    /* Gradient Meshes for Backgrounds */
+    --gradient-mesh-light:
+        radial-gradient(at 0% 0%, oklch(0.94 0.04 265 / 0.3) 0%, transparent 50%),
+        radial-gradient(at 100% 0%, oklch(0.95 0.04 295 / 0.2) 0%, transparent 50%),
+        radial-gradient(at 100% 100%, oklch(0.95 0.05 160 / 0.2) 0%, transparent 50%),
+        radial-gradient(at 0% 100%, oklch(0.97 0.02 85 / 0.2) 0%, transparent 50%);
+
+    /* Overlay */
+    --overlay-light: rgba(255, 255, 255, 0.5);
+    --overlay-dark: rgba(0, 0, 0, 0.5);
+}
+
+/* Dark Mode Tokens */
+.dark {
+    --glass-bg: rgba(30, 41, 59, 0.8);
+    --glass-bg-subtle: rgba(30, 41, 59, 0.6);
+    --glass-bg-strong: rgba(15, 23, 42, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.1);
+
+    /* Glow Shadows - Dark Mode (more intense) */
+    --shadow-glow-admin: 0 0 30px -5px oklch(0.55 0.22 265 / 0.4);
+    --shadow-glow-promoter: 0 0 30px -5px oklch(0.58 0.22 295 / 0.4);
+    --shadow-glow-validator: 0 0 30px -5px oklch(0.60 0.17 160 / 0.4);
+    --shadow-glow-success: 0 0 30px -5px oklch(0.62 0.17 145 / 0.4);
+    --shadow-glow-warning: 0 0 30px -5px oklch(0.75 0.18 85 / 0.4);
+    --shadow-glow-danger: 0 0 30px -5px oklch(0.58 0.22 25 / 0.4);
+
+    /* Glass Shadow - Dark */
+    --shadow-glass:
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        0 1px 2px rgba(0, 0, 0, 0.2),
+        0 4px 16px rgba(0, 0, 0, 0.3);
+
+    /* Gradient Meshes for Dark Backgrounds */
+    --gradient-mesh-light:
+        radial-gradient(at 0% 0%, oklch(0.35 0.10 265 / 0.3) 0%, transparent 50%),
+        radial-gradient(at 100% 0%, oklch(0.35 0.10 295 / 0.2) 0%, transparent 50%),
+        radial-gradient(at 100% 100%, oklch(0.35 0.08 160 / 0.2) 0%, transparent 50%),
+        radial-gradient(at 0% 100%, oklch(0.35 0.05 85 / 0.2) 0%, transparent 50%);
+
+    --overlay-light: rgba(255, 255, 255, 0.1);
+    --overlay-dark: rgba(0, 0, 0, 0.7);
+}

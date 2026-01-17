@@ -1,0 +1,510 @@
+/**
+ * Design System Utilities - Guest List Pro
+ *
+ * Classes utilitarias para glassmorphism, hover effects,
+ * focus states, gradients e mais.
+ */
+
+/* ========================================
+   GLASSMORPHISM
+   ======================================== */
+
+/* Glass Base */
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+}
+
+.glass-subtle {
+    background: var(--glass-bg-subtle);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+}
+
+.glass-strong {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur-lg));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+    border: 1px solid var(--glass-border);
+}
+
+/* Glass Card - Completo com sombra e radius */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-glass);
+}
+
+.glass-card-lg {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur-lg));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-glass);
+}
+
+/* ========================================
+   HOVER EFFECTS
+   ======================================== */
+
+/* Hover Lift - Eleva o elemento */
+.hover-lift {
+    transition:
+        transform var(--duration-normal) var(--ease-premium),
+        box-shadow var(--duration-normal) var(--ease-premium);
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevated);
+}
+
+/* Hover Scale - Escala suave */
+.hover-scale {
+    transition: transform var(--duration-normal) var(--ease-bounce);
+}
+
+.hover-scale:hover {
+    transform: scale(1.02);
+}
+
+/* Hover Scale Small */
+.hover-scale-sm {
+    transition: transform var(--duration-fast) var(--ease-bounce);
+}
+
+.hover-scale-sm:hover {
+    transform: scale(1.01);
+}
+
+/* Hover Glow - Por painel */
+.hover-glow-admin {
+    transition: box-shadow var(--duration-normal) var(--ease-premium);
+}
+
+.hover-glow-admin:hover {
+    box-shadow: var(--shadow-glow-admin);
+}
+
+.hover-glow-promoter {
+    transition: box-shadow var(--duration-normal) var(--ease-premium);
+}
+
+.hover-glow-promoter:hover {
+    box-shadow: var(--shadow-glow-promoter);
+}
+
+.hover-glow-validator {
+    transition: box-shadow var(--duration-normal) var(--ease-premium);
+}
+
+.hover-glow-validator:hover {
+    box-shadow: var(--shadow-glow-validator);
+}
+
+/* Hover Brightness */
+.hover-bright {
+    transition: filter var(--duration-fast) var(--ease-premium);
+}
+
+.hover-bright:hover {
+    filter: brightness(1.1);
+}
+
+/* ========================================
+   FOCUS STATES
+   ======================================== */
+
+/* Focus Ring Base */
+.focus-ring {
+    outline: none;
+    transition: box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.focus-ring:focus,
+.focus-ring:focus-visible {
+    box-shadow:
+        0 0 0 2px var(--glass-bg-strong),
+        0 0 0 4px oklch(0.55 0.22 265 / 0.5);
+}
+
+/* Focus Ring por Painel */
+.focus-ring-admin:focus,
+.focus-ring-admin:focus-visible {
+    box-shadow:
+        0 0 0 2px var(--glass-bg-strong),
+        0 0 0 4px oklch(0.55 0.22 265 / 0.5);
+}
+
+.focus-ring-promoter:focus,
+.focus-ring-promoter:focus-visible {
+    box-shadow:
+        0 0 0 2px var(--glass-bg-strong),
+        0 0 0 4px oklch(0.58 0.22 295 / 0.5);
+}
+
+.focus-ring-validator:focus,
+.focus-ring-validator:focus-visible {
+    box-shadow:
+        0 0 0 2px var(--glass-bg-strong),
+        0 0 0 4px oklch(0.60 0.17 160 / 0.5);
+}
+
+/* Focus Within */
+.focus-within-ring:focus-within {
+    box-shadow:
+        0 0 0 2px var(--glass-bg-strong),
+        0 0 0 4px oklch(0.55 0.22 265 / 0.5);
+}
+
+/* ========================================
+   GRADIENT BORDERS
+   ======================================== */
+
+.gradient-border {
+    position: relative;
+    background: var(--glass-bg);
+    border-radius: var(--radius-xl);
+}
+
+.gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+        135deg,
+        oklch(0.55 0.22 265) 0%,
+        oklch(0.58 0.22 295) 50%,
+        oklch(0.60 0.17 160) 100%
+    );
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+}
+
+/* Gradient Border por Painel */
+.gradient-border-admin::before {
+    background: linear-gradient(
+        135deg,
+        oklch(0.64 0.17 265) 0%,
+        oklch(0.47 0.22 265) 100%
+    );
+}
+
+.gradient-border-promoter::before {
+    background: linear-gradient(
+        135deg,
+        oklch(0.68 0.19 295) 0%,
+        oklch(0.50 0.22 295) 100%
+    );
+}
+
+.gradient-border-validator::before {
+    background: linear-gradient(
+        135deg,
+        oklch(0.72 0.18 160) 0%,
+        oklch(0.52 0.15 160) 100%
+    );
+}
+
+/* ========================================
+   TEXT GRADIENTS
+   ======================================== */
+
+.text-gradient {
+    background: linear-gradient(
+        135deg,
+        oklch(0.55 0.22 265) 0%,
+        oklch(0.58 0.22 295) 50%,
+        oklch(0.60 0.17 160) 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-admin {
+    background: var(--gradient-admin);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-promoter {
+    background: var(--gradient-promoter);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-validator {
+    background: var(--gradient-validator);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ========================================
+   SCROLLBAR
+   ======================================== */
+
+.scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.70 0 0 / 0.3) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background: oklch(0.70 0 0 / 0.3);
+    border-radius: var(--radius-full);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.60 0 0 / 0.5);
+}
+
+.dark .scrollbar-thin {
+    scrollbar-color: oklch(0.50 0 0 / 0.3) transparent;
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: oklch(0.50 0 0 / 0.3);
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.60 0 0 / 0.5);
+}
+
+/* Hide Scrollbar */
+.scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+}
+
+/* ========================================
+   SKELETON LOADING
+   ======================================== */
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        oklch(0.93 0 0) 0%,
+        oklch(0.96 0 0) 50%,
+        oklch(0.93 0 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s linear infinite;
+    border-radius: var(--radius-default);
+}
+
+.dark .skeleton {
+    background: linear-gradient(
+        90deg,
+        oklch(0.25 0.01 260) 0%,
+        oklch(0.30 0.01 260) 50%,
+        oklch(0.25 0.01 260) 100%
+    );
+    background-size: 200% 100%;
+}
+
+/* ========================================
+   BACKDROP / OVERLAY
+   ======================================== */
+
+.backdrop-blur-glass {
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.backdrop-blur-glass-lg {
+    backdrop-filter: blur(var(--glass-blur-lg));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+}
+
+.backdrop-blur-glass-xl {
+    backdrop-filter: blur(var(--glass-blur-xl));
+    -webkit-backdrop-filter: blur(var(--glass-blur-xl));
+}
+
+.overlay-light {
+    background: var(--overlay-light);
+}
+
+.overlay-dark {
+    background: var(--overlay-dark);
+}
+
+/* ========================================
+   INTERACTIVE STATES
+   ======================================== */
+
+/* Disabled State */
+.interactive-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Loading State */
+.interactive-loading {
+    position: relative;
+    cursor: wait;
+    pointer-events: none;
+}
+
+.interactive-loading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-light);
+    border-radius: inherit;
+}
+
+/* Active/Pressed State */
+.interactive-pressed {
+    transform: scale(0.98);
+}
+
+/* ========================================
+   SELECTION
+   ======================================== */
+
+::selection {
+    background: oklch(0.55 0.22 265 / 0.3);
+    color: oklch(0.20 0.08 265);
+}
+
+.dark ::selection {
+    background: oklch(0.55 0.22 265 / 0.4);
+    color: oklch(0.97 0.02 265);
+}
+
+/* ========================================
+   UTILITY HELPERS
+   ======================================== */
+
+/* Truncate with Ellipsis */
+.truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Smooth Scroll */
+.scroll-smooth {
+    scroll-behavior: smooth;
+}
+
+/* Hide Visually (Acessibilidade) */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Not SR Only (mostrar quando focado) */
+.not-sr-only {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+}
+
+/* ========================================
+   MESH GRADIENT BACKGROUND
+   ======================================== */
+
+.bg-mesh {
+    background-image: var(--gradient-mesh-light);
+    background-attachment: fixed;
+}
+
+/* ========================================
+   TYPOGRAPHY UTILITIES
+   ======================================== */
+
+.font-display {
+    font-family: var(--font-family-display);
+}
+
+.font-body {
+    font-family: var(--font-family-body);
+}
+
+.font-mono {
+    font-family: var(--font-family-mono);
+}
+
+/* ========================================
+   TRANSITION UTILITIES
+   ======================================== */
+
+.transition-premium {
+    transition-timing-function: var(--ease-premium);
+    transition-duration: var(--duration-normal);
+}
+
+.transition-bounce {
+    transition-timing-function: var(--ease-bounce);
+    transition-duration: var(--duration-normal);
+}
+
+.transition-spring {
+    transition-timing-function: var(--ease-spring);
+    transition-duration: var(--duration-normal);
+}
+
+/* ========================================
+   CONTAINER QUERIES (Future-proof)
+   ======================================== */
+
+@supports (container-type: inline-size) {
+    .container-query {
+        container-type: inline-size;
+    }
+}

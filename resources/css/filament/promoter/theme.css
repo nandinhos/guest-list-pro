@@ -1,7 +1,7 @@
 /**
- * Filament Admin Theme - Guest List Pro
+ * Filament Promoter Theme - Guest List Pro
  *
- * Tema do painel Admin com cores Indigo.
+ * Tema do painel Promoter com cores Purple.
  * Estende o base-theme.css com customizacoes especificas.
  */
 
@@ -15,29 +15,29 @@
 @import '../shared/base-theme.css';
 
 /* Source files for Tailwind */
-@source '../../../../app/Filament/Admin/**/*.php';
-@source '../../../../resources/views/filament/admin/**/*.blade.php';
+@source '../../../../app/Filament/Promoter/**/*.php';
+@source '../../../../resources/views/filament/promoter/**/*.blade.php';
 
 /* ========================================
-   ADMIN PANEL COLORS (INDIGO)
+   PROMOTER PANEL COLORS (PURPLE)
    ======================================== */
 
 :root {
     /* Panel brand color */
-    --panel-color: oklch(0.55 0.22 265);
-    --panel-color-light: oklch(0.64 0.17 265);
-    --panel-color-dark: oklch(0.47 0.22 265);
-    --panel-color-50: oklch(0.97 0.02 265);
-    --panel-color-100: oklch(0.94 0.04 265);
-    --panel-color-500: oklch(0.55 0.22 265);
-    --panel-color-600: oklch(0.47 0.22 265);
+    --panel-color: oklch(0.58 0.22 295);
+    --panel-color-light: oklch(0.68 0.19 295);
+    --panel-color-dark: oklch(0.50 0.22 295);
+    --panel-color-50: oklch(0.98 0.02 295);
+    --panel-color-100: oklch(0.95 0.04 295);
+    --panel-color-500: oklch(0.58 0.22 295);
+    --panel-color-600: oklch(0.50 0.22 295);
 
     /* Glow effect */
-    --shadow-glow: 0 0 20px -5px oklch(0.55 0.22 265 / 0.3);
+    --shadow-glow: 0 0 20px -5px oklch(0.58 0.22 295 / 0.3);
 }
 
 .dark {
-    --shadow-glow: 0 0 30px -5px oklch(0.55 0.22 265 / 0.4);
+    --shadow-glow: 0 0 30px -5px oklch(0.58 0.22 295 / 0.4);
 }
 
 /* ========================================
@@ -47,18 +47,18 @@
 /* Light mode gradient */
 .fi-body {
     background:
-        radial-gradient(ellipse at 0% 0%, oklch(0.94 0.04 265 / 0.4) 0%, transparent 50%),
-        radial-gradient(ellipse at 100% 100%, oklch(0.95 0.04 295 / 0.2) 0%, transparent 50%),
-        linear-gradient(180deg, rgb(248 250 252) 0%, rgb(241 245 249) 100%) !important;
+        radial-gradient(ellipse at 0% 0%, oklch(0.95 0.04 295 / 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, oklch(0.94 0.04 265 / 0.2) 0%, transparent 50%),
+        linear-gradient(180deg, rgb(250 250 255) 0%, rgb(245 243 255) 100%) !important;
     background-attachment: fixed !important;
 }
 
 /* Dark mode gradient */
 .dark .fi-body {
     background:
-        radial-gradient(ellipse at 0% 0%, oklch(0.30 0.10 265 / 0.3) 0%, transparent 50%),
-        radial-gradient(ellipse at 100% 100%, oklch(0.25 0.08 295 / 0.2) 0%, transparent 50%),
-        linear-gradient(180deg, rgb(15 23 42) 0%, rgb(15 23 42) 100%) !important;
+        radial-gradient(ellipse at 0% 0%, oklch(0.30 0.12 295 / 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, oklch(0.25 0.08 265 / 0.2) 0%, transparent 50%),
+        linear-gradient(180deg, rgb(15 15 30) 0%, rgb(15 15 30) 100%) !important;
     background-attachment: fixed !important;
 }
 
@@ -69,17 +69,17 @@
 /* Light mode login */
 .fi-simple-layout {
     background:
-        radial-gradient(ellipse at 30% 20%, oklch(0.94 0.04 265 / 0.5) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 80%, oklch(0.95 0.04 295 / 0.3) 0%, transparent 50%),
-        linear-gradient(135deg, rgb(248 250 252) 0%, rgb(241 245 249) 100%) !important;
+        radial-gradient(ellipse at 30% 20%, oklch(0.95 0.04 295 / 0.5) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, oklch(0.94 0.04 320 / 0.3) 0%, transparent 50%),
+        linear-gradient(135deg, rgb(250 250 255) 0%, rgb(245 243 255) 100%) !important;
 }
 
 /* Dark mode login */
 .dark .fi-simple-layout {
     background:
-        radial-gradient(ellipse at 30% 20%, oklch(0.30 0.12 265 / 0.4) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 80%, oklch(0.25 0.10 295 / 0.3) 0%, transparent 50%),
-        linear-gradient(135deg, rgb(15 23 42) 0%, rgb(15 23 42) 100%) !important;
+        radial-gradient(ellipse at 30% 20%, oklch(0.30 0.14 295 / 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, oklch(0.25 0.10 320 / 0.3) 0%, transparent 50%),
+        linear-gradient(135deg, rgb(15 15 30) 0%, rgb(15 15 30) 100%) !important;
 }
 
 /* Login card */
@@ -98,29 +98,29 @@
 
 /* Active sidebar item */
 .fi-sidebar-item-active {
-    background: linear-gradient(135deg, oklch(0.55 0.22 265 / 0.15) 0%, oklch(0.47 0.22 265 / 0.1) 100%) !important;
-    border-left: 3px solid oklch(0.55 0.22 265) !important;
+    background: linear-gradient(135deg, oklch(0.58 0.22 295 / 0.15) 0%, oklch(0.50 0.22 295 / 0.1) 100%) !important;
+    border-left: 3px solid oklch(0.58 0.22 295) !important;
     margin-left: -3px;
     padding-left: calc(0.75rem + 3px) !important;
 }
 
 .dark .fi-sidebar-item-active {
-    background: linear-gradient(135deg, oklch(0.55 0.22 265 / 0.25) 0%, oklch(0.47 0.22 265 / 0.15) 100%) !important;
+    background: linear-gradient(135deg, oklch(0.58 0.22 295 / 0.25) 0%, oklch(0.50 0.22 295 / 0.15) 100%) !important;
 }
 
 /* Active item text color */
 .fi-sidebar-item-active .fi-sidebar-item-label {
-    color: oklch(0.47 0.22 265) !important;
+    color: oklch(0.50 0.22 295) !important;
     font-weight: 600;
 }
 
 .dark .fi-sidebar-item-active .fi-sidebar-item-label {
-    color: oklch(0.76 0.12 265) !important;
+    color: oklch(0.79 0.14 295) !important;
 }
 
 /* Active item icon */
 .fi-sidebar-item-active .fi-sidebar-item-icon {
-    color: oklch(0.55 0.22 265) !important;
+    color: oklch(0.58 0.22 295) !important;
 }
 
 /* ========================================
@@ -129,18 +129,18 @@
 
 /* Primary button with gradient */
 .fi-btn-primary {
-    background: linear-gradient(135deg, oklch(0.55 0.22 265) 0%, oklch(0.47 0.22 265) 100%) !important;
+    background: linear-gradient(135deg, oklch(0.58 0.22 295) 0%, oklch(0.50 0.22 295) 100%) !important;
     border: none !important;
 }
 
 .fi-btn-primary:hover {
-    background: linear-gradient(135deg, oklch(0.50 0.22 265) 0%, oklch(0.43 0.22 265) 100%) !important;
+    background: linear-gradient(135deg, oklch(0.53 0.22 295) 0%, oklch(0.45 0.22 295) 100%) !important;
     box-shadow: var(--shadow-glow), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Focus state */
 .fi-btn-primary:focus {
-    box-shadow: 0 0 0 2px var(--glass-bg-strong), 0 0 0 4px oklch(0.55 0.22 265 / 0.5) !important;
+    box-shadow: 0 0 0 2px var(--glass-bg-strong), 0 0 0 4px oklch(0.58 0.22 295 / 0.5) !important;
 }
 
 /* ========================================
@@ -149,12 +149,12 @@
 
 /* Link color */
 .fi-link {
-    color: oklch(0.55 0.22 265) !important;
+    color: oklch(0.58 0.22 295) !important;
     transition: color var(--duration-fast) var(--ease-premium);
 }
 
 .fi-link:hover {
-    color: oklch(0.47 0.22 265) !important;
+    color: oklch(0.50 0.22 295) !important;
 }
 
 /* ========================================
@@ -162,11 +162,11 @@
    ======================================== */
 
 .fi-ta-row:hover {
-    background-color: oklch(0.97 0.02 265 / 0.5) !important;
+    background-color: oklch(0.98 0.02 295 / 0.5) !important;
 }
 
 .dark .fi-ta-row:hover {
-    background-color: oklch(0.30 0.10 265 / 0.2) !important;
+    background-color: oklch(0.30 0.12 295 / 0.2) !important;
 }
 
 /* ========================================
@@ -174,13 +174,13 @@
    ======================================== */
 
 .fi-tabs-item-active {
-    background: oklch(0.55 0.22 265 / 0.1) !important;
-    color: oklch(0.47 0.22 265) !important;
+    background: oklch(0.58 0.22 295 / 0.1) !important;
+    color: oklch(0.50 0.22 295) !important;
 }
 
 .dark .fi-tabs-item-active {
-    background: oklch(0.55 0.22 265 / 0.2) !important;
-    color: oklch(0.76 0.12 265) !important;
+    background: oklch(0.58 0.22 295 / 0.2) !important;
+    color: oklch(0.79 0.14 295) !important;
 }
 
 /* ========================================
@@ -190,7 +190,7 @@
 .fi-input:focus,
 .fi-select:focus,
 .fi-textarea:focus {
-    box-shadow: 0 0 0 2px var(--glass-bg-strong), 0 0 0 4px oklch(0.55 0.22 265 / 0.5) !important;
+    box-shadow: 0 0 0 2px var(--glass-bg-strong), 0 0 0 4px oklch(0.58 0.22 295 / 0.5) !important;
 }
 
 /* ========================================
@@ -216,8 +216,8 @@
 
 .fi-checkbox-input:checked,
 .fi-radio-input:checked {
-    background-color: oklch(0.55 0.22 265) !important;
-    border-color: oklch(0.55 0.22 265) !important;
+    background-color: oklch(0.58 0.22 295) !important;
+    border-color: oklch(0.58 0.22 295) !important;
 }
 
 /* ========================================
@@ -225,7 +225,7 @@
    ======================================== */
 
 .fi-toggle-input:checked {
-    background-color: oklch(0.55 0.22 265) !important;
+    background-color: oklch(0.58 0.22 295) !important;
 }
 
 /* ========================================
@@ -233,5 +233,5 @@
    ======================================== */
 
 .fi-progress-bar {
-    background-color: oklch(0.55 0.22 265) !important;
+    background-color: oklch(0.58 0.22 295) !important;
 }

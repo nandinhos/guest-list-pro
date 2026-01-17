@@ -1,0 +1,492 @@
+/**
+ * Filament Base Theme - Guest List Pro
+ *
+ * Estilos compartilhados entre todos os paineis.
+ * Importado pelos temas especificos (admin, promoter, validator).
+ *
+ * NOTA: Fonts sao importadas nos arquivos de tema individuais
+ * para garantir que @import venha antes de outras regras CSS.
+ */
+
+/* ========================================
+   CSS VARIABLES
+   ======================================== */
+
+:root {
+    /* Typography */
+    --font-heading: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-bg-strong: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-blur: 12px;
+    --glass-blur-lg: 20px;
+
+    /* Shadows */
+    --shadow-glass: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 16px rgba(0, 0, 0, 0.1);
+    --shadow-elevated: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.05), 0 12px 24px rgba(0, 0, 0, 0.05);
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+
+    /* Transitions */
+    --ease-premium: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+}
+
+.dark {
+    --glass-bg: rgba(30, 41, 59, 0.8);
+    --glass-bg-strong: rgba(15, 23, 42, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --shadow-glass: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 16px rgba(0, 0, 0, 0.3);
+    --shadow-elevated: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 8px rgba(0, 0, 0, 0.2), 0 16px 32px rgba(0, 0, 0, 0.3);
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+
+/* Headings with Outfit font */
+.fi-header-heading,
+.fi-page-heading,
+.fi-widget-heading,
+.fi-section-header-heading,
+.fi-modal-heading,
+.fi-sidebar-header,
+h1, h2, h3, h4 {
+    font-family: var(--font-heading) !important;
+    letter-spacing: -0.025em;
+}
+
+/* Body text with Inter */
+.fi-body,
+.fi-main,
+.fi-sidebar {
+    font-family: var(--font-body);
+}
+
+/* ========================================
+   PAGE ANIMATIONS
+   ======================================== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Page content animation */
+.fi-main > * {
+    animation: fadeInUp 0.4s var(--ease-premium) forwards;
+}
+
+/* ========================================
+   SIDEBAR STYLES
+   ======================================== */
+
+/* Sidebar glassmorphism */
+.fi-sidebar {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--glass-blur-lg));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+    border-right: 1px solid var(--glass-border) !important;
+}
+
+/* Sidebar nav items */
+.fi-sidebar-nav-groups {
+    padding: 0.5rem;
+}
+
+/* Sidebar item hover */
+.fi-sidebar-item {
+    border-radius: 0.75rem;
+    margin: 0.125rem 0;
+    transition: all var(--duration-fast) var(--ease-premium);
+}
+
+.fi-sidebar-item:hover {
+    transform: translateX(2px);
+}
+
+/* Sidebar item icon */
+.fi-sidebar-item-icon {
+    transition: transform var(--duration-fast) var(--ease-bounce);
+}
+
+.fi-sidebar-item:hover .fi-sidebar-item-icon {
+    transform: scale(1.1);
+}
+
+/* ========================================
+   CARDS & SECTIONS
+   ======================================== */
+
+/* Cards with glassmorphism */
+.fi-section,
+.fi-widget {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 1rem !important;
+    box-shadow: var(--shadow-card);
+    transition: all var(--duration-normal) var(--ease-premium);
+}
+
+/* Card hover effect */
+.fi-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevated);
+}
+
+/* Section content padding */
+.fi-section-content {
+    padding: 1.25rem !important;
+}
+
+/* ========================================
+   TABLES
+   ======================================== */
+
+/* Table container */
+.fi-ta {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 1rem !important;
+    overflow: hidden;
+}
+
+/* Table header */
+.fi-ta-header {
+    background: transparent !important;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+/* Table row hover */
+.fi-ta-row {
+    transition: background-color var(--duration-fast) var(--ease-premium);
+}
+
+.fi-ta-row:hover {
+    background-color: rgba(99, 102, 241, 0.05) !important;
+}
+
+.dark .fi-ta-row:hover {
+    background-color: rgba(99, 102, 241, 0.1) !important;
+}
+
+/* Table cell */
+.fi-ta-cell {
+    padding: 1rem 0.75rem !important;
+}
+
+/* ========================================
+   FORMS & INPUTS
+   ======================================== */
+
+/* Input fields */
+.fi-input,
+.fi-select,
+.fi-textarea {
+    border-radius: 0.75rem !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    transition: all var(--duration-fast) var(--ease-premium) !important;
+}
+
+.dark .fi-input,
+.dark .fi-select,
+.dark .fi-textarea {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Input focus state */
+.fi-input:focus,
+.fi-select:focus,
+.fi-textarea:focus {
+    border-color: transparent !important;
+    box-shadow: 0 0 0 2px var(--glass-bg-strong), 0 0 0 4px var(--panel-color, rgba(99, 102, 241, 0.5)) !important;
+}
+
+/* Input wrapper */
+.fi-input-wrapper {
+    border-radius: 0.75rem !important;
+    overflow: hidden;
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
+/* Primary button base */
+.fi-btn-primary {
+    border-radius: 0.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em;
+    transition: all var(--duration-fast) var(--ease-premium) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.06);
+}
+
+.fi-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fi-btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Secondary button */
+.fi-btn-secondary {
+    border-radius: 0.75rem !important;
+    transition: all var(--duration-fast) var(--ease-premium) !important;
+}
+
+.fi-btn-secondary:hover {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark .fi-btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Icon buttons */
+.fi-icon-btn {
+    border-radius: 0.625rem !important;
+    transition: all var(--duration-fast) var(--ease-bounce) !important;
+}
+
+.fi-icon-btn:hover {
+    transform: scale(1.05);
+}
+
+/* ========================================
+   MODALS
+   ======================================== */
+
+/* Modal backdrop */
+.fi-modal-window {
+    animation: scaleIn 0.2s var(--ease-bounce) forwards;
+}
+
+/* Modal content */
+.fi-modal {
+    background: var(--glass-bg-strong) !important;
+    backdrop-filter: blur(var(--glass-blur-lg));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 1.25rem !important;
+    box-shadow: var(--shadow-elevated);
+}
+
+/* Modal header */
+.fi-modal-header {
+    border-bottom: 1px solid var(--glass-border);
+    padding: 1.25rem 1.5rem !important;
+}
+
+/* Modal footer */
+.fi-modal-footer {
+    border-top: 1px solid var(--glass-border);
+    padding: 1rem 1.5rem !important;
+}
+
+/* ========================================
+   NOTIFICATIONS
+   ======================================== */
+
+/* Notification container */
+.fi-notification {
+    background: var(--glass-bg-strong) !important;
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 1rem !important;
+    box-shadow: var(--shadow-elevated);
+    animation: fadeInUp 0.3s var(--ease-bounce) forwards;
+}
+
+/* ========================================
+   TABS
+   ======================================== */
+
+/* Tab list */
+.fi-tabs-list {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 0.75rem;
+    padding: 0.25rem;
+}
+
+.dark .fi-tabs-list {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Tab item */
+.fi-tabs-item {
+    border-radius: 0.5rem !important;
+    transition: all var(--duration-fast) var(--ease-premium);
+}
+
+/* ========================================
+   BADGES
+   ======================================== */
+
+.fi-badge {
+    border-radius: 0.5rem !important;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+/* ========================================
+   STATS WIDGETS
+   ======================================== */
+
+.fi-stats-overview-stat {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 1rem !important;
+    transition: all var(--duration-normal) var(--ease-premium);
+}
+
+.fi-stats-overview-stat:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevated);
+}
+
+/* ========================================
+   DROPDOWN MENUS
+   ======================================== */
+
+.fi-dropdown-panel {
+    background: var(--glass-bg-strong) !important;
+    backdrop-filter: blur(var(--glass-blur-lg));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 0.875rem !important;
+    box-shadow: var(--shadow-elevated);
+    animation: scaleIn 0.15s var(--ease-bounce) forwards;
+}
+
+/* Dropdown item */
+.fi-dropdown-list-item {
+    border-radius: 0.5rem;
+    margin: 0.125rem 0.25rem;
+    transition: all var(--duration-fast) var(--ease-premium);
+}
+
+/* ========================================
+   BREADCRUMBS
+   ======================================== */
+
+.fi-breadcrumbs {
+    font-family: var(--font-body);
+}
+
+.fi-breadcrumbs-item {
+    transition: color var(--duration-fast) var(--ease-premium);
+}
+
+/* ========================================
+   LOADING STATES
+   ======================================== */
+
+/* Skeleton loading */
+.fi-skeleton {
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.06) 0%,
+        rgba(0, 0, 0, 0.03) 50%,
+        rgba(0, 0, 0, 0.06) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s linear infinite;
+    border-radius: 0.5rem;
+}
+
+.dark .fi-skeleton {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* ========================================
+   SCROLLBAR
+   ======================================== */
+
+/* Custom scrollbar */
+.fi-sidebar,
+.fi-main {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.dark .fi-sidebar,
+.dark .fi-main {
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.fi-sidebar::-webkit-scrollbar,
+.fi-main::-webkit-scrollbar {
+    width: 6px;
+}
+
+.fi-sidebar::-webkit-scrollbar-track,
+.fi-main::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.fi-sidebar::-webkit-scrollbar-thumb,
+.fi-main::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.dark .fi-sidebar::-webkit-scrollbar-thumb,
+.dark .fi-main::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
