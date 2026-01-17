@@ -19,10 +19,10 @@
 
     // Variantes - cores e estilos
     $variants = [
-        'primary' => 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30 hover:from-indigo-500 hover:to-indigo-400 dark:from-indigo-500 dark:to-indigo-400',
-        'secondary' => 'bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/80 shadow-sm',
+        'primary' => 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md hover:shadow-lg',
+        'secondary' => 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-sm',
         'ghost' => 'bg-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800',
-        'danger' => 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-lg shadow-red-500/25 hover:shadow-xl hover:shadow-red-500/30 hover:from-red-500 hover:to-red-400',
+        'danger' => 'bg-red-600 hover:bg-red-500 text-white shadow-md hover:shadow-lg',
     ];
 
     // Classes base
@@ -35,7 +35,7 @@
 @if($href && !$disabled)
     <a href="{{ $href }}" {{ $attributes->merge(['class' => $classes]) }}>
         @if($icon && !$loading)
-            <x-dynamic-component :component="$icon" class="w-4 h-4 shrink-0" />
+            @svg($icon, 'w-4 h-4 shrink-0')
         @endif
         @if($loading)
             <svg class="animate-spin w-4 h-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -45,7 +45,7 @@
         @endif
         <span>{{ $slot }}</span>
         @if($iconRight && !$loading)
-            <x-dynamic-component :component="$iconRight" class="w-4 h-4 shrink-0" />
+            @svg($iconRight, 'w-4 h-4 shrink-0')
         @endif
     </a>
 @else
@@ -55,7 +55,7 @@
         @if($disabled || $loading) disabled @endif
     >
         @if($icon && !$loading)
-            <x-dynamic-component :component="$icon" class="w-4 h-4 shrink-0" />
+            @svg($icon, 'w-4 h-4 shrink-0')
         @endif
         @if($loading)
             <svg class="animate-spin w-4 h-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -65,7 +65,7 @@
         @endif
         <span>{{ $slot }}</span>
         @if($iconRight && !$loading)
-            <x-dynamic-component :component="$iconRight" class="w-4 h-4 shrink-0" />
+            @svg($iconRight, 'w-4 h-4 shrink-0')
         @endif
     </button>
 @endif

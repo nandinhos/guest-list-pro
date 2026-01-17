@@ -23,13 +23,6 @@
         'down' => 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/50',
         'neutral' => 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-700',
     ];
-
-    // Ícones de mudança
-    $changeIcons = [
-        'up' => 'heroicon-m-arrow-trending-up',
-        'down' => 'heroicon-m-arrow-trending-down',
-        'neutral' => 'heroicon-m-minus',
-    ];
 @endphp
 
 <div {{ $attributes->merge(['class' => 'bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5']) }}>
@@ -50,7 +43,13 @@
             @if($change)
                 <div class="flex items-center gap-1.5 mt-2">
                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium {{ $changeColors[$changeType] ?? $changeColors['neutral'] }}">
-                        <x-dynamic-component :component="$changeIcons[$changeType] ?? $changeIcons['neutral']" class="w-3.5 h-3.5" />
+                        @if($changeType === 'up')
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg>
+                        @elseif($changeType === 'down')
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6L9 12.75l4.286-4.286a11.948 11.948 0 014.306 6.43l.776 2.898m0 0l3.182-5.511m-3.182 5.51l-5.511-3.181" /></svg>
+                        @else
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" /></svg>
+                        @endif
                         {{ $change }}
                     </span>
                     <span class="text-xs text-slate-500 dark:text-slate-400">vs. período anterior</span>
@@ -62,7 +61,7 @@
         @if($icon)
             <div class="shrink-0 ml-4">
                 <div class="w-12 h-12 rounded-xl flex items-center justify-center {{ $iconColors[$iconColor] ?? $iconColors['indigo'] }}">
-                    <x-dynamic-component :component="$icon" class="w-6 h-6" />
+                    @svg($icon, 'w-6 h-6')
                 </div>
             </div>
         @endif
