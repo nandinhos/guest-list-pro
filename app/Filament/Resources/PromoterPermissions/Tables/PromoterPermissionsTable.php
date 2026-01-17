@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Filament\Resources\PromoterPermissions\Tables;
+
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+
+class PromoterPermissionsTable
+{
+    public static function configure(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('user.name')
+                    ->label('Promoter')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('event.name')
+                    ->label('Evento')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('sector.name')
+                    ->label('Setor')
+                    ->sortable(),
+                TextColumn::make('guest_limit')
+                    ->label('Limite')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('start_time')
+                    ->label('Início')
+                    ->time('H:i')
+                    ->sortable(),
+                TextColumn::make('end_time')
+                    ->label('Fim')
+                    ->time('H:i')
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                //
+            ])
+            ->recordActions([
+                EditAction::make(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+}

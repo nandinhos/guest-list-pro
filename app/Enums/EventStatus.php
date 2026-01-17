@@ -10,23 +10,30 @@ namespace App\Enums;
  * FINISHED: Evento encerrado.
  * CANCELLED: Evento cancelado.
  */
-enum EventStatus: string
+enum EventStatus: string implements \Filament\Support\Contracts\HasLabel, \Filament\Support\Contracts\HasColor
 {
     case DRAFT = 'draft';
     case ACTIVE = 'active';
     case FINISHED = 'finished';
     case CANCELLED = 'cancelled';
 
-    /**
-     * Retorna o rótulo amigável para exibição na interface.
-     */
-    public function label(): string
+    public function getLabel(): ?string
     {
         return match ($this) {
             self::DRAFT => 'Rascunho',
             self::ACTIVE => 'Ativo',
             self::FINISHED => 'Finalizado',
             self::CANCELLED => 'Cancelado',
+        };
+    }
+
+    public function getColor(): string | array | null
+    {
+        return match ($this) {
+            self::DRAFT => 'gray',
+            self::ACTIVE => 'success',
+            self::FINISHED => 'info',
+            self::CANCELLED => 'danger',
         };
     }
 }
