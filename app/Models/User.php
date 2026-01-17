@@ -81,9 +81,17 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
     /**
      * Convidados cadastrados por este usuário (se for Promoter).
      */
-    public function guestsCreated(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function guests(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Guest::class, 'promoter_id');
+    }
+
+    /**
+     * Alias para convidados criados.
+     */
+    public function guestsCreated(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->guests();
     }
 
     /**
