@@ -142,42 +142,42 @@ Integrar o design system no build e configurar os paineis.
 
 ---
 
-## Sprint 4: Componentes UI Blade
+## Sprint 4: Componentes UI Blade ✅ CONCLUÍDA
 
 ### Objetivo
 Criar componentes Blade reutilizaveis para UI.
 
 ### Tarefas
 
-- [ ] **4.1 Criar estrutura de pastas**
-  - [ ] `resources/views/components/ui/`
+- [x] **4.1 Criar estrutura de pastas**
+  - [x] `resources/views/components/ui/`
 
-- [ ] **4.2 Button Component** (`ui/button.blade.php`)
-  - [ ] Props: variant (primary, secondary, ghost, danger)
-  - [ ] Props: size (sm, md, lg)
-  - [ ] Props: icon, iconRight
-  - [ ] Props: loading, disabled
-  - [ ] Props: href (para links)
-  - [ ] Estilos com gradients e hover effects
+- [x] **4.2 Button Component** (`ui/button.blade.php`)
+  - [x] Props: variant (primary, secondary, ghost, danger)
+  - [x] Props: size (sm, md, lg)
+  - [x] Props: icon, iconRight
+  - [x] Props: loading, disabled
+  - [x] Props: href (para links)
+  - [x] Estilos com gradients e hover effects
 
-- [ ] **4.3 Card Component** (`ui/card.blade.php`)
-  - [ ] Props: variant (default, glass, elevated, bordered)
-  - [ ] Props: hover (boolean)
-  - [ ] Props: padding (none, sm, md, lg)
-  - [ ] Slots: header, default (content), footer
+- [x] **4.3 Card Component** (`ui/card.blade.php`)
+  - [x] Props: variant (default, glass, elevated, bordered)
+  - [x] Props: hover (boolean)
+  - [x] Props: padding (none, sm, md, lg)
+  - [x] Slots: header, default (content), footer
 
-- [ ] **4.4 Badge Component** (`ui/badge.blade.php`)
-  - [ ] Props: variant (default, success, warning, danger, info, primary)
-  - [ ] Props: size (sm, md, lg)
-  - [ ] Props: dot (boolean)
-  - [ ] Props: removable (boolean)
+- [x] **4.4 Badge Component** (`ui/badge.blade.php`)
+  - [x] Props: variant (default, success, warning, danger, info, primary)
+  - [x] Props: size (sm, md, lg)
+  - [x] Props: dot (boolean)
+  - [x] Props: removable (boolean)
 
-- [ ] **4.5 Input Component** (`ui/input.blade.php`)
-  - [ ] Props: label, name, type, placeholder
-  - [ ] Props: icon, iconRight
-  - [ ] Props: error, hint
-  - [ ] Props: required, disabled
-  - [ ] Focus ring colorido
+- [x] **4.5 Input Component** (`ui/input.blade.php`)
+  - [x] Props: label, name, type, placeholder
+  - [x] Props: icon, iconRight
+  - [x] Props: error, hint
+  - [x] Props: required, disabled
+  - [x] Focus ring colorido
 
 ### Entregaveis
 - `resources/views/components/ui/button.blade.php`
