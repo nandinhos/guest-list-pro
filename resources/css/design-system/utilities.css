@@ -508,3 +508,379 @@
         container-type: inline-size;
     }
 }
+
+/* ========================================
+   BUTTON UTILITIES
+   ======================================== */
+
+/* Primary Button - Gradient with glow */
+.btn-primary {
+    background: var(--gradient-admin);
+    color: white;
+    font-weight: 600;
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.1),
+        0 1px 1px rgba(0, 0, 0, 0.06);
+    transition:
+        transform var(--duration-fast) var(--ease-premium),
+        box-shadow var(--duration-fast) var(--ease-premium);
+}
+
+.btn-primary:hover {
+    box-shadow:
+        var(--shadow-glow-admin),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Secondary Button */
+.btn-secondary {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: oklch(0.40 0.02 265);
+    font-weight: 500;
+    transition:
+        background var(--duration-fast) var(--ease-premium),
+        border-color var(--duration-fast) var(--ease-premium);
+}
+
+.dark .btn-secondary {
+    color: oklch(0.85 0.02 265);
+}
+
+.btn-secondary:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+.dark .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Danger Button */
+.btn-danger {
+    background: linear-gradient(135deg, var(--color-danger-500) 0%, var(--color-danger-600) 100%);
+    color: white;
+    font-weight: 600;
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.1),
+        0 1px 1px rgba(0, 0, 0, 0.06);
+    transition:
+        transform var(--duration-fast) var(--ease-premium),
+        box-shadow var(--duration-fast) var(--ease-premium);
+}
+
+.btn-danger:hover {
+    box-shadow:
+        var(--shadow-glow-danger),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.btn-danger:active {
+    transform: scale(0.98);
+}
+
+/* Success Button */
+.btn-success {
+    background: linear-gradient(135deg, var(--color-success-500) 0%, var(--color-success-600) 100%);
+    color: white;
+    font-weight: 600;
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.1),
+        0 1px 1px rgba(0, 0, 0, 0.06);
+    transition:
+        transform var(--duration-fast) var(--ease-premium),
+        box-shadow var(--duration-fast) var(--ease-premium);
+}
+
+.btn-success:hover {
+    box-shadow:
+        var(--shadow-glow-success),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.btn-success:active {
+    transform: scale(0.98);
+}
+
+/* Warning Button */
+.btn-warning {
+    background: linear-gradient(135deg, var(--color-warning-500) 0%, var(--color-warning-600) 100%);
+    color: oklch(0.25 0.05 55);
+    font-weight: 600;
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.1),
+        0 1px 1px rgba(0, 0, 0, 0.06);
+    transition:
+        transform var(--duration-fast) var(--ease-premium),
+        box-shadow var(--duration-fast) var(--ease-premium);
+}
+
+.btn-warning:hover {
+    box-shadow:
+        var(--shadow-glow-warning),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.btn-warning:active {
+    transform: scale(0.98);
+}
+
+/* Ghost Button */
+.btn-ghost {
+    background: transparent;
+    color: oklch(0.45 0.02 265);
+    font-weight: 500;
+    transition:
+        background var(--duration-fast) var(--ease-premium),
+        color var(--duration-fast) var(--ease-premium);
+}
+
+.dark .btn-ghost {
+    color: oklch(0.75 0.02 265);
+}
+
+.btn-ghost:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.dark .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================
+   BADGE UTILITIES
+   ======================================== */
+
+.badge-default {
+    background: var(--color-surface-100);
+    color: oklch(0.45 0.02 265);
+}
+
+.dark .badge-default {
+    background: oklch(0.30 0.01 260);
+    color: oklch(0.75 0.02 265);
+}
+
+.badge-success {
+    background: var(--color-success-50);
+    color: var(--color-success-700);
+}
+
+.dark .badge-success {
+    background: oklch(0.30 0.08 145 / 0.5);
+    color: oklch(0.75 0.12 145);
+}
+
+.badge-warning {
+    background: var(--color-warning-50);
+    color: var(--color-warning-700);
+}
+
+.dark .badge-warning {
+    background: oklch(0.35 0.08 85 / 0.5);
+    color: oklch(0.80 0.14 85);
+}
+
+.badge-danger {
+    background: var(--color-danger-50);
+    color: var(--color-danger-700);
+}
+
+.dark .badge-danger {
+    background: oklch(0.30 0.10 25 / 0.5);
+    color: oklch(0.75 0.18 25);
+}
+
+.badge-info {
+    background: var(--color-info-50);
+    color: var(--color-info-700);
+}
+
+.dark .badge-info {
+    background: oklch(0.30 0.08 230 / 0.5);
+    color: oklch(0.75 0.12 230);
+}
+
+.badge-primary {
+    background: var(--color-brand-admin-100);
+    color: var(--color-brand-admin-700);
+}
+
+.dark .badge-primary {
+    background: oklch(0.30 0.10 265 / 0.5);
+    color: oklch(0.75 0.15 265);
+}
+
+/* Badge Dot Colors */
+.badge-dot-default { background: oklch(0.55 0.02 265); }
+.badge-dot-success { background: var(--color-success-500); }
+.badge-dot-warning { background: var(--color-warning-500); }
+.badge-dot-danger { background: var(--color-danger-500); }
+.badge-dot-info { background: var(--color-info-500); }
+.badge-dot-primary { background: var(--color-brand-admin-500); }
+
+/* ========================================
+   ALERT UTILITIES
+   ======================================== */
+
+.alert-info {
+    background: var(--color-info-50);
+    border: 1px solid oklch(from var(--color-info-500) l c h / 0.3);
+}
+
+.dark .alert-info {
+    background: oklch(0.25 0.06 230 / 0.3);
+    border-color: oklch(from var(--color-info-500) l c h / 0.2);
+}
+
+.alert-success {
+    background: var(--color-success-50);
+    border: 1px solid oklch(from var(--color-success-500) l c h / 0.3);
+}
+
+.dark .alert-success {
+    background: oklch(0.25 0.06 145 / 0.3);
+    border-color: oklch(from var(--color-success-500) l c h / 0.2);
+}
+
+.alert-warning {
+    background: var(--color-warning-50);
+    border: 1px solid oklch(from var(--color-warning-500) l c h / 0.3);
+}
+
+.dark .alert-warning {
+    background: oklch(0.30 0.06 85 / 0.3);
+    border-color: oklch(from var(--color-warning-500) l c h / 0.2);
+}
+
+.alert-danger {
+    background: var(--color-danger-50);
+    border: 1px solid oklch(from var(--color-danger-500) l c h / 0.3);
+}
+
+.dark .alert-danger {
+    background: oklch(0.25 0.08 25 / 0.3);
+    border-color: oklch(from var(--color-danger-500) l c h / 0.2);
+}
+
+/* Alert Text Colors */
+.alert-info .alert-icon { color: var(--color-info-500); }
+.alert-info .alert-title { color: oklch(0.35 0.10 230); }
+.alert-info .alert-text { color: var(--color-info-700); }
+
+.dark .alert-info .alert-title { color: oklch(0.80 0.10 230); }
+.dark .alert-info .alert-text { color: oklch(0.75 0.08 230); }
+
+.alert-success .alert-icon { color: var(--color-success-500); }
+.alert-success .alert-title { color: oklch(0.35 0.10 145); }
+.alert-success .alert-text { color: var(--color-success-700); }
+
+.dark .alert-success .alert-title { color: oklch(0.80 0.12 145); }
+.dark .alert-success .alert-text { color: oklch(0.75 0.10 145); }
+
+.alert-warning .alert-icon { color: var(--color-warning-500); }
+.alert-warning .alert-title { color: oklch(0.35 0.12 55); }
+.alert-warning .alert-text { color: var(--color-warning-700); }
+
+.dark .alert-warning .alert-title { color: oklch(0.85 0.14 85); }
+.dark .alert-warning .alert-text { color: oklch(0.80 0.12 85); }
+
+.alert-danger .alert-icon { color: var(--color-danger-500); }
+.alert-danger .alert-title { color: oklch(0.40 0.15 25); }
+.alert-danger .alert-text { color: var(--color-danger-700); }
+
+.dark .alert-danger .alert-title { color: oklch(0.80 0.15 25); }
+.dark .alert-danger .alert-text { color: oklch(0.75 0.12 25); }
+
+/* ========================================
+   STAT CARD ICON UTILITIES
+   ======================================== */
+
+.stat-icon-admin {
+    background: var(--color-brand-admin-100);
+    color: var(--color-brand-admin-600);
+}
+
+.dark .stat-icon-admin {
+    background: oklch(0.30 0.10 265 / 0.5);
+    color: oklch(0.75 0.15 265);
+}
+
+.stat-icon-promoter {
+    background: var(--color-brand-promoter-100);
+    color: var(--color-brand-promoter-600);
+}
+
+.dark .stat-icon-promoter {
+    background: oklch(0.30 0.10 295 / 0.5);
+    color: oklch(0.75 0.15 295);
+}
+
+.stat-icon-validator {
+    background: var(--color-brand-validator-100);
+    color: var(--color-brand-validator-600);
+}
+
+.dark .stat-icon-validator {
+    background: oklch(0.30 0.08 160 / 0.5);
+    color: oklch(0.72 0.14 160);
+}
+
+.stat-icon-success {
+    background: var(--color-success-100);
+    color: var(--color-success-600);
+}
+
+.dark .stat-icon-success {
+    background: oklch(0.30 0.08 145 / 0.5);
+    color: oklch(0.72 0.14 145);
+}
+
+.stat-icon-warning {
+    background: var(--color-warning-100);
+    color: var(--color-warning-600);
+}
+
+.dark .stat-icon-warning {
+    background: oklch(0.35 0.08 85 / 0.5);
+    color: oklch(0.80 0.16 85);
+}
+
+.stat-icon-danger {
+    background: var(--color-danger-100);
+    color: var(--color-danger-600);
+}
+
+.dark .stat-icon-danger {
+    background: oklch(0.30 0.10 25 / 0.5);
+    color: oklch(0.72 0.18 25);
+}
+
+/* ========================================
+   INPUT UTILITIES
+   ======================================== */
+
+.input-ring-default {
+    --tw-ring-color: var(--glass-border);
+}
+
+.input-ring-default:focus {
+    --tw-ring-color: var(--color-brand-admin-500);
+}
+
+.input-ring-error {
+    --tw-ring-color: oklch(from var(--color-danger-500) l c h / 0.5);
+}
+
+.input-ring-error:focus {
+    --tw-ring-color: var(--color-danger-500);
+}

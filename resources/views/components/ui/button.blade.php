@@ -1,5 +1,5 @@
 @props([
-    'variant' => 'primary', // primary, secondary, ghost, danger
+    'variant' => 'primary', // primary, secondary, ghost, danger, success, warning
     'size' => 'md', // sm, md, lg
     'icon' => null,
     'iconRight' => null,
@@ -17,16 +17,18 @@
         'lg' => 'px-6 py-3 text-base gap-2.5',
     ];
 
-    // Variantes - cores e estilos
+    // Variantes - usando classes do design system
     $variants = [
-        'primary' => 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md hover:shadow-lg',
-        'secondary' => 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-sm',
-        'ghost' => 'bg-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800',
-        'danger' => 'bg-red-600 hover:bg-red-500 text-white shadow-md hover:shadow-lg',
+        'primary' => 'btn-primary',
+        'secondary' => 'btn-secondary',
+        'ghost' => 'btn-ghost',
+        'danger' => 'btn-danger',
+        'success' => 'btn-success',
+        'warning' => 'btn-warning',
     ];
 
     // Classes base
-    $baseClasses = 'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed';
+    $baseClasses = 'inline-flex items-center justify-center font-medium rounded-xl focus:outline-none focus-ring disabled:opacity-50 disabled:cursor-not-allowed';
 
     // Montar classes finais
     $classes = $baseClasses . ' ' . ($sizes[$size] ?? $sizes['md']) . ' ' . ($variants[$variant] ?? $variants['primary']);
@@ -49,8 +51,8 @@
         @endif
     </a>
 @else
-    <button 
-        type="{{ $type }}" 
+    <button
+        type="{{ $type }}"
         {{ $attributes->merge(['class' => $classes]) }}
         @if($disabled || $loading) disabled @endif
     >

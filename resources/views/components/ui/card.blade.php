@@ -13,16 +13,16 @@
         'lg' => 'p-6 sm:p-8',
     ];
 
-    // Variantes
+    // Variantes - usando tokens do design system
     $variants = [
-        'default' => 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm',
-        'glass' => 'bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 shadow-lg',
-        'elevated' => 'bg-white dark:bg-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 border border-slate-100 dark:border-slate-700',
-        'bordered' => 'bg-transparent border-2 border-slate-200 dark:border-slate-700',
+        'default' => 'bg-[var(--glass-bg-strong)] border border-[var(--glass-border)] shadow-[var(--shadow-card)]',
+        'glass' => 'glass-card',
+        'elevated' => 'bg-[var(--glass-bg-strong)] shadow-[var(--shadow-elevated)] border border-[var(--glass-border)]',
+        'bordered' => 'bg-transparent border-2 border-[var(--glass-border)]',
     ];
 
-    // Hover effect
-    $hoverClasses = $hover ? 'transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer' : '';
+    // Hover effect - usando classe hover-lift do design system
+    $hoverClasses = $hover ? 'hover-lift cursor-pointer' : '';
 
     // Classes base
     $baseClasses = 'rounded-2xl overflow-hidden';
@@ -34,7 +34,7 @@
 <div {{ $attributes->merge(['class' => $classes]) }}>
     {{-- Header Slot --}}
     @isset($header)
-        <div class="border-b border-slate-100 dark:border-slate-700 pb-4 mb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 -mt-4 pt-4 sm:-mt-6 sm:pt-6">
+        <div class="border-b border-[var(--glass-border)] pb-4 mb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 -mt-4 pt-4 sm:-mt-6 sm:pt-6">
             {{ $header }}
         </div>
     @endisset
@@ -44,7 +44,7 @@
 
     {{-- Footer Slot --}}
     @isset($footer)
-        <div class="border-t border-slate-100 dark:border-slate-700 pt-4 mt-4 -mx-4 px-4 sm:-mx-6 sm:px-6 -mb-4 pb-4 sm:-mb-6 sm:pb-6 bg-slate-50/50 dark:bg-slate-900/50">
+        <div class="border-t border-[var(--glass-border)] pt-4 mt-4 -mx-4 px-4 sm:-mx-6 sm:px-6 -mb-4 pb-4 sm:-mb-6 sm:pb-6 bg-[var(--color-surface-50)]/50">
             {{ $footer }}
         </div>
     @endisset

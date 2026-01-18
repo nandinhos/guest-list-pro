@@ -490,3 +490,286 @@ h1, h2, h3, h4 {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* ========================================
+   SEMANTIC BUTTON STYLES
+   ======================================== */
+
+/* Danger Button with Gradient */
+.fi-btn-danger,
+.fi-btn[data-color="danger"] {
+    background: linear-gradient(135deg, oklch(0.58 0.22 25) 0%, oklch(0.50 0.20 25) 100%) !important;
+    border: none !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.06);
+    transition: all var(--duration-fast) var(--ease-premium) !important;
+}
+
+.fi-btn-danger:hover,
+.fi-btn[data-color="danger"]:hover {
+    box-shadow: 0 0 20px -5px oklch(0.58 0.22 25 / 0.4), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-1px);
+}
+
+/* Success Button with Gradient */
+.fi-btn-success,
+.fi-btn[data-color="success"] {
+    background: linear-gradient(135deg, oklch(0.62 0.17 145) 0%, oklch(0.54 0.15 145) 100%) !important;
+    border: none !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.06);
+    transition: all var(--duration-fast) var(--ease-premium) !important;
+}
+
+.fi-btn-success:hover,
+.fi-btn[data-color="success"]:hover {
+    box-shadow: 0 0 20px -5px oklch(0.62 0.17 145 / 0.4), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-1px);
+}
+
+/* Warning Button with Gradient */
+.fi-btn-warning,
+.fi-btn[data-color="warning"] {
+    background: linear-gradient(135deg, oklch(0.75 0.18 85) 0%, oklch(0.68 0.17 70) 100%) !important;
+    border: none !important;
+    color: oklch(0.25 0.05 55) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.06);
+    transition: all var(--duration-fast) var(--ease-premium) !important;
+}
+
+.fi-btn-warning:hover,
+.fi-btn[data-color="warning"]:hover {
+    box-shadow: 0 0 20px -5px oklch(0.75 0.18 85 / 0.4), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-1px);
+}
+
+/* Press Effect for All Buttons */
+.fi-btn:active {
+    transform: scale(0.98) !important;
+}
+
+/* ========================================
+   PREMIUM TABLE STYLES
+   ======================================== */
+
+/* Row Elevation on Hover */
+.fi-ta-row {
+    position: relative;
+    transition:
+        background-color var(--duration-fast) var(--ease-premium),
+        box-shadow var(--duration-fast) var(--ease-premium),
+        z-index 0s;
+}
+
+.fi-ta-row:hover {
+    z-index: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dark .fi-ta-row:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Striped Rows */
+.fi-ta-row:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.015);
+}
+
+.dark .fi-ta-row:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Selection Glow */
+.fi-ta-row[aria-selected="true"],
+.fi-ta-row.fi-ta-row-selected {
+    box-shadow: inset 3px 0 0 var(--panel-color, oklch(0.55 0.22 265));
+    background-color: oklch(from var(--panel-color, oklch(0.55 0.22 265)) l c h / 0.05) !important;
+}
+
+.dark .fi-ta-row[aria-selected="true"],
+.dark .fi-ta-row.fi-ta-row-selected {
+    background-color: oklch(from var(--panel-color, oklch(0.55 0.22 265)) l c h / 0.1) !important;
+}
+
+/* Pagination Active Item */
+.fi-ta-pagination-item-active,
+.fi-pagination-item[aria-current="page"] {
+    background: var(--panel-color, oklch(0.55 0.22 265)) !important;
+    color: white !important;
+    border-color: transparent !important;
+}
+
+/* Table Actions Fade In */
+.fi-ta-actions {
+    opacity: 0.7;
+    transition: opacity var(--duration-fast) var(--ease-premium);
+}
+
+.fi-ta-row:hover .fi-ta-actions {
+    opacity: 1;
+}
+
+/* ========================================
+   FORM ANIMATIONS
+   ======================================== */
+
+/* Validation Error Shake */
+@keyframes validationError {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+    20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+.fi-input[aria-invalid="true"],
+.fi-fo-field-wrp:has([aria-invalid="true"]) .fi-input-wrapper {
+    animation: validationError 0.4s var(--ease-out);
+}
+
+/* Focus Color Fill */
+.fi-input:focus,
+.fi-select:focus {
+    background-color: oklch(from var(--panel-color, oklch(0.55 0.22 265)) 0.98 0.02 h) !important;
+}
+
+.dark .fi-input:focus,
+.dark .fi-select:focus {
+    background-color: oklch(from var(--panel-color, oklch(0.55 0.22 265)) 0.22 0.04 h) !important;
+}
+
+/* Checkbox Animation */
+@keyframes checkboxPop {
+    0% { transform: scale(0.8); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.fi-checkbox-input:checked {
+    animation: checkboxPop 0.2s var(--ease-bounce);
+}
+
+/* Toggle Glow */
+.fi-toggle-input:checked {
+    box-shadow: 0 0 8px oklch(from var(--panel-color, oklch(0.55 0.22 265)) l c h / 0.4);
+}
+
+/* Radio Animation */
+.fi-radio-input:checked {
+    animation: checkboxPop 0.2s var(--ease-bounce);
+}
+
+/* ========================================
+   PREMIUM CARD EFFECTS
+   ======================================== */
+
+/* Card Hover Gradient Overlay */
+.fi-widget {
+    position: relative;
+    overflow: hidden;
+}
+
+.fi-widget::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent, oklch(from var(--panel-color, oklch(0.55 0.22 265)) l c h / 0.03));
+    opacity: 0;
+    transition: opacity var(--duration-normal) var(--ease-premium);
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.fi-widget:hover::before {
+    opacity: 1;
+}
+
+/* ========================================
+   EMPTY STATE ANIMATION
+   ======================================== */
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.fi-ta-empty-state-icon {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* ========================================
+   ACTION BUTTON IMPROVEMENTS
+   ======================================== */
+
+/* Action button hover */
+.fi-ac-btn:hover,
+.fi-ta-action:hover {
+    transform: translateY(-1px);
+}
+
+.fi-ac-btn:active,
+.fi-ta-action:active {
+    transform: scale(0.98);
+}
+
+/* ========================================
+   NOTIFICATION IMPROVEMENTS
+   ======================================== */
+
+/* Success Notification */
+.fi-notification[data-type="success"] {
+    border-left: 3px solid oklch(0.62 0.17 145);
+}
+
+/* Warning Notification */
+.fi-notification[data-type="warning"] {
+    border-left: 3px solid oklch(0.75 0.18 85);
+}
+
+/* Danger Notification */
+.fi-notification[data-type="danger"] {
+    border-left: 3px solid oklch(0.58 0.22 25);
+}
+
+/* Info Notification */
+.fi-notification[data-type="info"] {
+    border-left: 3px solid oklch(0.60 0.15 230);
+}
+
+/* ========================================
+   HEADER & NAVIGATION
+   ======================================== */
+
+/* Header Action Buttons */
+.fi-header-actions .fi-btn {
+    transition: all var(--duration-fast) var(--ease-bounce) !important;
+}
+
+.fi-header-actions .fi-btn:hover {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* ========================================
+   INFOLIST ENHANCEMENTS
+   ======================================== */
+
+.fi-in-entry {
+    transition: background-color var(--duration-fast) var(--ease-premium);
+}
+
+.fi-in-entry:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 0.5rem;
+}
+
+.dark .fi-in-entry:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* ========================================
+   WIZARD STEPS ENHANCEMENT
+   ======================================== */
+
+.fi-wizard-step-active .fi-wizard-step-indicator {
+    box-shadow: 0 0 0 4px oklch(from var(--panel-color, oklch(0.55 0.22 265)) l c h / 0.2);
+}
+
+.fi-wizard-step-completed .fi-wizard-step-indicator {
+    animation: checkboxPop 0.3s var(--ease-bounce);
+}
