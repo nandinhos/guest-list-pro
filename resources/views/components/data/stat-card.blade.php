@@ -37,12 +37,12 @@
         {{-- Conteúdo Principal --}}
         <div class="flex-1">
             {{-- Label --}}
-            <p class="text-sm font-medium text-[var(--color-surface-200)] mb-1">
+            <p class="text-sm font-medium text-surface-secondary mb-1">
                 {{ $label }}
             </p>
 
             {{-- Valor --}}
-            <p class="text-3xl font-bold text-[var(--color-surface-900)] tracking-tight">
+            <p class="text-3xl font-bold text-surface-primary tracking-tight">
                 {{ $value }}
             </p>
 
@@ -59,7 +59,7 @@
                         @endif
                         {{ $change }}
                     </span>
-                    <span class="text-xs text-[var(--color-surface-200)]">vs. período anterior</span>
+                    <span class="text-xs text-surface-muted">vs. período anterior</span>
                 </div>
             @endif
         </div>

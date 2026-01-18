@@ -44,7 +44,7 @@
 
     {{-- Footer Slot --}}
     @isset($footer)
-        <div class="border-t border-[var(--glass-border)] pt-4 mt-4 -mx-4 px-4 sm:-mx-6 sm:px-6 -mb-4 pb-4 sm:-mb-6 sm:pb-6 bg-[var(--color-surface-50)]/50">
+        <div class="border-t border-[var(--glass-border)] pt-4 mt-4 -mx-4 px-4 sm:-mx-6 sm:px-6 -mb-4 pb-4 sm:-mb-6 sm:pb-6 bg-[var(--color-surface-100)]/80 dark:bg-[var(--glass-bg)]">
             {{ $footer }}
         </div>
     @endisset

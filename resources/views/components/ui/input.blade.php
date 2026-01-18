@@ -15,7 +15,7 @@
     $inputId = $name ?? 'input-' . uniqid();
 
     // Classes base usando tokens do design system
-    $inputClasses = 'block w-full rounded-xl border-0 bg-[var(--glass-bg-strong)] py-2.5 shadow-sm ring-1 ring-inset transition-all placeholder:text-[var(--color-surface-200)] focus:ring-2 focus:ring-inset disabled:bg-[var(--color-surface-100)] disabled:cursor-not-allowed sm:text-sm sm:leading-6';
+    $inputClasses = 'block w-full rounded-xl border-0 bg-[var(--glass-bg-strong)] py-2.5 shadow-sm ring-1 ring-inset transition-all placeholder:text-surface-muted focus:ring-2 focus:ring-inset disabled:bg-[var(--color-surface-100)] disabled:cursor-not-allowed sm:text-sm sm:leading-6';
 
     // Ajusta padding baseado em ícones
     $paddingLeft = $icon ? 'pl-10' : 'pl-3';
@@ -33,7 +33,7 @@
 <div {{ $attributes->only('class')->merge(['class' => 'w-full']) }}>
     {{-- Label --}}
     @if($label)
-        <label for="{{ $inputId }}" class="block text-sm font-medium text-[var(--color-surface-800)] mb-1.5">
+        <label for="{{ $inputId }}" class="block text-sm font-medium text-surface-primary mb-1.5">
             {{ $label }}
             @if($required)
                 <span class="text-[var(--color-danger-500)]">*</span>
@@ -46,7 +46,7 @@
         {{-- Icon Left --}}
         @if($icon)
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <x-dynamic-component :component="$icon" class="h-5 w-5 text-[var(--color-surface-200)]" />
+                <x-dynamic-component :component="$icon" class="h-5 w-5 text-surface-secondary" />
             </div>
         @endif
 
@@ -64,7 +64,7 @@
         {{-- Icon Right --}}
         @if($iconRight)
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                <x-dynamic-component :component="$iconRight" class="h-5 w-5 text-[var(--color-surface-200)]" />
+                <x-dynamic-component :component="$iconRight" class="h-5 w-5 text-surface-secondary" />
             </div>
         @endif
     </div>
@@ -79,7 +79,7 @@
 
     {{-- Hint Text --}}
     @if($hint && !$error)
-        <p class="mt-1.5 text-sm text-[var(--color-surface-200)]">
+        <p class="mt-1.5 text-sm text-surface-secondary">
             {{ $hint }}
         </p>
     @endif

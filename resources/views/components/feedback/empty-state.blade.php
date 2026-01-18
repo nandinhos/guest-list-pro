@@ -19,13 +19,13 @@
     @endif
 
     {{-- Título --}}
-    <h3 class="text-lg font-semibold text-[var(--color-surface-900)] mb-1">
+    <h3 class="text-lg font-semibold text-surface-primary mb-1">
         {{ $title }}
     </h3>
 
     {{-- Descrição --}}
     @if($description)
-        <p class="text-sm text-[var(--color-surface-200)] max-w-sm mb-6">
+        <p class="text-sm text-surface-secondary max-w-sm mb-6">
             {{ $description }}
         </p>
     @endif

@@ -180,12 +180,10 @@
     inset: 0;
     padding: 1px;
     border-radius: inherit;
-    background: linear-gradient(
-        135deg,
-        oklch(0.55 0.22 265) 0%,
-        oklch(0.58 0.22 295) 50%,
-        oklch(0.60 0.17 160) 100%
-    );
+    background: linear-gradient(135deg,
+            oklch(0.55 0.22 265) 0%,
+            oklch(0.58 0.22 295) 50%,
+            oklch(0.60 0.17 160) 100%);
     mask:
         linear-gradient(#fff 0 0) content-box,
         linear-gradient(#fff 0 0);
@@ -199,27 +197,21 @@
 
 /* Gradient Border por Painel */
 .gradient-border-admin::before {
-    background: linear-gradient(
-        135deg,
-        oklch(0.64 0.17 265) 0%,
-        oklch(0.47 0.22 265) 100%
-    );
+    background: linear-gradient(135deg,
+            oklch(0.64 0.17 265) 0%,
+            oklch(0.47 0.22 265) 100%);
 }
 
 .gradient-border-promoter::before {
-    background: linear-gradient(
-        135deg,
-        oklch(0.68 0.19 295) 0%,
-        oklch(0.50 0.22 295) 100%
-    );
+    background: linear-gradient(135deg,
+            oklch(0.68 0.19 295) 0%,
+            oklch(0.50 0.22 295) 100%);
 }
 
 .gradient-border-validator::before {
-    background: linear-gradient(
-        135deg,
-        oklch(0.72 0.18 160) 0%,
-        oklch(0.52 0.15 160) 100%
-    );
+    background: linear-gradient(135deg,
+            oklch(0.72 0.18 160) 0%,
+            oklch(0.52 0.15 160) 100%);
 }
 
 /* ========================================
@@ -227,12 +219,10 @@
    ======================================== */
 
 .text-gradient {
-    background: linear-gradient(
-        135deg,
-        oklch(0.55 0.22 265) 0%,
-        oklch(0.58 0.22 295) 50%,
-        oklch(0.60 0.17 160) 100%
-    );
+    background: linear-gradient(135deg,
+            oklch(0.55 0.22 265) 0%,
+            oklch(0.58 0.22 295) 50%,
+            oklch(0.60 0.17 160) 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -313,24 +303,20 @@
    ======================================== */
 
 .skeleton {
-    background: linear-gradient(
-        90deg,
-        oklch(0.93 0 0) 0%,
-        oklch(0.96 0 0) 50%,
-        oklch(0.93 0 0) 100%
-    );
+    background: linear-gradient(90deg,
+            oklch(0.93 0 0) 0%,
+            oklch(0.96 0 0) 50%,
+            oklch(0.93 0 0) 100%);
     background-size: 200% 100%;
     animation: shimmer 1.5s linear infinite;
     border-radius: var(--radius-default);
 }
 
 .dark .skeleton {
-    background: linear-gradient(
-        90deg,
-        oklch(0.25 0.01 260) 0%,
-        oklch(0.30 0.01 260) 50%,
-        oklch(0.25 0.01 260) 100%
-    );
+    background: linear-gradient(90deg,
+            oklch(0.25 0.01 260) 0%,
+            oklch(0.30 0.01 260) 50%,
+            oklch(0.25 0.01 260) 100%);
     background-size: 200% 100%;
 }
 
@@ -721,12 +707,29 @@
 }
 
 /* Badge Dot Colors */
-.badge-dot-default { background: oklch(0.55 0.02 265); }
-.badge-dot-success { background: var(--color-success-500); }
-.badge-dot-warning { background: var(--color-warning-500); }
-.badge-dot-danger { background: var(--color-danger-500); }
-.badge-dot-info { background: var(--color-info-500); }
-.badge-dot-primary { background: var(--color-brand-admin-500); }
+.badge-dot-default {
+    background: oklch(0.55 0.02 265);
+}
+
+.badge-dot-success {
+    background: var(--color-success-500);
+}
+
+.badge-dot-warning {
+    background: var(--color-warning-500);
+}
+
+.badge-dot-danger {
+    background: var(--color-danger-500);
+}
+
+.badge-dot-info {
+    background: var(--color-info-500);
+}
+
+.badge-dot-primary {
+    background: var(--color-brand-admin-500);
+}
 
 /* ========================================
    ALERT UTILITIES
@@ -773,33 +776,85 @@
 }
 
 /* Alert Text Colors */
-.alert-info .alert-icon { color: var(--color-info-500); }
-.alert-info .alert-title { color: oklch(0.35 0.10 230); }
-.alert-info .alert-text { color: var(--color-info-700); }
+.alert-info .alert-icon {
+    color: var(--color-info-500);
+}
 
-.dark .alert-info .alert-title { color: oklch(0.80 0.10 230); }
-.dark .alert-info .alert-text { color: oklch(0.75 0.08 230); }
+.alert-info .alert-title {
+    color: oklch(0.35 0.10 230);
+}
 
-.alert-success .alert-icon { color: var(--color-success-500); }
-.alert-success .alert-title { color: oklch(0.35 0.10 145); }
-.alert-success .alert-text { color: var(--color-success-700); }
+.alert-info .alert-text {
+    color: var(--color-info-700);
+}
 
-.dark .alert-success .alert-title { color: oklch(0.80 0.12 145); }
-.dark .alert-success .alert-text { color: oklch(0.75 0.10 145); }
+.dark .alert-info .alert-title {
+    color: oklch(0.80 0.10 230);
+}
 
-.alert-warning .alert-icon { color: var(--color-warning-500); }
-.alert-warning .alert-title { color: oklch(0.35 0.12 55); }
-.alert-warning .alert-text { color: var(--color-warning-700); }
+.dark .alert-info .alert-text {
+    color: oklch(0.75 0.08 230);
+}
 
-.dark .alert-warning .alert-title { color: oklch(0.85 0.14 85); }
-.dark .alert-warning .alert-text { color: oklch(0.80 0.12 85); }
+.alert-success .alert-icon {
+    color: var(--color-success-500);
+}
 
-.alert-danger .alert-icon { color: var(--color-danger-500); }
-.alert-danger .alert-title { color: oklch(0.40 0.15 25); }
-.alert-danger .alert-text { color: var(--color-danger-700); }
+.alert-success .alert-title {
+    color: oklch(0.35 0.10 145);
+}
 
-.dark .alert-danger .alert-title { color: oklch(0.80 0.15 25); }
-.dark .alert-danger .alert-text { color: oklch(0.75 0.12 25); }
+.alert-success .alert-text {
+    color: var(--color-success-700);
+}
+
+.dark .alert-success .alert-title {
+    color: oklch(0.80 0.12 145);
+}
+
+.dark .alert-success .alert-text {
+    color: oklch(0.75 0.10 145);
+}
+
+.alert-warning .alert-icon {
+    color: var(--color-warning-500);
+}
+
+.alert-warning .alert-title {
+    color: oklch(0.35 0.12 55);
+}
+
+.alert-warning .alert-text {
+    color: var(--color-warning-700);
+}
+
+.dark .alert-warning .alert-title {
+    color: oklch(0.85 0.14 85);
+}
+
+.dark .alert-warning .alert-text {
+    color: oklch(0.80 0.12 85);
+}
+
+.alert-danger .alert-icon {
+    color: var(--color-danger-500);
+}
+
+.alert-danger .alert-title {
+    color: oklch(0.40 0.15 25);
+}
+
+.alert-danger .alert-text {
+    color: var(--color-danger-700);
+}
+
+.dark .alert-danger .alert-title {
+    color: oklch(0.80 0.15 25);
+}
+
+.dark .alert-danger .alert-text {
+    color: oklch(0.75 0.12 25);
+}
 
 /* ========================================
    STAT CARD ICON UTILITIES
@@ -883,4 +938,515 @@
 
 .input-ring-error:focus {
     --tw-ring-color: var(--color-danger-500);
+}
+
+/* ========================================
+   ROLE CARD UTILITIES
+   ======================================== */
+
+/* Role Card Base */
+.role-card {
+    position: relative;
+    padding: 1px;
+    border-radius: var(--radius-3xl);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2));
+    transition:
+        transform var(--duration-normal) var(--ease-premium),
+        box-shadow var(--duration-normal) var(--ease-premium),
+        background var(--duration-normal) var(--ease-premium);
+}
+
+.dark .role-card {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+}
+
+.role-card:hover {
+    transform: scale(1.02);
+}
+
+/* Role Card Admin */
+.role-card-admin:hover {
+    background: linear-gradient(to bottom, oklch(0.55 0.22 265 / 0.5), oklch(0.47 0.22 265 / 0.5));
+    box-shadow: 0 25px 50px -12px oklch(0.55 0.22 265 / 0.2);
+}
+
+.role-card-admin .role-card-icon {
+    background: var(--color-brand-admin-100);
+    color: var(--color-brand-admin-600);
+}
+
+.dark .role-card-admin .role-card-icon {
+    background: oklch(0.55 0.22 265 / 0.2);
+    color: var(--color-brand-admin-400);
+}
+
+.role-card-admin:hover .role-card-icon {
+    background: var(--color-brand-admin-500);
+    color: white;
+    box-shadow: 0 0 20px oklch(0.55 0.22 265 / 0.5);
+}
+
+.role-card-admin:hover .role-card-title {
+    color: var(--color-brand-admin-700);
+}
+
+.dark .role-card-admin:hover .role-card-title {
+    color: var(--color-brand-admin-200);
+}
+
+.role-card-admin:hover .role-card-border {
+    border-color: oklch(0.55 0.22 265 / 0.3);
+}
+
+.role-card-admin:hover .role-card-tag {
+    background: oklch(0.55 0.22 265 / 0.2);
+    border-color: oklch(0.55 0.22 265 / 0.3);
+    color: var(--color-brand-admin-700);
+}
+
+.dark .role-card-admin:hover .role-card-tag {
+    color: var(--color-brand-admin-200);
+}
+
+/* Role Card Promoter */
+.role-card-promoter:hover {
+    background: linear-gradient(to bottom, oklch(0.58 0.22 295 / 0.5), oklch(0.50 0.22 295 / 0.5));
+    box-shadow: 0 25px 50px -12px oklch(0.58 0.22 295 / 0.2);
+}
+
+.role-card-promoter .role-card-icon {
+    background: var(--color-brand-promoter-100);
+    color: var(--color-brand-promoter-600);
+}
+
+.dark .role-card-promoter .role-card-icon {
+    background: oklch(0.58 0.22 295 / 0.2);
+    color: var(--color-brand-promoter-400);
+}
+
+.role-card-promoter:hover .role-card-icon {
+    background: var(--color-brand-promoter-500);
+    color: white;
+    box-shadow: 0 0 20px oklch(0.58 0.22 295 / 0.5);
+}
+
+.role-card-promoter:hover .role-card-title {
+    color: var(--color-brand-promoter-700);
+}
+
+.dark .role-card-promoter:hover .role-card-title {
+    color: var(--color-brand-promoter-200);
+}
+
+.role-card-promoter:hover .role-card-border {
+    border-color: oklch(0.58 0.22 295 / 0.3);
+}
+
+.role-card-promoter:hover .role-card-tag {
+    background: oklch(0.58 0.22 295 / 0.2);
+    border-color: oklch(0.58 0.22 295 / 0.3);
+    color: var(--color-brand-promoter-700);
+}
+
+.dark .role-card-promoter:hover .role-card-tag {
+    color: var(--color-brand-promoter-200);
+}
+
+/* Role Card Validator */
+.role-card-validator:hover {
+    background: linear-gradient(to bottom, oklch(0.60 0.17 160 / 0.5), oklch(0.52 0.15 160 / 0.5));
+    box-shadow: 0 25px 50px -12px oklch(0.60 0.17 160 / 0.2);
+}
+
+.role-card-validator .role-card-icon {
+    background: var(--color-brand-validator-100);
+    color: var(--color-brand-validator-600);
+}
+
+.dark .role-card-validator .role-card-icon {
+    background: oklch(0.60 0.17 160 / 0.2);
+    color: var(--color-brand-validator-400);
+}
+
+.role-card-validator:hover .role-card-icon {
+    background: var(--color-brand-validator-500);
+    color: white;
+    box-shadow: 0 0 20px oklch(0.60 0.17 160 / 0.5);
+}
+
+.role-card-validator:hover .role-card-title {
+    color: var(--color-brand-validator-700);
+}
+
+.dark .role-card-validator:hover .role-card-title {
+    color: var(--color-brand-validator-200);
+}
+
+.role-card-validator:hover .role-card-border {
+    border-color: oklch(0.60 0.17 160 / 0.3);
+}
+
+.role-card-validator:hover .role-card-tag {
+    background: oklch(0.60 0.17 160 / 0.2);
+    border-color: oklch(0.60 0.17 160 / 0.3);
+    color: var(--color-brand-validator-700);
+}
+
+.dark .role-card-validator:hover .role-card-tag {
+    color: var(--color-brand-validator-200);
+}
+
+/* Role Card Inner Components */
+.role-card-bg {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-3xl);
+    background: var(--color-surface-50);
+    opacity: 0.8;
+    backdrop-filter: blur(var(--glass-blur-xl));
+    transition: background var(--duration-normal) var(--ease-premium);
+}
+
+.dark .role-card-bg {
+    background: var(--color-surface-950);
+}
+
+.role-card:hover .role-card-bg {
+    background: var(--color-surface-100);
+    opacity: 0.6;
+}
+
+.dark .role-card:hover .role-card-bg {
+    background: var(--color-surface-950);
+}
+
+.role-card-content {
+    position: relative;
+    height: 100%;
+    padding: var(--spacing-8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: calc(var(--radius-3xl) - 4px);
+}
+
+.role-card-border {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: border-color var(--duration-normal) var(--ease-premium);
+}
+
+.dark .role-card-border {
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.role-card-icon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--radius-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-6);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition:
+        background var(--duration-normal) var(--ease-premium),
+        color var(--duration-normal) var(--ease-premium),
+        box-shadow var(--duration-normal) var(--ease-premium);
+}
+
+.role-card-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-surface-900);
+    margin-bottom: var(--spacing-2);
+    transition: color var(--duration-normal) var(--ease-premium);
+}
+
+.dark .role-card-title {
+    color: white;
+}
+
+.role-card-description {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    color: oklch(0.55 0.02 265);
+    margin-bottom: var(--spacing-6);
+    transition: color var(--duration-normal) var(--ease-premium);
+}
+
+.dark .role-card-description {
+    color: oklch(0.65 0.02 265);
+}
+
+.role-card:hover .role-card-description {
+    color: oklch(0.45 0.02 265);
+}
+
+.dark .role-card:hover .role-card-description {
+    color: oklch(0.80 0.02 265);
+}
+
+.role-card-tag {
+    margin-top: auto;
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: oklch(0.45 0.02 265);
+    transition:
+        background var(--duration-normal) var(--ease-premium),
+        border-color var(--duration-normal) var(--ease-premium),
+        color var(--duration-normal) var(--ease-premium);
+}
+
+.dark .role-card-tag {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.05);
+    color: oklch(0.70 0.02 265);
+}
+
+/* ========================================
+   LANDING PAGE UTILITIES
+   ======================================== */
+
+/* Landing Background */
+.landing-bg {
+    background-color: var(--color-surface-50);
+    transition: background-color var(--duration-normal) var(--ease-premium);
+}
+
+.dark .landing-bg {
+    background-color: var(--color-surface-950);
+}
+
+/* Landing Gradient Effects */
+.landing-gradient-top {
+    background: radial-gradient(ellipse at top, var(--gradient-stops));
+    --tw-gradient-from: oklch(0.94 0.04 265 / 0.4);
+    --tw-gradient-via: var(--color-surface-50);
+    --tw-gradient-to: var(--color-surface-50);
+    --gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to);
+}
+
+.dark .landing-gradient-top {
+    --tw-gradient-from: oklch(0.35 0.10 265 / 0.2);
+    --tw-gradient-via: var(--color-surface-950);
+    --tw-gradient-to: var(--color-surface-950);
+}
+
+.landing-glow-admin {
+    background: oklch(0.55 0.22 265 / 0.1);
+}
+
+.dark .landing-glow-admin {
+    background: oklch(0.55 0.22 265 / 0.2);
+}
+
+.landing-glow-validator {
+    background: oklch(0.60 0.17 160 / 0.1);
+}
+
+.dark .landing-glow-validator {
+    background: oklch(0.60 0.17 160 / 0.1);
+}
+
+/* Text Colors - Design System */
+.text-surface-primary {
+    color: var(--color-surface-900);
+}
+
+.dark .text-surface-primary {
+    color: white;
+}
+
+.text-surface-secondary {
+    color: oklch(0.35 0.04 260);
+    /* Azul escuro no light */
+}
+
+.dark .text-surface-secondary {
+    color: oklch(0.72 0.03 250);
+    /* Azul claro suave no dark */
+}
+
+.text-surface-muted {
+    color: oklch(0.45 0.03 260);
+    /* Azul médio no light */
+}
+
+.dark .text-surface-muted {
+    color: oklch(0.58 0.025 250);
+    /* Azul suave no dark */
+}
+
+/* ========================================
+   CODE BLOCK - Documentation
+   ======================================== */
+
+/* Code Block Container */
+.code-block {
+    font-family: var(--font-family-mono);
+    box-shadow: var(--shadow-elevated);
+}
+
+/* Code Block Scrollbar */
+.code-block .code-content {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.45 0 0 / 0.3) transparent;
+}
+
+.code-block .code-content::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.code-block .code-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.code-block .code-content::-webkit-scrollbar-thumb {
+    background: oklch(0.45 0 0 / 0.3);
+    border-radius: var(--radius-full);
+}
+
+.code-block .code-content::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.55 0 0 / 0.5);
+}
+
+/* Code Line Styling */
+.code-block .code-line {
+    min-height: 1.5rem;
+}
+
+.code-block .code-line:hover {
+    background: oklch(1 0 0 / 0.03);
+}
+
+.code-block .line-number {
+    user-select: none;
+    font-size: 0.75rem;
+}
+
+.code-block .line-content {
+    white-space: pre;
+}
+
+/* Docs Navigation Sidebar */
+.docs-sidebar {
+    position: sticky;
+    top: 2rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+}
+
+.docs-sidebar-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-lg);
+    color: oklch(0.55 0.02 265);
+    font-size: 0.875rem;
+    transition: all var(--duration-fast) var(--ease-premium);
+}
+
+.docs-sidebar-link:hover {
+    background: oklch(0 0 0 / 0.05);
+    color: oklch(0.35 0.02 265);
+}
+
+.dark .docs-sidebar-link {
+    color: oklch(0.65 0.02 265);
+}
+
+.dark .docs-sidebar-link:hover {
+    background: oklch(1 0 0 / 0.05);
+    color: oklch(0.85 0.02 265);
+}
+
+.docs-sidebar-link.active {
+    background: var(--color-brand-admin-100);
+    color: var(--color-brand-admin-700);
+    font-weight: 500;
+}
+
+.dark .docs-sidebar-link.active {
+    background: oklch(0.55 0.22 265 / 0.2);
+    color: oklch(0.80 0.15 265);
+}
+
+/* Component Section Styling */
+.docs-component-section {
+    scroll-margin-top: 2rem;
+}
+
+/* Props Table */
+.docs-props-table {
+    width: 100%;
+    font-size: 0.875rem;
+    border: 1px solid oklch(0.85 0.01 265);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.dark .docs-props-table {
+    border-color: oklch(0.30 0.02 265);
+}
+
+.docs-props-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    border-bottom: 1px solid oklch(0.80 0.01 265);
+    background: oklch(0.96 0.005 265);
+    color: oklch(0.35 0.03 265);
+}
+
+.dark .docs-props-table th {
+    background: oklch(0.22 0.02 265);
+    border-bottom-color: oklch(0.30 0.02 265);
+    color: oklch(0.75 0.02 265);
+}
+
+.docs-props-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid oklch(0.90 0.01 265);
+    color: oklch(0.40 0.03 265);
+}
+
+.dark .docs-props-table td {
+    border-bottom-color: oklch(0.25 0.02 265);
+    color: oklch(0.70 0.02 265);
+}
+
+.docs-props-table .prop-name {
+    font-family: var(--font-family-mono);
+    font-size: 0.8125rem;
+    color: var(--color-brand-admin-600);
+    font-weight: 500;
+}
+
+.dark .docs-props-table .prop-name {
+    color: var(--color-brand-admin-400);
+}
+
+.docs-props-table .prop-type {
+    font-family: var(--font-family-mono);
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-default);
+    background: var(--color-info-50);
+    color: var(--color-info-700);
+}
+
+.dark .docs-props-table .prop-type {
+    background: oklch(0.30 0.08 230 / 0.3);
+    color: oklch(0.75 0.12 230);
+}
+
+.docs-props-table .prop-default {
+    font-family: var(--font-family-mono);
+    font-size: 0.75rem;
+    color: oklch(0.55 0.02 265);
 }
