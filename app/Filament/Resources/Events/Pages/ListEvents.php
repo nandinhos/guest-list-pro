@@ -10,6 +10,8 @@ class ListEvents extends ListRecords
 {
     protected static string $resource = EventResource::class;
 
+    protected string $view = 'filament.resources.events.pages.list-events';
+
     protected function getHeaderActions(): array
     {
         return [

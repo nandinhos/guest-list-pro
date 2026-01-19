@@ -14,37 +14,19 @@ class EventsTable
     {
         return $table
             ->columns([
-                \Filament\Tables\Columns\ImageColumn::make('banner_path')
-                    ->label('Banner')
-                    ->circular(),
-                TextColumn::make('name')
-                    ->label('Evento')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('date')
-                    ->label('Data')
-                    ->date('d/m/Y')
-                    ->sortable(),
-                TextColumn::make('start_time')
-                    ->label('Início')
-                    ->time('H:i')
-                    ->sortable(),
-                TextColumn::make('end_time')
-                    ->label('Fim')
-                    ->time('H:i')
-                    ->sortable(),
-                TextColumn::make('status')
-                    ->badge()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                \Filament\Tables\Columns\ViewColumn::make('event_card')
+                    ->view('filament.tables.columns.event-card')
+                    ->label('') // Ocultar label da coluna
+                    ->alignLeft(),
             ])
+            ->contentGrid([
+                'default' => 2,
+                'md' => 3,
+                'xl' => 4,
+            ])
+            ->recordUrl(
+                fn (\App\Models\Event $record): string => \App\Filament\Resources\Events\Pages\EditEvent::getUrl(['record' => $record]),
+            )
             ->filters([
                 //
             ])
