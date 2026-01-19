@@ -25,6 +25,7 @@ class ValidatorPanelProvider extends PanelProvider
     {
         return $panel
             ->id('validator')
+            ->spa()
             ->path('validator')
             ->login()
             ->brandName('Portal do Validador')

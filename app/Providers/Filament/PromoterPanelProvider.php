@@ -25,6 +25,7 @@ class PromoterPanelProvider extends PanelProvider
     {
         return $panel
             ->id('promoter')
+            ->spa()
             ->path('promoter')
             ->login()
             ->brandName('Portal do Promoter')

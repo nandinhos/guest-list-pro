@@ -773,3 +773,103 @@ h1, h2, h3, h4 {
 .fi-wizard-step-completed .fi-wizard-step-indicator {
     animation: checkboxPop 0.3s var(--ease-bounce);
 }
+
+/* ========================================
+   GLASS SIDEBAR REDESIGN (Floating)
+   ======================================== */
+
+@media (min-width: 1024px) {
+
+    /* Sidebar Container - Floating Layout */
+    .fi-sidebar {
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        margin: 1rem !important;
+        flex-shrink: 0 !important;
+
+        /* Altura ajustada ao conteúdo, mas com scroll se necessário */
+        height: auto !important;
+        max-height: calc(100vh - 2rem) !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* O elemento interno de navegação (Card Glass) */
+    .fi-sidebar > nav {
+        background: var(--glass-bg) !important;
+        backdrop-filter: blur(var(--glass-blur-lg));
+        -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+        border: 1px solid var(--glass-border) !important;
+        border-radius: 1.25rem !important;
+        box-shadow: var(--shadow-glass) !important;
+
+        /* Ajusta ao conteúdo e permite scroll interno */
+        height: auto !important;
+        max-height: 100% !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* Scroll apenas na lista de navegação se precisar */
+    .fi-sidebar-nav {
+         flex: 1;
+         overflow-y: auto !important;
+         padding: 1rem 0.75rem !important;
+    }
+
+    /* Header (Logo) adjustment */
+    .fi-sidebar-header {
+        background-color: transparent !important;
+        border-bottom: 1px solid var(--glass-border) !important;
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+
+    /* Item Style Changes */
+    .fi-sidebar-item {
+        margin-bottom: 0.25rem;
+    }
+
+    .fi-sidebar-item-button {
+        border-radius: 0.75rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    /* Remover background padrão ativo */
+    .fi-sidebar-item-active {
+        border-left: none !important;
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+        background: transparent !important;
+    }
+
+    /* Novo estilo ativo (Pílula Glass Dynamic) */
+    .fi-sidebar-item-active .fi-sidebar-item-button {
+        background: linear-gradient(135deg, oklch(from var(--panel-color) l c h / 0.15) 0%, oklch(from var(--panel-color-dark) l c h / 0.1)) !important;
+        color: var(--panel-color-dark) !important;
+        box-shadow: 0 2px 10px -2px oklch(from var(--panel-color) l c h / 0.2);
+    }
+}
+
+/* Dark Mode Variants */
+@media (min-width: 1024px) {
+    .dark .fi-sidebar > nav {
+        background: var(--glass-bg-strong) !important;
+        border: 1px solid var(--glass-border) !important;
+        box-shadow: var(--shadow-elevated) !important;
+    }
+
+    .dark .fi-sidebar-header {
+        border-bottom: 1px solid var(--glass-border) !important;
+    }
+
+    .dark .fi-sidebar-item-active .fi-sidebar-item-button {
+        background: linear-gradient(135deg, oklch(from var(--panel-color) l c h / 0.25) 0%, oklch(from var(--panel-color-dark) l c h / 0.15)) !important;
+        color: oklch(from var(--panel-color-light) l c h) !important;
+        border: 1px solid oklch(from var(--panel-color) l c h / 0.3) !important;
+    }
+}
