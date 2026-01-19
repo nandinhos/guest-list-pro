@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Promoter\Pages\SelectEvent;
+use App\Filament\Bilheteria\Pages\SelectEvent;
 use App\Http\Middleware\EnsureEventSelected;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -21,30 +21,30 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class PromoterPanelProvider extends PanelProvider
+class BilheteriaPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('promoter')
+            ->id('bilheteria')
             ->spa()
-            ->path('promoter')
+            ->path('bilheteria')
             ->login()
-            ->brandName('Portal do Promoter')
+            ->brandName('Portal da Bilheteria')
             ->colors([
-                'primary' => Color::Purple,
+                'primary' => Color::Orange,
                 'gray' => Color::Slate,
             ])
             ->font('Inter')
             ->defaultThemeMode(\Filament\Enums\ThemeMode::Dark)
-            ->viteTheme('resources/css/filament/promoter/theme.css')
-            ->discoverResources(in: app_path('Filament/Promoter/Resources'), for: 'App\Filament\Promoter\Resources')
-            ->discoverPages(in: app_path('Filament/Promoter/Pages'), for: 'App\Filament\Promoter\Pages')
+            ->viteTheme('resources/css/filament/bilheteria/theme.css')
+            ->discoverResources(in: app_path('Filament/Bilheteria/Resources'), for: 'App\Filament\Bilheteria\Resources')
+            ->discoverPages(in: app_path('Filament/Bilheteria/Pages'), for: 'App\Filament\Bilheteria\Pages')
             ->pages([
                 SelectEvent::class,
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Promoter/Widgets'), for: 'App\Filament\Promoter\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Bilheteria/Widgets'), for: 'App\Filament\Bilheteria\Widgets')
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,

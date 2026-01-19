@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Validator\Pages\SelectEvent;
+use App\Http\Middleware\EnsureEventSelected;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -39,6 +41,7 @@ class ValidatorPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Validator/Resources'), for: 'App\Filament\Validator\Resources')
             ->discoverPages(in: app_path('Filament/Validator/Pages'), for: 'App\Filament\Validator\Pages')
             ->pages([
+                SelectEvent::class,
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Validator/Widgets'), for: 'App\Filament\Validator\Widgets')
@@ -59,6 +62,7 @@ class ValidatorPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                EnsureEventSelected::class,
             ]);
     }
 }

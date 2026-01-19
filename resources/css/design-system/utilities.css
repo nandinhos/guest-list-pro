@@ -109,6 +109,14 @@
     box-shadow: var(--shadow-glow-validator);
 }
 
+.hover-glow-bilheteria {
+    transition: box-shadow var(--duration-normal) var(--ease-premium);
+}
+
+.hover-glow-bilheteria:hover {
+    box-shadow: var(--shadow-glow-bilheteria);
+}
+
 /* Hover Brightness */
 .hover-bright {
     transition: filter var(--duration-fast) var(--ease-premium);
@@ -155,6 +163,13 @@
     box-shadow:
         0 0 0 2px var(--glass-bg-strong),
         0 0 0 4px oklch(0.60 0.17 160 / 0.5);
+}
+
+.focus-ring-bilheteria:focus,
+.focus-ring-bilheteria:focus-visible {
+    box-shadow:
+        0 0 0 2px var(--glass-bg-strong),
+        0 0 0 4px oklch(0.70 0.18 50 / 0.5);
 }
 
 /* Focus Within */
@@ -214,6 +229,12 @@
             oklch(0.52 0.15 160) 100%);
 }
 
+.gradient-border-bilheteria::before {
+    background: linear-gradient(135deg,
+            oklch(0.80 0.16 50) 0%,
+            oklch(0.58 0.16 50) 100%);
+}
+
 /* ========================================
    TEXT GRADIENTS
    ======================================== */
@@ -244,6 +265,13 @@
 
 .text-gradient-validator {
     background: var(--gradient-validator);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-bilheteria {
+    background: var(--gradient-bilheteria);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -890,6 +918,16 @@
     color: oklch(0.72 0.14 160);
 }
 
+.stat-icon-bilheteria {
+    background: var(--color-brand-bilheteria-100);
+    color: var(--color-brand-bilheteria-600);
+}
+
+.dark .stat-icon-bilheteria {
+    background: oklch(0.30 0.10 50 / 0.5);
+    color: oklch(0.75 0.15 50);
+}
+
 .stat-icon-success {
     background: var(--color-success-100);
     color: var(--color-success-600);
@@ -957,7 +995,7 @@
 }
 
 .dark .role-card {
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
 }
 
 .role-card:hover {
@@ -1096,15 +1134,62 @@
     color: var(--color-brand-validator-200);
 }
 
+/* Role Card Bilheteria */
+.role-card-bilheteria:hover {
+    background: linear-gradient(to bottom, oklch(0.70 0.18 50 / 0.5), oklch(0.58 0.16 50 / 0.5));
+    box-shadow: 0 25px 50px -12px oklch(0.70 0.18 50 / 0.2);
+}
+
+.role-card-bilheteria .role-card-icon {
+    background: var(--color-brand-bilheteria-100);
+    color: var(--color-brand-bilheteria-600);
+}
+
+.dark .role-card-bilheteria .role-card-icon {
+    background: oklch(0.70 0.18 50 / 0.2);
+    color: var(--color-brand-bilheteria-400);
+}
+
+.role-card-bilheteria:hover .role-card-icon {
+    background: var(--color-brand-bilheteria-500);
+    color: white;
+    box-shadow: 0 0 20px oklch(0.70 0.18 50 / 0.5);
+}
+
+.role-card-bilheteria:hover .role-card-title {
+    color: var(--color-brand-bilheteria-700);
+}
+
+.dark .role-card-bilheteria:hover .role-card-title {
+    color: var(--color-brand-bilheteria-200);
+}
+
+.role-card-bilheteria:hover .role-card-border {
+    border-color: oklch(0.70 0.18 50 / 0.3);
+}
+
+.role-card-bilheteria:hover .role-card-tag {
+    background: oklch(0.70 0.18 50 / 0.2);
+    border-color: oklch(0.70 0.18 50 / 0.3);
+    color: var(--color-brand-bilheteria-700);
+}
+
+.dark .role-card-bilheteria:hover .role-card-tag {
+    color: var(--color-brand-bilheteria-200);
+}
+
 /* Role Card Inner Components */
 .role-card-bg {
     position: absolute;
     inset: 0;
     border-radius: var(--radius-3xl);
-    background: var(--color-surface-50);
-    opacity: 0.8;
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(var(--glass-blur-xl));
-    transition: background var(--duration-normal) var(--ease-premium);
+    box-shadow:
+        0 4px 30px rgba(0, 0, 0, 0.08),
+        0 1px 3px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transition: all var(--duration-normal) var(--ease-premium);
 }
 
 .dark .role-card-bg {
@@ -1112,12 +1197,19 @@
 }
 
 .role-card:hover .role-card-bg {
-    background: var(--color-surface-100);
-    opacity: 0.6;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.12),
+        0 2px 6px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 .dark .role-card:hover .role-card-bg {
-    background: var(--color-surface-950);
+    background: rgba(15, 23, 42, 0.9);
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .role-card-content {
@@ -1214,12 +1306,16 @@
 
 /* Landing Background */
 .landing-bg {
-    background-color: var(--color-surface-50);
+    background: linear-gradient(180deg,
+            oklch(0.92 0.02 265) 0%,
+            oklch(0.88 0.03 265) 100%);
     transition: background-color var(--duration-normal) var(--ease-premium);
 }
 
 .dark .landing-bg {
-    background-color: var(--color-surface-950);
+    background: linear-gradient(180deg,
+            oklch(0.15 0.02 265) 0%,
+            oklch(0.12 0.02 265) 100%);
 }
 
 /* Landing Gradient Effects */
@@ -1449,4 +1545,45 @@
     font-family: var(--font-family-mono);
     font-size: 0.75rem;
     color: oklch(0.55 0.02 265);
+}
+
+/* ========================================
+   EVENT CARD UTILITIES
+   ======================================== */
+
+/* Event Card - Para selecao de eventos */
+.event-card {
+    position: relative;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.event-card:hover {
+    border-color: rgb(var(--primary-500) / 0.5);
+    box-shadow: 0 0 20px rgb(var(--primary-500) / 0.15);
+}
+
+.event-card:focus {
+    border-color: rgb(var(--primary-500));
+}
+
+/* Event Card por Painel */
+.event-card-promoter:hover {
+    border-color: oklch(0.58 0.22 295 / 0.5);
+    box-shadow: 0 0 20px oklch(0.58 0.22 295 / 0.15);
+}
+
+.event-card-validator:hover {
+    border-color: oklch(0.60 0.17 160 / 0.5);
+    box-shadow: 0 0 20px oklch(0.60 0.17 160 / 0.15);
+}
+
+.event-card-bilheteria:hover {
+    border-color: oklch(0.70 0.18 50 / 0.5);
+    box-shadow: 0 0 20px oklch(0.70 0.18 50 / 0.15);
 }

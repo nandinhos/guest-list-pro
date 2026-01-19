@@ -2,45 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
-class PromoterPermission extends Model
+/**
+ * Alias de EventAssignment para manter compatibilidade com codigo existente.
+ *
+ * @deprecated Use EventAssignment diretamente.
+ */
+class PromoterPermission extends EventAssignment
 {
-    /** @use HasFactory<\Database\Factories\PromoterPermissionFactory> */
-    use HasFactory;
-
-    protected $fillable = [
-        'user_id',
-        'event_id',
-        'sector_id',
-        'guest_limit',
-        'start_time',
-        'end_time',
-    ];
-
     /**
-     * Usuário (Promoter) desta permissão.
+     * A tabela original foi renomeada para event_assignments.
      */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Evento desta permissão.
-     */
-    public function event(): BelongsTo
-    {
-        return $this->belongsTo(Event::class);
-    }
-
-    /**
-     * Setor desta permissão.
-     */
-    public function sector(): BelongsTo
-    {
-        return $this->belongsTo(Sector::class);
-    }
+    protected $table = 'event_assignments';
 }

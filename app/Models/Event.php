@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Enums\EventStatus;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Event extends Model
 {
@@ -15,6 +17,8 @@ class Event extends Model
     protected $fillable = [
         'name',
         'banner_path',
+        'banner_url',
+        'location',
         'date',
         'start_time',
         'end_time',
@@ -46,10 +50,37 @@ class Event extends Model
     }
 
     /**
-     * Permissões de promoters para este evento.
+     * Permissões de promoters para este evento (alias para compatibilidade).
      */
     public function permissions(): HasMany
     {
         return $this->hasMany(PromoterPermission::class);
+    }
+
+    /**
+     * Atribuicoes de usuarios a este evento.
+     */
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(EventAssignment::class);
+    }
+
+    /**
+     * Retorna a URL de exibicao do banner.
+     * Prioriza banner_url externo, depois banner_path local, e por ultimo um placeholder.
+     */
+    protected function bannerDisplayUrl(): Attribute
+    {
+        return Attribute::get(function (): ?string {
+            if ($this->banner_url) {
+                return $this->banner_url;
+            }
+
+            if ($this->banner_path) {
+                return Storage::url($this->banner_path);
+            }
+
+            return null;
+        });
     }
 }

@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/css/filament/admin/theme.css',
                 'resources/css/filament/promoter/theme.css',
                 'resources/css/filament/validator/theme.css',
+                'resources/css/filament/bilheteria/theme.css',
             ],
             refresh: true,
         }),

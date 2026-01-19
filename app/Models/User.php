@@ -29,6 +29,10 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
             return $this->role === \App\Enums\UserRole::VALIDATOR && $this->is_active;
         }
 
+        if ($panel->getId() === 'bilheteria') {
+            return $this->role === \App\Enums\UserRole::BILHETERIA && $this->is_active;
+        }
+
         return false;
     }
 
@@ -72,10 +76,36 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
 
     /**
      * Permissões vinculadas a este usuário (se for Promoter).
+     * Alias para compatibilidade.
      */
     public function permissions(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(PromoterPermission::class);
+    }
+
+    /**
+     * Atribuicoes de eventos deste usuario.
+     */
+    public function eventAssignments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(EventAssignment::class);
+    }
+
+    /**
+     * Retorna os eventos atribuidos a este usuario baseado na sua role.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, Event>
+     */
+    public function getAssignedEvents(): \Illuminate\Database\Eloquent\Collection
+    {
+        return Event::query()
+            ->whereHas('assignments', fn ($query) => $query
+                ->where('user_id', $this->id)
+                ->where('role', $this->role->value)
+            )
+            ->where('status', \App\Enums\EventStatus::ACTIVE)
+            ->orderBy('date', 'asc')
+            ->get();
     }
 
     /**

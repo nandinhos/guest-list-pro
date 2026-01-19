@@ -23,7 +23,7 @@
     </div>
 
     <!-- Cards Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full relative z-10 px-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-6xl w-full relative z-10 px-4">
 
         <!-- ADMIN CARD -->
         <a href="/admin" class="role-card role-card-admin">
@@ -72,6 +72,23 @@
                 </p>
                 <span class="role-card-tag">
                     Abrir Terminal &rarr;
+                </span>
+            </div>
+        </a>
+
+        <!-- BILHETERIA CARD -->
+        <a href="/bilheteria" class="role-card role-card-bilheteria">
+            <div class="role-card-bg"></div>
+            <div class="role-card-content role-card-border">
+                <div class="role-card-icon">
+                    <x-heroicon-o-ticket class="w-8 h-8" />
+                </div>
+                <h3 class="role-card-title">Bilheteria</h3>
+                <p class="role-card-description">
+                    Venda de ingressos, controle de bilhetes e gestão de entradas.
+                </p>
+                <span class="role-card-tag">
+                    Acessar Bilheteria &rarr;
                 </span>
             </div>
         </a>

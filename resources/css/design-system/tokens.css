@@ -49,6 +49,19 @@
     --color-brand-validator-900: oklch(0.31 0.08 160);
     --color-brand-validator-950: oklch(0.19 0.05 160);
 
+    /* Bilheteria - Orange */
+    --color-brand-bilheteria-50: oklch(0.98 0.02 50);
+    --color-brand-bilheteria-100: oklch(0.95 0.05 50);
+    --color-brand-bilheteria-200: oklch(0.90 0.10 50);
+    --color-brand-bilheteria-300: oklch(0.82 0.14 50);
+    --color-brand-bilheteria-400: oklch(0.80 0.16 50);
+    --color-brand-bilheteria-500: oklch(0.70 0.18 50);
+    --color-brand-bilheteria-600: oklch(0.58 0.16 50);
+    --color-brand-bilheteria-700: oklch(0.45 0.14 50);
+    --color-brand-bilheteria-800: oklch(0.38 0.11 50);
+    --color-brand-bilheteria-900: oklch(0.32 0.08 50);
+    --color-brand-bilheteria-950: oklch(0.20 0.05 50);
+
     /* ========================================
        SEMANTIC COLORS
        ======================================== */
@@ -228,6 +241,7 @@
     --shadow-glow-admin: 0 0 20px -5px oklch(0.55 0.22 265 / 0.3);
     --shadow-glow-promoter: 0 0 20px -5px oklch(0.58 0.22 295 / 0.3);
     --shadow-glow-validator: 0 0 20px -5px oklch(0.60 0.17 160 / 0.3);
+    --shadow-glow-bilheteria: 0 0 20px -5px oklch(0.70 0.18 50 / 0.3);
     --shadow-glow-success: 0 0 20px -5px oklch(0.62 0.17 145 / 0.3);
     --shadow-glow-warning: 0 0 20px -5px oklch(0.75 0.18 85 / 0.3);
     --shadow-glow-danger: 0 0 20px -5px oklch(0.58 0.22 25 / 0.3);
@@ -242,6 +256,7 @@
     --gradient-admin: linear-gradient(135deg, oklch(0.55 0.22 265) 0%, oklch(0.47 0.22 265) 100%);
     --gradient-promoter: linear-gradient(135deg, oklch(0.58 0.22 295) 0%, oklch(0.50 0.22 295) 100%);
     --gradient-validator: linear-gradient(135deg, oklch(0.60 0.17 160) 0%, oklch(0.52 0.15 160) 100%);
+    --gradient-bilheteria: linear-gradient(135deg, oklch(0.70 0.18 50) 0%, oklch(0.58 0.16 50) 100%);
 
     /* Gradient Meshes for Backgrounds */
     --gradient-mesh-light:
@@ -266,6 +281,7 @@
     --shadow-glow-admin: 0 0 30px -5px oklch(0.55 0.22 265 / 0.4);
     --shadow-glow-promoter: 0 0 30px -5px oklch(0.58 0.22 295 / 0.4);
     --shadow-glow-validator: 0 0 30px -5px oklch(0.60 0.17 160 / 0.4);
+    --shadow-glow-bilheteria: 0 0 30px -5px oklch(0.70 0.18 50 / 0.4);
     --shadow-glow-success: 0 0 30px -5px oklch(0.62 0.17 145 / 0.4);
     --shadow-glow-warning: 0 0 30px -5px oklch(0.75 0.18 85 / 0.4);
     --shadow-glow-danger: 0 0 30px -5px oklch(0.58 0.22 25 / 0.4);

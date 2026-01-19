@@ -4,16 +4,18 @@ namespace App\Enums;
 
 /**
  * Define os papéis (roles) disponíveis para os usuários do sistema.
- * 
+ *
  * ADMIN: Acesso total.
  * PROMOTER: Cadastro de convidados dentro de limites.
  * VALIDATOR: Realização de check-ins nos eventos.
+ * BILHETERIA: Venda e controle de ingressos.
  */
-enum UserRole: string implements \Filament\Support\Contracts\HasLabel, \Filament\Support\Contracts\HasColor, \Filament\Support\Contracts\HasIcon
+enum UserRole: string implements \Filament\Support\Contracts\HasColor, \Filament\Support\Contracts\HasIcon, \Filament\Support\Contracts\HasLabel
 {
     case ADMIN = 'admin';
     case PROMOTER = 'promoter';
     case VALIDATOR = 'validator';
+    case BILHETERIA = 'bilheteria';
 
     public function getLabel(): ?string
     {
@@ -21,15 +23,17 @@ enum UserRole: string implements \Filament\Support\Contracts\HasLabel, \Filament
             self::ADMIN => 'Administrador',
             self::PROMOTER => 'Promoter',
             self::VALIDATOR => 'Validador',
+            self::BILHETERIA => 'Bilheteria',
         };
     }
 
-    public function getColor(): string | array | null
+    public function getColor(): string|array|null
     {
         return match ($this) {
             self::ADMIN => 'danger',
             self::PROMOTER => 'warning',
             self::VALIDATOR => 'success',
+            self::BILHETERIA => 'orange',
         };
     }
 
@@ -39,6 +43,7 @@ enum UserRole: string implements \Filament\Support\Contracts\HasLabel, \Filament
             self::ADMIN => 'heroicon-m-shield-check',
             self::PROMOTER => 'heroicon-m-user-group',
             self::VALIDATOR => 'heroicon-m-check-badge',
+            self::BILHETERIA => 'heroicon-m-ticket',
         };
     }
 }

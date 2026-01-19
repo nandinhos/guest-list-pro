@@ -10,13 +10,15 @@ class Welcome extends Component
     {
         if (auth()->check()) {
             $user = auth()->user();
-            
+
             if ($user->role === \App\Enums\UserRole::ADMIN) {
                 return redirect()->to('/admin');
             } elseif ($user->role === \App\Enums\UserRole::PROMOTER) {
                 return redirect()->to('/promoter');
             } elseif ($user->role === \App\Enums\UserRole::VALIDATOR) {
                 return redirect()->to('/validator');
+            } elseif ($user->role === \App\Enums\UserRole::BILHETERIA) {
+                return redirect()->to('/bilheteria');
             }
         }
     }
