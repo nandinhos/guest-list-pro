@@ -11,9 +11,14 @@ abstract class SelectEventBase extends Page
 
     protected static ?string $title = 'Selecionar Evento';
 
-    protected static ?int $navigationSort = -2;
-
     protected string $view = 'filament.pages.select-event';
+
+    protected static string $layout = 'layouts.fullscreen';
+
+    public function getMaxWidth(): \Filament\Support\Enums\MaxWidth|string|null
+    {
+        return \Filament\Support\Enums\MaxWidth::SevenExtraLarge;
+    }
 
     /**
      * Retorna o ID do painel atual.

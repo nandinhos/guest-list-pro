@@ -20,6 +20,17 @@ class GuestResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if ($selectedEventId = session('selected_event_id')) {
+            $query->where('event_id', $selectedEventId);
+        }
+
+        return $query->where('promoter_id', auth()->id());
+    }
+
     public static function form(Schema $schema): Schema
     {
         return GuestForm::configure($schema);

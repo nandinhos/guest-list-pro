@@ -33,9 +33,16 @@ class EnsureEventSelected
             return $next($request);
         }
 
-        // Se ja esta na pagina de selecao de evento, nao redireciona
-        if ($request->routeIs("filament.{$panelId}.pages.select-event")) {
-            return $next($request);
+        // Ignorar rotas de autenticação (login, logout, register, password reset, etc)
+        $authRoutes = [
+            "filament.{$panelId}.auth.",
+            "filament.{$panelId}.pages.select-event",
+        ];
+
+        foreach ($authRoutes as $routePattern) {
+            if ($request->routeIs($routePattern.'*') || $request->routeIs($routePattern)) {
+                return $next($request);
+            }
         }
 
         // Verifica se ha um evento selecionado na sessao

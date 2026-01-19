@@ -17,6 +17,7 @@
 /* Source files for Tailwind */
 @source '../../../../app/Filament/Bilheteria/**/*.php';
 @source '../../../../resources/views/filament/bilheteria/**/*.blade.php';
+@source '../../../../resources/views/livewire/**/*.blade.php';
 
 /* ========================================
    BILHETERIA PANEL COLORS (ORANGE)

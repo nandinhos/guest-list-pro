@@ -8,6 +8,9 @@
  * para garantir que @import venha antes de outras regras CSS.
  */
 
+/* Import design system utilities */
+@import '../../design-system/utilities.css';
+
 /* ========================================
    CSS VARIABLES
    ======================================== */
@@ -56,7 +59,10 @@
 .fi-section-header-heading,
 .fi-modal-heading,
 .fi-sidebar-header,
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     font-family: var(--font-heading) !important;
     letter-spacing: -0.025em;
 }
@@ -77,6 +83,7 @@ h1, h2, h3, h4 {
         opacity: 0;
         transform: translateY(12px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -88,6 +95,7 @@ h1, h2, h3, h4 {
         opacity: 0;
         transform: scale(0.96);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -95,7 +103,7 @@ h1, h2, h3, h4 {
 }
 
 /* Page content animation */
-.fi-main > * {
+.fi-main>* {
     animation: fadeInUp 0.4s var(--ease-premium) forwards;
 }
 
@@ -414,30 +422,31 @@ h1, h2, h3, h4 {
 
 /* Skeleton loading */
 .fi-skeleton {
-    background: linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0.06) 0%,
-        rgba(0, 0, 0, 0.03) 50%,
-        rgba(0, 0, 0, 0.06) 100%
-    );
+    background: linear-gradient(90deg,
+            rgba(0, 0, 0, 0.06) 0%,
+            rgba(0, 0, 0, 0.03) 50%,
+            rgba(0, 0, 0, 0.06) 100%);
     background-size: 200% 100%;
     animation: shimmer 1.5s linear infinite;
     border-radius: 0.5rem;
 }
 
 .dark .fi-skeleton {
-    background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.1) 0%,
-        rgba(255, 255, 255, 0.05) 50%,
-        rgba(255, 255, 255, 0.1) 100%
-    );
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.05) 50%,
+            rgba(255, 255, 255, 0.1) 100%);
     background-size: 200% 100%;
 }
 
 @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
 }
 
 /* ========================================
@@ -482,6 +491,7 @@ h1, h2, h3, h4 {
    ======================================== */
 
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
@@ -613,9 +623,26 @@ h1, h2, h3, h4 {
 
 /* Validation Error Shake */
 @keyframes validationError {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
-    20%, 40%, 60%, 80% { transform: translateX(4px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-4px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(4px);
+    }
 }
 
 .fi-input[aria-invalid="true"],
@@ -636,9 +663,17 @@ h1, h2, h3, h4 {
 
 /* Checkbox Animation */
 @keyframes checkboxPop {
-    0% { transform: scale(0.8); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(0.8);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .fi-checkbox-input:checked {
@@ -685,8 +720,15 @@ h1, h2, h3, h4 {
    ======================================== */
 
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
 }
 
 .fi-ta-empty-state-icon {
@@ -797,7 +839,7 @@ h1, h2, h3, h4 {
     }
 
     /* O elemento interno de navegação (Card Glass) */
-    .fi-sidebar > nav {
+    .fi-sidebar>nav {
         background: var(--glass-bg) !important;
         backdrop-filter: blur(var(--glass-blur-lg));
         -webkit-backdrop-filter: blur(var(--glass-blur-lg));
@@ -815,9 +857,9 @@ h1, h2, h3, h4 {
 
     /* Scroll apenas na lista de navegação se precisar */
     .fi-sidebar-nav {
-         flex: 1;
-         overflow-y: auto !important;
-         padding: 1rem 0.75rem !important;
+        flex: 1;
+        overflow-y: auto !important;
+        padding: 1rem 0.75rem !important;
     }
 
     /* Header (Logo) adjustment */
@@ -857,7 +899,7 @@ h1, h2, h3, h4 {
 
 /* Dark Mode Variants */
 @media (min-width: 1024px) {
-    .dark .fi-sidebar > nav {
+    .dark .fi-sidebar>nav {
         background: var(--glass-bg-strong) !important;
         border: 1px solid var(--glass-border) !important;
         box-shadow: var(--shadow-elevated) !important;

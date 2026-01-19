@@ -50,6 +50,7 @@ class EventForm
                         FileUpload::make('banner_path')
                             ->label('Upload do Banner')
                             ->image()
+                            ->disk('public')
                             ->directory('event-banners')
                             ->visibility('public')
                             ->imageResizeMode('cover')

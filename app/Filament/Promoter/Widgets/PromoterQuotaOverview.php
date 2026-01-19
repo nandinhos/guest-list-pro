@@ -9,8 +9,15 @@ class PromoterQuotaOverview extends StatsOverviewWidget
 {
     protected function getStats(): array
     {
+        $selectedEventId = session('selected_event_id');
+
+        if (! $selectedEventId) {
+            return [];
+        }
+
         $permissions = \App\Models\PromoterPermission::with(['event', 'sector'])
             ->where('user_id', auth()->id())
+            ->where('event_id', $selectedEventId)
             ->get();
 
         $stats = [];
@@ -27,9 +34,9 @@ class PromoterQuotaOverview extends StatsOverviewWidget
                 "{$permission->event->name} - {$permission->sector->name}",
                 "{$remaining} restantes"
             )
-            ->description("Total: {$permission->guest_limit} | Usados: {$used}")
-            ->descriptionIcon($remaining > 0 ? 'heroicon-m-ticket' : 'heroicon-m-no-symbol')
-            ->color($remaining > 10 ? 'success' : ($remaining > 0 ? 'warning' : 'danger'));
+                ->description("Total: {$permission->guest_limit} | Usados: {$used}")
+                ->descriptionIcon($remaining > 0 ? 'heroicon-m-ticket' : 'heroicon-m-no-symbol')
+                ->color($remaining > 10 ? 'success' : ($remaining > 0 ? 'warning' : 'danger'));
         }
 
         if (empty($stats)) {

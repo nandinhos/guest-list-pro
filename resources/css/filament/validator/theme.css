@@ -17,6 +17,7 @@
 /* Source files for Tailwind */
 @source '../../../../app/Filament/Validator/**/*.php';
 @source '../../../../resources/views/filament/validator/**/*.blade.php';
+@source '../../../../resources/views/livewire/**/*.blade.php';
 
 /* ========================================
    VALIDATOR PANEL COLORS (EMERALD)

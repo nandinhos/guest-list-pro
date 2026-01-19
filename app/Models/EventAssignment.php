@@ -21,6 +21,14 @@ class EventAssignment extends Model
         'end_time',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'start_time' => 'datetime',
+            'end_time' => 'datetime',
+        ];
+    }
+
     /**
      * Usuario atribuido a este evento.
      */
