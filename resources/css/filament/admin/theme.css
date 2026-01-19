@@ -236,3 +236,28 @@
 .fi-progress-bar {
     background-color: oklch(0.55 0.22 265) !important;
 }
+
+/* ========================================
+   FILTERS LAYOUT CUSTOMIZATION
+   ======================================== */
+
+.fi-ta-filters-form>div:last-child {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* Botões para a direita */
+    flex-direction: row;
+    /* Ordem natural */
+    gap: 1rem;
+    padding-top: 1rem;
+    grid-column: 1 / -1;
+    /* Ocupar largura total */
+}
+
+@media (min-width: 1024px) {
+
+    /* Fazer o primeiro campo (Pesquisar) ocupar 2 colunas */
+    .fi-ta-filters-form .grid>div:first-child {
+        grid-column: span 2;
+    }
+}

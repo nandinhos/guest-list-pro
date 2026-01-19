@@ -18,7 +18,7 @@ class GuestResource extends Resource
 {
     protected static ?string $model = Guest::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
     protected static ?string $modelLabel = 'Convidado';
 

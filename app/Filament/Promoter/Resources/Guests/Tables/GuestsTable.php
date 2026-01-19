@@ -15,48 +15,53 @@ class GuestsTable
     {
         return $table
             ->columns([
-                TextColumn::make('event.name')
-                    ->label('Evento')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
+                TextColumn::make('name')
+                    ->label('Convidado / Documento')
+                    ->description(fn (\App\Models\Guest $record): string => $record->document ?? '-')
+                    ->searchable(['name', 'document'])
+                    ->sortable(),
+
                 TextColumn::make('sector.name')
                     ->label('Setor')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('name')
-                    ->label('Convidado')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('document')
-                    ->label('Documento')
-                    ->searchable(),
+
                 IconColumn::make('is_checked_in')
                     ->label('Check-in')
                     ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueColor('success')
+                    ->falseColor('danger')
                     ->sortable(),
-                TextColumn::make('promoter.name')
-                    ->label('Promoter')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('checked_in_at')
                     ->label('Horário')
-                    ->dateTime('d/M H:i')
+                    ->dateTime('d/m H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                    
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('sector_id')
+                    ->label('Setor')
+                    ->relationship('sector', 'name', fn ($query) => $query->where('event_id', session('selected_event_id')))
+                    ->searchable()
+                    ->preload(),
+
+                \Filament\Tables\Filters\SelectFilter::make('is_checked_in')
+                    ->label('Status')
+                    ->options([
+                        true => 'Check-in Realizado',
+                        false => 'Pendente',
+                    ]),
             ])
+            ->filtersLayout(\Filament\Tables\Enums\FiltersLayout::AboveContent)
+            ->filtersFormColumns(4)
             ->recordActions([
                 EditAction::make(),
             ])

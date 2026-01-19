@@ -13,19 +13,16 @@ class GuestsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Convidado')
-                    ->description(fn ($record) => $record->document)
+                    ->label('Convidado / Documento')
+                    ->description(fn ($record) => $record->document ?? '-')
                     ->searchable(['name', 'document'])
-                    ->sortable(),
-
-                TextColumn::make('event.name')
-                    ->label('Evento')
                     ->sortable(),
 
                 TextColumn::make('sector.name')
                     ->label('Setor')
                     ->badge()
                     ->color('gray')
+                    ->searchable()
                     ->sortable(),
 
                 IconColumn::make('is_checked_in')
@@ -43,15 +40,20 @@ class GuestsTable
                     ->sortable(),
             ])
             ->filters([
-                \Filament\Tables\Filters\SelectFilter::make('event_id')
-                    ->label('Evento')
-                    ->relationship('event', 'name'),
+                \Filament\Tables\Filters\SelectFilter::make('sector_id')
+                    ->label('Setor')
+                    ->relationship('sector', 'name', fn ($query) => $query->where('event_id', session('selected_event_id')))
+                    ->searchable()
+                    ->preload(),
+
                 \Filament\Tables\Filters\TernaryFilter::make('is_checked_in')
                     ->label('Status de Check-in')
                     ->placeholder('Todos')
                     ->trueLabel('Confirmados')
                     ->falseLabel('Pendentes'),
             ])
+            ->filtersLayout(\Filament\Tables\Enums\FiltersLayout::AboveContent)
+            ->filtersFormColumns(4)
             ->recordActions([
                 \Filament\Actions\Action::make('checkIn')
                     ->label('Confirmar Entrada')

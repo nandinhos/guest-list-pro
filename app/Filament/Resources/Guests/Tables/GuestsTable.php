@@ -18,22 +18,17 @@ class GuestsTable
     {
         return $table
             ->columns([
-                TextColumn::make('event.name')
-                    ->label('Evento')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
-                TextColumn::make('sector.name')
-                    ->label('Setor')
-                    ->searchable()
-                    ->sortable(),
                 TextColumn::make('name')
-                    ->label('Convidado')
-                    ->searchable()
+                    ->label('Convidado / Documento')
+                    ->description(fn (\App\Models\Guest $record): string => $record->document ?? '-')
+                    ->searchable(['name', 'document'])
                     ->sortable(),
-                TextColumn::make('document')
-                    ->label('Documento')
-                    ->searchable(),
+
+                TextColumn::make('event.name')
+                    ->label('Evento / Setor')
+                    ->description(fn (\App\Models\Guest $record): string => $record->sector->name ?? '-')
+                    ->sortable(),
+
                 TextColumn::make('promoter.name')
                     ->label('Promoter')
                     ->searchable()
@@ -68,41 +63,35 @@ class GuestsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('event_id')
+                    ->label('Evento')
+                    ->relationship('event', 'name')
+                    ->searchable()
+                    ->preload(),
+                
+                \Filament\Tables\Filters\SelectFilter::make('sector_id')
+                    ->label('Setor')
+                    ->relationship('sector', 'name')
+                    ->searchable()
+                    ->preload(),
+
+                \Filament\Tables\Filters\SelectFilter::make('promoter_id')
+                    ->label('Promoter')
+                    ->relationship('promoter', 'name')
+                    ->searchable()
+                    ->preload(),
+
+                \Filament\Tables\Filters\SelectFilter::make('is_checked_in')
+                    ->label('Status')
+                    ->options([
+                        true => 'Check-in Realizado',
+                        false => 'Pendente',
+                    ]),
             ])
+            ->filtersLayout(\Filament\Tables\Enums\FiltersLayout::AboveContent)
+            ->filtersFormColumns(4)
             ->recordActions([
                 EditAction::make(),
-            ])
-            ->headerActions([
-                Action::make('exportCsv')
-                    ->label('Exportar Todos (CSV)')
-                    ->icon('heroicon-o-document-arrow-down')
-                    ->color('info')
-                    ->action(function () {
-                        $records = \App\Models\Guest::with(['event', 'sector', 'promoter', 'validator'])->get();
-
-                        return response()->streamDownload(function () use ($records) {
-                            $file = fopen('php://output', 'w');
-                            fwrite($file, "\xEF\xBB\xBF"); // UTF-8 BOM
-                            fputcsv($file, ['ID', 'Evento', 'Setor', 'Nome', 'Documento', 'Email', 'Status', 'Promoter', 'Validado Por', 'Data Check-in'], ';');
-
-                            foreach ($records as $record) {
-                                fputcsv($file, [
-                                    $record->id,
-                                    $record->event?->name,
-                                    $record->sector?->name,
-                                    $record->name,
-                                    $record->document,
-                                    $record->email,
-                                    $record->is_checked_in ? 'Sim' : 'Não',
-                                    $record->promoter?->name,
-                                    $record->validator?->name,
-                                    $record->checked_in_at?->format('d/m/Y H:i'),
-                                ], ';');
-                            }
-                            fclose($file);
-                        }, 'todos-convidados-'.now()->format('d-m-Y').'.csv');
-                    }),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
