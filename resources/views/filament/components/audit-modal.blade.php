@@ -1,3 +1,47 @@
+@php
+    $subjectName = null;
+    $entityLabel = 'Item';
+
+    if ($record->subject_type) {
+        // Label da Entidade
+        $entityLabel = match ($record->subject_type) {
+            'App\Models\Guest' => 'Convidado',
+            'App\Models\Event' => 'Evento',
+            'App\Models\User' => 'Usuário',
+            'App\Models\TicketSale' => 'Venda',
+            default => class_basename($record->subject_type),
+        };
+
+        // Nome da Entidade
+        if ($record->subject) {
+             $subjectName = match (get_class($record->subject)) {
+                'App\Models\TicketSale' => $record->subject->buyer_name ?? 'Venda #' . $record->subject->id,
+                default => $record->subject->name ?? $record->subject->title ?? null,
+            };
+        }
+
+        // Fallback para properties
+        if (!$subjectName) {
+            $attributes = $record->properties['attributes'] ?? [];
+            $old = $record->properties['old'] ?? [];
+            $subjectName = $attributes['name'] ?? $old['name'] ?? 
+                           $attributes['title'] ?? $old['title'] ?? 
+                           $attributes['buyer_name'] ?? $old['buyer_name'] ?? null;
+        }
+    } else {
+        $entityLabel = 'Sistema';
+        $subjectName = $record->description;
+    }
+
+    $actionLabel = match($record->event) {
+        'created' => 'Criou',
+        'updated' => 'Atualizou',
+        'deleted' => 'Removeu',
+        'checked_in' => 'Check-in',
+        default => ucfirst($record->event ?? 'Ação'),
+    };
+@endphp
+
 <div class="space-y-6">
     <div class="grid grid-cols-2 gap-4">
         <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
@@ -10,11 +54,14 @@
         </div>
         <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
             <span class="block text-xs text-gray-500 uppercase">Entidade</span>
-            <span class="font-medium text-base">{{ class_basename($record->subject_type) }} #{{ $record->subject_id }}</span>
+            <div class="flex flex-col">
+                <span class="font-medium text-base">{{ $subjectName ?? '-' }}</span>
+                <span class="text-xs text-gray-500">{{ $entityLabel }} @if($record->subject_id) #{{ $record->subject_id }} @endif</span>
+            </div>
         </div>
         <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
             <span class="block text-xs text-gray-500 uppercase">Ação</span>
-            <span class="font-medium text-base">{{ ucfirst($record->event) }}</span>
+            <span class="font-medium text-base">{{ $actionLabel }}</span>
         </div>
     </div>
 

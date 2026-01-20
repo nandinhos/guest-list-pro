@@ -5,13 +5,15 @@
                 'created' => 'success',
                 'updated' => 'warning',
                 'deleted' => 'danger',
+                'system' => 'info',
                 default => 'gray',
             };
             $label = match ($event) {
                 'created' => 'Criou',
                 'updated' => 'Atualizou',
                 'deleted' => 'Removeu',
-                default => ucfirst($event),
+                'system' => 'Ação',
+                default => ucfirst($event ?? 'Ação'),
             };
         @endphp
         <span class="fi-badge flex items-center justify-center gap-x-1 rounded-md text-xs font-medium ring-1 ring-inset px-1.5 py-0.5 fi-color-custom fi-color-{{ $color }} text-custom-600 bg-custom-50 ring-custom-600/10 dark:text-custom-400 dark:bg-custom-400/10 dark:ring-custom-400/30"
@@ -26,7 +28,13 @@
             {{ $subject_type }}
         </span>
     </div>
-    <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-        {{ $entity_label ?? 'Item' }} #{{ $subject_id }}
-    </span>
+    @if(!($is_system_log ?? false) && $subject_id)
+        <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            {{ $entity_label ?? 'Item' }} #{{ $subject_id }}
+        </span>
+    @elseif($is_system_log ?? false)
+        <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            {{ $entity_label ?? 'Sistema' }}
+        </span>
+    @endif
 </div>
