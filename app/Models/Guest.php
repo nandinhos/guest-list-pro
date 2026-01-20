@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DocumentType;
 use App\Observers\GuestObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,6 +25,7 @@ class Guest extends Model
         'promoter_id',
         'name',
         'document',
+        'document_type',
         'email',
         'is_checked_in',
         'checked_in_at',
@@ -35,6 +37,7 @@ class Guest extends Model
         return [
             'is_checked_in' => 'boolean',
             'checked_in_at' => 'datetime',
+            'document_type' => DocumentType::class,
         ];
     }
 

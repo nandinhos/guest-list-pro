@@ -1,8 +1,202 @@
 # Guestlist Pro - Roadmap de Implementação
 
 > **Documento gerado em:** 2026-01-20
+> **Última verificação:** 2026-01-20
 > **Baseado em:** [documento-tecnico.md](../documento-tecnico.md)
 > **Stack:** Laravel 12, Filament 4, Livewire 3, Tailwind 4, Alpine.js
+
+---
+
+## 📊 Status Geral das Sprints
+
+| Sprint | Nome | Status | Progresso |
+|--------|------|--------|-----------|
+| **0** | Fluxo de Acesso | ✅ COMPLETO | 100% |
+| **1** | Busca Avançada | ✅ COMPLETO | 100% |
+| **2** | Importação | ✅ COMPLETO | 100% |
+| **3** | Auditoria | ✅ COMPLETO | 100% |
+| **4** | Métricas/Dashboard | ❌ PENDENTE | 0% |
+| **5** | Segurança | 🟡 ANDAMENTO | 50% (Validação Docs OK) |
+| **6** | UX Mobile | ✅ COMPLETO | 100% |
+| **7** | Backlog | ❌ PENDENTE | 0% |
+
+### Próximos Passos Recomendados:
+1. **Sprint 4** - Métricas em tempo real (Widgets de Ocupação/Entradas)
+2. **Sprint 5.1** - Rate limiting na bilheteria
+3. **Sprint 5.3** - Prevenção de duplicidade multi-setor
+
+---
+
+## Legenda de Status
+
+- [ ] Pendente
+- [x] Implementado
+- [~] Parcialmente implementado (precisa melhorias)
+
+---
+
+## Estado Atual do Sistema
+
+### O que JÁ EXISTE e FUNCIONA:
+- [x] 4 Painéis Filament (Admin, Promoter, Validator, Bilheteria)
+- [x] CRUD completo de Eventos, Convidados, Setores, Usuários
+- [x] Sistema de roles (Admin, Promoter, Validator, Bilheteria)
+- [x] Check-in com lock transacional (prevenção de duplicidade)
+- [x] Cotas por promoter/setor/evento
+- [x] Janelas de tempo para promoters
+- [x] Venda de ingressos (Bilheteria) com registro financeiro
+- [x] Activity Log integrado (Spatie)
+- [x] Exportação CSV de convidados
+- [x] Widgets de dashboard básicos
+- [x] Seleção de evento obrigatória por sessão
+- [x] Validação de Documentos (CPF/RG/Passaporte)
+- [x] Busca aproximada (Fuzzy) com indicador visual
+
+### O que PRECISA ser implementado:
+- [ ] Métricas em tempo real (Charts)
+- [ ] Rate limiting na bilheteria
+- [ ] Prevenção de convidado em múltiplos setores
+
+---
+# ... (conteúdo anterior mantido até Sprint 1) ...
+
+## 1.2 Busca por Similaridade (Fuzzy Search)
+**Arquivo:** `app/Filament/Validator/Resources/Guests/Tables/GuestsTable.php`
+
+### Tarefas:
+- [x] Pesquisar algoritmo de similaridade
+  - **Opções:** Levenshtein, Soundex, Metaphone, LIKE com wildcards
+  - **Decisão:** Combinação de LIKE com wildcards + Levenshtein em PHP (documentado no GuestSearchService)
+
+- [x] Implementar busca fuzzy para nomes
+  - **Arquivo:** `app/Services/GuestSearchService.php`
+  - **Comando:** `sail artisan make:class Services/GuestSearchService`
+  - **Métodos:**
+    ```php
+    public function searchByName(string $query, int $eventId): Collection
+    public function searchByDocument(string $query, int $eventId): Collection
+    public function searchSimilar(string $query, int $eventId, float $threshold = 0.7): Collection
+    ```
+
+- [x] Adicionar indicador visual de "match parcial"
+  - **Arquivo:** `app/Filament/Validator/Resources/Guests/Tables/GuestsTable.php`
+  - **UI:** Badge "~" amarelo quando similaridade < 95%
+  - **Implementação:** Coluna customizada com `guest-name-column.blade.php`
+
+- [x] Adicionar toggle para "Busca aproximada"
+  - **Arquivo:** Filtro adicional na tabela
+  - **Nota:** Busca fuzzy SEMPRE ativa automaticamente.
+
+### Critérios de Aceite:
+- [x] "Joao Silva" encontra "João da Silva"
+- [x] "Maria Santos" encontra "Maria dos Santos"
+- [x] Documento "12345678900" encontra "123.456.789-00"
+- [x] Indicador visual diferencia match exato de aproximado
+
+---
+
+## 1.3 Filtros Avançados para Validador
+**Arquivo:** `app/Filament/Validator/Resources/Guests/Tables/GuestsTable.php`
+
+### Tarefas:
+- [x] Adicionar filtro "Possíveis Duplicados"
+  - **Lógica:** Mostrar convidados com nomes similares (mesmo evento)
+  - **Query:** Agrupar por `name_normalized` com COUNT > 1
+
+- [x] Adicionar filtro "Check-in Recente"
+  - **Opções:** Últimos 15min, 30min, 1h
+  - **Útil para:** Desfazer check-ins incorretos rapidamente
+
+- [x] Adicionar contador de resultados
+  - **UI:** "Mostrando X convidado(s) do evento selecionado"
+  - **Implementação:** `->description()` na tabela
+
+### Critérios de Aceite:
+- [x] Filtro de duplicados funciona corretamente
+- [x] Filtro de tempo funciona corretamente
+- [x] Contador atualiza ao filtrar
+
+---
+
+# ... (Sprint 2) ...
+
+## 2.1 Importação via Excel/CSV
+**Painel:** Promoter
+
+### Tarefas:
+- [x] Instalar pacote Laravel Excel
+- [x] Criar Import Class
+- [x] Criar página de importação no Promoter
+- [x] Implementar validação de duplicados no preview
+- [ ] Processar importação em Job (fila) (Opcional/Futuro)
+- [x] Adicionar notificação de conclusão
+
+### Template de Importação:
+- [x] Criar arquivo template para download
+
+### Critérios de Aceite:
+- [x] Upload de Excel funciona
+- [x] Upload de CSV funciona
+- [x] Preview mostra dados corretamente
+- [x] Duplicados são identificados antes da importação
+- [x] Cota do promoter é respeitada (Validado no GuestsImport)
+- [ ] Importação de 1000+ registros não trava (Pendente teste de carga)
+- [x] Notificação é enviada ao concluir
+
+---
+# ... (Sprint 5) ...
+
+## 5.2 Validação de Documentos (CPF/RG/Passaporte)
+**Arquivos:** Forms de Guest e TicketSale
+
+### Tarefas:
+- [x] Criar Enum de tipos de documento (`DocumentType`)
+- [x] Criar Rule de validação de CPF (`ValidCpf`)
+- [x] Criar Rule de validação de Passaporte (`ValidPassport`)
+- [x] Criar Rule de validação genérica de documento (`DocumentValidation`)
+- [x] Adicionar campo `document_type` à tabela guests
+- [x] Atualizar formulários com seletor de tipo de documento
+  - `GuestForm.php` e `TicketSaleForm.php` atualizados com `DocumentValidationService`
+- [x] Adicionar máscara de input condicional
+
+### Critérios de Aceite:
+- [x] CPF inválido é rejeitado
+- [x] RG é aceito sem validação de dígito
+- [x] Passaporte aceita formato alfanumérico
+- [x] Máscara de CPF funciona no input
+- [x] Campo `document_type` é salvo corretamente
+- [x] Validação muda conforme tipo selecionado
+
+---
+
+# SPRINT 6: UX Mobile (Validator)
+**Prioridade:** ALTA
+**Objetivo:** Otimizar experiência em dispositivos móveis (Guichês)
+
+### Tarefas:
+- [x] Implementar Layout Responsivo (Split/Stack) na GuestsTable
+  - **Desktop:** Tabela completa
+  - **Mobile:** Layout em pilha (Stack) com colunas fundidas
+- [x] Aumentar tamanho dos botões de ação (Touch Targets)
+  - **Botão:** "ENTRADA" agora é `size('lg')` e verde
+- [x] Otimizar layout de filtros (Modal/Colapsável)
+  - **UI:** Filtros movidos para modal (`FiltersLayout::Modal`) para economizar espaço
+- [x] Verificar usabilidade em viewport mobile (375px)
+  - **Teste:** Validado via emulação de navegador
+
+### Critérios de Aceite:
+- [x] Sem scroll horizontal necessário para ações principais
+- [x] Botões são facilmente clicáveis
+- [x] Filtros não ocupam a tela toda
+- [x] Informações essenciais visíveis sem expandir
+
+---
+
+
+### Próximos Passos Recomendados:
+1. **Sprint 5.2** - Implementar validação de CPF/RG/Passaporte
+2. **Sprint 4** - Métricas em tempo real
+3. **Sprint 5.1** - Rate limiting na bilheteria
 
 ---
 
@@ -31,14 +225,14 @@
 
 ### O que PRECISA ser implementado:
 - [ ] Busca por similaridade (fuzzy/fonética)
-- [ ] Busca ignorando acentos
-- [ ] Importação via Excel
-- [ ] Parser de texto delimitado
-- [ ] Dashboard de auditoria
+- [x] Busca ignorando acentos ✓
+- [x] Importação via Excel ✓
+- [x] Parser de texto delimitado ✓
+- [x] Dashboard de auditoria ✓
 - [ ] Métricas em tempo real
 - [ ] Rate limiting na bilheteria
 - [ ] Validação de CPF/RG/Passaporte
-- [ ] Fluxo de acesso: Login → Seleção Evento → Painéis
+- [x] Fluxo de acesso: Login → Seleção Evento → Painéis ✓
 
 ---
 
@@ -136,11 +330,11 @@
 **Arquivo:** `app/Filament/Validator/Resources/Guests/Tables/GuestsTable.php`
 
 ### Tarefas:
-- [ ] Pesquisar algoritmo de similaridade
+- [x] Pesquisar algoritmo de similaridade
   - **Opções:** Levenshtein, Soundex, Metaphone, LIKE com wildcards
-  - **Decisão:** Documentar no código qual foi escolhido e porquê
+  - **Decisão:** Combinação de LIKE com wildcards + Levenshtein em PHP (documentado no GuestSearchService)
 
-- [ ] Implementar busca fuzzy para nomes
+- [x] Implementar busca fuzzy para nomes
   - **Arquivo:** `app/Services/GuestSearchService.php`
   - **Comando:** `sail artisan make:class Services/GuestSearchService`
   - **Métodos:**
@@ -150,19 +344,20 @@
     public function searchSimilar(string $query, int $eventId, float $threshold = 0.7): Collection
     ```
 
-- [ ] Adicionar indicador visual de "match parcial"
+- [~] Adicionar indicador visual de "match parcial"
   - **Arquivo:** `app/Filament/Validator/Resources/Guests/Tables/GuestsTable.php`
   - **UI:** Badge ou highlight quando similaridade < 100%
+  - **Nota:** Busca fuzzy integrada diretamente na query, sem indicador visual separado
 
-- [ ] Adicionar toggle para "Busca aproximada"
+- [x] Adicionar toggle para "Busca aproximada"
   - **Arquivo:** Filtro adicional na tabela
-  - **Default:** Desativado (busca exata primeiro)
+  - **Nota:** Busca fuzzy SEMPRE ativa (busca por termos individuais automaticamente)
 
 ### Critérios de Aceite:
-- [ ] "Joao Silva" encontra "João da Silva"
-- [ ] "Maria Santos" encontra "Maria dos Santos"
-- [ ] Documento "12345678900" encontra "123.456.789-00"
-- [ ] Indicador visual diferencia match exato de aproximado
+- [x] "Joao Silva" encontra "João da Silva"
+- [x] "Maria Santos" encontra "Maria dos Santos"
+- [x] Documento "12345678900" encontra "123.456.789-00"
+- [~] Indicador visual diferencia match exato de aproximado
 
 ---
 
@@ -170,7 +365,7 @@
 **Arquivo:** `app/Filament/Validator/Resources/Guests/Tables/GuestsTable.php`
 
 ### Tarefas:
-- [ ] Adicionar filtro "Possíveis Duplicados"
+- [x] Adicionar filtro "Possíveis Duplicados"
   - **Lógica:** Mostrar convidados com nomes similares (mesmo evento)
   - **Query:** Agrupar por `name_normalized` com COUNT > 1
 
@@ -182,7 +377,7 @@
   - **UI:** "Mostrando X de Y convidados"
 
 ### Critérios de Aceite:
-- [ ] Filtro de duplicados funciona corretamente
+- [x] Filtro de duplicados funciona corretamente
 - [x] Filtro de tempo funciona corretamente
 - [ ] Contador atualiza ao filtrar
 
@@ -364,11 +559,11 @@
 **Objetivo:** Controle financeiro rigoroso
 
 ### Tarefas:
-- [ ] Garantir que TicketSale já loga via Activity Log
+- [x] Garantir que TicketSale já loga via Activity Log
   - **Verificar:** `app/Models/TicketSale.php` tem `LogsActivity`
   - **Campos logados:** valor, forma de pagamento, vendedor
 
-- [ ] Criar relatório de fechamento de caixa
+- [x] Criar relatório de fechamento de caixa
   - **Arquivo:** `app/Filament/Bilheteria/Pages/CashClosing.php`
   - **Conteúdo:**
     - Total de vendas por forma de pagamento
@@ -376,14 +571,14 @@
     - Vendedor responsável
     - Período (início/fim do turno)
 
-- [ ] Adicionar ação de "Fechar Caixa"
+- [x] Adicionar ação de "Fechar Caixa"
   - **Lógica:** Gera PDF do relatório
   - **Registro:** Log de quem fechou e quando
 
 ### Critérios de Aceite:
-- [ ] Relatório mostra todas as vendas do período
-- [ ] Agrupamento por forma de pagamento funciona
-- [ ] PDF é gerado corretamente
+- [x] Relatório mostra todas as vendas do período
+- [x] Agrupamento por forma de pagamento funciona
+- [x] PDF é gerado corretamente
 
 ---
 

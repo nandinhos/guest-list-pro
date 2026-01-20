@@ -3,6 +3,7 @@
 namespace App\Filament\Validator\Resources\Guests\Tables;
 
 use App\Models\Guest;
+use App\Services\GuestSearchService;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -16,22 +17,53 @@ class GuestsTable
             ->columns([
                 TextColumn::make('name')
                     ->label('Convidado / Documento')
-                    ->description(fn ($record) => $record->document ?? '-')
-                    ->searchable(query: function ($query, string $search): void {
-                        // Normaliza a busca: remove acentos e converte para lowercase
-                        $normalizedSearch = strtolower(\Illuminate\Support\Str::ascii($search));
-                        $numericSearch = preg_replace('/\D/', '', $search);
+                    ->formatStateUsing(function ($state, $record, $livewire) {
+                        // Obtém o termo de busca atual da tabela Filament
+                        $searchTerm = $livewire->getTableSearch() ?? '';
+                        $isPartialMatch = false;
 
-                        $query->where(function ($q) use ($normalizedSearch, $numericSearch) {
-                            // Busca por nome normalizado
-                            $q->where('name_normalized', 'like', "%{$normalizedSearch}%")
-                              // Fallback para nome original (registros antigos)
-                                ->orWhere('name', 'like', "%{$normalizedSearch}%");
+                        if (! empty($searchTerm)) {
+                            $searchService = app(GuestSearchService::class);
+                            $normalizedSearch = $searchService->normalize($searchTerm);
+                            $normalizedName = $record->name_normalized ?? $searchService->normalize($record->name);
+
+                            // Calcula similaridade
+                            $similarity = $searchService->calculateSimilarity($normalizedSearch, $normalizedName);
+
+                            // Match parcial: encontrou mas não é exato (< 95%)
+                            $isPartialMatch = $similarity > 0.3 && $similarity < 0.95;
+                        }
+
+                        return view('filament.components.guest-name-column', [
+                            'name' => $state,
+                            'document' => $record->document ?? '-',
+                            'isPartialMatch' => $isPartialMatch,
+                        ]);
+                    })
+                    ->html()
+                    ->searchable(query: function ($query, string $search): void {
+                        $searchService = app(GuestSearchService::class);
+
+                        // Normaliza a busca: remove acentos e converte para lowercase
+                        $normalizedSearch = $searchService->normalize($search);
+                        $normalizedDocument = $searchService->normalizeDocument($search);
+
+                        // Divide o termo de busca em palavras para fuzzy search
+                        $searchTerms = array_filter(explode(' ', $normalizedSearch), fn ($term) => strlen($term) >= 2);
+
+                        $query->where(function ($q) use ($normalizedSearch, $normalizedDocument, $searchTerms) {
+                            // Busca exata por nome normalizado
+                            $q->where('name_normalized', 'like', "%{$normalizedSearch}%");
+
+                            // Busca fuzzy: cada termo individualmente (encontra "Joao Silva" com "João da Silva")
+                            foreach ($searchTerms as $term) {
+                                $q->orWhere('name_normalized', 'like', "%{$term}%");
+                            }
 
                             // Busca por documento normalizado
-                            if ($numericSearch) {
-                                $q->orWhere('document_normalized', 'like', "%{$numericSearch}%")
-                                    ->orWhere('document', 'like', "%{$numericSearch}%");
+                            if (strlen($normalizedDocument) >= 3) {
+                                $q->orWhere('document_normalized', 'like', "%{$normalizedDocument}%")
+                                    ->orWhere('document', 'like', "%{$normalizedDocument}%");
                             }
                         });
                     })
@@ -84,14 +116,49 @@ class GuestsTable
                             $query->where('checked_in_at', '>=', now()->subMinutes($minutes));
                         }
                     }),
+
+                \Filament\Tables\Filters\TernaryFilter::make('possible_duplicates')
+                    ->label('Duplicados')
+                    ->placeholder('Todos')
+                    ->trueLabel('Possíveis Duplicados')
+                    ->falseLabel('Únicos')
+                    ->queries(
+                        true: fn ($query) => $query->whereIn('name_normalized', function ($subquery) {
+                            $subquery->select('name_normalized')
+                                ->from('guests')
+                                ->where('event_id', session('selected_event_id'))
+                                ->whereNotNull('name_normalized')
+                                ->groupBy('name_normalized')
+                                ->havingRaw('COUNT(*) > 1');
+                        }),
+                        false: fn ($query) => $query->whereNotIn('name_normalized', function ($subquery) {
+                            $subquery->select('name_normalized')
+                                ->from('guests')
+                                ->where('event_id', session('selected_event_id'))
+                                ->whereNotNull('name_normalized')
+                                ->groupBy('name_normalized')
+                                ->havingRaw('COUNT(*) > 1');
+                        }),
+                        blank: fn ($query) => $query,
+                    ),
             ])
-            ->filtersLayout(\Filament\Tables\Enums\FiltersLayout::AboveContent)
-            ->filtersFormColumns(4)
+            ->contentGrid([
+                'md' => 1,
+                'xl' => 1,
+            ])
+            ->filtersLayout(\Filament\Tables\Enums\FiltersLayout::Modal)
+            ->filtersFormColumns(2)
+            ->description(fn ($livewire) => sprintf(
+                'Mostrando %d convidado(s) do evento selecionado',
+                $livewire->getFilteredTableQuery()->count()
+            ))
             ->recordActions([
                 \Filament\Actions\Action::make('checkIn')
-                    ->label('Confirmar Entrada')
-                    ->icon('heroicon-m-check-badge')
+                    ->label('ENTRADA')
+                    ->icon('heroicon-m-check-circle')
                     ->color('success')
+                    ->button()
+                    ->size('lg')
                     ->hidden(fn ($record) => $record->is_checked_in)
                     ->requiresConfirmation()
                     ->modalHeading('Confirmar Check-in')
@@ -130,7 +197,7 @@ class GuestsTable
                                 ->send();
                         } catch (\Exception $e) {
                             $isAlreadyCheckedIn = $e->getMessage() === 'checkin_exists';
-                            
+
                             // Log de Falha / Tentativa Duplicada
                             DB::table('checkin_attempts')->insert([
                                 'event_id' => $record->event_id,
@@ -152,9 +219,10 @@ class GuestsTable
                     }),
 
                 \Filament\Actions\Action::make('undoCheckIn')
-                    ->label('Estornar Entrada')
+                    ->label('Estornar')
                     ->icon('heroicon-m-arrow-path')
                     ->color('warning')
+                    ->link() // Mantém como link para ser menos proeminente que a entrada, mas acessível
                     ->visible(fn ($record) => $record->is_checked_in)
                     ->requiresConfirmation()
                     ->modalHeading('Estornar Check-in')
