@@ -102,7 +102,7 @@ class GuestsTable
                                 $guest = Guest::lockForUpdate()->find($record->id);
 
                                 if ($guest->is_checked_in) {
-                                    throw new \Exception('Check-in já foi realizado por outro operador.');
+                                    throw new \Exception('checkin_exists');
                                 }
 
                                 $guest->update([
@@ -112,14 +112,40 @@ class GuestsTable
                                 ]);
                             });
 
+                            // Log de Sucesso
+                            DB::table('checkin_attempts')->insert([
+                                'event_id' => $record->event_id,
+                                'validator_id' => auth()->id(),
+                                'guest_id' => $record->id,
+                                'result' => 'success',
+                                'ip_address' => request()->ip(),
+                                'user_agent' => request()->userAgent(),
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+
                             \Filament\Notifications\Notification::make()
                                 ->title('Check-in realizado!')
                                 ->success()
                                 ->send();
                         } catch (\Exception $e) {
+                            $isAlreadyCheckedIn = $e->getMessage() === 'checkin_exists';
+                            
+                            // Log de Falha / Tentativa Duplicada
+                            DB::table('checkin_attempts')->insert([
+                                'event_id' => $record->event_id,
+                                'validator_id' => auth()->id(),
+                                'guest_id' => $record->id,
+                                'result' => $isAlreadyCheckedIn ? 'already_checked_in' : 'error',
+                                'ip_address' => request()->ip(),
+                                'user_agent' => request()->userAgent(),
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+
                             \Filament\Notifications\Notification::make()
-                                ->title('Erro no check-in')
-                                ->body($e->getMessage())
+                                ->title($isAlreadyCheckedIn ? 'Check-in já realizado!' : 'Erro no check-in')
+                                ->body($isAlreadyCheckedIn ? 'Este convidado já entrou.' : $e->getMessage())
                                 ->danger()
                                 ->send();
                         }
@@ -139,7 +165,7 @@ class GuestsTable
                                 $guest = Guest::lockForUpdate()->find($record->id);
 
                                 if (! $guest->is_checked_in) {
-                                    throw new \Exception('Este convidado não possui check-in para estornar.');
+                                    throw new \Exception('guest_not_checked_in');
                                 }
 
                                 $guest->update([
@@ -148,6 +174,18 @@ class GuestsTable
                                     'checked_in_by' => null,
                                 ]);
                             });
+
+                            // Log de Estorno
+                            DB::table('checkin_attempts')->insert([
+                                'event_id' => $record->event_id,
+                                'validator_id' => auth()->id(),
+                                'guest_id' => $record->id,
+                                'result' => 'estorno',
+                                'ip_address' => request()->ip(),
+                                'user_agent' => request()->userAgent(),
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
 
                             \Filament\Notifications\Notification::make()
                                 ->title('Check-in estornado.')

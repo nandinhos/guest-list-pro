@@ -11,6 +11,7 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    use \Spatie\Activitylog\Traits\LogsActivity;
 
     /**
      * Define quem pode acessar o painel administrativo do Filament.
@@ -130,5 +131,17 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
     public function guestsValidated(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Guest::class, 'checked_in_by');
+    }
+
+    /**
+     * Configure activity log options.
+     */
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['name', 'email', 'role', 'is_active'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => "Usuário foi {$eventName}");
     }
 }

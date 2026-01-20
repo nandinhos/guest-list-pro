@@ -13,6 +13,7 @@ class Event extends Model
 {
     /** @use HasFactory<\Database\Factories\EventFactory> */
     use HasFactory;
+    use \Spatie\Activitylog\Traits\LogsActivity;
 
     protected $fillable = [
         'name',
@@ -94,5 +95,17 @@ class Event extends Model
 
             return null;
         });
+    }
+
+    /**
+     * Configure activity log options.
+     */
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => "Evento foi {$eventName}");
     }
 }

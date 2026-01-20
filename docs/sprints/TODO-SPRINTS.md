@@ -292,12 +292,12 @@
 **Painel:** Admin
 
 ### Tarefas:
-- [ ] Criar Resource de Activity Log
+- [x] Criar Resource de Activity Log
   - **Arquivo:** `app/Filament/Resources/ActivityLogResource.php`
   - **Comando:** `sail artisan make:filament-resource ActivityLog --panel=admin`
   - **Somente leitura:** Sem create/edit/delete
 
-- [ ] Configurar colunas da tabela
+- [x] Configurar colunas da tabela
   - **Colunas:**
     - Data/Hora
     - Usuário (causer)
@@ -306,7 +306,7 @@
     - Descrição
     - Evento relacionado
 
-- [ ] Implementar filtros
+- [x] Implementar filtros
   - **Filtros:**
     - Por evento
     - Por tipo de ação
@@ -314,14 +314,14 @@
     - Por período (data início/fim)
     - Por entidade
 
-- [ ] Adicionar visualização de detalhes (JSON diff)
+- [x] Adicionar visualização de detalhes (JSON diff)
   - **Modal:** Mostrar `properties->old` vs `properties->attributes`
   - **UI:** Diff colorido (verde = adicionado, vermelho = removido)
 
 ### Critérios de Aceite:
-- [ ] Admin consegue ver todos os logs
-- [ ] Filtros funcionam corretamente
-- [ ] Detalhes mostram mudanças claramente
+- [x] Admin consegue ver todos os logs
+- [x] Filtros funcionam corretamente
+- [x] Detalhes mostram mudanças claramente
 
 ---
 
@@ -329,7 +329,7 @@
 **Objetivo:** Rastrear tentativas de fraude
 
 ### Tarefas:
-- [ ] Criar tabela `checkin_attempts`
+- [x] Criar tabela `checkin_attempts`
   - **Arquivo:** Nova migration
   - **Campos:**
     - id
@@ -342,11 +342,11 @@
     - user_agent
     - created_at
 
-- [ ] Registrar tentativas no Validator
+- [x] Registrar tentativas no Validator
   - **Arquivo:** `app/Filament/Validator/Resources/Guests/GuestResource.php`
   - **Quando:** Toda busca e toda tentativa de check-in
 
-- [ ] Criar widget de "Tentativas Suspeitas"
+- [x] Criar widget de "Tentativas Suspeitas"
   - **Arquivo:** `app/Filament/Widgets/SuspiciousAttemptsWidget.php`
   - **Critérios:**
     - Mesmo convidado com múltiplas tentativas em curto período
@@ -354,9 +354,9 @@
     - Check-ins de mesmo IP para diferentes convidados
 
 ### Critérios de Aceite:
-- [ ] Todas as buscas são logadas
-- [ ] Tentativas de check-in duplicado são registradas
-- [ ] Widget mostra padrões suspeitos
+- [x] Todas as buscas são logadas
+- [x] Tentativas de check-in duplicado são registradas
+- [x] Widget mostra padrões suspeitos
 
 ---
 

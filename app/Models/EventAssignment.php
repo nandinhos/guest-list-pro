@@ -10,6 +10,7 @@ class EventAssignment extends Model
 {
     /** @use HasFactory<\Database\Factories\EventAssignmentFactory> */
     use HasFactory;
+    use \Spatie\Activitylog\Traits\LogsActivity;
 
     protected $fillable = [
         'user_id',
@@ -51,5 +52,17 @@ class EventAssignment extends Model
     public function sector(): BelongsTo
     {
         return $this->belongsTo(Sector::class);
+    }
+
+    /**
+     * Configure activity log options.
+     */
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => "Atribuição de evento foi {$eventName}");
     }
 }
