@@ -7,6 +7,11 @@ use Filament\Support\Icons\Heroicon;
 
 abstract class SelectEventBase extends Page
 {
+    /**
+     * Esconde esta página da navegação lateral.
+     */
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedCalendar;
 
     protected static ?string $title = 'Selecionar Evento';

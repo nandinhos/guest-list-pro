@@ -63,6 +63,11 @@ class ValidatorPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 EnsureEventSelected::class,
-            ]);
+            ])
+            ->userMenu(false)
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::TOPBAR_END,
+                fn (): string => \Illuminate\Support\Facades\Blade::render('@livewire(\'change-event-button\')')
+            );
     }
 }
