@@ -34,6 +34,21 @@ class GuestsImport implements ToCollection, WithHeadingRow, WithValidation
      */
     public function collection(Collection $rows): void
     {
+        // Verifica cota disponível do promoter para o setor
+        $assignment = \App\Models\EventAssignment::where('user_id', $this->promoterId)
+            ->where('event_id', $this->eventId)
+            ->where('sector_id', $this->sectorId)
+            ->first();
+
+        $quotaTotal = $assignment?->quota ?? 0;
+
+        $usedQuota = Guest::where('event_id', $this->eventId)
+            ->where('sector_id', $this->sectorId)
+            ->where('promoter_id', $this->promoterId)
+            ->count();
+
+        $availableQuota = max(0, $quotaTotal - $usedQuota);
+
         foreach ($rows as $index => $row) {
             $name = trim($row['nome'] ?? $row['name'] ?? '');
             $document = trim($row['documento'] ?? $row['document'] ?? $row['cpf'] ?? '');
@@ -41,6 +56,14 @@ class GuestsImport implements ToCollection, WithHeadingRow, WithValidation
 
             // Pula linhas vazias
             if (empty($name)) {
+                continue;
+            }
+
+            // Verifica se há cota disponível
+            if ($availableQuota <= 0) {
+                $this->skipped++;
+                $this->errors[] = 'Linha '.($index + 2).": Cota esgotada. Não foi possível importar '{$name}'.";
+
                 continue;
             }
 
@@ -71,6 +94,7 @@ class GuestsImport implements ToCollection, WithHeadingRow, WithValidation
             ]);
 
             $this->imported++;
+            $availableQuota--; // Decrementa cota disponível
         }
     }
 
