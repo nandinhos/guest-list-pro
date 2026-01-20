@@ -15,14 +15,22 @@ class SuspiciousCheckins extends BaseWidget
 
     protected static ?int $sort = 2;
 
+    protected static ?string $pollingInterval = '30s';
+
     public function table(Table $table): Table
     {
+        $eventId = session('selected_event_id');
+
+        $query = CheckinAttempt::query()
+            ->where('result', '!=', 'success')
+            ->latest();
+
+        if ($eventId) {
+            $query->where('event_id', $eventId);
+        }
+
         return $table
-            ->query(
-                CheckinAttempt::query()
-                    ->where('result', '!=', 'success')
-                    ->latest()
-            )
+            ->query($query)
             ->columns([
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Hora')
@@ -46,10 +54,15 @@ class SuspiciousCheckins extends BaseWidget
                     ->label('IP'),
                 Tables\Columns\TextColumn::make('event.name')
                     ->label('Evento')
-                    ->limit(20),
+                    ->limit(20)
+                    ->visible(fn () => ! session('selected_event_id')),
             ])
             ->actions([
                 //
-            ]);
+            ])
+            ->emptyStateHeading('Nenhuma tentativa suspeita')
+            ->emptyStateDescription('Todas as tentativas de check-in foram bem sucedidas.')
+            ->emptyStateIcon('heroicon-o-check-circle')
+            ->poll('30s');
     }
 }

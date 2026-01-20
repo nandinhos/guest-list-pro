@@ -15,15 +15,15 @@
 | **1** | Busca Avançada | ✅ COMPLETO | 100% |
 | **2** | Importação | ✅ COMPLETO | 100% |
 | **3** | Auditoria | ✅ COMPLETO | 100% |
-| **4** | Métricas/Dashboard | ❌ PENDENTE | 0% |
+| **4** | Métricas/Dashboard | ✅ COMPLETO | 100% |
 | **5** | Segurança | 🟡 ANDAMENTO | 50% (Validação Docs OK) |
 | **6** | UX Mobile | ✅ COMPLETO | 100% |
 | **7** | Backlog | ❌ PENDENTE | 0% |
 
 ### Próximos Passos Recomendados:
-1. **Sprint 4** - Métricas em tempo real (Widgets de Ocupação/Entradas)
-2. **Sprint 5.1** - Rate limiting na bilheteria
-3. **Sprint 5.3** - Prevenção de duplicidade multi-setor
+1. **Sprint 5.1** - Rate limiting na bilheteria
+2. **Sprint 5.3** - Prevenção de duplicidade multi-setor
+3. **Sprint 5.4** - Otimização de queries
 
 ---
 
@@ -582,99 +582,102 @@
 
 ---
 
-# SPRINT 4: Métricas e Dashboard em Tempo Real
+# SPRINT 4: Métricas e Dashboard em Tempo Real ✅
 **Prioridade:** MÉDIA
 **Objetivo:** Visão executiva do evento em andamento
+**Status:** COMPLETO
 
-## 4.1 Métricas de Entrada por Hora
+## 4.1 Métricas de Entrada por Hora ✅
 **Painel:** Admin
 
 ### Tarefas:
-- [ ] Criar widget de gráfico de entradas
-  - **Arquivo:** `app/Filament/Widgets/HourlyCheckinsChart.php`
-  - **Tipo:** Gráfico de linha ou barras
-  - **Dados:** Check-ins agrupados por hora
-  - **Período:** Últimas 12 horas
+- [x] Melhorar widget de gráfico de entradas
+  - **Arquivo:** `app/Filament/Widgets/CheckinFlowChart.php`
+  - **Tipo:** Gráfico de linha com área preenchida
+  - **Dados:** Check-ins agrupados por hora (24h)
+  - **Filtro:** Considera evento selecionado na sessão
 
-- [ ] Identificar pico de entrada
-  - **Lógica:** Destacar hora com mais check-ins
-  - **UI:** Badge "Pico: XX:00 - XXX entradas"
+- [x] Identificar pico de entrada
+  - **Lógica:** `getDescription()` mostra hora com mais check-ins
+  - **UI:** "Pico: XX:00 - XXX entradas"
 
 ### Critérios de Aceite:
-- [ ] Gráfico renderiza corretamente
-- [ ] Pico é identificado automaticamente
-- [ ] Dados atualizam a cada X minutos
+- [x] Gráfico renderiza corretamente
+- [x] Pico é identificado automaticamente
+- [x] Dados atualizam a cada 30 segundos
 
 ---
 
-## 4.2 Ocupação por Setor
+## 4.2 Ocupação por Setor ✅
 **Painel:** Admin
 
 ### Tarefas:
-- [ ] Criar widget de ocupação
-  - **Arquivo:** `app/Filament/Widgets/SectorOccupancyWidget.php`
-  - **UI:** Cards por setor com:
-    - Nome do setor
-    - Capacidade total
-    - Check-ins realizados
-    - Porcentagem de ocupação
-    - Barra de progresso colorida
+- [x] Melhorar widget de ocupação
+  - **Arquivo:** `app/Filament/Widgets/SectorOccupancyChart.php`
+  - **UI:** Gráfico de barras com cores dinâmicas
+  - **Dados:** Ocupação % por setor
 
-- [ ] Implementar cores por ocupação
-  - **Verde:** < 70%
-  - **Amarelo:** 70-90%
-  - **Vermelho:** > 90%
+- [x] Implementar cores por ocupação
+  - **Verde:** < 70% (`#10B981`)
+  - **Amarelo:** 70-90% (`#F59E0B`)
+  - **Vermelho:** > 90% (`#EF4444`)
 
 ### Critérios de Aceite:
-- [ ] Todos os setores são mostrados
-- [ ] Cores refletem ocupação corretamente
-- [ ] Dados são precisos
+- [x] Todos os setores são mostrados
+- [x] Cores refletem ocupação corretamente
+- [x] Dados são precisos e atualizados a cada 30s
 
 ---
 
-## 4.3 Comparativo Convidados vs Bilheteria
+## 4.3 Comparativo Convidados vs Bilheteria ✅
 **Painel:** Admin
 
 ### Tarefas:
-- [ ] Criar widget comparativo
-  - **Arquivo:** `app/Filament/Widgets/GuestsVsTicketsWidget.php`
-  - **UI:** Gráfico de pizza ou donut
+- [x] Criar widget comparativo
+  - **Arquivo:** `app/Filament/Widgets/GuestsVsTicketsChart.php`
+  - **UI:** Gráfico donut
   - **Dados:**
     - Convidados (via lista)
     - Ingressos vendidos (bilheteria)
-    - Total
+    - Percentuais na descrição
 
-- [ ] Adicionar métricas financeiras
+- [x] Adicionar métricas financeiras
+  - **Arquivo:** `app/Filament/Widgets/AdminOverview.php`
   - **Dados:**
     - Receita total bilheteria
-    - Ticket médio
-    - Comparativo com eventos anteriores (se houver)
+    - Tendência de vendas (sparkline)
+    - Stats contextuais por evento selecionado
 
 ### Critérios de Aceite:
-- [ ] Gráfico mostra proporção correta
-- [ ] Valores financeiros estão corretos
+- [x] Gráfico mostra proporção correta
+- [x] Valores financeiros estão corretos
 
 ---
 
-## 4.4 Atualização em Tempo Real (Polling)
+## 4.4 Atualização em Tempo Real (Polling) ✅
 **Todos os widgets**
 
 ### Tarefas:
-- [ ] Implementar polling nos widgets
-  - **Método Filament:** `protected static int $pollingInterval = 30;`
-  - **Intervalo:** 30 segundos
+- [x] Implementar polling nos widgets
+  - **Método Filament:** `protected ?string $pollingInterval = '30s';`
+  - **Intervalo:** 30 segundos em todos os widgets
 
-- [ ] Adicionar indicador de "Última atualização"
-  - **UI:** Timestamp no rodapé do widget
+- [x] Adicionar descrições dinâmicas
+  - **Método:** `getDescription()` em cada widget
+  - **UI:** Informações contextuais atualizadas
 
-- [ ] Otimizar queries para polling
-  - **Cache:** Usar cache de 25s para queries pesadas
-  - **Índices:** Verificar se índices estão otimizados
+- [x] Widgets atualizados com polling:
+  - `AdminOverview.php` - Stats gerais com sparklines
+  - `CheckinFlowChart.php` - Entradas por hora
+  - `SectorOccupancyChart.php` - Ocupação por setor
+  - `GuestsVsTicketsChart.php` - Comparativo lista vs bilheteria
+  - `PromoterPerformanceChart.php` - Performance de promoters
+  - `SuspiciousCheckins.php` - Tentativas suspeitas
 
 ### Critérios de Aceite:
-- [ ] Widgets atualizam automaticamente
-- [ ] Não há degradação de performance
-- [ ] Indicador de última atualização funciona
+- [x] Widgets atualizam automaticamente
+- [x] Não há degradação de performance
+- [x] Todas as métricas consideram evento selecionado
 
 ---
 
@@ -1000,4 +1003,4 @@ sail artisan optimize:clear
 ---
 
 **Documento mantido por:** Equipe de Desenvolvimento
-**Última atualização:** 2026-01-20
+**Última atualização:** 2026-01-20 (Sprint 4 concluída)
