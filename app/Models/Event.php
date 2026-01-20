@@ -23,6 +23,8 @@ class Event extends Model
         'start_time',
         'end_time',
         'status',
+        'ticket_price',
+        'bilheteria_enabled',
     ];
 
     protected function casts(): array
@@ -30,6 +32,8 @@ class Event extends Model
         return [
             'date' => 'date',
             'status' => EventStatus::class,
+            'ticket_price' => 'decimal:2',
+            'bilheteria_enabled' => 'boolean',
         ];
     }
 
@@ -63,6 +67,14 @@ class Event extends Model
     public function assignments(): HasMany
     {
         return $this->hasMany(EventAssignment::class);
+    }
+
+    /**
+     * Vendas de bilheteria deste evento.
+     */
+    public function ticketSales(): HasMany
+    {
+        return $this->hasMany(TicketSale::class);
     }
 
     /**

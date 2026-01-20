@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class GuestResource extends Resource
 {
@@ -23,6 +24,17 @@ class GuestResource extends Resource
     protected static ?string $navigationLabel = 'Check-in';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCheckBadge;
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if ($selectedEventId = session('selected_event_id')) {
+            $query->where('event_id', $selectedEventId);
+        }
+
+        return $query;
+    }
 
     public static function form(Schema $schema): Schema
     {

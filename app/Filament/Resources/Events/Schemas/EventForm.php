@@ -90,6 +90,19 @@ class EventForm
                             ->required()
                             ->native(false),
                     ])->columns(3),
+
+                Section::make('Bilheteria')
+                    ->description('Configurações de venda de ingressos')
+                    ->schema([
+                        Toggle::make('bilheteria_enabled')
+                            ->label('Habilitar Bilheteria')
+                            ->helperText('Permite a venda de ingressos para este evento'),
+                        TextInput::make('ticket_price')
+                            ->label('Preço do Ingresso')
+                            ->numeric()
+                            ->prefix('R$')
+                            ->placeholder('0,00'),
+                    ])->columns(2),
             ]);
     }
 }

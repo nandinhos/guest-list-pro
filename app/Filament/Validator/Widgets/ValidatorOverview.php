@@ -9,13 +9,25 @@ class ValidatorOverview extends StatsOverviewWidget
 {
     protected function getStats(): array
     {
-        $total = \App\Models\Guest::count();
-        $confirmed = \App\Models\Guest::where('is_checked_in', true)->count();
+        $selectedEventId = session('selected_event_id');
+
+        if (! $selectedEventId) {
+            return [
+                Stat::make('Aviso', 'Selecione um evento')
+                    ->description('Selecione um evento para visualizar as estatísticas')
+                    ->color('gray'),
+            ];
+        }
+
+        $total = \App\Models\Guest::where('event_id', $selectedEventId)->count();
+        $confirmed = \App\Models\Guest::where('event_id', $selectedEventId)
+            ->where('is_checked_in', true)
+            ->count();
         $pending = $total - $confirmed;
 
         return [
             Stat::make('Total de Convidados', $total)
-                ->description('Cadastrados no sistema')
+                ->description('Cadastrados neste evento')
                 ->descriptionIcon('heroicon-m-users')
                 ->color('info'),
             Stat::make('Check-ins Realizados', $confirmed)

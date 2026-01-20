@@ -2,9 +2,11 @@
 
 namespace App\Filament\Validator\Resources\Guests\Tables;
 
+use App\Models\Guest;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\DB;
 
 class GuestsTable
 {
@@ -64,16 +66,32 @@ class GuestsTable
                     ->modalHeading('Confirmar Check-in')
                     ->modalDescription('Deseja confirmar a entrada deste convidado agora?')
                     ->action(function ($record) {
-                        $record->update([
-                            'is_checked_in' => true,
-                            'checked_in_at' => now(),
-                            'checked_in_by' => auth()->id(),
-                        ]);
+                        try {
+                            DB::transaction(function () use ($record) {
+                                $guest = Guest::lockForUpdate()->find($record->id);
 
-                        \Filament\Notifications\Notification::make()
-                            ->title('Check-in realizado!')
-                            ->success()
-                            ->send();
+                                if ($guest->is_checked_in) {
+                                    throw new \Exception('Check-in já foi realizado por outro operador.');
+                                }
+
+                                $guest->update([
+                                    'is_checked_in' => true,
+                                    'checked_in_at' => now(),
+                                    'checked_in_by' => auth()->id(),
+                                ]);
+                            });
+
+                            \Filament\Notifications\Notification::make()
+                                ->title('Check-in realizado!')
+                                ->success()
+                                ->send();
+                        } catch (\Exception $e) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Erro no check-in')
+                                ->body($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
                     }),
 
                 \Filament\Actions\Action::make('undoCheckIn')
@@ -85,16 +103,32 @@ class GuestsTable
                     ->modalHeading('Estornar Check-in')
                     ->modalDescription('Esta ação marcará o convidado como "Pendente" novamente.')
                     ->action(function ($record) {
-                        $record->update([
-                            'is_checked_in' => false,
-                            'checked_in_at' => null,
-                            'checked_in_by' => null,
-                        ]);
+                        try {
+                            DB::transaction(function () use ($record) {
+                                $guest = Guest::lockForUpdate()->find($record->id);
 
-                        \Filament\Notifications\Notification::make()
-                            ->title('Check-in estornado.')
-                            ->info()
-                            ->send();
+                                if (! $guest->is_checked_in) {
+                                    throw new \Exception('Este convidado não possui check-in para estornar.');
+                                }
+
+                                $guest->update([
+                                    'is_checked_in' => false,
+                                    'checked_in_at' => null,
+                                    'checked_in_by' => null,
+                                ]);
+                            });
+
+                            \Filament\Notifications\Notification::make()
+                                ->title('Check-in estornado.')
+                                ->info()
+                                ->send();
+                        } catch (\Exception $e) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Erro ao estornar')
+                                ->body($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
                     }),
             ])
             ->toolbarActions([
