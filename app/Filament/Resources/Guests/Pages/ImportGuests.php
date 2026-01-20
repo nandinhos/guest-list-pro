@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Guests\Pages;
 
 use App\Filament\Resources\Guests\GuestResource;
 use App\Imports\GuestsImport;
+use App\Models\Guest;
 use App\Models\Sector;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -25,13 +26,28 @@ class ImportGuests extends Page
 
     protected string $view = 'filament.admin.pages.import-guests';
 
-    public $file = null;
+    // Aba ativa
+    public string $activeTab = 'file';
 
-    public ?int $sectorId = null;
+    // Upload de Arquivo
+    public $file = null;
 
     public ?int $eventId = null;
 
+    public ?int $sectorId = null;
+
     public ?int $promoterId = null;
+
+    // Importação por Texto
+    public string $textContent = '';
+
+    public string $delimiter = 'newline';
+
+    public ?int $textEventId = null;
+
+    public ?int $textSectorId = null;
+
+    public ?int $textPromoterId = null;
 
     /**
      * Retorna os eventos disponíveis (Admin vê todos).
@@ -45,7 +61,7 @@ class ImportGuests extends Page
     }
 
     /**
-     * Retorna os setores disponíveis para o evento selecionado.
+     * Retorna os setores disponíveis para o evento selecionado (Aba Arquivo).
      */
     public function getSectorsProperty(): array
     {
@@ -55,6 +71,21 @@ class ImportGuests extends Page
 
         return Sector::query()
             ->where('event_id', $this->eventId)
+            ->pluck('name', 'id')
+            ->toArray();
+    }
+
+    /**
+     * Retorna os setores disponíveis para o evento selecionado (Aba Texto).
+     */
+    public function getTextSectorsProperty(): array
+    {
+        if (! $this->textEventId) {
+            return [];
+        }
+
+        return Sector::query()
+            ->where('event_id', $this->textEventId)
             ->pluck('name', 'id')
             ->toArray();
     }
@@ -73,6 +104,58 @@ class ImportGuests extends Page
             ->orderBy('name')
             ->pluck('name', 'id')
             ->toArray();
+    }
+
+    /**
+     * Retorna o preview do texto parseado.
+     */
+    public function getParsedPreviewProperty(): array
+    {
+        if (empty($this->textContent)) {
+            return [];
+        }
+
+        $lines = $this->parseText($this->textContent, $this->delimiter);
+
+        return array_slice($lines, 0, 20); // Limita preview a 20 linhas
+    }
+
+    /**
+     * Parseia o texto baseado no delimitador selecionado.
+     */
+    protected function parseText(string $text, string $delimiter): array
+    {
+        $lines = explode("\n", trim($text));
+        $results = [];
+
+        foreach ($lines as $index => $line) {
+            $line = trim($line);
+            if (empty($line)) {
+                continue;
+            }
+
+            $parts = match ($delimiter) {
+                'comma' => explode(',', $line),
+                'semicolon' => explode(';', $line),
+                'tab' => explode("\t", $line),
+                'pipe' => explode('|', $line),
+                default => [$line], // newline = um campo por linha (só nome)
+            };
+
+            $name = trim($parts[0] ?? '');
+            $document = trim($parts[1] ?? '');
+
+            if (! empty($name)) {
+                $results[] = [
+                    'line' => $index + 1,
+                    'name' => $name,
+                    'document' => $document,
+                    'valid' => true,
+                ];
+            }
+        }
+
+        return $results;
     }
 
     /**
@@ -143,5 +226,81 @@ class ImportGuests extends Page
 
         $this->file = null;
         $this->sectorId = null;
+        $this->eventId = null;
+        $this->promoterId = null;
+    }
+
+    /**
+     * Processa a importação por texto colado.
+     */
+    public function importFromText(): void
+    {
+        if (empty($this->textContent)) {
+            Notification::make()->title('Cole o texto com os convidados')->danger()->send();
+
+            return;
+        }
+
+        if (! $this->textEventId) {
+            Notification::make()->title('Selecione um evento')->danger()->send();
+
+            return;
+        }
+
+        if (! $this->textSectorId) {
+            Notification::make()->title('Selecione um setor')->danger()->send();
+
+            return;
+        }
+
+        if (! $this->textPromoterId) {
+            Notification::make()->title('Selecione um promoter')->danger()->send();
+
+            return;
+        }
+
+        $lines = $this->parseText($this->textContent, $this->delimiter);
+
+        $imported = 0;
+        $skipped = 0;
+
+        foreach ($lines as $line) {
+            $documentNormalized = preg_replace('/\D/', '', $line['document']);
+
+            // Verifica duplicidade
+            if ($documentNormalized) {
+                $exists = Guest::query()
+                    ->where('event_id', $this->textEventId)
+                    ->where('document_normalized', $documentNormalized)
+                    ->exists();
+
+                if ($exists) {
+                    $skipped++;
+
+                    continue;
+                }
+            }
+
+            Guest::create([
+                'event_id' => $this->textEventId,
+                'sector_id' => $this->textSectorId,
+                'promoter_id' => $this->textPromoterId,
+                'name' => $line['name'],
+                'document' => $line['document'] ?: null,
+            ]);
+
+            $imported++;
+        }
+
+        Notification::make()
+            ->title('Importação concluída!')
+            ->body("{$imported} convidados importados, {$skipped} ignorados (duplicados).")
+            ->success()
+            ->send();
+
+        $this->textContent = '';
+        $this->textSectorId = null;
+        $this->textEventId = null;
+        $this->textPromoterId = null;
     }
 }

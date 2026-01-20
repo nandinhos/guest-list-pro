@@ -4,112 +4,148 @@
         <div class="fi-ta-header flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h2 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    Importar Convidados via Excel/CSV
+                    Importar Convidados
                 </h2>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    Faça upload de um arquivo Excel ou CSV com a lista de convidados.
+                    Importe convidados via arquivo Excel/CSV ou cole uma lista de texto.
                 </p>
             </div>
-
             {{ $this->downloadTemplateAction }}
         </div>
 
-        {{-- Formulário --}}
-        <div class="fi-section rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
-            <div class="fi-section-content p-6">
-                <form wire:submit="import" class="space-y-6">
-                    {{-- Seleção de Setor --}}
-                    <div>
-                        <label for="sectorId" class="fi-fo-field-wrp-label inline-flex items-center gap-x-3">
-                            <span class="text-sm font-medium leading-6 text-gray-950 dark:text-white">
-                                Setor de Destino <span class="text-danger-600">*</span>
-                            </span>
-                        </label>
-                        <select
-                            wire:model="sectorId"
-                            id="sectorId"
-                            class="mt-1.5 block w-full rounded-lg border-gray-300 shadow-sm
-                                   focus:border-primary-500 focus:ring-primary-500
-                                   dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                        >
-                            <option value="">Selecione um setor...</option>
-                            @foreach($this->sectors as $id => $name)
-                                <option value="{{ $id }}">{{ $name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+        {{-- Abas --}}
+        <div x-data="{ activeTab: @entangle('activeTab') }">
+            <nav class="flex space-x-4 border-b border-gray-200 dark:border-gray-700" aria-label="Tabs">
+                <button type="button" @click="activeTab = 'file'"
+                    :class="activeTab === 'file' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                    class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    📁 Upload de Arquivo
+                </button>
+                <button type="button" @click="activeTab = 'text'"
+                    :class="activeTab === 'text' ? 'border-primary-500 text-primary-600 dark:text-primary-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                    class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    📝 Colar Texto
+                </button>
+            </nav>
 
-                    {{-- Upload de Arquivo --}}
-                    <div>
-                        <label class="fi-fo-field-wrp-label inline-flex items-center gap-x-3">
-                            <span class="text-sm font-medium leading-6 text-gray-950 dark:text-white">
-                                Arquivo Excel/CSV <span class="text-danger-600">*</span>
-                            </span>
-                        </label>
-                        <div class="mt-1.5">
-                    <input
-                                type="file"
-                                wire:model="file"
-                                accept=".xlsx,.xls,.csv"
-                                class="block w-full text-sm text-gray-500
-                                       file:mr-4 file:py-2 file:px-4
-                                       file:rounded-lg file:border-0
-                                       file:text-sm file:font-semibold
-                                       file:bg-primary-50 file:text-primary-700
-                                       hover:file:bg-primary-100
-                                       dark:file:bg-primary-900/20 dark:file:text-primary-400"
-                            />
-                        </div>
-                        <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                            Formatos aceitos: .xlsx, .xls, .csv | Colunas esperadas: Nome, Documento, Email (opcional)
-                        </p>
-                    </div>
+            {{-- Aba: Upload de Arquivo --}}
+            <div x-show="activeTab === 'file'" x-cloak class="mt-6">
+                <div class="fi-section rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
+                    <div class="fi-section-content p-6">
+                        <form wire:submit="import" class="space-y-6">
+                            <div>
+                                <label class="text-sm font-medium text-gray-950 dark:text-white">
+                                    Setor de Destino <span class="text-danger-600">*</span>
+                                </label>
+                                <select wire:model="sectorId" class="mt-1.5 block w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                    <option value="">Selecione um setor...</option>
+                                    @foreach($this->sectors as $id => $name)
+                                        <option value="{{ $id }}">{{ $name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                    {{-- Indicador de loading --}}
-                    <div wire:loading wire:target="filePath" class="text-sm text-gray-500">
-                        <svg class="animate-spin inline-block h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Carregando arquivo...
-                    </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-950 dark:text-white">
+                                    Arquivo Excel/CSV <span class="text-danger-600">*</span>
+                                </label>
+                                <input type="file" wire:model="file" accept=".xlsx,.xls,.csv"
+                                    class="mt-1.5 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 dark:file:bg-primary-900/20 dark:file:text-primary-400" />
+                                <p class="mt-2 text-xs text-gray-500">Colunas: Nome, Documento, Email (opcional)</p>
+                            </div>
 
-                    {{-- Botão de Importar --}}
-                    <div class="flex justify-end">
-                        <x-filament::button
-                            type="submit"
-                            wire:loading.attr="disabled"
-                            wire:target="import"
-                        >
-                            <svg wire:loading wire:target="import" class="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Importar Convidados
-                        </x-filament::button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                            <div wire:loading wire:target="file" class="text-sm text-gray-500">Carregando...</div>
 
-        {{-- Instruções --}}
-        <div class="rounded-xl bg-blue-50 p-4 dark:bg-blue-900/20">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                    </svg>
+                            <div class="flex justify-end">
+                                <x-filament::button type="submit" wire:loading.attr="disabled" wire:target="import">
+                                    Importar Arquivo
+                                </x-filament::button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="ml-3">
-                    <h3 class="text-sm font-medium text-blue-800 dark:text-blue-300">
-                        Instruções de Importação
-                    </h3>
-                    <div class="mt-2 text-sm text-blue-700 dark:text-blue-400">
-                        <ul class="list-disc pl-5 space-y-1">
-                            <li>A primeira linha deve conter os cabeçalhos: <strong>Nome</strong>, <strong>Documento</strong>, <strong>Email</strong></li>
-                            <li>Documentos duplicados serão automaticamente ignorados</li>
-                            <li>O campo Email é opcional</li>
-                        </ul>
+            </div>
+
+            {{-- Aba: Colar Texto --}}
+            <div x-show="activeTab === 'text'" x-cloak class="mt-6">
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    {{-- Formulário --}}
+                    <div class="fi-section rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
+                        <div class="fi-section-content p-6">
+                            <form wire:submit="importFromText" class="space-y-6">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-950 dark:text-white">Setor <span class="text-danger-600">*</span></label>
+                                        <select wire:model="textSectorId" class="mt-1.5 block w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                            <option value="">Selecione...</option>
+                                            @foreach($this->sectors as $id => $name)
+                                                <option value="{{ $id }}">{{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-950 dark:text-white">Delimitador</label>
+                                        <select wire:model.live="delimiter" class="mt-1.5 block w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                            <option value="newline">Nova linha (um por linha)</option>
+                                            <option value="comma">Vírgula (nome, documento)</option>
+                                            <option value="semicolon">Ponto e vírgula (nome; documento)</option>
+                                            <option value="tab">Tab</option>
+                                            <option value="pipe">Pipe (nome | documento)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="text-sm font-medium text-gray-950 dark:text-white">Cole a lista de convidados</label>
+                                    <textarea wire:model.live.debounce.300ms="textContent" rows="12"
+                                        class="mt-1.5 block w-full rounded-lg border-gray-300 font-mono text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                                        placeholder="João Silva, 123.456.789-00
+Maria Santos, 987.654.321-00
+Carlos Oliveira"></textarea>
+                                </div>
+
+                                <div class="flex justify-end">
+                                    <x-filament::button type="submit" wire:loading.attr="disabled" wire:target="importFromText">
+                                        Importar {{ count($this->parsedPreview) }} Convidados
+                                    </x-filament::button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    {{-- Preview --}}
+                    <div class="fi-section rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
+                        <div class="fi-section-header p-4 border-b border-gray-100 dark:border-gray-800">
+                            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+                                Preview ({{ count($this->parsedPreview) }} registros)
+                            </h3>
+                        </div>
+                        <div class="fi-section-content p-4 max-h-96 overflow-y-auto">
+                            @if(count($this->parsedPreview) > 0)
+                                <table class="w-full text-sm">
+                                    <thead class="text-xs text-gray-500 dark:text-gray-400">
+                                        <tr>
+                                            <th class="text-left py-2">#</th>
+                                            <th class="text-left py-2">Nome</th>
+                                            <th class="text-left py-2">Documento</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                                        @foreach($this->parsedPreview as $row)
+                                            <tr>
+                                                <td class="py-2 text-gray-400">{{ $row['line'] }}</td>
+                                                <td class="py-2 text-gray-900 dark:text-white">{{ $row['name'] }}</td>
+                                                <td class="py-2 text-gray-500 dark:text-gray-400">{{ $row['document'] ?: '-' }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @else
+                                <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-8">
+                                    Cole o texto para ver o preview aqui
+                                </p>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

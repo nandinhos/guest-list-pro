@@ -196,11 +196,11 @@
 **Painel:** Promoter
 
 ### Tarefas:
-- [ ] Instalar pacote Laravel Excel
+- [x] Instalar pacote Laravel Excel
   - **Comando:** `sail composer require maatwebsite/excel`
   - **Publicar config:** `sail artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider"`
 
-- [ ] Criar Import Class
+- [x] Criar Import Class
   - **Arquivo:** `app/Imports/GuestsImport.php`
   - **Comando:** `sail artisan make:import GuestsImport --model=Guest`
   - **Colunas esperadas:** nome, documento, email (opcional)
@@ -209,7 +209,7 @@
     - Documento obrigatório e único no evento
     - Respeitar cota do promoter
 
-- [ ] Criar página de importação no Promoter
+- [x] Criar página de importação no Promoter
   - **Arquivo:** `app/Filament/Promoter/Resources/Guests/Pages/ImportGuests.php`
   - **Comando:** `sail artisan make:filament-page ImportGuests --resource=GuestResource --panel=promoter`
   - **UI:**
@@ -218,7 +218,7 @@
     - Botão "Importar"
     - Progress bar
 
-- [ ] Implementar validação de duplicados no preview
+- [x] Implementar validação de duplicados no preview
   - **Arquivo:** `app/Services/GuestImportService.php`
   - **Lógica:**
     - Verificar duplicados dentro do arquivo
@@ -230,24 +230,24 @@
   - **Comando:** `sail artisan make:job ProcessGuestImport`
   - **Motivo:** Importações grandes não devem travar a UI
 
-- [ ] Adicionar notificação de conclusão
+- [x] Adicionar notificação de conclusão
   - **Tipo:** Database notification + toast
   - **Conteúdo:** "X convidados importados, Y ignorados (duplicados)"
 
 ### Template de Importação:
-- [ ] Criar arquivo template para download
+- [x] Criar arquivo template para download
   - **Arquivo:** `storage/app/templates/modelo-importacao-convidados.xlsx`
   - **Colunas:** Nome | Documento | Email
   - **Botão:** "Baixar modelo" na página de importação
 
 ### Critérios de Aceite:
-- [ ] Upload de Excel funciona
-- [ ] Upload de CSV funciona
+- [x] Upload de Excel funciona
+- [x] Upload de CSV funciona
 - [ ] Preview mostra dados corretamente
-- [ ] Duplicados são identificados antes da importação
+- [x] Duplicados são identificados antes da importação
 - [ ] Cota do promoter é respeitada
 - [ ] Importação de 1000+ registros não trava
-- [ ] Notificação é enviada ao concluir
+- [x] Notificação é enviada ao concluir
 
 ---
 
@@ -255,11 +255,11 @@
 **Painel:** Promoter
 
 ### Tarefas:
-- [ ] Criar modal de importação por texto
+- [x] Criar modal de importação por texto
   - **Arquivo:** `app/Filament/Promoter/Resources/Guests/Actions/ImportFromTextAction.php`
   - **UI:** Textarea grande + seletor de delimitador
 
-- [ ] Implementar parser de texto
+- [x] Implementar parser de texto
   - **Arquivo:** `app/Services/TextParserService.php`
   - **Delimitadores suportados:**
     - Vírgula (,)
@@ -269,18 +269,18 @@
     - Nova linha (um registro por linha)
   - **Formato esperado:** `nome, documento` ou `nome; documento`
 
-- [ ] Preview em tempo real (live)
+- [x] Preview em tempo real (live)
   - **Tecnologia:** Alpine.js para parsing client-side
   - **UI:** Tabela preview ao lado do textarea
 
-- [ ] Validação e importação
+- [x] Validação e importação
   - **Reutilizar:** `GuestImportService` já criado
 
 ### Critérios de Aceite:
-- [ ] Colar lista de nomes funciona
-- [ ] Diferentes delimitadores são reconhecidos
-- [ ] Preview atualiza em tempo real
-- [ ] Erros são destacados visualmente
+- [x] Colar lista de nomes funciona
+- [x] Diferentes delimitadores são reconhecidos
+- [x] Preview atualiza em tempo real
+- [x] Erros são destacados visualmente
 
 ---
 
