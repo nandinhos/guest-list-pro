@@ -2,14 +2,17 @@
 
 namespace App\Filament\Bilheteria\Resources\TicketSales\Schemas;
 
+use App\Enums\DocumentType;
 use App\Enums\PaymentMethod;
 use App\Models\Event;
 use App\Models\Sector;
+use App\Rules\DocumentValidation;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 
 class TicketSaleForm
@@ -20,7 +23,7 @@ class TicketSaleForm
             ->components([
                 Section::make('Dados do Comprador')
                     ->description('Informações do comprador do ingresso')
-                    ->columns(2)
+                    ->columns(3)
                     ->schema([
                         TextInput::make('buyer_name')
                             ->label('Nome do Comprador')
@@ -28,11 +31,30 @@ class TicketSaleForm
                             ->maxLength(255)
                             ->placeholder('Nome completo'),
 
+                        Select::make('document_type')
+                            ->label('Tipo de Documento')
+                            ->options(DocumentType::class)
+                            ->default(DocumentType::CPF->value)
+                            ->live()
+                            ->native(false),
+
                         TextInput::make('buyer_document')
                             ->label('Documento')
                             ->required()
                             ->maxLength(20)
-                            ->placeholder('CPF ou RG'),
+                            ->placeholder(fn (Get $get) => DocumentType::tryFrom($get('document_type') ?? '')?->getPlaceholder() ?? 'CPF, RG ou Passaporte')
+                            ->helperText(fn (Get $get) => match ($get('document_type')) {
+                                DocumentType::CPF->value => 'CPF: 11 dígitos numéricos',
+                                DocumentType::RG->value => 'RG: formato varia por estado',
+                                DocumentType::PASSPORT->value => 'Passaporte: letras e números',
+                                default => null,
+                            })
+                            ->rules([
+                                fn (Get $get): DocumentValidation => new DocumentValidation(
+                                    type: DocumentType::tryFrom($get('document_type') ?? ''),
+                                    allowEmpty: false
+                                ),
+                            ]),
                     ]),
 
                 Section::make('Dados do Ingresso')

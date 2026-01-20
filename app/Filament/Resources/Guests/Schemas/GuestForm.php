@@ -2,10 +2,13 @@
 
 namespace App\Filament\Resources\Guests\Schemas;
 
+use App\Enums\DocumentType;
+use App\Rules\DocumentValidation;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 
 class GuestForm
@@ -24,25 +27,24 @@ class GuestForm
                             ->preload()
                             ->required()
                             ->native(false),
-                        
+
                         Select::make('sector_id')
                             ->label('Setor')
                             ->relationship(
-                                name: 'sector', 
+                                name: 'sector',
                                 titleAttribute: 'name',
-                                modifyQueryUsing: fn ($query, \Filament\Schemas\Components\Utilities\Get $get) => 
-                                    $query->where('event_id', $get('event_id'))
+                                modifyQueryUsing: fn ($query, Get $get) => $query->where('event_id', $get('event_id'))
                             )
                             ->searchable()
                             ->preload()
                             ->required()
                             ->native(false)
-                            ->disabled(fn (\Filament\Schemas\Components\Utilities\Get $get) => ! $get('event_id')),
+                            ->disabled(fn (Get $get) => ! $get('event_id')),
 
                         Select::make('promoter_id')
                             ->label('Promoter Responsável')
                             ->relationship(
-                                name: 'promoter', 
+                                name: 'promoter',
                                 titleAttribute: 'name',
                                 modifyQueryUsing: fn ($query) => $query->where('role', \App\Enums\UserRole::PROMOTER->value)
                             )
@@ -58,15 +60,36 @@ class GuestForm
                             ->label('Nome Completo')
                             ->required()
                             ->maxLength(255),
+
+                        Select::make('document_type')
+                            ->label('Tipo de Documento')
+                            ->options(DocumentType::class)
+                            ->default(DocumentType::CPF->value)
+                            ->live()
+                            ->native(false),
+
                         TextInput::make('document')
-                            ->label('Documento (CPF/RG)')
-                            ->required()
+                            ->label('Documento')
+                            ->placeholder(fn (Get $get) => DocumentType::tryFrom($get('document_type') ?? '')?->getPlaceholder() ?? 'Digite o documento')
+                            ->helperText(fn (Get $get) => match ($get('document_type')) {
+                                DocumentType::CPF->value => 'CPF: 11 dígitos numéricos',
+                                DocumentType::RG->value => 'RG: formato varia por estado',
+                                DocumentType::PASSPORT->value => 'Passaporte: letras e números',
+                                default => null,
+                            })
+                            ->rules([
+                                fn (Get $get): DocumentValidation => new DocumentValidation(
+                                    type: DocumentType::tryFrom($get('document_type') ?? ''),
+                                    allowEmpty: true
+                                ),
+                            ])
                             ->maxLength(20),
+
                         TextInput::make('email')
                             ->label('E-mail')
                             ->email()
                             ->maxLength(255),
-                    ])->columns(3),
+                    ])->columns(4),
 
                 \Filament\Schemas\Components\Section::make('Status de Check-in')
                     ->description('Estes campos são atualizados automaticamente durante o evento')
