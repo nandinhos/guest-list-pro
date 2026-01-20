@@ -17,7 +17,24 @@ class GuestsTable
                 TextColumn::make('name')
                     ->label('Convidado / Documento')
                     ->description(fn ($record) => $record->document ?? '-')
-                    ->searchable(['name', 'document'])
+                    ->searchable(query: function ($query, string $search): void {
+                        // Normaliza a busca: remove acentos e converte para lowercase
+                        $normalizedSearch = strtolower(\Illuminate\Support\Str::ascii($search));
+                        $numericSearch = preg_replace('/\D/', '', $search);
+
+                        $query->where(function ($q) use ($normalizedSearch, $numericSearch) {
+                            // Busca por nome normalizado
+                            $q->where('name_normalized', 'like', "%{$normalizedSearch}%")
+                              // Fallback para nome original (registros antigos)
+                                ->orWhere('name', 'like', "%{$normalizedSearch}%");
+
+                            // Busca por documento normalizado
+                            if ($numericSearch) {
+                                $q->orWhere('document_normalized', 'like', "%{$numericSearch}%")
+                                    ->orWhere('document', 'like', "%{$numericSearch}%");
+                            }
+                        });
+                    })
                     ->sortable(),
 
                 TextColumn::make('sector.name')
@@ -53,6 +70,20 @@ class GuestsTable
                     ->placeholder('Todos')
                     ->trueLabel('Confirmados')
                     ->falseLabel('Pendentes'),
+
+                \Filament\Tables\Filters\SelectFilter::make('checked_in_recent')
+                    ->label('Check-in Recente')
+                    ->options([
+                        '15' => 'Últimos 15 minutos',
+                        '30' => 'Últimos 30 minutos',
+                        '60' => 'Última 1 hora',
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (filled($data['value'])) {
+                            $minutes = (int) $data['value'];
+                            $query->where('checked_in_at', '>=', now()->subMinutes($minutes));
+                        }
+                    }),
             ])
             ->filtersLayout(\Filament\Tables\Enums\FiltersLayout::AboveContent)
             ->filtersFormColumns(4)

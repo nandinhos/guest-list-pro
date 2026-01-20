@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Guest;
+use Illuminate\Support\Str;
 
 class GuestObserver
 {
@@ -13,6 +14,7 @@ class GuestObserver
     {
         $this->normalizeDocument($guest);
         $this->normalizeName($guest);
+        $this->fillNormalizedColumns($guest);
     }
 
     /**
@@ -32,6 +34,23 @@ class GuestObserver
     {
         if ($guest->name) {
             $guest->name = preg_replace('/\s+/', ' ', trim($guest->name));
+        }
+    }
+
+    /**
+     * Preenche as colunas normalizadas para busca sem acentos.
+     * Usa Str::ascii() para remover acentos e strtolower para lowercase.
+     */
+    protected function fillNormalizedColumns(Guest $guest): void
+    {
+        // Normaliza o nome: remove acentos e converte para lowercase
+        if ($guest->name) {
+            $guest->name_normalized = strtolower(Str::ascii($guest->name));
+        }
+
+        // Normaliza o documento: apenas números
+        if ($guest->document) {
+            $guest->document_normalized = preg_replace('/\D/', '', $guest->document);
         }
     }
 }
