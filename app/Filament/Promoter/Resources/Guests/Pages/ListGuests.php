@@ -18,6 +18,11 @@ class ListGuests extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            \Filament\Actions\Action::make('import')
+                ->label('Importar')
+                ->icon('heroicon-o-arrow-up-tray')
+                ->color('gray')
+                ->url(fn () => ImportGuests::getUrl()),
             CreateAction::make(),
         ];
     }

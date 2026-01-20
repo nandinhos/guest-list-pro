@@ -59,44 +59,44 @@
 ```
 
 ### Tarefas:
-- [ ] Verificar middleware `EnsureEventSelected` em todos os painéis
+- [x] Verificar middleware `EnsureEventSelected` em todos os painéis
   - **Arquivos:**
     - `app/Providers/Filament/AdminPanelProvider.php`
     - `app/Providers/Filament/PromoterPanelProvider.php`
     - `app/Providers/Filament/ValidatorPanelProvider.php`
     - `app/Providers/Filament/BilheteriaPanelProvider.php`
 
-- [ ] Garantir que página SelectEvent NÃO tem sidebar
+- [x] Garantir que página SelectEvent NÃO tem sidebar
   - **Arquivos:** `app/Filament/*/Pages/SelectEvent.php`
   - **Método:** `protected static bool $shouldRegisterNavigation = false;`
   - **Layout:** Usar layout simples sem navegação lateral
 
-- [ ] Configurar redirecionamento pós-login para SelectEvent
+- [x] Configurar redirecionamento pós-login para SelectEvent
   - **Verificar:** `LOGIN_REDIRECT` ou método `getLoginRedirectUrl()`
   - **Destino:** Página de seleção de evento
 
-- [ ] Garantir que SelectEvent mostra apenas eventos permitidos
+- [x] Garantir que SelectEvent mostra apenas eventos permitidos
   - **Admin:** Todos os eventos
   - **Promoter:** Eventos com EventAssignment ativo
   - **Validator:** Eventos designados
   - **Bilheteria:** Eventos com `bilheteria_enabled = true`
 
-- [ ] Após seleção de evento, redirecionar para Dashboard
+- [x] Após seleção de evento, redirecionar para Dashboard
   - **Ação:** `session(['selected_event_id' => $eventId])`
   - **Redirect:** Dashboard do painel correspondente
 
-- [ ] Adicionar botão "Trocar Evento" no header
+- [x] Adicionar botão "Trocar Evento" no header
   - **UI:** Dropdown ou botão no topbar
   - **Ação:** Limpar sessão e voltar para SelectEvent
 
 ### Critérios de Aceite:
-- [ ] Login redireciona para SelectEvent (não para Dashboard)
-- [ ] SelectEvent NÃO mostra sidebar
-- [ ] Seleção de evento armazena na sessão
-- [ ] Dashboard só aparece APÓS selecionar evento
-- [ ] Sidebar só aparece APÓS selecionar evento
-- [ ] Botão "Trocar Evento" funciona corretamente
-- [ ] Cada role vê apenas eventos permitidos
+- [x] Login redireciona para SelectEvent (não para Dashboard)
+- [x] SelectEvent NÃO mostra sidebar
+- [x] Seleção de evento armazena na sessão
+- [x] Dashboard só aparece APÓS selecionar evento
+- [x] Sidebar só aparece APÓS selecionar evento
+- [x] Botão "Trocar Evento" funciona corretamente
+- [x] Cada role vê apenas eventos permitidos
 
 ---
 
@@ -108,27 +108,27 @@
 **Arquivo:** `app/Filament/Validator/Resources/Guests/Tables/GuestsTable.php`
 
 ### Tarefas:
-- [ ] Criar coluna `name_normalized` na tabela `guests`
+- [x] Criar coluna `name_normalized` na tabela `guests`
   - **Arquivo:** Nova migration
   - **Comando:** `sail artisan make:migration add_name_normalized_to_guests_table`
   - **Campos:** `name_normalized VARCHAR(255) INDEX`
 
-- [ ] Atualizar GuestObserver para preencher `name_normalized`
+- [x] Atualizar GuestObserver para preencher `name_normalized`
   - **Arquivo:** `app/Observers/GuestObserver.php`
   - **Lógica:** Converter para lowercase, remover acentos com `iconv()` ou `Str::ascii()`
 
-- [ ] Criar comando para normalizar registros existentes
+- [x] Criar comando para normalizar registros existentes
   - **Arquivo:** `app/Console/Commands/NormalizeGuestNames.php`
   - **Comando:** `sail artisan make:command NormalizeGuestNames`
 
-- [ ] Implementar busca usando `name_normalized`
+- [x] Implementar busca usando `name_normalized`
   - **Arquivo:** `app/Filament/Validator/Resources/Guests/Tables/GuestsTable.php`
   - **Método:** Sobrescrever `searchable()` com query customizada
 
 ### Critérios de Aceite:
-- [ ] Buscar "João" retorna "Joao", "JOÃO", "joao"
-- [ ] Buscar "Jose" retorna "José", "JOSE", "jose"
-- [ ] Performance: < 200ms para 10k registros
+- [x] Buscar "João" retorna "Joao", "JOÃO", "joao"
+- [x] Buscar "Jose" retorna "José", "JOSE", "jose"
+- [x] Performance: < 200ms para 10k registros
 
 ---
 
@@ -174,7 +174,7 @@
   - **Lógica:** Mostrar convidados com nomes similares (mesmo evento)
   - **Query:** Agrupar por `name_normalized` com COUNT > 1
 
-- [ ] Adicionar filtro "Check-in Recente"
+- [x] Adicionar filtro "Check-in Recente"
   - **Opções:** Últimos 15min, 30min, 1h
   - **Útil para:** Desfazer check-ins incorretos rapidamente
 
@@ -183,7 +183,7 @@
 
 ### Critérios de Aceite:
 - [ ] Filtro de duplicados funciona corretamente
-- [ ] Filtro de tempo funciona corretamente
+- [x] Filtro de tempo funciona corretamente
 - [ ] Contador atualiza ao filtrar
 
 ---

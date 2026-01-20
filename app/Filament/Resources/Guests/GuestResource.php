@@ -47,6 +47,7 @@ class GuestResource extends Resource
             'index' => ListGuests::route('/'),
             'create' => CreateGuest::route('/create'),
             'edit' => EditGuest::route('/{record}/edit'),
+            'import' => Pages\ImportGuests::route('/import'),
         ];
     }
 }

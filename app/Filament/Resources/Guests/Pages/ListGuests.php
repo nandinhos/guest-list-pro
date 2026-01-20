@@ -3,10 +3,9 @@
 namespace App\Filament\Resources\Guests\Pages;
 
 use App\Filament\Resources\Guests\GuestResource;
-use Filament\Actions\CreateAction;
-use Filament\Helpers\Exports\Export;
-use Filament\Resources\Pages\ListRecords;
 use Filament\Actions\Action;
+use Filament\Actions\CreateAction;
+use Filament\Resources\Pages\ListRecords;
 
 class ListGuests extends ListRecords
 {
@@ -15,6 +14,11 @@ class ListGuests extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('import')
+                ->label('Importar')
+                ->icon('heroicon-o-arrow-up-tray')
+                ->color('gray')
+                ->url(fn () => ImportGuests::getUrl()),
             CreateAction::make(),
             Action::make('exportCsv')
                 ->label('Exportar Todos (CSV)')
