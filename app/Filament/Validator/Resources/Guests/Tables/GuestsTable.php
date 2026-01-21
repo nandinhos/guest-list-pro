@@ -2,12 +2,10 @@
 
 namespace App\Filament\Validator\Resources\Guests\Tables;
 
-use App\Models\Guest;
 use App\Services\GuestSearchService;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\DB;
 
 class GuestsTable
 {
@@ -15,80 +13,60 @@ class GuestsTable
     {
         return $table
             ->columns([
+
+                // Mobile Layout (Custom Card View)
+                \Filament\Tables\Columns\ViewColumn::make('mobile_card')
+                    ->view('filament.validator.resources.guests.tables.columns.mobile_card')
+                    ->label('LISTA')
+                    ->hiddenFrom('md'),
+
+                // Desktop Layout (Standard Table Columns)
                 TextColumn::make('name')
-                    ->label('Convidado / Documento')
-                    ->formatStateUsing(function ($state, $record, $livewire) {
-                        // Obtém o termo de busca atual da tabela Filament
-                        $searchTerm = $livewire->getTableSearch() ?? '';
-                        $isPartialMatch = false;
-
-                        if (! empty($searchTerm)) {
-                            $searchService = app(GuestSearchService::class);
-                            $normalizedSearch = $searchService->normalize($searchTerm);
-                            $normalizedName = $record->name_normalized ?? $searchService->normalize($record->name);
-
-                            // Calcula similaridade
-                            $similarity = $searchService->calculateSimilarity($normalizedSearch, $normalizedName);
-
-                            // Match parcial: encontrou mas não é exato (< 95%)
-                            $isPartialMatch = $similarity > 0.3 && $similarity < 0.95;
-                        }
-
-                        return view('filament.components.guest-name-column', [
-                            'name' => $state,
-                            'document' => $record->document ?? '-',
-                            'isPartialMatch' => $isPartialMatch,
-                        ]);
-                    })
-                    ->html()
+                    ->label('NOME / DOC')
+                    ->weight(FontWeight::Bold)
+                    ->description(fn ($record) => view('filament.validator.resources.guests.tables.columns.document_description', ['record' => $record]))
                     ->searchable(query: function ($query, string $search): void {
                         $searchService = app(GuestSearchService::class);
-
-                        // Normaliza a busca: remove acentos e converte para lowercase
                         $normalizedSearch = $searchService->normalize($search);
                         $normalizedDocument = $searchService->normalizeDocument($search);
-
-                        // Divide o termo de busca em palavras para fuzzy search
                         $searchTerms = array_filter(explode(' ', $normalizedSearch), fn ($term) => strlen($term) >= 2);
-
                         $query->where(function ($q) use ($normalizedSearch, $normalizedDocument, $searchTerms) {
-                            // Busca exata por nome normalizado
                             $q->where('name_normalized', 'like', "%{$normalizedSearch}%");
-
-                            // Busca fuzzy: cada termo individualmente (encontra "Joao Silva" com "João da Silva")
                             foreach ($searchTerms as $term) {
                                 $q->orWhere('name_normalized', 'like', "%{$term}%");
                             }
-
-                            // Busca por documento normalizado
                             if (strlen($normalizedDocument) >= 3) {
                                 $q->orWhere('document_normalized', 'like', "%{$normalizedDocument}%")
                                     ->orWhere('document', 'like', "%{$normalizedDocument}%");
                             }
                         });
                     })
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('sector.name')
-                    ->label('Setor')
+                    ->label('SETOR')
                     ->badge()
-                    ->color('gray')
-                    ->searchable()
-                    ->sortable(),
-
-                IconColumn::make('is_checked_in')
-                    ->label('Status')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
-                    ->trueColor('success')
-                    ->falseColor('danger'),
+                    ->color('info')
+                    ->visibleFrom('md'),
 
                 TextColumn::make('checked_in_at')
-                    ->label('Entrada')
-                    ->dateTime('H:i')
-                    ->description(fn ($record) => $record->checked_in_at ? $record->checked_in_at->format('d/m/Y') : null)
-                    ->sortable(),
+                    ->label('CHECK-IN')
+                    ->default('Pendente')
+                    ->formatStateUsing(fn ($state) => $state instanceof \DateTimeInterface ? $state->format('d/m/Y \à\s H:i') : $state)
+                    ->color(fn ($record) => $record->is_checked_in ? 'success' : 'warning')
+                    ->icon(fn ($record) => $record->is_checked_in ? 'heroicon-m-check-circle' : 'heroicon-m-clock')
+                    ->iconColor(fn ($record) => $record->is_checked_in ? 'success' : 'warning')
+                    ->visibleFrom('md'),
+
+                TextColumn::make('validator.name')
+                    ->label('VALIDADOR')
+                    ->color('gray')
+                    ->icon('heroicon-m-user')
+                    ->placeholder('-')
+                    ->extraAttributes(['class' => 'italic'])
+                    ->size(\Filament\Support\Enums\TextSize::Small)
+                    ->visibleFrom('md'),
             ])
             ->filters([
                 \Filament\Tables\Filters\SelectFilter::make('sector_id')
@@ -142,10 +120,6 @@ class GuestsTable
                         blank: fn ($query) => $query,
                     ),
             ])
-            ->contentGrid([
-                'md' => 1,
-                'xl' => 1,
-            ])
             ->filtersLayout(\Filament\Tables\Enums\FiltersLayout::Modal)
             ->filtersFormColumns(2)
             ->description(fn ($livewire) => sprintf(
@@ -158,29 +132,27 @@ class GuestsTable
                     ->icon('heroicon-m-check-circle')
                     ->color('success')
                     ->button()
-                    ->size('lg')
-                    ->hidden(fn ($record) => $record->is_checked_in)
+                    ->size('sm')
+                    ->extraAttributes(['class' => 'hidden md:inline-flex'])
+                    ->hidden(fn ($record) => $record?->is_checked_in ?? false)
                     ->requiresConfirmation()
                     ->modalHeading('Confirmar Check-in')
-                    ->modalDescription('Deseja confirmar a entrada deste convidado agora?')
+                    ->modalDescription(fn ($record) => "Confirmar entrada de {$record->name}?")
+                    ->modalSubmitActionLabel('Confirmar Entrada')
                     ->action(function ($record) {
                         try {
-                            DB::transaction(function () use ($record) {
-                                $guest = Guest::lockForUpdate()->find($record->id);
-
+                            \Illuminate\Support\Facades\DB::transaction(function () use ($record) {
+                                $guest = \App\Models\Guest::lockForUpdate()->find($record->id);
                                 if ($guest->is_checked_in) {
                                     throw new \Exception('checkin_exists');
                                 }
-
                                 $guest->update([
                                     'is_checked_in' => true,
                                     'checked_in_at' => now(),
                                     'checked_in_by' => auth()->id(),
                                 ]);
                             });
-
-                            // Log de Sucesso
-                            DB::table('checkin_attempts')->insert([
+                            \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
                                 'event_id' => $record->event_id,
                                 'validator_id' => auth()->id(),
                                 'guest_id' => $record->id,
@@ -190,16 +162,14 @@ class GuestsTable
                                 'created_at' => now(),
                                 'updated_at' => now(),
                             ]);
-
                             \Filament\Notifications\Notification::make()
                                 ->title('Check-in realizado!')
+                                ->body("Entrada confirmada para {$record->name}")
                                 ->success()
                                 ->send();
                         } catch (\Exception $e) {
                             $isAlreadyCheckedIn = $e->getMessage() === 'checkin_exists';
-
-                            // Log de Falha / Tentativa Duplicada
-                            DB::table('checkin_attempts')->insert([
+                            \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
                                 'event_id' => $record->event_id,
                                 'validator_id' => auth()->id(),
                                 'guest_id' => $record->id,
@@ -209,7 +179,6 @@ class GuestsTable
                                 'created_at' => now(),
                                 'updated_at' => now(),
                             ]);
-
                             \Filament\Notifications\Notification::make()
                                 ->title($isAlreadyCheckedIn ? 'Check-in já realizado!' : 'Erro no check-in')
                                 ->body($isAlreadyCheckedIn ? 'Este convidado já entrou.' : $e->getMessage())
@@ -222,29 +191,29 @@ class GuestsTable
                     ->label('Estornar')
                     ->icon('heroicon-m-arrow-path')
                     ->color('warning')
-                    ->link() // Mantém como link para ser menos proeminente que a entrada, mas acessível
-                    ->visible(fn ($record) => $record->is_checked_in)
+                    ->button()
+                    ->outlined()
+                    ->size('sm')
+                    ->extraAttributes(['class' => 'hidden md:inline-flex'])
+                    ->visible(fn ($record) => ($record?->is_checked_in ?? false))
                     ->requiresConfirmation()
                     ->modalHeading('Estornar Check-in')
-                    ->modalDescription('Esta ação marcará o convidado como "Pendente" novamente.')
+                    ->modalDescription(fn ($record) => "Estornar entrada de {$record->name}? Esta ação marcará o convidado como 'Pendente' novamente.")
+                    ->modalSubmitActionLabel('Confirmar Estorno')
                     ->action(function ($record) {
                         try {
-                            DB::transaction(function () use ($record) {
-                                $guest = Guest::lockForUpdate()->find($record->id);
-
+                            \Illuminate\Support\Facades\DB::transaction(function () use ($record) {
+                                $guest = \App\Models\Guest::lockForUpdate()->find($record->id);
                                 if (! $guest->is_checked_in) {
                                     throw new \Exception('guest_not_checked_in');
                                 }
-
                                 $guest->update([
                                     'is_checked_in' => false,
                                     'checked_in_at' => null,
                                     'checked_in_by' => null,
                                 ]);
                             });
-
-                            // Log de Estorno
-                            DB::table('checkin_attempts')->insert([
+                            \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
                                 'event_id' => $record->event_id,
                                 'validator_id' => auth()->id(),
                                 'guest_id' => $record->id,
@@ -254,10 +223,10 @@ class GuestsTable
                                 'created_at' => now(),
                                 'updated_at' => now(),
                             ]);
-
                             \Filament\Notifications\Notification::make()
-                                ->title('Check-in estornado.')
-                                ->info()
+                                ->title('Check-in estornado')
+                                ->body("{$record->name} voltou para a fila de entrada.")
+                                ->warning()
                                 ->send();
                         } catch (\Exception $e) {
                             \Filament\Notifications\Notification::make()
@@ -268,11 +237,8 @@ class GuestsTable
                         }
                     }),
             ])
-            ->toolbarActions([
-                // Remover ações de criação
-            ])
-            ->bulkActions([
-                // Remover ações em massa para segurança
-            ]);
+            ->striped()
+            ->defaultSort('name')
+            ->poll('30s');
     }
 }
