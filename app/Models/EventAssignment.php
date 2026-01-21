@@ -10,6 +10,7 @@ class EventAssignment extends Model
 {
     /** @use HasFactory<\Database\Factories\EventAssignmentFactory> */
     use HasFactory;
+
     use \Spatie\Activitylog\Traits\LogsActivity;
 
     protected $fillable = [

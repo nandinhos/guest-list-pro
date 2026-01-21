@@ -40,7 +40,7 @@ class GuestsTable
                     ->dateTime('d/m H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                    
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

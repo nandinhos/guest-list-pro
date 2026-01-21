@@ -17,12 +17,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('event_id')->constrained()->cascadeOnDelete();
             $table->foreignId('sector_id')->constrained()->cascadeOnDelete();
-            
+
             // Limites e restrições
             $table->integer('guest_limit');
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
-            
+
             $table->timestamps();
         });
     }

@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
-use App\Enums\UserRole;
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;

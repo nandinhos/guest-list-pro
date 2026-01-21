@@ -14,14 +14,14 @@ class CreateGuest extends CreateRecord
         $data['promoter_id'] = auth()->id();
         $data['is_checked_in'] = false;
 
-        $service = new \App\Services\GuestService();
+        $service = new \App\Services\GuestService;
         $validation = $service->canRegisterGuest(
-            auth()->user(), 
-            (int)$data['event_id'], 
-            (int)$data['sector_id']
+            auth()->user(),
+            (int) $data['event_id'],
+            (int) $data['sector_id']
         );
 
-        if (!$validation['allowed']) {
+        if (! $validation['allowed']) {
             \Filament\Notifications\Notification::make()
                 ->title('Erro de Validação')
                 ->body($validation['message'])

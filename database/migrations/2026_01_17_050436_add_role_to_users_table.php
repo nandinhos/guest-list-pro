@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             // Adiciona o papel do usuário usando o Enum UserRole. O padrão é VALIDATOR para maior segurança.
             $table->string('role')->default(\App\Enums\UserRole::VALIDATOR->value)->after('password');
-            
+
             // Controle de ativação do usuário
             $table->boolean('is_active')->default(true)->after('role');
         });

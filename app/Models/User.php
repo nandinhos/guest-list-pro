@@ -11,6 +11,7 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
     use \Spatie\Activitylog\Traits\LogsActivity;
 
     /**
