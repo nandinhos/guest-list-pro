@@ -4,13 +4,13 @@ namespace App\Enums;
 
 /**
  * Define os possíveis estados de um evento.
- * 
+ *
  * DRAFT: Evento em criação, não visível.
  * ACTIVE: Evento ativo e recebendo cadastros/check-ins.
  * FINISHED: Evento encerrado.
  * CANCELLED: Evento cancelado.
  */
-enum EventStatus: string implements \Filament\Support\Contracts\HasLabel, \Filament\Support\Contracts\HasColor
+enum EventStatus: string implements \Filament\Support\Contracts\HasColor, \Filament\Support\Contracts\HasLabel
 {
     case DRAFT = 'draft';
     case ACTIVE = 'active';
@@ -27,7 +27,7 @@ enum EventStatus: string implements \Filament\Support\Contracts\HasLabel, \Filam
         };
     }
 
-    public function getColor(): string | array | null
+    public function getColor(): string|array|null
     {
         return match ($this) {
             self::DRAFT => 'gray',

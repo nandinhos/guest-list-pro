@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Guests\Tables;
 
-use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -68,7 +67,7 @@ class GuestsTable
                     ->relationship('event', 'name')
                     ->searchable()
                     ->preload(),
-                
+
                 \Filament\Tables\Filters\SelectFilter::make('sector_id')
                     ->label('Setor')
                     ->relationship('sector', 'name')

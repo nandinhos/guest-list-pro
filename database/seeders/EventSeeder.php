@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\Sector;
-use App\Enums\EventStatus;
 use Illuminate\Database\Seeder;
 
 class EventSeeder extends Seeder
