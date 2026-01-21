@@ -75,25 +75,17 @@ class GuestsTable
                     ->searchable()
                     ->preload(),
 
+                \Filament\Tables\Filters\SelectFilter::make('promoter_id')
+                    ->label('Promoter')
+                    ->options(fn () => \App\Models\User::whereHas('guests', fn ($q) => $q->where('event_id', session('selected_event_id')))->pluck('name', 'id'))
+                    ->searchable()
+                    ->preload(),
+
                 \Filament\Tables\Filters\TernaryFilter::make('is_checked_in')
-                    ->label('Status de Check-in')
+                    ->label('Status')
                     ->placeholder('Todos')
                     ->trueLabel('Confirmados')
                     ->falseLabel('Pendentes'),
-
-                \Filament\Tables\Filters\SelectFilter::make('checked_in_recent')
-                    ->label('Check-in Recente')
-                    ->options([
-                        '15' => 'Últimos 15 minutos',
-                        '30' => 'Últimos 30 minutos',
-                        '60' => 'Última 1 hora',
-                    ])
-                    ->query(function ($query, array $data) {
-                        if (filled($data['value'])) {
-                            $minutes = (int) $data['value'];
-                            $query->where('checked_in_at', '>=', now()->subMinutes($minutes));
-                        }
-                    }),
 
                 \Filament\Tables\Filters\TernaryFilter::make('possible_duplicates')
                     ->label('Duplicados')
@@ -120,8 +112,8 @@ class GuestsTable
                         blank: fn ($query) => $query,
                     ),
             ])
-            ->filtersLayout(\Filament\Tables\Enums\FiltersLayout::Modal)
-            ->filtersFormColumns(2)
+            ->filtersLayout(\Filament\Tables\Enums\FiltersLayout::AboveContent)
+            ->filtersFormColumns(4)
             ->description(fn ($livewire) => sprintf(
                 'Mostrando %d convidado(s) do evento selecionado',
                 $livewire->getFilteredTableQuery()->count()
