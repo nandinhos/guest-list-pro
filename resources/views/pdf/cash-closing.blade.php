@@ -172,8 +172,8 @@
             <h1>Fechamento de Caixa</h1>
             <h2>{{ $event->name ?? 'Evento' }}</h2>
             <div class="period">
-                Data: {{ \Carbon\Carbon::parse($date)->format('d/m/Y') }} |
-                Periodo: {{ $start_time }} - {{ $end_time }}
+                De {{ \Carbon\Carbon::parse($start_datetime)->format('d/m/Y H:i') }}
+                até {{ \Carbon\Carbon::parse($end_datetime)->format('d/m/Y H:i') }}
             </div>
         </div>
 

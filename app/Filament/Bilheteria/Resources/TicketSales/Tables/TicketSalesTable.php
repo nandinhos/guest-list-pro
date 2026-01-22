@@ -3,7 +3,7 @@
 namespace App\Filament\Bilheteria\Resources\TicketSales\Tables;
 
 use App\Enums\PaymentMethod;
-use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
@@ -16,41 +16,53 @@ class TicketSalesTable
     {
         return $table
             ->columns([
+                \Filament\Tables\Columns\ViewColumn::make('mobile_card')
+                    ->label('VENDA')
+                    ->view('filament.bilheteria.resources.ticket-sales.mobile_card')
+                    ->hiddenFrom('md'),
+
                 TextColumn::make('id')
                     ->label('#')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('buyer_name')
                     ->label('Comprador')
                     ->description(fn ($record) => $record->buyer_document ?? '-')
                     ->searchable(['buyer_name', 'buyer_document'])
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('guest.name')
                     ->label('Convidado Gerado')
                     ->description(fn ($record) => $record->guest?->sector?->name)
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('value')
                     ->label('Valor')
                     ->money('BRL')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('payment_method')
                     ->label('Pagamento')
                     ->badge()
                     ->formatStateUsing(fn (string $state) => PaymentMethod::tryFrom($state)?->getLabel() ?? $state)
-                    ->color(fn (string $state) => PaymentMethod::tryFrom($state)?->getColor() ?? 'gray'),
+                    ->color(fn (string $state) => PaymentMethod::tryFrom($state)?->getColor() ?? 'gray')
+                    ->visibleFrom('md'),
 
                 TextColumn::make('seller.name')
                     ->label('Vendedor')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('created_at')
                     ->label('Data/Hora')
                     ->dateTime('d/m/Y H:i')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
             ])
             ->filters([
                 SelectFilter::make('sector')
@@ -76,17 +88,17 @@ class TicketSalesTable
                     ->preload(),
 
                 Filter::make('created_at')
-                    ->label('Data')
+                    ->label('Período')
                     ->form([
-                        DatePicker::make('from')
-                            ->label('De'),
-                        DatePicker::make('until')
+                        DateTimePicker::make('from')
+                            ->label('Início'),
+                        DateTimePicker::make('until')
                             ->label('Até'),
                     ])
                     ->columns(2)
                     ->query(fn ($query, array $data) => $query
-                        ->when($data['from'], fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
-                        ->when($data['until'], fn ($q, $date) => $q->whereDate('created_at', '<=', $date))),
+                        ->when($data['from'], fn ($q, $dateTime) => $q->where('created_at', '>=', $dateTime))
+                        ->when($data['until'], fn ($q, $dateTime) => $q->where('created_at', '<=', $dateTime))),
             ])
             ->filtersLayout(FiltersLayout::AboveContent)
             ->filtersFormColumns(4)
