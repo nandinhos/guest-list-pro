@@ -28,7 +28,6 @@ class BilheteriaPanelProvider extends PanelProvider
     {
         return $panel
             ->id('bilheteria')
-            ->spa()
             ->path('bilheteria')
             ->login()
             ->brandName('Portal da Bilheteria')
