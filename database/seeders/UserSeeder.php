@@ -15,30 +15,47 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Administrador Principal
-        User::create([
-            'name' => 'Admin do Sistema',
-            'email' => 'admin@guestlist.pro',
-            'password' => Hash::make('password'),
-            'role' => UserRole::ADMIN,
-            'is_active' => true,
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@guestlist.pro'],
+            [
+                'name' => 'Admin do Sistema',
+                'password' => Hash::make('password'),
+                'role' => UserRole::ADMIN,
+                'is_active' => true,
+            ]
+        );
 
         // Promoter para Testes
-        User::create([
-            'name' => 'Promoter Exemplo',
-            'email' => 'promoter@guestlist.pro',
-            'password' => Hash::make('password'),
-            'role' => UserRole::PROMOTER,
-            'is_active' => true,
-        ]);
+        User::firstOrCreate(
+            ['email' => 'promoter@guestlist.pro'],
+            [
+                'name' => 'Promoter Exemplo',
+                'password' => Hash::make('password'),
+                'role' => UserRole::PROMOTER,
+                'is_active' => true,
+            ]
+        );
 
         // Validador para Testes
-        User::create([
-            'name' => 'Validador Exemplo',
-            'email' => 'validator@guestlist.pro',
-            'password' => Hash::make('password'),
-            'role' => UserRole::VALIDATOR,
-            'is_active' => true,
-        ]);
+        User::firstOrCreate(
+            ['email' => 'validator@guestlist.pro'],
+            [
+                'name' => 'Validador Exemplo',
+                'password' => Hash::make('password'),
+                'role' => UserRole::VALIDATOR,
+                'is_active' => true,
+            ]
+        );
+
+        // Bilheteria (Adicionado para completar o fluxo)
+        User::firstOrCreate(
+            ['email' => 'bilheteria@guestlist.pro'],
+            [
+                'name' => 'Bilheteria Central',
+                'password' => Hash::make('password'),
+                'role' => UserRole::BILHETERIA,
+                'is_active' => true,
+            ]
+        );
     }
 }
