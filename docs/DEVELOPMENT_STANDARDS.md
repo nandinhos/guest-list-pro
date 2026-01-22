@@ -21,11 +21,12 @@ Este documento serve como guia obrigatório para o Agente de IA e desenvolvedore
 ---
 
 ## 🌐 Estabilidade JS & SPA
-**Lição**: O modo SPA do Filament (`->spa()`) causa redeclaração de scripts globais e falhas no ciclo de vida de plugins externos.
-- **Protocolo**: Manter `->spa()` desabilitado em todos os `PanelProviders`.
+**Lição**: O modo SPA do Filament (`->spa()`) causa redeclaração de scripts globais e falhas no ciclo de vida de plugins externos ao navegar entre componentes Livewire.
+- **Protocolo**: Manter `->spa()` desabilitado em todos os `PanelProviders` (`Admin`, `Bilheteria`, `Validator`, `Promoter`).
 - **Sintomas de erro**: 
     - `Identifier 'loadDarkMode' has already been declared`.
     - `Cannot read properties of null (reading 'destroy')` no Chart.js.
+    - Componentes JS (como Masks ou Modais) parando de funcionar após navegação.
 
 ---
 
@@ -50,11 +51,13 @@ $enum = $type instanceof DocumentType ? $type : DocumentType::tryFrom($type ?? '
 ---
 
 ## 📱 Mobile UX & Responsividade
-**Lição**: Tabelas horizontais em mobile são proibidas.
+**Lição**: Tabelas horizontais em mobile são proibidas. O uso incorreto de componentes de layout em tabelas gera erros fatais.
 - **Protocolo**:
-    - Usar `ViewColumn` para renderizar um card mobile (`mobile_card.blade.php`).
-    - Esconder colunas desktop em resoluções menores.
-    - Integrar botões de ação (Editar/Deletar) dentro do próprio card para economizar espaço e evitar scroll.
+    - Usar `Filament\Tables\Columns\ViewColumn` para renderizar cards mobile (`mobile_card.blade.php`).
+    - **CRÍTICO**: Nunca use `Filament\Tables\Columns\Layout\View` como coluna de topo; ele não suporta métodos como `label()` ou `hiddenFrom()`.
+    - **Sintaxe Correta**: `ViewColumn::make('mobile_card')->view('caminho.da.view')`.
+    - Esconder colunas desktop via `visibleFrom('md')`.
+    - Integrar botões de ação (Editar/Deletar) dentro do próprio card para economizar espaço via `mountTableAction`.
 
 ---
 
