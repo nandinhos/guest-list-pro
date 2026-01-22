@@ -89,6 +89,7 @@ class ApprovalRequestResource extends Resource
     {
         return [
             'index' => Pages\ListApprovalRequests::route('/'),
+            'report' => Pages\RequestsReport::route('/report'),
         ];
     }
 }

@@ -35,7 +35,7 @@ Criar um **Sistema de Solicitações** com dois fluxos:
 | **S.2** | Fluxo de Solicitação (Promoter) | ✅ CONCLUÍDO | 100% |
 | **S.3** | Painel de Aprovação (Admin) | ✅ CONCLUÍDO | 100% |
 | **S.4** | Notificações e Alertas | ✅ CONCLUÍDO | 100% |
-| **S.5** | Auditoria e Relatórios | 🏗️ EM ANDAMENTO | 80% |
+| **S.5** | Auditoria e Relatórios | ✅ CONCLUÍDO | 100% |
 | **S.6** | Testes e Validação | ✅ CONCLUÍDO | 100% |
 
 ---
@@ -115,9 +115,9 @@ Convidado chega → Validador busca na lista
     - EXPIRED → exclamation-circle
 
 ### Critérios de Aceite:
-- [ ] Enum criado com todos os valores
-- [ ] Labels em português funcionando
-- [ ] Cores e ícones configurados para Filament
+- [x] Enum criado com todos os valores
+- [x] Labels em português funcionando
+- [x] Cores e ícones configurados para Filament
 
 ---
 
@@ -143,8 +143,8 @@ Convidado chega → Validador busca na lista
     - EMERGENCY_CHECKIN → bolt
 
 ### Critérios de Aceite:
-- [ ] Enum criado com todos os valores
-- [ ] Labels em português funcionando
+- [x] Enum criado com todos os valores
+- [x] Labels em português funcionando
 
 ---
 
@@ -475,7 +475,7 @@ Convidado chega → Validador busca na lista
       $service = app(ApprovalRequestService::class);
 
       $request = $service->createEmergencyCheckinRequest(
-          requester: auth()->user(),
+          validator: auth()->user(), // Corrigido de requester para validator conforme Service
           eventId: session('selected_event_id'),
           sectorId: $data['sector_id'],
           guestData: [
@@ -483,7 +483,7 @@ Convidado chega → Validador busca na lista
               'document' => $data['guest_document'],
               'document_type' => $data['guest_document_type'],
           ],
-          reason: $data['request_reason']
+          notes: $data['notes'] // Corrigido de reason para notes conforme Service
       );
 
       Notification::make()
@@ -542,8 +542,8 @@ Convidado chega → Validador busca na lista
   - Link para página de solicitações
 
 ### Critérios de Aceite:
-- [ ] Widget mostra contagem correta
-- [ ] Clique redireciona para página de solicitações
+- [x] Widget mostra contagem correta
+- [x] Clique redireciona para página de solicitações
 
 ---
 
@@ -605,8 +605,8 @@ Convidado chega → Validador busca na lista
 - [ ] Diferenciar convidados "na lista" vs "em aprovação"
 
 ### Critérios de Aceite:
-- [ ] Badge amarelo "Aguardando Aprovação" visível
-- [ ] Lista clara e fácil de entender
+- [x] Badge amarelo "Aguardando Aprovação" visível
+- [x] Lista clara e fácil de entender (via Widget no Header)
 
 ---
 
@@ -805,9 +805,9 @@ Convidado chega → Validador busca na lista
   ```
 
 ### Critérios de Aceite:
-- [ ] Badge mostra quantidade de pendentes
-- [ ] Cor muda baseada na quantidade
-- [ ] Atualiza ao navegar
+- [x] Badge mostra quantidade de pendentes
+- [x] Cor muda baseada na quantidade
+- [x] Atualiza ao navegar
 
 ---
 
@@ -937,9 +937,9 @@ Convidado chega → Validador busca na lista
   - Motivos de rejeição mais comuns
 
 ### Critérios de Aceite:
-- [ ] Relatório exportável (PDF/CSV)
-- [ ] Filtros por período e evento
-- [ ] Gráficos visuais
+- [x] Relatório exportável (PDF/CSV) - Via Filament Actions
+- [x] Filtros por período e evento
+- [x] Gráficos visuais (Doughnut Chart)
 
 ---
 
@@ -952,8 +952,8 @@ Convidado chega → Validador busca na lista
 - [ ] Tempo médio de resposta
 
 ### Critérios de Aceite:
-- [ ] Gráficos renderizam corretamente
-- [ ] Dados filtrados por evento selecionado
+- [x] Gráficos renderizam corretamente
+- [x] Dados filtrados por evento selecionado
 
 ---
 
@@ -1144,11 +1144,11 @@ sail bin pint
 5. **Rate Limiting:** Limitar quantidade de solicitações por usuário/período
 
 ## Checklist de Segurança
-- [ ] Middleware verifica role antes de aprovar
-- [ ] Não é possível aprovar própria solicitação
-- [ ] Logs não podem ser editados ou excluídos
-- [ ] IP e User Agent sempre registrados
-- [ ] Motivo obrigatório para rejeição
+- [x] Middleware verifica role antes de aprovar
+- [x] Não é possível aprovar própria solicitação (Implementado no Service)
+- [x] Logs não podem ser editados ou excluídos (Via ActivityLog)
+- [x] IP e User Agent sempre registrados
+- [x] Motivo obrigatório para rejeição
 
 ---
 

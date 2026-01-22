@@ -201,6 +201,10 @@ class ApprovalRequestService
             throw new \RuntimeException('Você não tem permissão para aprovar solicitações.');
         }
 
+        if ($request->requester_id === $admin->id) {
+            throw new \RuntimeException('Você não pode aprovar sua própria solicitação.');
+        }
+
         // Verificar se já existe um Guest com o mesmo documento no evento
         $existingGuest = $request->findExistingGuest();
         if ($existingGuest) {
@@ -277,6 +281,10 @@ class ApprovalRequestService
             throw new \RuntimeException('Você não tem permissão para aprovar solicitações.');
         }
 
+        if ($request->requester_id === $admin->id) {
+            throw new \RuntimeException('Você não pode aprovar sua própria solicitação.');
+        }
+
         $existingGuest = $request->findExistingGuest();
         if (! $existingGuest) {
             throw new \RuntimeException('Nenhum convidado existente encontrado. Use a aprovação normal.');
@@ -335,6 +343,10 @@ class ApprovalRequestService
             throw new \RuntimeException('Você não tem permissão para rejeitar solicitações.');
         }
 
+        if ($request->requester_id === $admin->id) {
+            throw new \RuntimeException('Você não pode rejeitar sua própria solicitação.');
+        }
+
         $request->update([
             'status' => RequestStatus::REJECTED,
             'reviewer_id' => $admin->id,
@@ -387,6 +399,10 @@ class ApprovalRequestService
             throw new \RuntimeException('Você não tem permissão para reconsiderar solicitações.');
         }
 
+        if ($request->requester_id === $admin->id) {
+            throw new \RuntimeException('Você não pode reconsiderar sua própria solicitação.');
+        }
+
         $request->update([
             'status' => RequestStatus::PENDING,
             'reviewer_id' => null,
@@ -417,6 +433,10 @@ class ApprovalRequestService
 
         if (! $this->canReview($admin)) {
             throw new \RuntimeException('Você não tem permissão para reverter aprovações.');
+        }
+
+        if ($request->requester_id === $admin->id) {
+            throw new \RuntimeException('Você não pode reverter sua própria solicitação.');
         }
 
         return DB::transaction(function () use ($request, $reason) {

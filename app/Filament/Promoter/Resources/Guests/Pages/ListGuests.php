@@ -26,4 +26,11 @@ class ListGuests extends ListRecords
             CreateAction::make(),
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            \App\Filament\Promoter\Widgets\PendingRequestsTableWidget::class,
+        ];
+    }
 }
