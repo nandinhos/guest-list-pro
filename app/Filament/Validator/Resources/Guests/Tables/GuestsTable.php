@@ -2,7 +2,15 @@
 
 namespace App\Filament\Validator\Resources\Guests\Tables;
 
+use App\Enums\DocumentType;
+use App\Models\Sector;
+use App\Services\ApprovalRequestService;
 use App\Services\GuestSearchService;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -231,6 +239,110 @@ class GuestsTable
             ])
             ->striped()
             ->defaultSort('name')
-            ->poll('30s');
+            ->poll('30s')
+            ->headerActions([
+                \Filament\Actions\Action::make('emergencyCheckinRequest')
+                    ->label('Não está na lista')
+                    ->icon('heroicon-m-exclamation-triangle')
+                    ->color('warning')
+                    ->modalHeading('Solicitar Check-in Emergencial')
+                    ->modalDescription('Preencha os dados do convidado que não está na lista. A solicitação será enviada para aprovação do administrador.')
+                    ->slideOver()
+                    ->form([
+                        TextInput::make('guest_name')
+                            ->label('Nome completo')
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder('Nome do convidado'),
+
+                        Select::make('guest_document_type')
+                            ->label('Tipo de documento')
+                            ->options(DocumentType::class)
+                            ->default(DocumentType::CPF)
+                            ->required()
+                            ->live(),
+
+                        TextInput::make('guest_document')
+                            ->label('Documento')
+                            ->required()
+                            ->maxLength(50)
+                            ->placeholder('Número do documento')
+                            ->mask(fn (Get $get) => $get('guest_document_type') === DocumentType::CPF->value ? '999.999.999-99' : null),
+
+                        Select::make('sector_id')
+                            ->label('Setor')
+                            ->options(fn () => Sector::where('event_id', session('selected_event_id'))->pluck('name', 'id'))
+                            ->required()
+                            ->searchable()
+                            ->preload(),
+
+                        Textarea::make('notes')
+                            ->label('Motivo / Observações')
+                            ->placeholder('Ex: Convidado de última hora do artista principal, autorizado verbalmente pelo produtor...')
+                            ->required()
+                            ->rows(3)
+                            ->maxLength(500),
+                    ])
+                    ->modalSubmitActionLabel('Enviar Solicitação')
+                    ->action(function (array $data): void {
+                        try {
+                            $service = app(ApprovalRequestService::class);
+
+                            // Verificar duplicidade (documento = bloqueante, nome = aviso)
+                            $duplicate = $service->checkForDuplicates(
+                                session('selected_event_id'),
+                                $data['guest_name'],
+                                $data['guest_document'] ?? null
+                            );
+
+                            if ($duplicate) {
+                                if ($duplicate['level'] === 'error') {
+                                    // Documento duplicado = bloqueia
+                                    Notification::make()
+                                        ->title('Solicitação Bloqueada')
+                                        ->body($duplicate['message'])
+                                        ->danger()
+                                        ->persistent()
+                                        ->send();
+
+                                    return;
+                                }
+
+                                // Nome duplicado = aviso, continua
+                                Notification::make()
+                                    ->title('Atenção: Possível Duplicidade')
+                                    ->body($duplicate['message'].' A solicitação será enviada para revisão.')
+                                    ->warning()
+                                    ->persistent()
+                                    ->send();
+                            }
+
+                            $request = $service->createEmergencyCheckinRequest(
+                                auth()->user(),
+                                session('selected_event_id'),
+                                $data['sector_id'],
+                                [
+                                    'name' => $data['guest_name'],
+                                    'document' => $data['guest_document'],
+                                    'document_type' => $data['guest_document_type'],
+                                ],
+                                $data['notes']
+                            );
+
+                            Notification::make()
+                                ->title('Solicitação enviada!')
+                                ->body("Solicitação #{$request->id} criada. Peça para o convidado aguardar ao lado enquanto o administrador aprova.")
+                                ->success()
+                                ->persistent()
+                                ->send();
+                        } catch (\Exception $e) {
+                            Notification::make()
+                                ->title('Erro ao criar solicitação')
+                                ->body($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    }),
+            ]);
     }
 }
