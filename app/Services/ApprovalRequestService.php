@@ -23,15 +23,18 @@ class ApprovalRequestService
     public function checkForDuplicates(
         int $eventId,
         string $name,
-        ?string $document = null
+        ?string $document = null,
+        ?int $excludeGuestId = null
     ): ?array {
         $searchService = app(GuestSearchService::class);
         $normalizedName = $searchService->normalize($name);
 
         // 1. Verificar Guest existente por DOCUMENTO (bloqueante)
         if ($document) {
+            $normalizedDoc = $searchService->normalizeDocument($document);
             $existingByDocument = Guest::where('event_id', $eventId)
-                ->where('document', $document)
+                ->when($excludeGuestId, fn ($q) => $q->where('id', '!=', $excludeGuestId))
+                ->where(fn ($q) => $q->where('document', $document)->orWhere('document_normalized', $normalizedDoc))
                 ->with(['promoter', 'sector'])
                 ->first();
 
@@ -72,6 +75,7 @@ class ApprovalRequestService
 
         // 2. Verificar Guest existente por NOME (apenas alerta)
         $existingByName = Guest::where('event_id', $eventId)
+            ->when($excludeGuestId, fn ($q) => $q->where('id', '!=', $excludeGuestId))
             ->where('name_normalized', $normalizedName)
             ->with(['promoter', 'sector'])
             ->first();

@@ -267,7 +267,7 @@ class GuestsTable
                             ->required()
                             ->maxLength(50)
                             ->placeholder('Número do documento')
-                            ->mask(fn (Get $get) => $get('guest_document_type') === DocumentType::CPF->value ? '999.999.999-99' : null),
+                            ->mask(fn (Get $get) => in_array($get('guest_document_type'), [DocumentType::CPF, DocumentType::CPF->value], true) ? '999.999.999-99' : null),
 
                         Select::make('sector_id')
                             ->label('Setor')

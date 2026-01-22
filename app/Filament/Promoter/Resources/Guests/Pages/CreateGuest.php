@@ -18,15 +18,44 @@ class CreateGuest extends CreateRecord
         $data['promoter_id'] = auth()->id();
         $data['is_checked_in'] = false;
 
-        $service = new GuestService;
-        $validation = $service->canRegisterGuest(
+        $service = app(ApprovalRequestService::class);
+
+        // 1. Verificar duplicidade universal (bloqueia se documento existir, avisa se nome existir)
+        $duplicate = $service->checkForDuplicates(
+            (int) $data['event_id'],
+            $data['name'],
+            $data['document'] ?? null
+        );
+
+        if ($duplicate) {
+            if ($duplicate['level'] === 'error') {
+                Notification::make()
+                    ->title('Cadastro Bloqueado')
+                    ->body($duplicate['message'])
+                    ->danger()
+                    ->persistent()
+                    ->send();
+
+                $this->halt();
+            }
+
+            // Aviso de homônimo
+            Notification::make()
+                ->title('Atenção: Possível Duplicidade')
+                ->body($duplicate['message'])
+                ->warning()
+                ->send();
+        }
+
+        // 2. Verificar limites e permissões
+        $guestService = new GuestService;
+        $validation = $guestService->canRegisterGuest(
             auth()->user(),
             (int) $data['event_id'],
             (int) $data['sector_id']
         );
 
         if (! $validation['allowed']) {
-            // Criar solicitação de aprovação em vez de apenas bloquear
             $this->createApprovalRequest($data, $validation['message']);
 
             $this->halt();

@@ -25,6 +25,16 @@ class GuestResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCheckBadge;
 
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
+    public static function canEdit(mixed $record): bool
+    {
+        return false;
+    }
+
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
