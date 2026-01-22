@@ -9,6 +9,8 @@ Este documento serve como guia obrigatório para o Agente de IA e desenvolvedore
 4. [🛡️ Integridade de Dados & Duplicidade](#-integridade-de-dados--duplicidade)
 5. [📱 Mobile UX & Responsividade](#-mobile-ux--responsividade)
 6. [🏗️ Arquitetura & Camada de Serviço](#-arquitetura--camada-de-serviço)
+7. [🧪 Testes & Factories](#-testes--factories)
+8. [🔔 Notificações Filament](#-notificações-filament)
 
 ---
 
@@ -69,4 +71,60 @@ $enum = $type instanceof DocumentType ? $type : DocumentType::tryFrom($type ?? '
     - Utilizar `GuestSearchService` para buscas performáticas e sanitizadas.
 
 ---
-*Ultima atualização: Janeiro 2026*
+
+## 🧪 Testes & Factories
+**Lição**: Factories são essenciais para testes robustos. Models que usam `HasFactory` precisam ter seus factories criados.
+- **Protocolo**:
+    - Antes de criar testes, verificar se todas as factories necessárias existem em `database/factories/`.
+    - Criar factories com states úteis para cenários de teste (ex: `->pending()`, `->approved()`, `->checkedIn()`).
+    - Usar `Notification::fake()` no setUp() para isolar testes de notificações.
+    - Para testes Filament, usar `Livewire::test()` com o componente Page.
+
+- **Factories Disponíveis**:
+    - `UserFactory` - States: por role (ADMIN, PROMOTER, VALIDATOR)
+    - `EventFactory` - States: `active()`, `draft()`, `finished()`, `cancelled()`, `withBilheteria()`
+    - `SectorFactory` - States: `vip()`, `pista()`, `withCapacity()`
+    - `GuestFactory` - States: `checkedIn()`, `notCheckedIn()`, `withRg()`, `withPassport()`
+    - `ApprovalRequestFactory` - States: `pending()`, `approved()`, `rejected()`, `guestInclusion()`, `emergencyCheckin()`
+
+- **Padrão de Teste Filament**:
+```php
+use Livewire\Livewire;
+
+Livewire::test(ListApprovalRequests::class)
+    ->callTableAction('approve', $request)
+    ->assertNotified('Solicitação Aprovada');
+```
+
+- **Sintomas de erro**:
+    - `Class "Database\Factories\XxxFactory" not found` → Factory não existe, criar com `artisan make:factory`.
+    - `assertStringContains` → Usar `assertStringContainsString` (PHPUnit correto).
+
+---
+
+## 🔔 Notificações Filament
+**Lição**: Notificações de banco de dados do Filament NÃO suportam `Filament\Actions\Action`. Usar apenas em notificações flash.
+- **Protocolo**:
+    - Para `toArray()` (database notification): usar apenas `getDatabaseMessage()` sem actions.
+    - Para `toFilament()` (flash notification): pode usar actions normalmente.
+    - Notificações de status devem ser simples e informativas.
+
+- **Exemplo Correto** (Database Notification):
+```php
+public function toArray(object $notifiable): array
+{
+    return FilamentNotification::make()
+        ->title('Título')
+        ->body('Mensagem')
+        ->icon('heroicon-o-bell')
+        ->warning()
+        ->getDatabaseMessage(); // SEM actions!
+}
+```
+
+- **Sintomas de erro**:
+    - `Class "Filament\Notifications\Actions\Action" not found` → Remover actions de `toArray()`.
+    - Bulk actions falhando silenciosamente → Verificar se notificações estão causando erros.
+
+---
+*Última atualização: Janeiro 2026*

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\ApprovalRequests\ApprovalRequestResource;
+use App\Models\ApprovalRequest;
 use App\Models\Event;
 use App\Models\Guest;
 use App\Models\TicketSale;
@@ -38,6 +40,9 @@ class AdminOverview extends StatsOverviewWidget
 
         $totalEntries = $presentGuests + $totalTickets;
 
+        // Solicitações pendentes do evento
+        $pendingRequests = ApprovalRequest::where('event_id', $eventId)->pending()->count();
+
         return [
             Stat::make('Convidados Presentes', "{$presentGuests}/{$totalGuests}")
                 ->description("Taxa de presença: {$presenceRate}%")
@@ -56,10 +61,11 @@ class AdminOverview extends StatsOverviewWidget
                 ->descriptionIcon('heroicon-m-ticket')
                 ->color('info'),
 
-            Stat::make('Evento', $event?->name ?? 'N/A')
-                ->description('Selecionado')
-                ->descriptionIcon('heroicon-m-calendar')
-                ->color('gray'),
+            Stat::make('Solicitações Pendentes', $pendingRequests)
+                ->description('Aguardando aprovação')
+                ->descriptionIcon('heroicon-m-inbox')
+                ->color($pendingRequests > 0 ? 'warning' : 'success')
+                ->url(ApprovalRequestResource::getUrl('index')),
         ];
     }
 
@@ -72,21 +78,25 @@ class AdminOverview extends StatsOverviewWidget
 
         $totalTicketRevenue = TicketSale::sum('value');
 
+        // Solicitações pendentes globais
+        $pendingRequests = ApprovalRequest::pending()->count();
+
         return [
+            Stat::make('Solicitações Pendentes', $pendingRequests)
+                ->description('Aguardando sua aprovação')
+                ->descriptionIcon('heroicon-m-inbox')
+                ->color($pendingRequests > 0 ? 'warning' : 'success')
+                ->url(ApprovalRequestResource::getUrl('index')),
+
             Stat::make('Total de Eventos', $totalEvents)
                 ->description('Eventos cadastrados')
                 ->descriptionIcon('heroicon-m-calendar')
                 ->color('info'),
 
             Stat::make('Total de Convidados', $totalGuests)
-                ->description('Cadastrados via promoters')
+                ->description("{$presentGuests} presentes ({$presenceRate}%)")
                 ->descriptionIcon('heroicon-m-user-group')
                 ->color('success'),
-
-            Stat::make('Taxa de Presença', "{$presenceRate}%")
-                ->description("{$presentGuests} presentes")
-                ->descriptionIcon('heroicon-m-check-badge')
-                ->color($presenceRate >= 70 ? 'success' : ($presenceRate >= 40 ? 'warning' : 'danger')),
 
             Stat::make('Receita Total', 'R$ '.number_format($totalTicketRevenue, 2, ',', '.'))
                 ->description('Vendas de bilheteria')

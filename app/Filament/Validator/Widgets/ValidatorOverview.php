@@ -2,14 +2,19 @@
 
 namespace App\Filament\Validator\Widgets;
 
+use App\Models\ApprovalRequest;
+use App\Models\Guest;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class ValidatorOverview extends StatsOverviewWidget
 {
+    protected ?string $pollingInterval = '30s';
+
     protected function getStats(): array
     {
         $selectedEventId = session('selected_event_id');
+        $userId = auth()->id();
 
         if (! $selectedEventId) {
             return [
@@ -19,25 +24,40 @@ class ValidatorOverview extends StatsOverviewWidget
             ];
         }
 
-        $total = \App\Models\Guest::where('event_id', $selectedEventId)->count();
-        $confirmed = \App\Models\Guest::where('event_id', $selectedEventId)
+        $total = Guest::where('event_id', $selectedEventId)->count();
+        $confirmed = Guest::where('event_id', $selectedEventId)
             ->where('is_checked_in', true)
             ->count();
         $pending = $total - $confirmed;
 
+        // Solicitações do validador
+        $myPendingRequests = ApprovalRequest::where('requester_id', $userId)
+            ->where('event_id', $selectedEventId)
+            ->pending()
+            ->count();
+
+        $myApprovedToday = ApprovalRequest::where('requester_id', $userId)
+            ->where('event_id', $selectedEventId)
+            ->where('status', 'approved')
+            ->whereDate('reviewed_at', today())
+            ->count();
+
         return [
-            Stat::make('Total de Convidados', $total)
-                ->description('Cadastrados neste evento')
-                ->descriptionIcon('heroicon-m-users')
-                ->color('info'),
             Stat::make('Check-ins Realizados', $confirmed)
-                ->description('Entradas confirmadas')
+                ->description("{$pending} aguardando entrada")
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color('success'),
-            Stat::make('Aguardando Entrada', $pending)
-                ->description('Convidados pendentes')
-                ->descriptionIcon('heroicon-m-clock')
-                ->color('warning'),
+
+            Stat::make('Total na Lista', $total)
+                ->description('Convidados cadastrados')
+                ->descriptionIcon('heroicon-m-users')
+                ->color('info'),
+
+            Stat::make('Minhas Solicitações', $myPendingRequests)
+                ->description($myApprovedToday > 0 ? "{$myApprovedToday} aprovadas hoje" : 'Pendentes de aprovação')
+                ->descriptionIcon('heroicon-m-inbox')
+                ->color($myPendingRequests > 0 ? 'warning' : 'gray')
+                ->url(route('filament.validator.pages.my-requests')),
         ];
     }
 }
