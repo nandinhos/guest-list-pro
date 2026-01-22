@@ -7,6 +7,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
@@ -16,55 +17,69 @@ class PromoterPermissionsTable
     {
         return $table
             ->columns([
+                ViewColumn::make('mobile_card')
+                    ->view('filament.resources.promoter-permissions.tables.columns.mobile_card')
+                    ->label('Dados da Permissão')
+                    ->hiddenFrom('md'),
+
                 TextColumn::make('user.name')
                     ->label('Usuário')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('role')
                     ->label('Função')
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => UserRole::tryFrom($state)?->getLabel() ?? $state)
                     ->color(fn (string $state): string => UserRole::tryFrom($state)?->getColor() ?? 'gray')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('event.name')
                     ->label('Evento')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('sector.name')
                     ->label('Setor')
                     ->placeholder('-')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('guest_limit')
                     ->label('Limite')
                     ->numeric()
                     ->placeholder('-')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('start_time')
                     ->label('Início')
                     ->dateTime('d/m/Y H:i')
                     ->placeholder('Sem restrição')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('end_time')
                     ->label('Fim')
                     ->dateTime('d/m/Y H:i')
                     ->placeholder('Sem restrição')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->visibleFrom('md'),
 
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->visibleFrom('md'),
             ])
             ->filters([
                 SelectFilter::make('role')
@@ -80,8 +95,10 @@ class PromoterPermissionsTable
                     ->searchable()
                     ->preload(),
             ])
+            ->actionsColumnLabel('Ações')
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -55,6 +55,11 @@ class AuditResource extends Resource
     {
         return $table
             ->columns([
+                \Filament\Tables\Columns\ViewColumn::make('mobile_card')
+                    ->view('filament.resources.audits.tables.columns.mobile_card')
+                    ->label('Log de Auditoria')
+                    ->hiddenFrom('md'),
+
                 TextColumn::make('created_at')
                     ->label('Ocorrência')
                     ->formatStateUsing(fn ($state, $record) => view('filament.components.audit-occurrence', [
@@ -66,7 +71,8 @@ class AuditResource extends Resource
                     ->sortable()
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         return $query->whereHas('causer', fn ($q) => $q->where('name', 'like', "%{$search}%"));
-                    }),
+                    })
+                    ->visibleFrom('md'),
 
                 TextColumn::make('description')
                     ->label('Atividade')
@@ -119,7 +125,8 @@ class AuditResource extends Resource
                             'is_system_log' => false,
                         ]);
                     })
-                    ->html(),
+                    ->html()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('properties')
                     ->label('Alterações')
@@ -163,7 +170,8 @@ class AuditResource extends Resource
                         return $count > 3 ? "{$preview} e mais ".($count - 3) : $preview;
                     })
                     ->color('gray')
-                    ->limit(50),
+                    ->limit(50)
+                    ->visibleFrom('md'),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
@@ -207,7 +215,8 @@ class AuditResource extends Resource
                     ->modalHeading('Detalhes da Auditoria')
                     ->modalContent(fn ($record) => view('filament.components.audit-modal', ['record' => $record]))
                     ->modalSubmitAction(false)
-                    ->modalCancelAction(fn ($action) => $action->label('Fechar')),
+                    ->modalCancelAction(fn ($action) => $action->label('Fechar'))
+                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
             ])
             ->bulkActions([])
             ->recordAction('view')

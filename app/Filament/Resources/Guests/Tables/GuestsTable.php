@@ -6,8 +6,8 @@ use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -17,49 +17,59 @@ class GuestsTable
     {
         return $table
             ->columns([
+                ViewColumn::make('mobile_card')
+                    ->view('filament.resources.guests.tables.columns.mobile_card')
+                    ->label('Dados do Convidado')
+                    ->hiddenFrom('md'),
+
                 TextColumn::make('name')
                     ->label('Convidado / Documento')
                     ->description(fn (\App\Models\Guest $record): string => $record->document ?? '-')
                     ->searchable(['name', 'document'])
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('event.name')
                     ->label('Evento / Setor')
                     ->description(fn (\App\Models\Guest $record): string => $record->sector->name ?? '-')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('promoter.name')
                     ->label('Promoter')
                     ->searchable()
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable()
+                    ->visibleFrom('md'),
 
-                IconColumn::make('is_checked_in')
+                TextColumn::make('is_checked_in')
                     ->label('Status')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
-                    ->trueColor('success')
-                    ->falseColor('danger')
-                    ->sortable(),
+                    ->badge()
+                    ->color(fn ($state) => $state ? 'success' : 'gray')
+                    ->formatStateUsing(fn ($state) => $state ? 'Check-in' : 'Pendente')
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('validator.name')
                     ->label('Validado por')
                     ->searchable()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->visibleFrom('md'),
 
                 TextColumn::make('checked_in_at')
                     ->label('Check-in em')
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable()
+                    ->visibleFrom('md'),
 
                 TextColumn::make('created_at')
                     ->label('Cadastrado em')
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->visibleFrom('md'),
             ])
             ->filters([
                 \Filament\Tables\Filters\SelectFilter::make('event_id')
@@ -89,8 +99,10 @@ class GuestsTable
             ])
             ->filtersLayout(\Filament\Tables\Enums\FiltersLayout::AboveContent)
             ->filtersFormColumns(4)
+            ->actionsColumnLabel('Ações')
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

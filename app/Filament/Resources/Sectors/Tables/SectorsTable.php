@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 
 class SectorsTable
@@ -14,33 +15,45 @@ class SectorsTable
     {
         return $table
             ->columns([
+                ViewColumn::make('mobile_card')
+                    ->view('filament.resources.sectors.tables.columns.mobile_card')
+                    ->label('Dados do Setor')
+                    ->hiddenFrom('md'),
+
                 TextColumn::make('event.name')
                     ->label('Evento')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
                 TextColumn::make('name')
                     ->label('Setor')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
                 TextColumn::make('capacity')
                     ->label('Capacidade')
                     ->numeric()
                     ->sortable()
-                    ->placeholder('Ilimitada'),
+                    ->placeholder('Ilimitada')
+                    ->visibleFrom('md'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->visibleFrom('md'),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->visibleFrom('md'),
             ])
             ->filters([
                 //
             ])
+            ->actionsColumnLabel('Ações')
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

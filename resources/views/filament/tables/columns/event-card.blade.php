@@ -18,41 +18,53 @@
     </div>
 
     {{-- Info --}}
-    <div class="p-4 space-y-2 flex-grow flex flex-col">
-        <div class="flex items-start justify-between gap-2">
-            <h3 class="font-semibold text-base text-gray-900 dark:text-gray-100 truncate flex-grow" title="{{ $record->name }}">
-                {{ $record->name }}
-            </h3>
-            @if($record->status)
-                @php
-                    $statusColor = $record->status->getColor() ?? 'gray';
-                    $statusLabel = $record->status->getLabel() ?? ucfirst($record->status->value);
-                @endphp
-                <x-filament::badge :color="$statusColor">
-                    {{ $statusLabel }}
-                </x-filament::badge>
+    <div class="p-4 flex-grow flex flex-col justify-between">
+        <div class="space-y-2">
+            <div class="flex items-start justify-between gap-2">
+                <h3 class="font-bold text-sm text-gray-900 dark:text-gray-100 leading-tight flex-grow" title="{{ $record->name }}">
+                    {{ $record->name }}
+                </h3>
+                @if($record->status)
+                    @php
+                        $statusColor = $record->status->getColor() ?? 'gray';
+                        $statusLabel = $record->status->getLabel() ?? ucfirst($record->status->value);
+                    @endphp
+                    <span class="inline-flex shrink-0 items-center px-2 py-0.5 rounded text-[10px] font-medium bg-{{ $statusColor }}-500/10 text-{{ $statusColor }}-700">
+                        {{ $statusLabel }}
+                    </span>
+                @endif
+            </div>
+
+            <p class="text-[10px] text-gray-600 dark:text-gray-400 flex items-center gap-1.5">
+                <x-heroicon-m-calendar class="w-3.5 h-3.5 text-gray-400 shrink-0"/>
+                <span>
+                    {{ $record->date->format('d/m/Y') }} &bull;
+                    {{ \Carbon\Carbon::parse($record->start_time)->format('H:i') }}
+                </span>
+            </p>
+
+            @if($record->location)
+                <p class="text-[10px] text-gray-500 dark:text-gray-500 flex items-center gap-1.5 truncate">
+                    <x-heroicon-m-map-pin class="w-3.5 h-3.5 text-gray-400 shrink-0"/>
+                    <span class="truncate">{{ $record->location }}</span>
+                </p>
             @endif
+
+            <p class="text-[10px] text-gray-400 flex items-center gap-1.5 pt-1">
+                <x-heroicon-m-users class="w-3.5 h-3.5 shrink-0"/>
+                <span>{{ $record->guests_count ?? $record->guests()->count() }} Convidados</span>
+            </p>
         </div>
 
-        <p class="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
-            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <span>
-                {{ $record->date->format('d/m/Y') }} &bull;
-                {{ \Carbon\Carbon::parse($record->start_time)->format('H:i') }} -
-                {{ \Carbon\Carbon::parse($record->end_time)->format('H:i') }}
-            </span>
-        </p>
-
-        @if($record->location)
-            <p class="text-sm text-gray-500 dark:text-gray-500 flex items-center gap-2 truncate">
-                <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span class="truncate">{{ $record->location }}</span>
-            </p>
-        @endif
+        <!-- Actions -->
+        <div class="flex items-center justify-end w-full mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
+            <button
+                wire:click="mountTableAction('edit', {{ $record->id }})"
+                class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-bold text-indigo-600 bg-indigo-500/10 rounded-lg hover:bg-indigo-500/20 transition-colors"
+            >
+                <x-heroicon-m-pencil-square class="w-4 h-4 mr-1.5"/>
+                Editar
+            </button>
+        </div>
     </div>
 </div>

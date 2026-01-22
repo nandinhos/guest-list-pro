@@ -1,4 +1,4 @@
-<div class="flex flex-col space-y-3 py-3 w-full">
+<div class="flex flex-col space-y-3 py-1.5 w-full overflow-hidden">
     <!-- Row 1: Nome do Convidado e Tipo -->
     <div class="flex items-start justify-between w-full">
         <span class="font-bold text-sm text-gray-950 dark:text-white break-words pr-2 leading-tight flex-1 min-w-0">

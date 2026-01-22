@@ -30,7 +30,8 @@ class EventsTable
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->extraAttributes(['class' => 'hidden']),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
