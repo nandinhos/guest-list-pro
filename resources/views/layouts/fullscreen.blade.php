@@ -6,7 +6,7 @@
                 @if ($homeUrl = filament()->getHomeUrl())
                     <a href="{{ $homeUrl }}" class="flex items-center gap-x-2">
                         {{-- Logo ou Nome --}}
-                        <span class="text-xl font-bold tracking-tight text-gray-950 dark:text-white">
+                        <span class="text-lg font-bold tracking-tight text-gray-950 dark:text-white sm:text-xl truncate max-w-[160px] sm:max-w-none">
                             {{ filament()->getBrandName() }}
                         </span>
                     </a>
@@ -16,7 +16,7 @@
              <div class="ml-auto flex items-center gap-x-4">
                 {{-- User Menu / Logout --}}
                 <div class="flex items-center gap-4">
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-200">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-200 truncate max-w-[80px] sm:max-w-[120px]">
                         {{ auth()->user()->name }}
                     </span>
                     <form action="{{ filament()->getLogoutUrl() }}" method="post">
