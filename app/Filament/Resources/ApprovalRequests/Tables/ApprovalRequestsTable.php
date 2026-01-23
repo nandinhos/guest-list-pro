@@ -22,6 +22,7 @@ class ApprovalRequestsTable
     public static function make(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->with(['event', 'sector', 'requester', 'reviewer']))
             ->columns([
                 // Mobile Layout (Custom Card View)
                 ViewColumn::make('mobile_card')

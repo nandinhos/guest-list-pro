@@ -9,10 +9,16 @@ use App\Models\Guest;
 use App\Models\TicketSale;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\Cache;
 
 class AdminOverview extends StatsOverviewWidget
 {
     protected ?string $pollingInterval = '30s';
+
+    /**
+     * Cache TTL in seconds (60s = 1 minute).
+     */
+    private const CACHE_TTL = 60;
 
     protected function getStats(): array
     {
@@ -29,19 +35,28 @@ class AdminOverview extends StatsOverviewWidget
 
     private function getEventStats(int $eventId): array
     {
-        $event = Event::find($eventId);
+        $cacheKey = "admin_overview_event_{$eventId}";
 
-        $totalGuests = Guest::where('event_id', $eventId)->count();
-        $presentGuests = Guest::where('event_id', $eventId)->where('is_checked_in', true)->count();
+        $data = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($eventId) {
+            return [
+                'totalGuests' => Guest::where('event_id', $eventId)->count(),
+                'presentGuests' => Guest::where('event_id', $eventId)->where('is_checked_in', true)->count(),
+                'totalTickets' => TicketSale::where('event_id', $eventId)->count(),
+                'ticketRevenue' => TicketSale::where('event_id', $eventId)->sum('value'),
+                'pendingRequests' => ApprovalRequest::where('event_id', $eventId)->pending()->count(),
+            ];
+        });
+
+        $totalGuests = $data['totalGuests'];
+        $presentGuests = $data['presentGuests'];
         $presenceRate = $totalGuests > 0 ? round(($presentGuests / $totalGuests) * 100, 1) : 0;
 
-        $totalTickets = TicketSale::where('event_id', $eventId)->count();
-        $ticketRevenue = TicketSale::where('event_id', $eventId)->sum('value');
+        $totalTickets = $data['totalTickets'];
+        $ticketRevenue = $data['ticketRevenue'];
 
         $totalEntries = $presentGuests + $totalTickets;
 
-        // Solicitações pendentes do evento
-        $pendingRequests = ApprovalRequest::where('event_id', $eventId)->pending()->count();
+        $pendingRequests = $data['pendingRequests'];
 
         return [
             Stat::make('Convidados Presentes', "{$presentGuests}/{$totalGuests}")
@@ -71,15 +86,23 @@ class AdminOverview extends StatsOverviewWidget
 
     private function getGlobalStats(): array
     {
-        $totalEvents = Event::count();
-        $totalGuests = Guest::count();
-        $presentGuests = Guest::where('is_checked_in', true)->count();
+        $data = Cache::remember('admin_overview_global', self::CACHE_TTL, function () {
+            return [
+                'totalEvents' => Event::count(),
+                'totalGuests' => Guest::count(),
+                'presentGuests' => Guest::where('is_checked_in', true)->count(),
+                'totalTicketRevenue' => TicketSale::sum('value'),
+                'pendingRequests' => ApprovalRequest::pending()->count(),
+            ];
+        });
+
+        $totalEvents = $data['totalEvents'];
+        $totalGuests = $data['totalGuests'];
+        $presentGuests = $data['presentGuests'];
         $presenceRate = $totalGuests > 0 ? round(($presentGuests / $totalGuests) * 100, 1) : 0;
 
-        $totalTicketRevenue = TicketSale::sum('value');
-
-        // Solicitações pendentes globais
-        $pendingRequests = ApprovalRequest::pending()->count();
+        $totalTicketRevenue = $data['totalTicketRevenue'];
+        $pendingRequests = $data['pendingRequests'];
 
         return [
             Stat::make('Solicitações Pendentes', $pendingRequests)

@@ -829,9 +829,9 @@ Convidado chega → Validador busca na lista
   - Check-ins emergenciais: Y
 
 ### Critérios de Aceite:
-- [ ] Widget visível no dashboard (A verificar/implementar se necessário)
-- [ ] Números corretos
-- [ ] Link para listagem funciona
+- [x] Widget visível no dashboard
+- [x] Números corretos
+- [x] Link para listagem funciona
 
 ---
 

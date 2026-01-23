@@ -16,6 +16,7 @@ class GuestsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->with(['event', 'sector', 'promoter', 'validator']))
             ->columns([
                 ViewColumn::make('mobile_card')
                     ->view('filament.resources.guests.tables.columns.mobile_card')

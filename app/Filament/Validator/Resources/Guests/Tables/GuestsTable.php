@@ -20,6 +20,7 @@ class GuestsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->with(['sector', 'validator']))
             ->columns([
 
                 // Mobile Layout (Custom Card View)

@@ -8,6 +8,7 @@ use App\Models\Guest;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\RateLimiter;
 
 class CreateTicketSale extends CreateRecord
 {
@@ -15,6 +16,9 @@ class CreateTicketSale extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        // Check rate limit for sales
+        $this->checkRateLimit();
+
         $eventId = session('selected_event_id');
         $event = Event::find($eventId);
 
@@ -32,6 +36,29 @@ class CreateTicketSale extends CreateRecord
         $data['sold_by'] = auth()->id();
 
         return $data;
+    }
+
+    /**
+     * Check if the user has exceeded the rate limit for creating sales.
+     */
+    protected function checkRateLimit(): void
+    {
+        $key = 'bilheteria-sales:'.(auth()->id() ?: request()->ip());
+
+        if (RateLimiter::tooManyAttempts($key, 15)) {
+            $seconds = RateLimiter::availableIn($key);
+
+            Notification::make()
+                ->title('Limite de vendas atingido')
+                ->body("Muitas vendas em pouco tempo. Aguarde {$seconds} segundos.")
+                ->danger()
+                ->persistent()
+                ->send();
+
+            $this->halt();
+        }
+
+        RateLimiter::hit($key, 60); // Decay in 60 seconds
     }
 
     protected function handleRecordCreation(array $data): \Illuminate\Database\Eloquent\Model
