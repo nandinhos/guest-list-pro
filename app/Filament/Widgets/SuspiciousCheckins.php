@@ -32,15 +32,23 @@ class SuspiciousCheckins extends BaseWidget
         return $table
             ->query($query)
             ->columns([
+                Tables\Columns\ViewColumn::make('mobile_card')
+                    ->view('filament.widgets.suspicious-checkins.mobile_card')
+                    ->label('TENTATIVAS')
+                    ->hiddenFrom('md'),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Hora')
                     ->dateTime('d/m H:i')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('validator.name')
-                    ->label('Validador'),
+                    ->label('Validador')
+                    ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('guest.name')
                     ->label('Convidado Alvo')
-                    ->placeholder('-'),
+                    ->placeholder('-')
+                    ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('result')
                     ->label('Resultado')
                     ->badge()
@@ -49,13 +57,16 @@ class SuspiciousCheckins extends BaseWidget
                         'error' => 'danger',
                         'estorno' => 'info',
                         default => 'gray',
-                    }),
+                    })
+                    ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('ip_address')
-                    ->label('IP'),
+                    ->label('IP')
+                    ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('event.name')
                     ->label('Evento')
                     ->limit(20)
-                    ->visible(fn () => ! session('selected_event_id')),
+                    ->visible(fn () => ! session('selected_event_id'))
+                    ->visibleFrom('md'),
             ])
             ->actions([
                 //
