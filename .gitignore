@@ -33,3 +33,7 @@ Thumbs.db
 .worktrees/
 .security-key
 logs/security/
+
+# AI Dev State (dynamic session data)
+.aidev/state/
+.env
