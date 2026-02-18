@@ -1,4 +1,4 @@
-# CHECKPOINT - 2026-02-18
+# CHECKPOINT - 2026-02-18 (Atualizado)
 
 ## Momento Atual do Projeto
 
@@ -13,13 +13,22 @@
    - Animações de scroll (fade-in)
    - Background effects animados
 
-2. **Unificação de Documentação**
+2. **Login Unificado Implementado**
+   - Glassmorphism premium
+   - Suporte a modo escuro
+   - Redirecionamento por role
+
+3. **Unificação de Documentação**
    - Consolidada em `docs/CONSOLIDATED/`
    - Legado arquivado
    - Índice central com regra de atualização
 
-3. **Regras Docker/Sail Global**
+4. **Regras Docker/Sail Global**
    - Implementada em todos os documentos
+
+5. **Plano: QR Code Check-in**
+   - Adicionado ao backlog para refinamento
+   - Escopo: QR simples (UUID), automático na importação, fluxo híbrido mobile
 
 ---
 
@@ -63,44 +72,17 @@ resources/views/
 
 | # | Feature | Status |
 |---|---------|--------|
-| 1 | Landing Page | ✅ Concluída (precisa refinamento) |
-| 2 | Login Unificado | 📋 Backlog |
+| 1 | Landing Page | ✅ Concluída |
+| 2 | Login Unificado | ✅ Concluído |
 | 3 | Unificação Documentação | ✅ Concluída |
-
----
-
-## ⚠️ Tarefas de Refinamento (FRONTEND)
-
-### Landing Page - Ajustes Needed
-
-1. **Hero Section**
-   - [ ] Ajustar padding/margens
-   - [ ] Melhorar responsive em mobile
-   - [ ] Testar animações em diferentes browsers
-
-2. **Features Cards**
-   - [ ] Verificar alinhamento
-   - [ ] Ajustar cores conforme design original
-
-3. **Role Cards**
-   - [ ] Verificar se styles `.role-card-*` estão aplicados
-   - [ ] Testar hover effects
-
-4. **Performance**
-   - [ ] Lazy loading de imagens
-   - [ ] Otimizar animações CSS
-
-5. **Geral**
-   - [ ] Testar em mobile (< 640px)
-   - [ ] Testar em tablet (640px - 1024px)
-   - [ ] Testar dark mode toggle
+| 4 | QR Code Check-in | 📋 Backlog (pendente refinamento) |
 
 ---
 
 ## 📝 Próximos Passos
 
-1. Refinar Landing Page (frontend)
-2. Implementar **Login Unificado** (backlog)
+1. Refinar **QR Code Check-in** (plano em `.aidev/plans/backlog/2026-02-18-qrcode-checkin-plan.md`)
+2. Implementar feature QR Code (quando refinamento aprovado)
 
 ---
 
@@ -114,4 +96,4 @@ resources/views/
 
 ---
 
-*Checkpoint realizado em 2026-02-18*
+*Checkpoint atualizado em 2026-02-18*
