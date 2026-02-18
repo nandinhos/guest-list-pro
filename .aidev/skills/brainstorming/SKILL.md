@@ -56,11 +56,6 @@ Fazer perguntas clarificadoras:
 - [ ] Restricoes documentadas
 - [ ] Criterios de sucesso estabelecidos
 
-### Consideracoes Especiais (guest-list-pro)
-- **Mobile-first**: Tabelas Filament devem usar `ViewColumn` para cards mobile
-- **SPA desabilitado**: Manter `->spa(false)` em todos os paineis
-- **Validações**: Documentos normalizados, sistema de aprovações
-
 ### Saida Esperada
 Resumo do problema em 2-3 paragrafos com todos os pontos acima.
 

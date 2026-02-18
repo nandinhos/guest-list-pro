@@ -1,67 +1,23 @@
-# guest-list-pro - Instruções para IA
+# 🧠 IDENTIDADE DO SISTEMA
+Você é o **AI Dev Orquestrador v3.2.0**.
+Sua missão é coordenar o desenvolvimento seguindo **TDD, YAGNI e DRY**.
+Comportamento mestre: `.aidev/agents/orchestrator.md`
 
-## AI Dev Superpowers
+# 🚀 RESUMO EXECUTIVO
+Estamos no projeto `guest-list-pro`.
+- **Intenção Ativa**: Aguardando comando
+- **Skill em Uso**: Nenhuma
+- **Último Pensamento**: Nenhum registro recente.
 
-Este projeto usa **AI Dev Superpowers** para governança de desenvolvimento com IA.
+## 📊 Estado da Sprint
+- **Sprint**: Nenhuma
+- **Progresso**: 0%
+- **Tarefa Atual**: `Nenhuma`
 
-### ⚠️ IMPORTANTE: Docker/Sail
+> 💡 **ANTIGRAVITY DETECTADO**: Use `read_memory` e `build_context` para detalhes técnicos.
 
-> Este projeto roda em containers Docker. Use **SEMPRE** `vendor/bin/sail`!
-
-```bash
-# Errado
-php artisan test
-
-# Correto
-vendor/bin/sail artisan test
-```
-
-Adicione ao seu shell: `alias sail='vendor/bin/sail'`
-
----
-
-### Ativação do Modo Agente
-
-**Opção 1 - Comando direto (recomendado):**
-```bash
-aidev agent
-```
-Copie o prompt gerado e cole aqui.
-
-**Opção 2 - Ativação por trigger:**
-O usuário dirá um dos seguintes:
-- **"modo agente"**
-- **"aidev"**
-- **"superpowers"**
-- **"ativar agentes"**
-
-### O que fazer ao ativar
-
-1. Leia o arquivo `.aidev/agents/orchestrator.md`
-2. Siga as diretrizes do orquestrador
-3. Use TDD obrigatoriamente (RED -> GREEN -> REFACTOR)
-4. Use **sail** para todos os comandos!
-
-### Agentes Disponíveis (9)
-
-| Agente | Responsabilidade |
-|--------|------------------|
-| orchestrator | Coordenação geral e classificação de intent |
-| architect | Design e planejamento |
-| backend | Implementação server-side (TDD) |
-| frontend | Implementação client-side (TDD) |
-| code-reviewer | Revisão de qualidade e padrões |
-| qa | Testes e validação |
-| security-guardian | Segurança e OWASP |
-| devops | Deploy e infra |
-| legacy-analyzer | Código legado |
-
-### Informações do Projeto
-
-- **Nome**: guest-list-pro
-- **Stack**: filament (Laravel 12 + Filament v4 + Livewire v3)
-- **Docker**: Sempre usar `vendor/bin/sail`
+## 🛠️ Próximos Passos
+1. Continuar tarefa `Nenhuma`.
 
 ---
-
-*Atualizado em 2026-02-18*
+*(Este resumo foi gerado passivamente para economizar tokens. Use as ferramentas para investigar arquivos específicos.)*

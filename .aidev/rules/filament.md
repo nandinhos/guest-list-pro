@@ -4,80 +4,18 @@
 ```
 app/
 ├── Filament/
-│   ├── Admin/              # Painel Admin
-│   ├── Promoter/          # Painel Promoter
-│   ├── Validator/         # Painel Validator
-│   ├── Bilheteria/        # Painel Bilheteria
 │   ├── Resources/
 │   ├── Pages/
 │   ├── Widgets/
 │   └── Actions/
-├── Enums/                  # UserRole, EventStatus, RequestStatus, etc.
-├── Services/               # GuestService, ApprovalRequestService, etc.
+├── Http/Controllers/
 ├── Models/
-├── Observers/
+├── Services/
 ├── Livewire/
-├── Imports/                # GuestsImport
-├── Notifications/
-├── Rules/                  # DocumentValidation
+resources/views/
 tests/Feature/
 tests/Unit/
 ```
-
-## guest-list-pro Specific Rules
-
-### Regras de Negócio
-- **Documento único**: Usar `document_normalized` para comparações
-- **Sistema de aprovações**: Usar `ApprovalRequestService`
-- **Check-in**: Registrar em `CheckinAttempt`, usar `GuestSearchService`
-
-### Mobile-First (OBRIGATÓRIO)
-```php
-// Correto: ViewColumn para mobile
-Tables\Columns\ViewColumn::make('mobile_card')
-    ->view('filament.tables.columns.guest-card')
-    ->hiddenFrom('md'),
-
-Tables\Columns\TextColumn::make('name')
-    ->visibleFrom('md'),
-
-// Errado: Layout\View em tabelas
-Tables\Columns\Layout\View::make('...');
-```
-
-### SPA Desabilitado
-```php
-// Em todos os PanelProviders
-->spa(false)
-```
-
-### Enum Validation
-```php
-// Correto
-$type = $get('type');
-$enum = $type instanceof MyEnum ? $type : MyEnum::tryFrom($type ?? '');
-if ($enum === MyEnum::SomeValue) { ... }
-
-// Errado
-if ($get('type') === MyEnum::SomeValue) { ... }
-```
-
-### Database Notifications
-```php
-// Correto: getDatabaseMessage sem Actions
-public function getDatabaseMessage(): string {
-    return 'Sua solicitação foi aprovada.';
-}
-
-// Errado: toArray com Actions (erro de serialização)
-public function toArray(object $notifiable): array {
-    return ['actions' => [Action::make('view')...]];
-}
-```
-
-### Performance
-- Eager loading: `$query->with(['event', 'requester'])`
-- Cache em widgets: `protected static ?string $pollingInterval = '30s';`
 
 ## Naming Conventions
 - **Resources**: `UserResource`, `PostResource`

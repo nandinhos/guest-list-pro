@@ -389,39 +389,3 @@ agent_handoff "code-reviewer" "qa" "Review com sugestoes, validar comportamento"
 
 ## Stack Ativa: filament
 Consulte `.aidev/rules/filament.md` para convencoes especificas.
-
-## Checklist Específico do Projeto
-
-### Regras de Negócio
-- [ ] Usa `document_normalized` para comparações (não documento bruto)
-- [ ] Valida ANTES do commit em imports (preview)
-- [ ] Usa `ApprovalRequestService` para lógica de aprovações
-- [ ] Notifica requester após mudança de status
-- [ ] Registra toda tentativa em `CheckinAttempt`
-
-### Filament/Padrões UI
-- [ ] Usa `ViewColumn` para mobile cards (não `Layout\View`)
-- [ ] Usa `visibleFrom('md')` para colunas desktop
-- [ ] Valida tipo de Enum antes de usar em forms
-- [ ] SPA mantido desabilitado (`->spa(false)`)
-- [ ] Notificações com `getDatabaseMessage()` sem Actions
-
-### Performance
-- [ ] Eager loading em widgets e listagens (`->with(['relation'])`)
-- [ ] Sem N+1 queries
-- [ ] Índices usados corretamente
-
-### Testes
-- [ ] Factories usadas (não dados manuais)
-- [ ] Estados de factory: `checkedIn()`, `pending()`, `approved()`, `rejected()`
-- [ ] Testes de duplicidade: idêntico, formatado diferente, similar
-
-### Code Quality
-- [ ] PSR-12 compliance (`vendor/bin/sail bin pint`)
-- [ ] Type hints em parâmetros e retornos
-- [ ] `declare(strict_types=1);` em novos arquivos
-
-### Gaps Críticos (cobrir优先)
-- GuestService (0 testes)
-- GuestsImport (0 testes)
-- CheckinAttempt (0 testes)

@@ -97,34 +97,6 @@ Para cada funcionalidade do design:
 **Verificacao:**
 ```bash
 npm test -- path/to/test.spec.js
-# ou
-pytest -k "[nome do teste]"
-# ou
-php artisan test --filter="[nome do teste]"
-```
-
-**Comandos Laravel (guest-list-pro):**
-```bash
-# Criar Filament Resource
-php artisan make:filament-resource Guest --generate
-
-# Criar Filament Page
-php artisan make:filament-page Settings
-
-# Criar Filament Widget
-php artisan make:filament-widget StatsOverview
-
-# Criar Service
-php artisan make:service GuestService
-
-# Criar Test
-php artisan make:test GuestServiceTest
-# ou
-php artisan make:pest-test GuestServiceTest
-
-# Migrations
-php artisan migrate
-php artisan migrate:fresh --seed
 ```
 
 **Resultado Esperado:**

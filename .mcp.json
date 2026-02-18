@@ -1,21 +1,27 @@
 {
-    "mcpServers": {
-        "laravel-boost": {
-            "command": "vendor/bin/sail",
-            "args": [
-                "artisan",
-                "boost:mcp"
-            ]
-        },
-        "serena": {
-            "command": "uvx",
-            "args": [
-                "--from",
-                "git+https://github.com/oraios/serena",
-                "serena",
-                "start-mcp-server",
-                "--project-from-cwd"
-            ]
-        }
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "env": {
+        "CONTEXT7_API_KEY": ""
+      },
+      "description": "Context7 server for documentation lookups"
+    },
+    "serena": {
+      "command": "uvx",
+      "args": ["serena", "--project=."],
+      "description": "Serena server for intelligent code navigation"
+    },
+    "basic-memory": {
+      "command": "uvx",
+      "args": ["basic-memory", "mcp"],
+      "description": "Persistent memory for cross-session knowledge"
     }
+  },
+  "projectConfig": {
+    "name": "laravel",
+    "stack": "filament",
+    "version": "1.0.0"
+  }
 }

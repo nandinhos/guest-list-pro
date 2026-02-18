@@ -375,29 +375,3 @@ agent_handoff "architect" "backend" "Implementar conforme plano" "docs/plans/...
 
 ## Diretrizes Especificas da Stack
 Siga as regras em `.aidev/rules/filament.md`
-
-## Regras Específicas do Projeto
-
-### Regra de Ouro: Documentos
-- **Documento deve ser único por evento** - usar `document_normalized`
-- Validar ANTES do commit (preview em imports)
-- Nunca permitir duplicatas silenciosamente
-
-### Sistema de Aprovações
-- Usar `ApprovalRequestService` para toda lógica
-- Nunca aprovar/rejeitar diretamente no Model
-- Sempre notificar requester após mudança de status
-
-### Mobile-First Obrigatório
-- Usar `ViewColumn` para cards mobile em tabelas
-- Esconder colunas via `visibleFrom('md')`
-- NÃO usar `Layout\View` em tabelas (causa bugs)
-
-### SPA Desabilitado
-- Manter `->spa()` desabilitado em todos os painéis
-- Evita erros de JS com Chart.js e Alpine.js
-
-### Performance
-- Eager loading obrigatório em widgets e listagens
-- Índices requeridos: (event_id, name_normalized), (event_id, document_normalized)
-- Cache em widgets com dados que mudam pouco

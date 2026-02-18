@@ -66,22 +66,6 @@ Tipos: `feat` | `fix` | `refactor` | `test` | `docs` | `chore`
 
 ---
 
-## ⚠️ Docker/Sail (OBRIGATÓRIO)
-
-> Este projeto usa Docker. Use **SEMPRE** `vendor/bin/sail` para comandos!
-
-```bash
-# Errado
-php artisan test
-
-# Correto
-vendor/bin/sail artisan test
-```
-
-Adicione ao seu shell: `alias sail='vendor/bin/sail'`
-
----
-
 ## Estado Persistente
 
 - `.aidev/state/session.json` - Estado da sessao
