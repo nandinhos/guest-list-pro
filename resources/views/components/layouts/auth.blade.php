@@ -20,7 +20,7 @@
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="h-full bg-surface-base text-surface-primary overflow-hidden">
+<body class="h-full bg-surface-base text-surface-primary selection:bg-[var(--color-brand-admin-500)]/30 antialiased overflow-hidden">
 
     <!-- Background animado idêntico à landing -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
