@@ -89,23 +89,20 @@
             <!-- Botão de submit -->
             <button
                 type="submit"
-                class="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-[var(--color-brand-admin-500)] to-[var(--color-brand-admin-600)] hover:from-[var(--color-brand-admin-600)] hover:to-[var(--color-brand-admin-700)] text-white font-semibold rounded-xl shadow-lg hover:shadow-admin-glow transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                class="w-full relative group overflow-hidden flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-[var(--color-brand-admin-500)] to-[var(--color-brand-admin-600)] hover:from-[var(--color-brand-admin-600)] hover:to-[var(--color-brand-admin-700)] text-white font-semibold rounded-xl shadow-lg hover:shadow-admin-glow transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                 wire:loading.attr="disabled"
             >
-                <span wire:loading.remove>
-                    <x-heroicon-m-arrow-right-on-rectangle class="w-5 h-5 inline-block mr-1" />
-                    Entrar
                 <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
                 <span class="relative flex items-center justify-center gap-2" wire:loading.remove>
+                    <x-heroicon-m-arrow-right-on-rectangle class="w-5 h-5" />
                     Entrar no Painel
-                    <x-heroicon-m-arrow-right class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </span>
                 <span wire:loading class="relative flex items-center justify-center gap-3">
                     <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                     </svg>
-                    Processando...
+                    Autenticando...
                 </span>
             </button>
         </form>

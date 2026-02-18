@@ -40,6 +40,11 @@
 **Problema**: Scroll suave não funciona em alguns browsers/charsets.
 **Padrão**: IDs de âncoras devem ser sempre **ASCII Puro** (ex: `id="paineis"`, `id="benefits"`). O texto visível pode ter acento, a âncora não.
 
+### LL-012 — Glassmorphism Premium: Container e Vazamento de Layout
+**Contexto**: Elementos com `absolute inset-0` dentro de containers sem `relative` vazam para o container pai mais próximo, quebrando o layout.
+**Lição**: Ao criar efeitos de *glass* ou *glossy* (overlay de brilho), garantir que o elemento pai tenha `relative` e `overflow-hidden`.
+**Dark Mode**: Backgrounds de página no modo escuro devem usar tokens de `surface` redefinidos na classe `.dark` (ex: `--color-surface-base`), caso contrário, mantêm a cor clara do `:root`.
+
 ---
 
 ## ⚙️ Backend & Lógica de Negócio
