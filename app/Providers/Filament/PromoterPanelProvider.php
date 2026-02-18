@@ -29,6 +29,7 @@ class PromoterPanelProvider extends PanelProvider
             ->id('promoter')
             ->path('promoter')
             ->loginRouteSlug('login')
+            ->spa(false)
             ->brandName('Portal do Promoter')
             ->colors([
                 'primary' => Color::Purple,
