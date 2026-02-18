@@ -29,7 +29,7 @@ class BilheteriaPanelProvider extends PanelProvider
         return $panel
             ->id('bilheteria')
             ->path('bilheteria')
-            ->login()
+            ->loginRouteSlug('login')
             ->brandName('Portal da Bilheteria')
             ->colors([
                 'primary' => Color::Orange,
