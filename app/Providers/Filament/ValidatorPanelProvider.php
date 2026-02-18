@@ -29,7 +29,7 @@ class ValidatorPanelProvider extends PanelProvider
             ->id('validator')
             ->path('validator')
             ->loginRouteSlug('login')
-            ->spa(false)
+            ->spa(true)
             ->brandName('Portal do Validador')
             ->colors([
                 'primary' => Color::Emerald,

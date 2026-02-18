@@ -28,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->loginRouteSlug('login')
-            ->spa(false)
+            ->spa(true)
             ->brandName('Guest List Pro')
             ->colors([
                 'primary' => Color::Indigo,

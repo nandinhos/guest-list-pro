@@ -1,4 +1,4 @@
-<div class="w-full max-w-6xl mx-auto py-16">
+<div id="paineis" class="w-full max-w-6xl mx-auto py-16 scroll-mt-20">
     <div class="text-center mb-16">
         <h2 class="text-3xl md:text-5xl font-extrabold text-gradient-admin mb-6">
             Ecosystem de Gestão

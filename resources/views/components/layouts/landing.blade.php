@@ -113,7 +113,7 @@
             <div class="hidden md:flex items-center gap-6">
                 <a href="#features" class="text-sm font-medium hover:text-[var(--color-brand-admin-500)] transition-colors">Funcionalidades</a>
                 <a href="#benefits" class="text-sm font-medium hover:text-[var(--color-brand-admin-500)] transition-colors">Benefícios</a>
-                <a href="#panéis" class="text-sm font-medium hover:text-[var(--color-brand-admin-500)] transition-colors">Painéis</a>
+                <a href="#paineis" class="text-sm font-medium hover:text-[var(--color-brand-admin-500)] transition-colors">Painéis</a>
             </div>
             
             <div class="flex items-center gap-3">
