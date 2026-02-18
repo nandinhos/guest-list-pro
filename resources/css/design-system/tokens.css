@@ -229,13 +229,13 @@
 
 :root {
     /* Glassmorphism - Light Mode */
-    --glass-bg: rgba(255, 255, 255, 0.8);
-    --glass-bg-subtle: rgba(255, 255, 255, 0.6);
-    --glass-bg-strong: rgba(255, 255, 255, 0.95);
-    --glass-border: rgba(255, 255, 255, 0.3);
-    --glass-blur: 12px;
-    --glass-blur-lg: 20px;
-    --glass-blur-xl: 32px;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-bg-subtle: rgba(255, 255, 255, 0.4);
+    --glass-bg-strong: rgba(255, 255, 255, 0.9);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-blur: 16px;
+    --glass-blur-lg: 24px;
+    --glass-blur-xl: 40px;
 
     /* Glow Shadows - Light Mode */
     --shadow-glow-admin: 0 0 20px -5px oklch(0.55 0.22 265 / 0.3);
@@ -272,9 +272,9 @@
 
 /* Dark Mode Tokens */
 .dark {
-    --glass-bg: rgba(30, 41, 59, 0.8);
-    --glass-bg-subtle: rgba(30, 41, 59, 0.6);
-    --glass-bg-strong: rgba(15, 23, 42, 0.95);
+    --glass-bg: rgba(15, 23, 42, 0.6);
+    --glass-bg-subtle: rgba(15, 23, 42, 0.4);
+    --glass-bg-strong: rgba(2, 6, 23, 0.8);
     --glass-border: rgba(255, 255, 255, 0.1);
 
     /* Glow Shadows - Dark Mode (more intense) */

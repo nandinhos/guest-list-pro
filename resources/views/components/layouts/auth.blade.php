@@ -24,24 +24,28 @@
 
     <!-- Background animado idêntico à landing -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-[var(--color-brand-admin-500)]/10 blur-3xl animate-pulse"></div>
-        <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-[var(--color-brand-promoter-500)]/10 blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[var(--color-brand-validator-500)]/5 blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-[var(--color-brand-admin-500)]/10 blur-[100px] animate-pulse"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-[var(--color-brand-promoter-500)]/10 blur-[100px] animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[var(--color-brand-validator-500)]/5 blur-[120px] animate-pulse" style="animation-delay: 2s;"></div>
     </div>
 
     <!-- Conteúdo centralizado -->
     <div class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-12">
 
         <!-- Logo -->
-        <a href="{{ route('home') }}" class="flex items-center gap-3 mb-10 group">
-            <div class="p-2.5 glass-subtle rounded-xl shadow-lg group-hover:scale-105 transition-transform duration-200">
-                <x-heroicon-s-ticket class="w-8 h-8 text-[var(--color-brand-admin-500)]" />
-            </div>
-            <span class="text-2xl font-bold text-gradient-admin">GuestListPro</span>
-        </a>
+        <div class="mb-10 text-center animate-fade-in-up">
+            <a href="{{ route('home') }}" class="inline-flex items-center gap-3 group">
+                <div class="p-2.5 glass shadow-xl rounded-2xl group-hover:scale-105 transition-all duration-300 group-hover:shadow-admin-glow">
+                    <x-heroicon-s-ticket class="w-8 h-8 text-[var(--color-brand-admin-500)]" />
+                </div>
+                <span class="text-3xl font-bold font-display tracking-tight text-gradient-admin transition-all duration-300 group-hover:tracking-normal">GuestListPro</span>
+            </a>
+        </div>
 
         <!-- Slot do componente -->
-        {{ $slot }}
+        <main class="w-full max-w-md animate-fade-in-up" style="animation-delay: 150ms;">
+            {{ $slot }}
+        </main>
 
     </div>
 

@@ -95,36 +95,45 @@
                 <span wire:loading.remove>
                     <x-heroicon-m-arrow-right-on-rectangle class="w-5 h-5 inline-block mr-1" />
                     Entrar
+                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                <span class="relative flex items-center justify-center gap-2" wire:loading.remove>
+                    Entrar no Painel
+                    <x-heroicon-m-arrow-right class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </span>
-                <span wire:loading class="flex items-center gap-2">
-                    <svg class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <span wire:loading class="relative flex items-center justify-center gap-3">
+                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                     </svg>
-                    Autenticando...
+                    Processando...
                 </span>
             </button>
-
         </form>
     </div>
 
-    <!-- Badges de painéis disponíveis -->
-    <div class="mt-6 flex flex-wrap justify-center gap-2">
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 glass-subtle rounded-full text-xs text-surface-muted border border-[var(--glass-border)]">
-            <x-heroicon-m-shield-check class="w-3.5 h-3.5 text-red-400" />
-            Admin
-        </span>
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 glass-subtle rounded-full text-xs text-surface-muted border border-[var(--glass-border)]">
-            <x-heroicon-m-user-group class="w-3.5 h-3.5 text-yellow-400" />
-            Promoter
-        </span>
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 glass-subtle rounded-full text-xs text-surface-muted border border-[var(--glass-border)]">
-            <x-heroicon-m-check-badge class="w-3.5 h-3.5 text-green-400" />
-            Validador
-        </span>
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 glass-subtle rounded-full text-xs text-surface-muted border border-[var(--glass-border)]">
-            <x-heroicon-m-ticket class="w-3.5 h-3.5 text-orange-400" />
-            Bilheteria
-        </span>
+    <!-- Badges Elegantes -->
+    <div class="mt-8 flex flex-wrap justify-center gap-4 animate-fade-in-up" style="animation-delay: 300ms;">
+        <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-surface-muted/60">
+            Acesso disponível
+            <div class="h-px w-8 bg-[var(--glass-border)]"></div>
+        </div>
+        <div class="flex flex-wrap justify-center gap-1.5">
+            <span class="px-2.5 py-1 glass-subtle rounded-lg text-[10px] font-bold text-surface-primary border border-[var(--glass-border)] flex items-center gap-1.5 shadow-sm transform hover:scale-105 transition-transform duration-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.8)]"></span>
+                Admin
+            </span>
+            <span class="px-2.5 py-1 glass-subtle rounded-lg text-[10px] font-bold text-surface-primary border border-[var(--glass-border)] flex items-center gap-1.5 shadow-sm transform hover:scale-105 transition-transform duration-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.8)]"></span>
+                Promoter
+            </span>
+            <span class="px-2.5 py-1 glass-subtle rounded-lg text-[10px] font-bold text-surface-primary border border-[var(--glass-border)] flex items-center gap-1.5 shadow-sm transform hover:scale-105 transition-transform duration-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
+                Validador
+            </span>
+            <span class="px-2.5 py-1 glass-subtle rounded-lg text-[10px] font-bold text-surface-primary border border-[var(--glass-border)] flex items-center gap-1.5 shadow-sm transform hover:scale-105 transition-transform duration-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-orange-400 shadow-[0_0_8_rgba(251,146,60,0.8)]"></span>
+                Bilheteria
+            </span>
+        </div>
     </div>
 </div>
