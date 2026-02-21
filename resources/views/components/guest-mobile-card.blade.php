@@ -63,7 +63,7 @@
         <button 
             wire:click="mountTableAction('downloadQr', {{ $record->id }})"
             class="inline-flex items-center justify-center p-3 text-gray-500 hover:text-indigo-600 bg-gray-50 hover:bg-indigo-50 dark:bg-gray-800 dark:hover:bg-indigo-500/10 rounded-xl transition-colors border border-gray-200 hover:border-indigo-200 dark:border-gray-700 dark:hover:border-indigo-800 shadow-sm"
-            title="Download QR"
+            title="Baixar QR Code"
         >
             <x-heroicon-o-qr-code class="w-7 h-7 stroke-2"/>
         </button>

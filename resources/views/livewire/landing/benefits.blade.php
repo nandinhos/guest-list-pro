@@ -37,7 +37,7 @@
                 <x-heroicon-o-code-bracket class="w-6 h-6 text-green-400" />
             </div>
             <div>
-                <h4 class="font-bold text-lg text-surface-primary mb-2">API Dev-First</h4>
+                <h4 class="font-bold text-lg text-surface-primary mb-2">API para Desenvolvedores</h4>
                 <p class="text-sm text-surface-secondary leading-relaxed">Integre o GuestListPro ao seu ecossistema existente com nossa API robusta.</p>
             </div>
         </div>
@@ -59,7 +59,7 @@
                 <x-heroicon-o-swatch class="w-6 h-6 text-yellow-400" />
             </div>
             <div>
-                <h4 class="font-bold text-lg text-surface-primary mb-2">Puro White Label</h4>
+                <h4 class="font-bold text-lg text-surface-primary mb-2">Marca Própria</h4>
                 <p class="text-sm text-surface-secondary leading-relaxed">Customize cores e logos para que a plataforma tenha a identidade da sua marca.</p>
             </div>
         </div>
@@ -70,7 +70,7 @@
                 <x-heroicon-o-chat-bubble-left-right class="w-6 h-6 text-cyan-400" />
             </div>
             <div>
-                <h4 class="font-bold text-lg text-surface-primary mb-2">Concierge Support</h4>
+                <h4 class="font-bold text-lg text-surface-primary mb-2">Suporte VIP 24/7</h4>
                 <p class="text-sm text-surface-secondary leading-relaxed">Atendimento prioritário e consultoria para grandes eventos garantidos.</p>
             </div>
         </div>

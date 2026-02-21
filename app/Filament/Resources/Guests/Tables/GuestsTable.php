@@ -105,7 +105,7 @@ class GuestsTable
             ->actionsColumnLabel('Ações')
             ->actions([
                 Action::make('downloadQr')
-                    ->label('QR Code')
+                    ->label('Baixar QR')
                     ->hiddenLabel()
                     ->icon('heroicon-o-qr-code')
                     ->color('gray')
