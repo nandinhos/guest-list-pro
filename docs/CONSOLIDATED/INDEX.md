@@ -107,4 +107,4 @@ Para desenvolvimento assistido por IA, consulte:
 
 ---
 
-*Última atualização: 2026-02-18*
+*Última atualização: 2026-02-21*

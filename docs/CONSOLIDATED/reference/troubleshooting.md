@@ -86,6 +86,14 @@ vendor/bin/sail artisan cache:clear
 - Verificar `table()` method
 - Verificar relations estão definidas
 
+### Erro JS: `Identifier 'loadDarkMode' has already been declared`
+- **Causa**: Uso de `->spa(true)` no `PanelProvider` que reexecuta scripts globais sem limpar a memória.
+- **Solução**: Desabilitar o SPA com `->spa(false)` em todos os `PanelProviders`.
+
+### Biblioteca JS (ex: html5-qrcode) não carrega em modais
+- **Causa**: O script injetado no componente Livewire não está pronto no `init()` do Alpine.
+- **Solução**: Registrar o script no `HEAD` do painel via `renderHook` no `PanelProvider`.
+
 ---
 
 ## Problemas de Testes

@@ -7,7 +7,6 @@ use App\Imports\GuestsImport;
 use App\Models\Guest;
 use App\Models\Sector;
 use BackedEnum;
-use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
 use Filament\Support\Icons\Heroicon;
@@ -17,6 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class ImportGuests extends Page
 {
     use WithFileUploads;
+    use \App\Traits\HasGuestImport;
 
     protected static string $resource = GuestResource::class;
 
@@ -107,104 +107,27 @@ class ImportGuests extends Page
     }
 
     /**
-     * Retorna o preview do texto parseado.
-     */
-    public function getParsedPreviewProperty(): array
-    {
-        if (empty($this->textContent)) {
-            return [];
-        }
-
-        $lines = $this->parseText($this->textContent, $this->delimiter);
-
-        return array_slice($lines, 0, 20); // Limita preview a 20 linhas
-    }
-
-    /**
-     * Parseia o texto baseado no delimitador selecionado.
-     */
-    protected function parseText(string $text, string $delimiter): array
-    {
-        $lines = explode("\n", trim($text));
-        $results = [];
-
-        foreach ($lines as $index => $line) {
-            $line = trim($line);
-            if (empty($line)) {
-                continue;
-            }
-
-            $parts = match ($delimiter) {
-                'comma' => array_map('trim', explode(',', $line)),
-                'semicolon' => array_map('trim', explode(';', $line)),
-                'tab' => array_map('trim', explode("\t", $line)),
-                'pipe' => array_map('trim', explode('|', $line)),
-                default => [$line], // newline = um campo por linha (só nome)
-            };
-
-            // Se for newline mas o usuário colou com vírgula, tenta ser amigável e extrair
-            if ($delimiter === 'newline' && str_contains($line, ',')) {
-                $parts = array_map('trim', explode(',', $line));
-            }
-
-            $name = $parts[0] ?? '';
-            $document = $parts[1] ?? '';
-
-            if (! empty($name)) {
-                $results[] = [
-                    'line' => $index + 1,
-                    'name' => $name,
-                    'document' => $document,
-                    'valid' => true,
-                ];
-            }
-        }
-
-        return $results;
-    }
-
-    /**
-     * Ação de baixar o template de importação.
-     */
-    public function downloadTemplateAction(): Action
-    {
-        return Action::make('downloadTemplate')
-            ->label('Baixar Modelo')
-            ->icon('heroicon-o-document-arrow-down')
-            ->color('gray')
-            ->action(function () {
-                return response()->download(
-                    storage_path('app/templates/modelo-importacao-convidados.xlsx')
-                );
-            });
-    }
-
-    /**
      * Processa a importação do arquivo.
      */
     public function import(): void
     {
         if (! $this->file) {
             Notification::make()->title('Selecione um arquivo')->danger()->send();
-
             return;
         }
 
         if (! $this->eventId) {
             Notification::make()->title('Selecione um evento')->danger()->send();
-
             return;
         }
 
         if (! $this->sectorId) {
             Notification::make()->title('Selecione um setor')->danger()->send();
-
             return;
         }
 
         if (! $this->promoterId) {
             Notification::make()->title('Selecione um promoter')->danger()->send();
-
             return;
         }
 
@@ -242,25 +165,21 @@ class ImportGuests extends Page
     {
         if (empty($this->textContent)) {
             Notification::make()->title('Cole o texto com os convidados')->danger()->send();
-
             return;
         }
 
         if (! $this->textEventId) {
             Notification::make()->title('Selecione um evento')->danger()->send();
-
             return;
         }
 
         if (! $this->textSectorId) {
             Notification::make()->title('Selecione um setor')->danger()->send();
-
             return;
         }
 
         if (! $this->textPromoterId) {
             Notification::make()->title('Selecione um promoter')->danger()->send();
-
             return;
         }
 
@@ -272,8 +191,7 @@ class ImportGuests extends Page
         foreach ($lines as $line) {
             $documentNormalized = preg_replace('/\D/', '', $line['document']);
 
-            // Verifica duplicidade apenas se o documento existe
-            if (! empty($documentNormalized)) {
+            if (!empty($documentNormalized)) {
                 $exists = Guest::query()
                     ->where('event_id', $this->textEventId)
                     ->where('document_normalized', $documentNormalized)
@@ -281,7 +199,6 @@ class ImportGuests extends Page
 
                 if ($exists) {
                     $skipped++;
-
                     continue;
                 }
             }
@@ -291,7 +208,7 @@ class ImportGuests extends Page
                 'sector_id' => $this->textSectorId,
                 'promoter_id' => $this->textPromoterId,
                 'name' => $line['name'],
-                'document' => $line['document'] ?: '', // Não pode ser nulo no banco MySQL
+                'document' => $line['document'] ?: '',
             ]);
 
             $imported++;

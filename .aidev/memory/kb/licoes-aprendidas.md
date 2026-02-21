@@ -25,10 +25,10 @@
 
 ## 🎨 Frontend & UX
 
-### LL-004 — Filament v4: Navegação SPA e Estabilidade
-**Contexto**: O modo SPA do Filament (`->spa()`) é fundamental para fluidez, mas pode causar redeclaração de scripts e flashes brancos.
-**Lição Histórica**: Antigamente desativávamos (`->spa(false)`), mas o padrão v4 deve ser `->spa(true)`.
-**Padrão**: Manter `->spa(true)`. Se houver erros de JS (ex: `Identifier '...' has already been declared`), encapsular scripts com verificações de existência ou usar o ciclo de vida do Livewire (`livewire:init`).
+### LL-004 — Filament v4: Navegação SPA e Estabilidade (SUPERADA)
+**Contexto**: O modo SPA do Filament (`->spa()`) foi testado para melhorar a fluidez.
+**Lição Histórica**: Antigamente recomendava-se `->spa(true)`.
+**Padrão**: **LIÇÃO SUBSTITUÍDA PELA LL-015.** Use `->spa(false)` para evitar conflitos JS.
 
 ### LL-005 — Mobile-First e Componentes de Tabela
 **Contexto**: Tabelas horizontais em mobile degradam a experiência.
@@ -78,7 +78,46 @@ $enum = $type instanceof MyEnum ? $type : MyEnum::tryFrom($type ?? '');
 3. Se o teste envolver banco, prefira verificação manual com users do `UserSeeder` para validações rápidas de fluxo de tela.
 
 ### LL-011 — Pint e Formatação Automática
-**Padrão**: Sempre rodar `./vendor/bin/pint --dirty` antes de cada commit para manter a consistência do código de acordo com o padrão Laravel.
+**Padrão**: Sempre rodar `./vendor/bin/sail bin pint --dirty` antes de cada commit para manter a consistência do código de acordo com o padrão Laravel.
+
+### LL-013 — ULID para QR Codes: Performance de Leitura
+**Contexto**: Uso de QR Codes para check-in em ambientes de eventos (baixa luz, câmeras variadas).
+**Lição**: Identificadores longos (UUID) aumentam a densidade de pontos do QR Code, dificultando a leitura.
+**Padrão**: Usar **ULID (26 caracteres)** para tokens de QR Code. Menos caracteres geram blocos maiores e leitura 30-50% mais rápida.
+**Exemplo**: `$guest->qr_token = (string) Str::ulid();`
+
+### LL-014 — Injeção de Bibliotecas JS em Painéis Filament
+**Contexto**: Carregar bibliotecas externas (ex: `html5-qrcode`) apenas onde necessário.
+**Problema**: Injetar scripts dentro de componentes Livewire em modais causa erros de `undefined` no Alpine.js (corrida de carregamento).
+**Padrão**: Registrar scripts essenciais no `HEAD` do painel via `renderHook` no `PanelProvider`.
+**Exemplo**: `->renderHook(PanelsRenderHook::HEAD_END, fn() => '<script src="..."></script>')`
+
+### LL-015 — Veredito SPA: Estabilidade sobre Fluidez
+**Contexto**: Revisitando a lição LL-004 após bugs de redeclaração JS (`loadDarkMode`).
+**Decisão**: O uso de `->spa(true)` provou-se instável para o volume de scripts customizados do projeto.
+**Padrão Atual**: Manter **`->spa(false)`** em todos os `PanelProviders` para garantir limpeza total da memória JS a cada navegação e evitar erros de sintaxe por redeclaração.
+
+### LL-016 — Sincronização de Temas Tailwind no Filament
+**Contexto**: Estilos de componentes customizados sumindo após o `build` de produção.
+**Causa**: O Tailwind v4 ignora arquivos fora dos diretórios padrão se não forem explicitamente mapeados.
+**Padrão**: Sempre adicionar a diretiva `@source` apontando para `resources/views/components/**/*.blade.php` nos arquivos `theme.css` de cada painel.
+
+### LL-017 — Integridade de Variáveis em Componentes Blade (@props)
+**Contexto**: Erro de "Undefined variable" ao passar dados para componentes anônimos.
+**Padrão**: Nunca criar componentes sem declarar `@props(['var' => default])`. Isso garante o contrato entre pai e filho e evita quebras na renderização.
+
+### LL-018 — UX Mobile: Navegação por Página vs Modal na Edição
+**Contexto**: Edição de registros complexos em modais mobile prejudica a visibilidade e uso.
+**Padrão**: Para refinar a qualidade visual, usar `getUrl('edit')` para navegar para uma página dedicada em vez de `mountTableAction` (modal). 
+**Dica**: Desabilitar `recordUrl(null)` na tabela se houver botões de ação explícitos no card.
+
+### LL-019 — Centralização de Cards Customizados no Mobile
+**Contexto**: Cards parecendo "deslocados" para a direita devido ao padding interno da tabela Filament.
+**Solução**: Usar margem negativa e cálculo de largura compensatória: `-ml-3 w-[calc(100%+0.75rem)]`. Isso faz o card "pular" o padding e ficar centralizado na tela.
+
+### LL-020 — Alinhamento de Topbar e Truncagem Flexbox
+**Contexto**: Nome da marca e nome do usuário grudados em telas pequenas no layout fullscreen.
+**Padrão**: Usar `justify-between` no container pai e aplicar `min-w-0` no bloco de texto com `truncate`. Isso força o Flexbox a calcular o espaço correto antes de aplicar o corte de texto.
 
 ---
-*Atualizado em: 18 de fevereiro de 2026*
+*Atualizado em: 21 de fevereiro de 2026*
