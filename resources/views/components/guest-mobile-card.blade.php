@@ -1,6 +1,6 @@
 @props(['record', 'editUrl' => null])
 
-<div class="flex justify-between items-stretch gap-3 w-full p-2 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm relative overflow-hidden">
+<div class="-ml-3 w-[calc(100%+0.75rem)] flex justify-between items-stretch gap-3 p-2 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm relative overflow-hidden">
     <!-- Left Column: Infos + Status -->
     <div class="flex flex-col space-y-3 flex-1 min-w-0 justify-between">
         
