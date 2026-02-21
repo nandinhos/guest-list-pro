@@ -1,33 +1,21 @@
 @props(['model'])
 
-<div class="flex flex-wrap gap-4 items-center mb-6 p-4 glass-subtle rounded-2xl border border-white/5">
-    <span class="text-sm font-medium text-surface-secondary">Delimitador:</span>
+<div class="flex flex-wrap gap-2 items-center">
+    <span class="text-xs font-medium text-gray-500 dark:text-gray-400 mr-2">Delimitador:</span>
     
-    <label class="inline-flex items-center group cursor-pointer">
-        <input type="radio" wire:model.live="{{ $model }}" value="newline" class="hidden peer">
-        <span class="px-4 py-2 rounded-xl text-xs font-bold transition-all border border-transparent peer-checked:bg-[var(--color-brand-admin-500)] peer-checked:text-white bg-white/5 text-surface-secondary hover:bg-white/10 group-hover:scale-105">
-            Um por linha
-        </span>
-    </label>
-
-    <label class="inline-flex items-center group cursor-pointer">
-        <input type="radio" wire:model.live="{{ $model }}" value="comma" class="hidden peer">
-        <span class="px-4 py-2 rounded-xl text-xs font-bold transition-all border border-transparent peer-checked:bg-[var(--color-brand-admin-500)] peer-checked:text-white bg-white/5 text-surface-secondary hover:bg-white/10 group-hover:scale-105">
-            Vírgula (,)
-        </span>
-    </label>
-
-    <label class="inline-flex items-center group cursor-pointer">
-        <input type="radio" wire:model.live="{{ $model }}" value="semicolon" class="hidden peer">
-        <span class="px-4 py-2 rounded-xl text-xs font-bold transition-all border border-transparent peer-checked:bg-[var(--color-brand-admin-500)] peer-checked:text-white bg-white/5 text-surface-secondary hover:bg-white/10 group-hover:scale-105">
-            Ponto e Vírgula (;)
-        </span>
-    </label>
-
-    <label class="inline-flex items-center group cursor-pointer">
-        <input type="radio" wire:model.live="{{ $model }}" value="tab" class="hidden peer">
-        <span class="px-4 py-2 rounded-xl text-xs font-bold transition-all border border-transparent peer-checked:bg-[var(--color-brand-admin-500)] peer-checked:text-white bg-white/5 text-surface-secondary hover:bg-white/10 group-hover:scale-105">
-            Tabulação
-        </span>
-    </label>
+    <div class="flex p-1 bg-gray-100 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
+        @foreach([
+            'newline' => 'Linha',
+            'comma' => ',',
+            'semicolon' => ';',
+            'tab' => 'Tab'
+        ] as $value => $label)
+            <label class="cursor-pointer">
+                <input type="radio" wire:model.live="{{ $model }}" value="{{ $value }}" class="hidden peer">
+                <span class="px-3 py-1 rounded-md text-[10px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-gray-800 peer-checked:text-primary-600 dark:peer-checked:text-primary-400 peer-checked:shadow-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                    {{ $label }}
+                </span>
+            </label>
+        @endforeach
+    </div>
 </div>
