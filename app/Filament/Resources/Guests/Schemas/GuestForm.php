@@ -70,8 +70,8 @@ class GuestForm
 
                         TextInput::make('document')
                             ->label('Documento')
-                            ->placeholder(fn (Get $get) => DocumentType::tryFrom($get('document_type') ?? '')?->getPlaceholder() ?? 'Digite o documento')
-                            ->helperText(fn (Get $get) => match ($get('document_type')) {
+                            ->placeholder(fn (Get $get) => ($type = $get('document_type')) instanceof DocumentType ? $type->getPlaceholder() : (DocumentType::tryFrom($type ?? '')?->getPlaceholder() ?? 'Digite o documento'))
+                            ->helperText(fn (Get $get) => match ($get('document_type') instanceof DocumentType ? $get('document_type')->value : $get('document_type')) {
                                 DocumentType::CPF->value => 'CPF: 11 dígitos numéricos',
                                 DocumentType::RG->value => 'RG: formato varia por estado',
                                 DocumentType::PASSPORT->value => 'Passaporte: letras e números',
@@ -79,7 +79,7 @@ class GuestForm
                             })
                             ->rules([
                                 fn (Get $get): DocumentValidation => new DocumentValidation(
-                                    type: DocumentType::tryFrom($get('document_type') ?? ''),
+                                    type: ($type = $get('document_type')) instanceof DocumentType ? $type : DocumentType::tryFrom($type ?? ''),
                                     allowEmpty: true
                                 ),
                             ])

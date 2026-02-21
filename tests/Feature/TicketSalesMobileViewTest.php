@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Filament\Bilheteria\Resources\TicketSales\Pages\ListTicketSales;
 use App\Models\Event;
+use App\Models\Sector;
 use App\Models\TicketSale;
 use App\Models\User;
-use App\Models\Sector;
-use App\Filament\Bilheteria\Resources\TicketSales\Pages\ListTicketSales;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -19,13 +19,13 @@ class TicketSalesMobileViewTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $user = User::factory()->create();
         $this->actingAs($user);
 
         $event = Event::factory()->create();
         session(['selected_event_id' => $event->id]);
-        
+
         Filament::setCurrentPanel(Filament::getPanel('bilheteria'));
     }
 

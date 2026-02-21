@@ -42,8 +42,8 @@ class TicketSaleForm
                             ->label('Documento')
                             ->required()
                             ->maxLength(20)
-                            ->placeholder(fn (Get $get) => DocumentType::tryFrom($get('document_type') ?? '')?->getPlaceholder() ?? 'CPF, RG ou Passaporte')
-                            ->helperText(fn (Get $get) => match ($get('document_type')) {
+                            ->placeholder(fn (Get $get) => ($type = $get('document_type')) instanceof DocumentType ? $type->getPlaceholder() : (DocumentType::tryFrom($type ?? '')?->getPlaceholder() ?? 'CPF, RG ou Passaporte'))
+                            ->helperText(fn (Get $get) => match ($get('document_type') instanceof DocumentType ? $get('document_type')->value : $get('document_type')) {
                                 DocumentType::CPF->value => 'CPF: 11 dígitos numéricos',
                                 DocumentType::RG->value => 'RG: formato varia por estado',
                                 DocumentType::PASSPORT->value => 'Passaporte: letras e números',
@@ -51,7 +51,7 @@ class TicketSaleForm
                             })
                             ->rules([
                                 fn (Get $get): DocumentValidation => new DocumentValidation(
-                                    type: DocumentType::tryFrom($get('document_type') ?? ''),
+                                    type: ($type = $get('document_type')) instanceof DocumentType ? $type : DocumentType::tryFrom($type ?? ''),
                                     allowEmpty: false
                                 ),
                             ]),

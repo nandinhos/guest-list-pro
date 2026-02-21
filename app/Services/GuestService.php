@@ -12,6 +12,51 @@ use Carbon\Carbon;
 class GuestService
 {
     /**
+     * Realiza o check-in de um convidado através do token do QR Code (ULID).
+     */
+    public function checkinByQrToken(string $qrToken, User $validator): array
+    {
+        // 1. Verificar permissão do usuário que realiza a ação
+        if (! in_array($validator->role, [\App\Enums\UserRole::ADMIN, \App\Enums\UserRole::VALIDATOR])) {
+            return [
+                'success' => false,
+                'message' => 'Você não tem permissão para realizar check-ins.',
+            ];
+        }
+
+        // 2. Buscar convidado pelo token
+        $guest = Guest::where('qr_token', $qrToken)->first();
+
+        if (! $guest) {
+            return [
+                'success' => false,
+                'message' => 'Convidado não encontrado.',
+            ];
+        }
+
+        // 3. Verificar se já realizou check-in
+        if ($guest->is_checked_in) {
+            return [
+                'success' => false,
+                'message' => 'Este convidado já realizou o check-in.',
+            ];
+        }
+
+        // 4. Realizar check-in
+        $guest->update([
+            'is_checked_in' => true,
+            'checked_in_at' => now(),
+            'checked_in_by' => $validator->id,
+        ]);
+
+        return [
+            'success' => true,
+            'message' => 'Check-in realizado com sucesso!',
+            'guest' => $guest,
+        ];
+    }
+
+    /**
      * Verifica se o promoter pode cadastrar convidados para um determinado evento e setor.
      */
     public function canRegisterGuest(User $user, int $eventId, int $sectorId): array

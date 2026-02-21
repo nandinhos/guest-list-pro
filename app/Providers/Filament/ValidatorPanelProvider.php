@@ -29,7 +29,7 @@ class ValidatorPanelProvider extends PanelProvider
             ->id('validator')
             ->path('validator')
             ->loginRouteSlug('login')
-            ->spa(true)
+            ->spa(false)
             ->brandName('Portal do Validador')
             ->colors([
                 'primary' => Color::Emerald,
@@ -64,6 +64,10 @@ class ValidatorPanelProvider extends PanelProvider
                 Authenticate::class,
                 EnsureEventSelected::class,
             ])
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::HEAD_END,
+                fn (): string => '<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>'
+            )
             ->userMenu(false)
             ->renderHook(
                 \Filament\View\PanelsRenderHook::TOPBAR_END,

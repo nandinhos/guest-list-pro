@@ -6,10 +6,12 @@ use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class GuestsTable
 {
@@ -101,9 +103,30 @@ class GuestsTable
             ->filtersLayout(\Filament\Tables\Enums\FiltersLayout::AboveContent)
             ->filtersFormColumns(4)
             ->actionsColumnLabel('Ações')
-            ->recordActions([
+            ->actions([
+                Action::make('downloadQr')
+                    ->label('QR Code')
+                    ->hiddenLabel()
+                    ->icon('heroicon-o-qr-code')
+                    ->color('gray')
+                    ->tooltip('Baixar QR Code')
+                    ->extraAttributes(['class' => 'hidden md:inline-flex']) // Esconde no mobile nativamente
+                    ->action(function (\App\Models\Guest $record) {
+                        if (empty($record->qr_token)) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Este convidado não possui um token de QR Code. Tente salvar o registro novamente para gerá-lo.')
+                                ->danger()
+                                ->send();
+                            return;
+                        }
+
+                        return response()->streamDownload(
+                            fn () => print(QrCode::format('svg')->size(200)->generate($record->qr_token)),
+                            "qr-code-{$record->qr_token}.svg"
+                        );
+                    }),
                 EditAction::make()
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    ->extraAttributes(['class' => 'hidden md:inline-flex']), // Esconde no mobile nativamente
             ])
             ->bulkActions([
                 BulkActionGroup::make([
@@ -135,6 +158,7 @@ class GuestsTable
                             }, 'convidados-selecionados-'.now()->format('d-m-Y').'.csv');
                         }),
                 ]),
-            ]);
+            ])
+            ->recordUrl(null); // Desativar link na linha para forçar uso do botão Editar
     }
 }

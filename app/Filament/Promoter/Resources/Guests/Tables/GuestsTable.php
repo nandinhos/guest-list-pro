@@ -5,8 +5,10 @@ namespace App\Filament\Promoter\Resources\Guests\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class GuestsTable
 {
@@ -115,15 +117,45 @@ class GuestsTable
                 'Mostrando %d convidado(s) da sua lista no evento selecionado',
                 $livewire->getFilteredTableQuery()->count()
             ))
-            ->recordActions([
+            ->actions([
+                Action::make('downloadQr')
+                    ->label('QR Code')
+                    ->hiddenLabel()
+                    ->icon('heroicon-o-qr-code')
+                    ->color('gray')
+                    ->tooltip('Baixar QR Code')
+                    ->extraAttributes(['class' => 'hidden md:inline-flex']) // Esconde no mobile nativamente
+                    ->action(function (\App\Models\Guest $record) {
+                        try {
+                            if (empty($record->qr_token)) {
+                                \Filament\Notifications\Notification::make()
+                                    ->title('Este convidado não possui um token de QR Code gerado.')
+                                    ->danger()
+                                    ->send();
+                                return;
+                            }
+
+                            return response()->streamDownload(
+                                fn () => print(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')->size(200)->generate($record->qr_token)),
+                                "qr-code-{$record->qr_token}.svg"
+                            );
+                        } catch (\Exception $e) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Erro ao gerar QR Code')
+                                ->body('Tente novamente mais tarde.')
+                                ->danger()
+                                ->send();
+                        }
+                    }),
                 EditAction::make()
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    ->extraAttributes(['class' => 'hidden md:inline-flex']), // Esconde no mobile nativamente
             ])
             ->actionsColumnLabel('AÇÕES')
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->recordUrl(null); // Desativar link na linha para forçar uso do botão Editar
     }
 }

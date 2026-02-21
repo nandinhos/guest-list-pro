@@ -1,4 +1,4 @@
-<div class="w-full max-w-6xl mx-auto">
+<div class="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-6 md:pt-16">
     <!-- Logo Section -->
     <div class="text-center mb-12 animate-fade-in-down">
         <div class="inline-flex items-center gap-3 mb-3">
@@ -6,10 +6,10 @@
                 <x-heroicon-s-ticket class="w-10 h-10 text-[var(--color-brand-admin-600)] dark:text-[var(--color-brand-admin-400)]" />
             </div>
         </div>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gradient-admin mb-6">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gradient-admin mb-6 leading-tight md:leading-tight">
             Transforme a Gestão do seu Evento <br class="hidden md:block" /> com GuestListPro
         </h1>
-        <p class="text-lg md:text-xl text-surface-secondary max-w-3xl mx-auto mb-10 leading-relaxed">
+        <p class="text-base md:text-xl text-surface-secondary max-w-3xl mx-auto mb-10 leading-relaxed px-2 sm:px-0">
             A plataforma ultra-moderna que redefine o controle de acesso. 
             Do check-in instantâneo via QR Code à inteligência de dados em tempo real, 
             garantimos o sucesso da sua produção com segurança e sofisticação.
@@ -18,12 +18,12 @@
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="/login" 
-               class="inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-[var(--color-brand-admin-500)] to-[var(--color-brand-admin-600)] hover:from-[var(--color-brand-admin-600)] hover:to-[var(--color-brand-admin-700)] text-white font-bold rounded-2xl shadow-2xl hover:shadow-admin-glow transition-all duration-300 hover:-translate-y-1">
+               class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-4 md:px-10 md:py-5 bg-gradient-to-r from-[var(--color-brand-admin-500)] to-[var(--color-brand-admin-600)] hover:from-[var(--color-brand-admin-600)] hover:to-[var(--color-brand-admin-700)] text-white font-bold rounded-2xl shadow-2xl hover:shadow-admin-glow transition-all duration-300 hover:-translate-y-1">
                 <x-heroicon-o-bolt class="w-6 h-6" />
                 Começar Agora
             </a>
             <a href="#features" 
-               class="inline-flex items-center justify-center gap-3 px-10 py-5 glass-subtle hover:bg-[var(--glass-bg)] text-surface-primary font-bold rounded-2xl shadow-xl transition-all duration-300 hover:-translate-y-1 border border-[var(--glass-border)]">
+               class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-4 md:px-10 md:py-5 glass-subtle hover:bg-[var(--glass-bg)] text-surface-primary font-bold rounded-2xl shadow-xl transition-all duration-300 hover:-translate-y-1 border border-[var(--glass-border)]">
                 <x-heroicon-o-sparkles class="w-6 h-6" />
                 Explorar Soluções
             </a>

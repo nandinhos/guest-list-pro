@@ -18,6 +18,7 @@
 @source '../../../../app/Filament/**/*.php';
 @source '../../../../resources/views/filament/**/*.blade.php';
 @source '../../../../resources/views/livewire/**/*.blade.php';
+@source '../../../../resources/views/components/**/*.blade.php';
 
 /* ========================================
    ADMIN PANEL COLORS (INDIGO)

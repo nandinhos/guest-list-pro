@@ -18,6 +18,7 @@
 @source '../../../../app/Filament/Validator/**/*.php';
 @source '../../../../resources/views/filament/validator/**/*.blade.php';
 @source '../../../../resources/views/livewire/**/*.blade.php';
+@source '../../../../resources/views/components/**/*.blade.php';
 
 /* ========================================
    VALIDATOR PANEL COLORS (EMERALD)
@@ -252,23 +253,28 @@
     background-color: oklch(0.30 0.10 160) !important;
     color: oklch(0.90 0.10 160) !important;
 }
+
 /* ========================================
    FILTERS LAYOUT CUSTOMIZATION
    ======================================== */
 
-.fi-ta-filters-form > div:last-child {
+.fi-ta-filters-form>div:last-child {
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Botões para a direita */
-    flex-direction: row; /* Ordem natural */
+    justify-content: flex-end;
+    /* Botões para a direita */
+    flex-direction: row;
+    /* Ordem natural */
     gap: 1rem;
     padding-top: 1rem;
-    grid-column: 1 / -1; /* Ocupar largura total */
+    grid-column: 1 / -1;
+    /* Ocupar largura total */
 }
 
 @media (min-width: 1024px) {
+
     /* Fazer o primeiro campo (Pesquisar) ocupar 2 colunas */
-    .fi-ta-filters-form .grid > div:first-child {
+    .fi-ta-filters-form .grid>div:first-child {
         grid-column: span 2;
     }
 }

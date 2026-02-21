@@ -2,16 +2,16 @@
 
 namespace Tests\Feature;
 
+use App\Enums\PaymentMethod;
+use App\Filament\Bilheteria\Pages\CashClosing;
 use App\Models\Event;
 use App\Models\TicketSale;
 use App\Models\User;
-use App\Filament\Bilheteria\Pages\CashClosing;
-use App\Enums\PaymentMethod;
+use Carbon\Carbon;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
-use Carbon\Carbon;
 
 class CashClosingTest extends TestCase
 {
@@ -20,13 +20,13 @@ class CashClosingTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $user = User::factory()->create();
         $this->actingAs($user);
 
         $event = Event::factory()->create();
         session(['selected_event_id' => $event->id]);
-        
+
         Filament::setCurrentPanel(Filament::getPanel('bilheteria'));
     }
 
@@ -39,7 +39,7 @@ class CashClosingTest extends TestCase
     public function test_can_filter_sales_by_datetime_range(): void
     {
         $event = Event::first();
-        
+
         // Sale 1: Early morning (Included)
         TicketSale::factory()->create([
             'event_id' => $event->id,
@@ -64,7 +64,7 @@ class CashClosingTest extends TestCase
     public function test_can_filter_sales_by_payment_method(): void
     {
         $event = Event::first();
-        
+
         TicketSale::factory()->create([
             'event_id' => $event->id,
             'payment_method' => PaymentMethod::Pix->value,

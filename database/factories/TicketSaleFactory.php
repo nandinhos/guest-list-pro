@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Enums\PaymentMethod;
 use App\Models\Event;
 use App\Models\Guest;
 use App\Models\TicketSale;
 use App\Models\User;
-use App\Enums\PaymentMethod;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

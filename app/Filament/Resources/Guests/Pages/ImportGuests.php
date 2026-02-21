@@ -135,15 +135,20 @@ class ImportGuests extends Page
             }
 
             $parts = match ($delimiter) {
-                'comma' => explode(',', $line),
-                'semicolon' => explode(';', $line),
-                'tab' => explode("\t", $line),
-                'pipe' => explode('|', $line),
+                'comma' => array_map('trim', explode(',', $line)),
+                'semicolon' => array_map('trim', explode(';', $line)),
+                'tab' => array_map('trim', explode("\t", $line)),
+                'pipe' => array_map('trim', explode('|', $line)),
                 default => [$line], // newline = um campo por linha (só nome)
             };
 
-            $name = trim($parts[0] ?? '');
-            $document = trim($parts[1] ?? '');
+            // Se for newline mas o usuário colou com vírgula, tenta ser amigável e extrair
+            if ($delimiter === 'newline' && str_contains($line, ',')) {
+                $parts = array_map('trim', explode(',', $line));
+            }
+
+            $name = $parts[0] ?? '';
+            $document = $parts[1] ?? '';
 
             if (! empty($name)) {
                 $results[] = [
@@ -267,8 +272,8 @@ class ImportGuests extends Page
         foreach ($lines as $line) {
             $documentNormalized = preg_replace('/\D/', '', $line['document']);
 
-            // Verifica duplicidade
-            if ($documentNormalized) {
+            // Verifica duplicidade apenas se o documento existe
+            if (! empty($documentNormalized)) {
                 $exists = Guest::query()
                     ->where('event_id', $this->textEventId)
                     ->where('document_normalized', $documentNormalized)
@@ -286,7 +291,7 @@ class ImportGuests extends Page
                 'sector_id' => $this->textSectorId,
                 'promoter_id' => $this->textPromoterId,
                 'name' => $line['name'],
-                'document' => $line['document'] ?: null,
+                'document' => $line['document'] ?: '', // Não pode ser nulo no banco MySQL
             ]);
 
             $imported++;

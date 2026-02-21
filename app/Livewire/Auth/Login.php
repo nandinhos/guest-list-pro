@@ -21,9 +21,11 @@ class Login extends Component
 
     public bool $remember = false;
 
-    public function authenticate(AuthenticationService $authService): void
+    public function authenticate(): void
     {
         $this->validate();
+
+        $authService = app(\App\Services\AuthenticationService::class);
 
         $throttleKey = Str::lower($this->email).'.'.request()->ip();
 

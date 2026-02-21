@@ -102,12 +102,12 @@
 
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 glass-subtle border-b border-[var(--glass-border)]">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="p-2 glass-subtle rounded-xl">
-                    <x-heroicon-s-ticket class="w-6 h-6 text-[var(--color-brand-admin-600)] dark:text-[var(--color-brand-admin-400)]" />
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="p-1.5 sm:p-2 glass-subtle rounded-xl">
+                    <x-heroicon-s-ticket class="w-5 h-5 sm:w-6 sm:h-6 text-[var(--color-brand-admin-600)] dark:text-[var(--color-brand-admin-400)]" />
                 </div>
-                <span class="font-bold text-lg">Guest List Pro</span>
+                <span class="font-bold text-base sm:text-lg tracking-tight">Guest List Pro</span>
             </div>
             
             <div class="hidden md:flex items-center gap-6">
@@ -116,14 +116,14 @@
                 <a href="#paineis" class="text-sm font-medium hover:text-[var(--color-brand-admin-500)] transition-colors">Painéis</a>
             </div>
             
-            <div class="flex items-center gap-3">
-                <a href="/login" class="px-4 py-2 bg-[var(--color-brand-admin-500)] hover:bg-[var(--color-brand-admin-600)] text-white text-sm font-medium rounded-lg transition-colors">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="/login" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-[var(--color-brand-admin-500)] hover:bg-[var(--color-brand-admin-600)] text-white text-sm font-medium rounded-lg transition-colors">
                     Entrar
                 </a>
                 <button @click="darkMode = !darkMode"
-                        class="p-2 rounded-lg glass-subtle hover:bg-[var(--glass-bg)] transition-colors">
-                    <x-heroicon-o-sun x-show="!darkMode" class="w-5 h-5" />
-                    <x-heroicon-o-moon x-show="darkMode" class="w-5 h-5" />
+                        class="p-1.5 sm:p-2 rounded-lg glass-subtle hover:bg-[var(--glass-bg)] transition-colors">
+                    <x-heroicon-o-sun x-show="!darkMode" class="w-4 h-4 sm:w-5 sm:h-5" />
+                    <x-heroicon-o-moon x-show="darkMode" class="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
             </div>
         </div>

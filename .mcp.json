@@ -8,15 +8,39 @@
       },
       "description": "Context7 server for documentation lookups"
     },
-    "serena": {
-      "command": "uvx",
-      "args": ["serena", "--project=."],
-      "description": "Serena server for intelligent code navigation"
-    },
     "basic-memory": {
       "command": "uvx",
       "args": ["basic-memory", "mcp"],
       "description": "Persistent memory for cross-session knowledge"
+    },
+    "laravel-boost": {
+      "command": "docker",
+      "args": [
+        "compose",
+        "exec",
+        "-T",
+        "-u",
+        "1000:1000",
+        "-e",
+        "WWWUSER=1000",
+        "-e",
+        "WWWGROUP=1000",
+        "laravel.test",
+        "php",
+        "artisan",
+        "boost:mcp"
+      ],
+      "disabledTools": []
+    },
+    "serena": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--project-from-cwd"
+      ]
     }
   },
   "projectConfig": {

@@ -24,7 +24,7 @@
     <!-- CTA Final -->
     <section class="py-24">
         <div class="w-full max-w-4xl mx-auto px-6 text-center">
-            <div class="glass-card inline-block p-10 rounded-3xl fade-in-section">
+            <div class="glass-card inline-block p-6 sm:p-10 rounded-3xl fade-in-section mx-4 sm:mx-0">
                 <h3 class="text-3xl md:text-4xl font-bold text-gradient-admin mb-4">
                     Pronto para começar?
                 </h3>
@@ -32,7 +32,7 @@
                     Acesse o sistema agora e revolucione a gestão dos seus eventos.
                 </p>
                 <a href="/login" 
-                   class="inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-[var(--color-brand-admin-500)] to-[var(--color-brand-admin-600)] hover:from-[var(--color-brand-admin-600)] hover:to-[var(--color-brand-admin-700)] text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-105">
+                   class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-4 md:px-10 md:py-5 bg-gradient-to-r from-[var(--color-brand-admin-500)] to-[var(--color-brand-admin-600)] hover:from-[var(--color-brand-admin-600)] hover:to-[var(--color-brand-admin-700)] text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-105">
                     <x-heroicon-o-arrow-right-on-rectangle class="w-6 h-6" />
                     Entrar Agora
                 </a>
