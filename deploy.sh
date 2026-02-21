@@ -1,46 +1,67 @@
 #!/bin/bash
 
-# Guest List Pro - Script de Deploy Automatizado
-# Executar este script no servidor VPS (Produção)
+# Guest List Pro - Script de Deploy Automatizado (v2)
+# Autor: Agent Gemini
+# Data: 2026-02-21
 
-set -e # Parar execução em caso de erro
+set -e # Aborta o script em caso de erro
 
-echo "🚀 Iniciando deploy do Guest List Pro..."
+# Configurações - AJUSTE ESTAS VARIÁVEIS CONFORME SUA VPS
+WEB_USER="www-data" # Usuário do servidor web (Nginx/Apache)
+REPO_DIR="/var/www/guest-list-pro" # Caminho da aplicação na VPS
 
-# 1. Atualizar Repositório
-echo "📥 Baixando atualizações do Git..."
+echo "🚀 Iniciando Deploy Estratégico: Guest List Pro"
+
+# 1. Manutenção
+echo "🚧 Ativando modo de manutenção..."
+php artisan down || true
+
+# 2. Atualização do Código
+echo "📥 Sincronizando com o repositório remoto (main)..."
 git pull origin main
 
-# 2. Instalar Dependências PHP
-echo "📦 Instalando dependências do Composer (Otimizado)..."
+# 3. Dependências de Backend (Composer)
+echo "📦 Instalando dependências PHP (Otimizado para Produção)..."
 composer install --no-dev --optimize-autoloader --no-interaction
 
-# 3. Instalar Dependências Frontend e Build
-echo "🎨 Buildando assets do Frontend (Vite)..."
+# 4. Dependências de Frontend (NPM)
+echo "🎨 Compilando assets do Frontend (Vite)..."
 npm ci
 npm run build
 
-# 4. Migrações de Banco de Dados
-echo "🗄️ Executando migrações de banco de dados..."
+# 5. Banco de Dados
+echo "🗄️ Executando migrações críticas..."
 php artisan migrate --force
 
-# 5. Otimizações do Laravel
-echo "⚡ Otimizando caches do Laravel..."
+# 6. Links Simbólicos
+echo "🔗 Criando link simbólico para storage..."
+php artisan storage:link --force
+
+# 7. Otimização de Performance (Cache de Produção)
+echo "⚡ Gerando caches de alta performance..."
 php artisan config:cache
-php artisan event:cache
 php artisan route:cache
 php artisan view:cache
+php artisan event:cache
+php artisan filament:cache-components # Específico para Filament v4
 
-# 6. Permissões (Ajustar conforme usuário do servidor web e proprietário)
-# Assumindo www-data como usuário web comum. Ajuste se necessário.
-echo "🔒 Ajustando permissões de diretórios..."
-sudo chown -R $USER:www-data storage bootstrap/cache
-sudo chmod -R 775 storage bootstrap/cache
+# 8. Gestão de Permissões (Crítico para VPS)
+echo "🔒 Aplicando permissões de segurança..."
+sudo chown -R $USER:$WEB_USER .
+sudo find . -type f -exec chmod 644 {} \;
+sudo find . -type d -exec chmod 755 {} \;
 
-# 7. Reiniciar Filas (Se usar Supervisor)
-if [ -f /etc/supervisor/conf.d/guest-list-pro-worker.conf ]; then
-    echo "🔄 Reiniciando filas..."
-    php artisan queue:restart
+# Permissões especiais para pastas de escrita
+sudo chgrp -R $WEB_USER storage bootstrap/cache
+sudo chmod -R ug+rwx storage bootstrap/cache
+
+# 9. Reiniciar Processos
+if php artisan queue:restart > /dev/null 2>&1; then
+    echo "🔄 Trabalhadores de fila reiniciados."
 fi
 
-echo "✅ Deploy concluído com sucesso! 🚀"
+# 10. Finalização
+echo "🚀 Desativando modo de manutenção..."
+php artisan up
+
+echo "✅ DEPLOY FINALIZADO COM SUCESSO! Aplicação pronta para uso."
