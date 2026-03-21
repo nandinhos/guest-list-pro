@@ -1307,8 +1307,144 @@
 }
 
 /* ========================================
-   LANDING PAGE UTILITIES
-   ======================================== */
+    BLUE THEME - DEALDECK LANDING
+    ======================================== */
+
+/* Blue Theme Landing Background */
+.blue-landing-bg {
+    background: var(--blue-theme-bg);
+}
+
+/* Blue Theme Glass Card */
+.blue-glass-card {
+    background: var(--blue-theme-card);
+    border-radius: var(--blue-radius-lg);
+    box-shadow: var(--blue-shadow-card);
+    border: 1px solid var(--blue-theme-border);
+}
+
+.blue-glass-card-lg {
+    background: var(--blue-theme-card);
+    border-radius: var(--blue-radius-xl);
+    box-shadow: var(--blue-shadow-card-md);
+    border: 1px solid var(--blue-theme-border);
+}
+
+/* Blue Theme Button */
+.blue-btn-primary {
+    background: var(--blue-theme-accent);
+    color: white;
+    font-weight: 600;
+    padding: 1rem 2rem;
+    border-radius: var(--blue-radius-md);
+    box-shadow: var(--blue-shadow-blue);
+    transition: all 0.3s ease;
+}
+
+.blue-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(77,94,246,0.35);
+}
+
+/* Blue Theme Button Secondary */
+.blue-btn-secondary {
+    background: var(--blue-theme-card);
+    color: var(--blue-theme-dark);
+    font-weight: 600;
+    padding: 1rem 2rem;
+    border-radius: var(--blue-radius-md);
+    border: 1px solid var(--blue-theme-border);
+    box-shadow: var(--blue-shadow-card);
+    transition: all 0.3s ease;
+}
+
+.blue-btn-secondary:hover {
+    background: var(--blue-theme-sidebar);
+    transform: translateY(-2px);
+}
+
+/* Blue Theme Text Gradient */
+.blue-text-gradient {
+    background: linear-gradient(135deg, #4D5EF6 0%, #6366F1 50%, #8B5CF6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Blue Theme Section */
+.blue-section {
+    background: var(--blue-theme-bg);
+    color: var(--blue-theme-dark);
+}
+
+/* Blue Theme Feature Card */
+.blue-feature-card {
+    background: var(--blue-theme-card);
+    border-radius: var(--blue-radius-lg);
+    padding: 2rem;
+    box-shadow: var(--blue-shadow-card);
+    border: 1px solid var(--blue-theme-border);
+    transition: all 0.3s ease;
+}
+
+.blue-feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--blue-shadow-card-md);
+}
+
+/* Blue Theme Feature Icon */
+.blue-feature-icon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--blue-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Blue Theme Glow Orbs */
+.blue-glow-orb-1 {
+    background: rgba(77, 94, 246, 0.15);
+    border-radius: 50%;
+    filter: blur(80px);
+}
+
+.blue-glow-orb-2 {
+    background: rgba(74, 222, 128, 0.1);
+    border-radius: 50%;
+    filter: blur(60px);
+}
+
+.blue-glow-orb-3 {
+    background: rgba(248, 113, 113, 0.1);
+    border-radius: 50%;
+    filter: blur(60px);
+}
+
+/* Blue Theme Typography */
+.blue-text-primary {
+    color: var(--blue-theme-dark);
+}
+
+.blue-text-secondary {
+    color: var(--blue-theme-muted);
+}
+
+.blue-text-accent {
+    color: var(--blue-theme-accent);
+}
+
+/* Blue Theme Navigation */
+.blue-nav {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--blue-theme-border);
+}
+
+/* ========================================
+    LANDING PAGE UTILITIES
+    ======================================== */
 
 /* Landing Background */
 .landing-bg {

@@ -1,20 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-      class="h-full antialiased"
-      x-data="{
-          darkMode: localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage)),
-          currentSection: 'hero'
-      }"
-      x-init="$watch('darkMode', val => localStorage.setItem('theme', val ? 'dark' : 'light')); 
-          const observer = new IntersectionObserver((entries) => {
-              entries.forEach(entry => {
-                  if (entry.isIntersecting) {
-                      currentSection = entry.target.id;
-                  }
-              });
-          }, { threshold: 0.3 });
-          document.querySelectorAll('section').forEach(section => observer.observe(section));"
-      :class="{ 'dark': darkMode }">
+      class="h-full antialiased">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,11 +31,11 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(99, 102, 241, 0.3);
+            background: rgba(77, 94, 246, 0.3);
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(99, 102, 241, 0.5);
+            background: rgba(77, 94, 246, 0.5);
         }
         
         /* Animation Classes */
@@ -78,53 +64,30 @@
         .animate-float {
             animation: float 6s ease-in-out infinite;
         }
-        
-        /* Gradient Text */
-        .text-gradient-admin {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        /* Glow Effect */
-        .glow-pulse {
-            animation: glow-pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes glow-pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.6); }
-        }
     </style>
 </head>
-<body class="h-full landing-bg text-surface-primary font-[Outfit] overflow-x-hidden">
+<body class="h-full blue-landing-bg text-surface-primary font-[Outfit] overflow-x-hidden">
 
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 glass-subtle border-b border-[var(--glass-border)]">
+    <nav class="fixed top-0 left-0 right-0 z-50 blue-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
             <div class="flex items-center gap-2 sm:gap-3">
-                <div class="p-1.5 sm:p-2 glass-subtle rounded-xl">
-                    <x-heroicon-s-ticket class="w-5 h-5 sm:w-6 sm:h-6 text-[var(--color-brand-admin-600)] dark:text-[var(--color-brand-admin-400)]" />
+                <div class="p-1.5 sm:p-2 bg-[var(--blue-theme-accent)]/10 rounded-xl">
+                    <x-heroicon-s-ticket class="w-5 h-5 sm:w-6 sm:h-6 text-[var(--blue-theme-accent)]" />
                 </div>
-                <span class="font-bold text-base sm:text-lg tracking-tight">Guest List Pro</span>
+                <span class="font-bold text-base sm:text-lg tracking-tight text-[var(--blue-theme-dark)]">Guest List Pro</span>
             </div>
             
             <div class="hidden md:flex items-center gap-6">
-                <a href="#features" class="text-sm font-medium hover:text-[var(--color-brand-admin-500)] transition-colors">Funcionalidades</a>
-                <a href="#benefits" class="text-sm font-medium hover:text-[var(--color-brand-admin-500)] transition-colors">Benefícios</a>
-                <a href="#paineis" class="text-sm font-medium hover:text-[var(--color-brand-admin-500)] transition-colors">Painéis</a>
+                <a href="#features" class="text-sm font-medium text-[var(--blue-theme-muted)] hover:text-[var(--blue-theme-accent)] transition-colors">Funcionalidades</a>
+                <a href="#benefits" class="text-sm font-medium text-[var(--blue-theme-muted)] hover:text-[var(--blue-theme-accent)] transition-colors">Benefícios</a>
+                <a href="#paineis" class="text-sm font-medium text-[var(--blue-theme-muted)] hover:text-[var(--blue-theme-accent)] transition-colors">Painéis</a>
             </div>
             
             <div class="flex items-center gap-2 sm:gap-3">
-                <a href="/login" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-[var(--color-brand-admin-500)] hover:bg-[var(--color-brand-admin-600)] text-white text-sm font-medium rounded-lg transition-colors">
+                <a href="/login" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-[var(--blue-theme-accent)] hover:bg-[var(--blue-theme-accent)]/90 text-white text-sm font-medium rounded-lg transition-colors">
                     Entrar
                 </a>
-                <button @click="darkMode = !darkMode"
-                        class="p-1.5 sm:p-2 rounded-lg glass-subtle hover:bg-[var(--glass-bg)] transition-colors">
-                    <x-heroicon-o-sun x-show="!darkMode" class="w-4 h-4 sm:w-5 sm:h-5" />
-                    <x-heroicon-o-moon x-show="darkMode" class="w-4 h-4 sm:w-5 sm:h-5" />
-                </button>
             </div>
         </div>
     </nav>
@@ -135,9 +98,9 @@
     </main>
 
     <!-- Footer -->
-    <footer class="py-8 border-t border-[var(--glass-border)] mt-20">
+    <footer class="py-8 border-t border-[var(--blue-theme-border)] mt-20">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <p class="text-surface-muted text-sm">
+            <p class="text-sm text-[var(--blue-theme-muted)]">
                 &copy; {{ date('Y') }} Guest List Pro. Todos os direitos reservados.
             </p>
         </div>

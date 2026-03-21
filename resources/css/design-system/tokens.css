@@ -228,8 +228,32 @@
 }
 
 /* ========================================
-   CSS CUSTOM PROPERTIES (Non-Tailwind)
-   ======================================== */
+    BLUE THEME - DEALDECK STYLE
+    ======================================== */
+
+:root {
+    /* DealDeck Blue Theme */
+    --blue-theme-bg: #E9ECF1;
+    --blue-theme-accent: #4D5EF6;
+    --blue-theme-green: #4ADE80;
+    --blue-theme-red: #F87171;
+    --blue-theme-card: #FFFFFF;
+    --blue-theme-sidebar: #F8F9FB;
+    --blue-theme-muted: #718096;
+    --blue-theme-dark: #1A202C;
+    --blue-theme-border: #E2E8F0;
+    
+    /* Blue Theme Radius */
+    --blue-radius-sm: 0.5rem;
+    --blue-radius-md: 0.75rem;
+    --blue-radius-lg: 1rem;
+    --blue-radius-xl: 1.5rem;
+    
+    /* Blue Theme Shadows */
+    --blue-shadow-card: 0 4px 20px rgba(0,0,0,0.05);
+    --blue-shadow-card-md: 0 8px 32px rgba(0,0,0,0.08);
+    --blue-shadow-blue: 0 4px 20px rgba(77,94,246,0.25);
+}
 
 :root {
    /* Glassmorphism - Light Mode */

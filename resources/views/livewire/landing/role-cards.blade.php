@@ -1,9 +1,9 @@
 <div id="paineis" class="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-16 scroll-mt-20">
     <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-5xl font-extrabold text-gradient-admin mb-6">
+        <h2 class="text-3xl md:text-5xl font-extrabold blue-text-gradient mb-6">
             Ecossistema de Gestão
         </h2>
-        <p class="text-surface-secondary max-w-2xl mx-auto text-lg">
+        <p class="text-[var(--blue-theme-muted)] max-w-2xl mx-auto text-lg">
             Quatro painéis especializados projetados para máxima eficiência operacional.
         </p>
     </div>
