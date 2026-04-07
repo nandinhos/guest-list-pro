@@ -45,8 +45,6 @@ class BilheteriaPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Bilheteria/Widgets'), for: 'App\Filament\Bilheteria\Widgets')
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
