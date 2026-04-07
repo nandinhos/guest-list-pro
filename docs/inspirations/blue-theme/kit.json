@@ -1,0 +1,22 @@
+{
+  "slug": "dash-blue",
+  "name": "DealDeck",
+  "version": "1.0.0",
+  "description": "Dashboard analytics limpo com accent azul elétrico, cards suaves e tipografia Inter. Ideal para SaaS de vendas e CRM.",
+  "status": "stable",
+  "previewImage": "/kit-previews/dash-blue/screen.png",
+  "colors": [
+    { "name": "Background", "hex": "#E9ECF1", "role": "bg" },
+    { "name": "Accent Blue", "hex": "#4D5EF6", "role": "primary" },
+    { "name": "Success", "hex": "#4ADE80", "role": "success" },
+    { "name": "Danger", "hex": "#F87171", "role": "danger" },
+    { "name": "Card", "hex": "#FFFFFF", "role": "card" },
+    { "name": "Sidebar", "hex": "#F8F9FB", "role": "sidebar" },
+    { "name": "Muted", "hex": "#718096", "role": "muted" },
+    { "name": "Dark", "hex": "#1A202C", "role": "text" }
+  ],
+  "fonts": { "heading": "Inter", "body": "Inter" },
+  "componentCount": 24,
+  "tags": ["analytics", "saas", "clean", "blue", "crm"],
+  "showcaseView": "kits.dash-blue.showcase"
+}

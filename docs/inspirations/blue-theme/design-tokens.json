@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "kit": "dash-blue",
+    "name": "DealDeck",
+    "description": "Design tokens for the DealDeck analytics dashboard kit"
+  },
+  "colors": {
+    "bg":      { "$value": "#E9ECF1", "comment": "Page background" },
+    "blue":    { "$value": "#4D5EF6", "comment": "Primary accent" },
+    "green":   { "$value": "#4ADE80", "comment": "Success / positive trend" },
+    "red":     { "$value": "#F87171", "comment": "Danger / negative trend" },
+    "card":    { "$value": "#FFFFFF", "comment": "Card background" },
+    "sidebar": { "$value": "#F8F9FB", "comment": "Sidebar background" },
+    "muted":   { "$value": "#718096", "comment": "Muted text" },
+    "dark":    { "$value": "#1A202C", "comment": "Primary text" },
+    "border":  { "$value": "#E2E8F0", "comment": "Borders and dividers" }
+  },
+  "typography": {
+    "fontFamily": { "$value": "Inter, sans-serif" },
+    "weights": { "regular": 400, "medium": 500, "semibold": 600, "bold": 700, "black": 800 }
+  },
+  "radius": {
+    "sm":  { "$value": "0.5rem" },
+    "md":  { "$value": "0.75rem" },
+    "lg":  { "$value": "1rem" },
+    "xl":  { "$value": "1.5rem" }
+  },
+  "shadows": {
+    "card":    { "$value": "0 4px 20px rgba(0,0,0,0.05)" },
+    "card-md": { "$value": "0 8px 32px rgba(0,0,0,0.08)" },
+    "blue":    { "$value": "0 4px 20px rgba(77,94,246,0.25)" }
+  }
+}

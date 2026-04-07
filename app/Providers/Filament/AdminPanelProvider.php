@@ -46,6 +46,8 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
+                // AdminOverview::class,
+                // PendingApprovalsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
