@@ -193,6 +193,23 @@ class ApprovalRequestService
         User $admin,
         ?string $notes = null
     ): ApprovalRequest {
+        $this->validateCanApprove($request, $admin);
+        $this->validateNoExistingGuestInSameSector($request);
+
+        return DB::transaction(function () use ($request, $admin, $notes) {
+            $guest = $this->createGuestFromRequest($request);
+            $this->updateRequestAsApproved($request, $admin, $notes, $guest);
+            $this->notifyRequester($request);
+
+            return $request->fresh();
+        });
+    }
+
+    /**
+     * Valida se a solicitação pode ser aprovada pelo admin.
+     */
+    private function validateCanApprove(ApprovalRequest $request, User $admin): void
+    {
         if (! $request->canBeReviewed()) {
             throw new \RuntimeException('Esta solicitação não pode ser aprovada.');
         }
@@ -204,64 +221,82 @@ class ApprovalRequestService
         if ($request->requester_id === $admin->id) {
             throw new \RuntimeException('Você não pode aprovar sua própria solicitação.');
         }
+    }
 
-        // Verificar se já existe um Guest com o mesmo documento no evento
+    /**
+     * Valida que não existe Guest com mesmo documento no evento/setor.
+     */
+    private function validateNoExistingGuestInSameSector(ApprovalRequest $request): void
+    {
         $existingGuest = $request->findExistingGuest();
-        if ($existingGuest) {
-            $promoterName = $existingGuest->promoter?->name ?? 'Desconhecido';
-            $sectorName = $existingGuest->sector?->name ?? 'Desconhecido';
 
-            // Se mesmo setor, não pode aprovar
-            if ($existingGuest->sector_id === $request->sector_id) {
-                throw new \RuntimeException(sprintf(
-                    'Convidado já existe na lista de "%s" (Setor: %s). Rejeite esta solicitação.',
-                    $promoterName,
-                    $sectorName
-                ));
-            }
+        if (! $existingGuest) {
+            return;
+        }
 
-            // Se setor diferente, também lançar erro (será tratado por action específica)
+        $promoterName = $existingGuest->promoter?->name ?? 'Desconhecido';
+        $sectorName = $existingGuest->sector?->name ?? 'Desconhecido';
+
+        if ($existingGuest->sector_id === $request->sector_id) {
             throw new \RuntimeException(sprintf(
-                'Convidado já existe na lista de "%s" no Setor "%s". Use a ação "Aprovar em Outro Setor" para atualizar o setor.',
+                'Convidado já existe na lista de "%s" (Setor: %s). Rejeite esta solicitação.',
                 $promoterName,
                 $sectorName
             ));
         }
 
-        return DB::transaction(function () use ($request, $admin, $notes) {
-            // Criar o Guest
-            // O solicitante sempre é o "responsável" pelo convidado
-            $guest = Guest::create([
-                'event_id' => $request->event_id,
-                'sector_id' => $request->sector_id,
-                'promoter_id' => $request->requester_id,
-                'name' => $request->guest_name,
-                'document' => $request->guest_document,
-                'document_type' => $request->guest_document_type,
-                'email' => $request->guest_email,
-                'is_checked_in' => $request->type === RequestType::EMERGENCY_CHECKIN,
-                'checked_in_at' => $request->type === RequestType::EMERGENCY_CHECKIN ? now() : null,
-                'checked_in_by' => $request->type === RequestType::EMERGENCY_CHECKIN
-                    ? $request->requester_id
-                    : null,
-            ]);
+        throw new \RuntimeException(sprintf(
+            'Convidado já existe na lista de "%s" no Setor "%s". Use a ação "Aprovar em Outro Setor" para atualizar o setor.',
+            $promoterName,
+            $sectorName
+        ));
+    }
 
-            // Atualizar a solicitação
-            $request->update([
-                'status' => RequestStatus::APPROVED,
-                'reviewer_id' => $admin->id,
-                'reviewed_at' => now(),
-                'reviewer_notes' => $notes,
-                'guest_id' => $guest->id,
-            ]);
+    /**
+     * Cria um Guest a partir de uma ApprovalRequest.
+     */
+    private function createGuestFromRequest(ApprovalRequest $request): Guest
+    {
+        return Guest::create([
+            'event_id' => $request->event_id,
+            'sector_id' => $request->sector_id,
+            'promoter_id' => $request->requester_id,
+            'name' => $request->guest_name,
+            'document' => $request->guest_document,
+            'document_type' => $request->guest_document_type,
+            'email' => $request->guest_email,
+            'is_checked_in' => $request->type === RequestType::EMERGENCY_CHECKIN,
+            'checked_in_at' => $request->type === RequestType::EMERGENCY_CHECKIN ? now() : null,
+            'checked_in_by' => $request->type === RequestType::EMERGENCY_CHECKIN
+                ? $request->requester_id
+                : null,
+        ]);
+    }
 
-            $request = $request->fresh();
+    /**
+     * Atualiza a solicitação como aprovada.
+     */
+    private function updateRequestAsApproved(
+        ApprovalRequest $request,
+        User $admin,
+        ?string $notes,
+        Guest $guest
+    ): void {
+        $request->update([
+            'status' => RequestStatus::APPROVED,
+            'reviewer_id' => $admin->id,
+            'reviewed_at' => now(),
+            'reviewer_notes' => $notes,
+            'guest_id' => $guest->id,
+        ]);
+    }
 
-            // Notificar o solicitante
-            $request->requester->notify(new ApprovalRequestStatusNotification($request));
-
-            return $request;
-        });
+    /**
+     * Notifica o solicitante sobre a aprovação.
+     */
+    private function notifyRequester(ApprovalRequest $request): void
+    {
+        $request->requester->notify(new ApprovalRequestStatusNotification($request));
     }
 
     /**

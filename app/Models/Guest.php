@@ -23,7 +23,6 @@ class Guest extends Model
         'event_id',
         'sector_id',
         'promoter_id',
-        'qr_token',
         'name',
         'document',
         'document_type',

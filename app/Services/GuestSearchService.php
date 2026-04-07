@@ -165,24 +165,148 @@ class GuestSearchService
         return Guest::query()
             ->where('event_id', $eventId)
             ->whereNotNull('name_normalized')
-            ->selectRaw('name_normalized, COUNT(*) as count')
-            ->groupBy('name_normalized')
-            ->havingRaw('COUNT(*) > 1')
-            ->orderByDesc('count')
+            ->with(['sector', 'promoter'])
             ->get()
-            ->map(function ($item) use ($eventId) {
-                $guests = Guest::query()
-                    ->where('event_id', $eventId)
-                    ->where('name_normalized', $item->name_normalized)
-                    ->with(['sector'])
-                    ->get();
-
+            ->groupBy('name_normalized')
+            ->filter(fn ($group) => $group->count() > 1)
+            ->map(function ($group) {
                 return [
-                    'name_normalized' => $item->name_normalized,
-                    'count' => $item->count,
-                    'guests' => $guests,
+                    'name_normalized' => $group->first()->name_normalized,
+                    'count' => $group->count(),
+                    'guests' => $group,
                 ];
-            });
+            })
+            ->sortByDesc('count')
+            ->values();
+    }
+
+    /**
+     * Verifica duplicatas para múltiplos guests em uma única query.
+     * Otimizado para importações massivas.
+     *
+     * @param  array<int, array{name: string, document?: string}>  $guests
+     * @return array<int, array{index: int, type: string, level: string, message: string, existing: Guest|null}>
+     */
+    public function checkForDuplicatesBatch(int $eventId, array $guests): array
+    {
+        if (empty($guests)) {
+            return [];
+        }
+
+        $results = [];
+        $documents = [];
+        $names = [];
+
+        foreach ($guests as $index => $guest) {
+            if (! empty($guest['document'])) {
+                $normalizedDoc = $this->normalizeDocument($guest['document']);
+                $documents[$normalizedDoc] = $index;
+            }
+            if (! empty($guest['name'])) {
+                $normalizedName = $this->normalize($guest['name']);
+                $names[$normalizedName] = $index;
+            }
+        }
+
+        if (! empty($documents)) {
+            $existingByDocument = Guest::where('event_id', $eventId)
+                ->whereIn('document_normalized', array_keys($documents))
+                ->with(['promoter', 'sector'])
+                ->get();
+
+            foreach ($existingByDocument as $guest) {
+                $normalizedDoc = $guest->document_normalized;
+                if (isset($documents[$normalizedDoc])) {
+                    $results[$documents[$normalizedDoc]] = [
+                        'index' => $documents[$normalizedDoc],
+                        'type' => 'document',
+                        'level' => 'error',
+                        'message' => sprintf(
+                            'Documento já cadastrado na lista de %s (Setor: %s)',
+                            $guest->promoter?->name ?? 'N/A',
+                            $guest->sector?->name ?? 'N/A'
+                        ),
+                        'existing' => $guest,
+                    ];
+                }
+            }
+
+            $pendingByDocument = \App\Models\ApprovalRequest::pending()
+                ->where('event_id', $eventId)
+                ->whereIn('guest_document', array_column($guests, 'document'))
+                ->with('requester')
+                ->get();
+
+            foreach ($pendingByDocument as $request) {
+                foreach ($guests as $index => $guest) {
+                    if ($guest['document'] === $request->guest_document && ! isset($results[$index])) {
+                        $results[$index] = [
+                            'index' => $index,
+                            'type' => 'document',
+                            'level' => 'error',
+                            'message' => sprintf(
+                                'Documento já possui solicitação pendente por %s',
+                                $request->requester?->name ?? 'N/A'
+                            ),
+                            'existing' => $request,
+                        ];
+                    }
+                }
+            }
+        }
+
+        if (! empty($names)) {
+            $existingByName = Guest::where('event_id', $eventId)
+                ->whereIn('name_normalized', array_keys($names))
+                ->with(['promoter', 'sector'])
+                ->get();
+
+            foreach ($existingByName as $guest) {
+                $normalizedName = $guest->name_normalized;
+                if (isset($names[$normalizedName]) && ! isset($results[$names[$normalizedName]])) {
+                    $results[$names[$normalizedName]] = [
+                        'index' => $names[$normalizedName],
+                        'type' => 'name',
+                        'level' => 'warning',
+                        'message' => sprintf(
+                            'Possível homônimo: "%s" já existe na lista de %s (Setor: %s) com documento %s',
+                            $guest->name,
+                            $guest->promoter?->name ?? 'N/A',
+                            $guest->sector?->name ?? 'N/A',
+                            $guest->document ?? 'sem documento'
+                        ),
+                        'existing' => $guest,
+                    ];
+                }
+            }
+
+            $pendingByName = \App\Models\ApprovalRequest::pending()
+                ->where('event_id', $eventId)
+                ->whereIn('guest_name', array_column($guests, 'name'))
+                ->with('requester')
+                ->get();
+
+            foreach ($pendingByName as $request) {
+                foreach ($guests as $index => $guest) {
+                    if ($guest['name'] === $request->guest_name && ! isset($results[$index])) {
+                        $results[$index] = [
+                            'index' => $index,
+                            'type' => 'name',
+                            'level' => 'warning',
+                            'message' => sprintf(
+                                'Possível homônimo: Já existe solicitação pendente para "%s" por %s com documento %s',
+                                $request->guest_name,
+                                $request->requester?->name ?? 'N/A',
+                                $request->guest_document ?? 'sem documento'
+                            ),
+                            'existing' => $request,
+                        ];
+                    }
+                }
+            }
+        }
+
+        return array_values($results);
     }
 
     /**

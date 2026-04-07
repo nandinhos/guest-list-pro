@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Event;
 use App\Models\Guest;
-use App\Models\PromoterPermission;
 use App\Models\Sector;
 use App\Models\User;
 use Carbon\Carbon;
@@ -70,7 +69,7 @@ class GuestService
         }
 
         // 2. Buscar a permissão específica
-        $permission = PromoterPermission::where('user_id', $user->id)
+        $permission = \App\Models\EventAssignment::where('user_id', $user->id)
             ->where('event_id', $eventId)
             ->where('sector_id', $sectorId)
             ->first();
@@ -124,7 +123,7 @@ class GuestService
     {
         return Event::whereIn('id', function ($query) use ($user) {
             $query->select('event_id')
-                ->from('promoter_permissions')
+                ->from('event_assignments')
                 ->where('user_id', $user->id);
         })->get();
     }
@@ -136,7 +135,7 @@ class GuestService
     {
         return Sector::whereIn('id', function ($query) use ($user, $eventId) {
             $query->select('sector_id')
-                ->from('promoter_permissions')
+                ->from('event_assignments')
                 ->where('user_id', $user->id)
                 ->where('event_id', $eventId);
         })->get();
