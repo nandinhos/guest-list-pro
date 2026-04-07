@@ -4,13 +4,8 @@ namespace App\Providers\Filament;
 
 use App\Filament\Widgets\AdminOverview;
 use App\Filament\Widgets\ApprovalMetricsChart;
-use App\Filament\Widgets\CheckinFlowChart;
 use App\Filament\Widgets\GuestsVsTicketsChart;
 use App\Filament\Widgets\PendingApprovalsWidget;
-use App\Filament\Widgets\PromoterPerformanceChart;
-use App\Filament\Widgets\RequestsTimelineChart;
-use App\Filament\Widgets\SectorOccupancyChart;
-use App\Filament\Widgets\SuspiciousCheckins;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -55,11 +50,11 @@ class AdminPanelProvider extends PanelProvider
                 PendingApprovalsWidget::class,
                 ApprovalMetricsChart::class,
                 GuestsVsTicketsChart::class,
-                CheckinFlowChart::class,
-                PromoterPerformanceChart::class,
-                SectorOccupancyChart::class,
-                SuspiciousCheckins::class,
-                RequestsTimelineChart::class,
+                // CheckinFlowChart::class,          // ERRO - investigar
+                // PromoterPerformanceChart::class,  // ERRO - investigar
+                // SectorOccupancyChart::class,      // ERRO - investigar
+                // SuspiciousCheckins::class,        // ERRO - investigar
+                // RequestsTimelineChart::class,    // ERRO - investigar
             ])
             ->middleware([
                 EncryptCookies::class,
