@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Widgets\AdminOverview;
+use App\Filament\Widgets\ApprovalMetricsChart;
 use App\Filament\Widgets\PendingApprovalsWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -46,6 +47,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 AdminOverview::class,
                 PendingApprovalsWidget::class,
+                ApprovalMetricsChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,
