@@ -20,6 +20,7 @@ class CheckinFlowChart extends ChartWidget
         $query = Guest::where('is_checked_in', true)
             ->whereDate('checked_in_at', now()->today());
 
+        // Admin vê dados globais se não tiver evento selecionado
         if ($eventId) {
             $query->where('event_id', $eventId);
         }
