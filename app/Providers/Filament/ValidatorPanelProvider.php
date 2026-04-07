@@ -12,8 +12,6 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -37,7 +35,7 @@ class ValidatorPanelProvider extends PanelProvider
             ])
             ->font('Inter')
             ->defaultThemeMode(\Filament\Enums\ThemeMode::Dark)
-            ->viteTheme('resources/css/filament/validator/theme.css')
+            // ->viteTheme('resources/css/filament/validator/theme.css')
             ->discoverResources(in: app_path('Filament/Validator/Resources'), for: 'App\Filament\Validator\Resources')
             ->discoverPages(in: app_path('Filament/Validator/Pages'), for: 'App\Filament\Validator\Pages')
             ->pages([
@@ -46,8 +44,6 @@ class ValidatorPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Validator/Widgets'), for: 'App\Filament\Validator\Widgets')
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
