@@ -45,7 +45,7 @@ class AdminPanelProvider extends PanelProvider
             // ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AdminOverview::class,
-                // PendingApprovalsWidget::class,
+                PendingApprovalsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
