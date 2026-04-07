@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Widgets\AdminOverview;
 use App\Filament\Widgets\ApprovalMetricsChart;
+use App\Filament\Widgets\CheckinFlowChart;
 use App\Filament\Widgets\GuestsVsTicketsChart;
 use App\Filament\Widgets\PendingApprovalsWidget;
 use Filament\Http\Middleware\Authenticate;
@@ -50,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
                 PendingApprovalsWidget::class,
                 ApprovalMetricsChart::class,
                 GuestsVsTicketsChart::class,
+                CheckinFlowChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,
