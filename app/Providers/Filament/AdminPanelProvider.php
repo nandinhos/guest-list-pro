@@ -6,6 +6,7 @@ use App\Filament\Widgets\AdminOverview;
 use App\Filament\Widgets\ApprovalMetricsChart;
 use App\Filament\Widgets\GuestsVsTicketsChart;
 use App\Filament\Widgets\PendingApprovalsWidget;
+use App\Filament\Widgets\SuspiciousCheckins;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -52,6 +53,7 @@ class AdminPanelProvider extends PanelProvider
                 GuestsVsTicketsChart::class,
                 // CheckinFlowChart::class,
                 // PromoterPerformanceChart::class,
+                SuspiciousCheckins::class,
             ])
             ->middleware([
                 EncryptCookies::class,
