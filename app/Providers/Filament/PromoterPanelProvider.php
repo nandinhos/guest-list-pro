@@ -35,14 +35,14 @@ class PromoterPanelProvider extends PanelProvider
             ])
             ->font('Inter')
             ->defaultThemeMode(\Filament\Enums\ThemeMode::Dark)
-            // ->viteTheme('resources/css/filament/promoter/theme.css')
+            ->viteTheme('resources/css/filament/promoter/theme.css')
             ->discoverResources(in: app_path('Filament/Promoter/Resources'), for: 'App\Filament\Promoter\Resources')
             ->discoverPages(in: app_path('Filament/Promoter/Pages'), for: 'App\Filament\Promoter\Pages')
             ->pages([
                 SelectEvent::class,
                 Dashboard::class,
             ])
-            //             // ->discoverWidgets(in: app_path('Filament/Promoter/Widgets'), for: 'App\Filament\Promoter\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Promoter/Widgets'), for: 'App\Filament\Promoter\Widgets')
             ->widgets([
             ])
             ->middleware([
