@@ -22,7 +22,14 @@ class AdminOverview extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        // Admin não tem selected_event_id na sessão - mostrar métricas globais
+        $eventId = session('selected_event_id');
+
+        // Se tiver evento selecionado, mostrar métricas do evento
+        if ($eventId) {
+            return $this->getEventStats($eventId);
+        }
+
+        // Se não tiver evento, mostrar métricas gerais
         return $this->getGlobalStats();
     }
 
