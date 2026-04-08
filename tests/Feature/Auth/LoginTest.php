@@ -26,7 +26,7 @@ class LoginTest extends TestCase
 
         $response = $this->actingAs($user)->get('/login');
 
-        $response->assertRedirect('/admin');
+        $response->assertRedirect('/');
     }
 
     public function test_admin_is_redirected_to_admin_panel(): void

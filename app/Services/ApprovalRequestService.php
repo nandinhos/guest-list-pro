@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\DB;
 
 class ApprovalRequestService
 {
+    public function __construct(
+        private GuestSearchService $searchService,
+        private DuplicateGuestValidator $duplicateValidator,
+    ) {}
+
     /**
      * Verifica se existem duplicidades para um convidado no evento.
      *
@@ -26,97 +31,7 @@ class ApprovalRequestService
         ?string $document = null,
         ?int $excludeGuestId = null
     ): ?array {
-        $searchService = app(GuestSearchService::class);
-        $normalizedName = $searchService->normalize($name);
-
-        // 1. Verificar Guest existente por DOCUMENTO (bloqueante)
-        if ($document) {
-            $normalizedDoc = $searchService->normalizeDocument($document);
-            $existingByDocument = Guest::where('event_id', $eventId)
-                ->when($excludeGuestId, fn ($q) => $q->where('id', '!=', $excludeGuestId))
-                ->where(fn ($q) => $q->where('document', $document)->orWhere('document_normalized', $normalizedDoc))
-                ->with(['promoter', 'sector'])
-                ->first();
-
-            if ($existingByDocument) {
-                return [
-                    'type' => 'document',
-                    'level' => 'error',
-                    'message' => sprintf(
-                        'Documento "%s" já cadastrado na lista de %s (Setor: %s)',
-                        $document,
-                        $existingByDocument->promoter?->name ?? 'N/A',
-                        $existingByDocument->sector?->name ?? 'N/A'
-                    ),
-                    'existing' => $existingByDocument,
-                ];
-            }
-
-            // 1.1 Verificar Solicitação pendente com mesmo documento
-            $pendingByDocument = ApprovalRequest::pending()
-                ->forEvent($eventId)
-                ->where('guest_document', $document)
-                ->with('requester')
-                ->first();
-
-            if ($pendingByDocument) {
-                return [
-                    'type' => 'document',
-                    'level' => 'error',
-                    'message' => sprintf(
-                        'Documento "%s" já possui solicitação pendente por %s',
-                        $document,
-                        $pendingByDocument->requester?->name ?? 'N/A'
-                    ),
-                    'existing' => $pendingByDocument,
-                ];
-            }
-        }
-
-        // 2. Verificar Guest existente por NOME (apenas alerta)
-        $existingByName = Guest::where('event_id', $eventId)
-            ->when($excludeGuestId, fn ($q) => $q->where('id', '!=', $excludeGuestId))
-            ->where('name_normalized', $normalizedName)
-            ->with(['promoter', 'sector'])
-            ->first();
-
-        if ($existingByName) {
-            return [
-                'type' => 'name',
-                'level' => 'warning',
-                'message' => sprintf(
-                    'Possível homônimo: "%s" já existe na lista de %s (Setor: %s) com documento %s',
-                    $existingByName->name,
-                    $existingByName->promoter?->name ?? 'N/A',
-                    $existingByName->sector?->name ?? 'N/A',
-                    $existingByName->document ?? 'sem documento'
-                ),
-                'existing' => $existingByName,
-            ];
-        }
-
-        // 2.1 Verificar Solicitação pendente com mesmo nome
-        $pendingByName = ApprovalRequest::pending()
-            ->forEvent($eventId)
-            ->whereRaw('LOWER(guest_name) = ?', [strtolower($name)])
-            ->with('requester')
-            ->first();
-
-        if ($pendingByName) {
-            return [
-                'type' => 'name',
-                'level' => 'warning',
-                'message' => sprintf(
-                    'Possível homônimo: Já existe solicitação pendente para "%s" por %s com documento %s',
-                    $pendingByName->guest_name,
-                    $pendingByName->requester?->name ?? 'N/A',
-                    $pendingByName->guest_document ?? 'sem documento'
-                ),
-                'existing' => $pendingByName,
-            ];
-        }
-
-        return null; // Sem duplicidade
+        return $this->duplicateValidator->check($eventId, $name, $document, $excludeGuestId);
     }
 
     /**

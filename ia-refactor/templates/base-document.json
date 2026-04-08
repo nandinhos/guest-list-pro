@@ -1,0 +1,16 @@
+{
+  "id": "uuid",
+  "type": "domain|flow|analysis|risk|decision",
+  "name": "",
+  "source": {
+    "files": [],
+    "routes": [],
+    "components": []
+  },
+  "summary": "",
+  "details": {},
+  "relationships": [],
+  "risks": [],
+  "created_at": "",
+  "updated_at": ""
+}
