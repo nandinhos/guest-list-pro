@@ -41,4 +41,12 @@ class Sector extends Model
     {
         return $this->hasMany(PromoterPermission::class);
     }
+
+    /**
+     * Vendas de ingressos deste setor.
+     */
+    public function ticketSales(): HasMany
+    {
+        return $this->hasMany(TicketSale::class);
+    }
 }

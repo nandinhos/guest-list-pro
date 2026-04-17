@@ -19,6 +19,8 @@ class EventAssignment extends Model
         'event_id',
         'sector_id',
         'guest_limit',
+        'plus_one_enabled',
+        'plus_one_limit',
         'start_time',
         'end_time',
     ];
@@ -28,6 +30,8 @@ class EventAssignment extends Model
         return [
             'start_time' => 'datetime',
             'end_time' => 'datetime',
+            'plus_one_enabled' => 'boolean',
+            'plus_one_limit' => 'integer',
         ];
     }
 

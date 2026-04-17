@@ -1,8 +1,9 @@
 # SPEC-001: Correções de Code Review — guest-list-pro
 
-**Versão:** 1.0  
+**Versão:** 1.1  
 **Data:** 2026-04-07  
-**Status:** Aprovada  
+**Data Atualização:** 2026-04-17  
+**Status:** Implementada ✅  
 **Prioridade:** Alta  
 **Responsável:** Backend Team  
 
@@ -291,12 +292,25 @@ Remover `qr_token` do array `$fillable` em Guest.php, pois o token deve ser gera
 
 ### Definition of Done (DoD)
 
-- [ ] Todas as 8 tarefas concluídas
-- [ ] `php artisan test` passando 100%
-- [ ] `composer pint --test` sem erros de style
-- [ ] `php artisan optimize:clear` executado
-- [ ] PR criado e code review aprovado
-- [ ] Merge para branch main
+- [x] Todas as 8 tarefas concluídas
+- [x] `php artisan test` passando 100%
+- [x] `composer pint --test` sem erros de style
+- [x] `php artisan optimize:clear` executado
+- [x] PR criado e code review aprovado
+- [x] Merge para branch main
+
+### Checklist de Implementação
+
+| Tarefa | Implementada | Data |
+|--------|-------------|------|
+| T-001: GuestPolicy | ✅ | 07/04/2026 |
+| T-002: ApprovalRequestPolicy | ✅ | 07/04/2026 |
+| T-003: TrustProxies | ✅ | 07/04/2026 |
+| T-004: Batch Duplicate Check | ✅ | 07/04/2026 |
+| T-005: Fix N+1 | ✅ | 07/04/2026 |
+| T-006: GuestServiceTest | ✅ | 07/04/2026 |
+| T-007: Refatorar approve() | ✅ | 07/04/2026 |
+| T-008: Remover qr_token | ✅ | 07/04/2026 |
 
 ### Definition of Ready (DoR)
 

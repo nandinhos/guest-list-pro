@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -23,6 +24,7 @@ class Guest extends Model
         'event_id',
         'sector_id',
         'promoter_id',
+        'parent_id',
         'name',
         'document',
         'document_type',
@@ -71,6 +73,31 @@ class Guest extends Model
     public function validator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'checked_in_by');
+    }
+
+    /**
+     * Convidado pai (para +1).
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Guest::class, 'parent_id');
+    }
+
+    /**
+     * Convidados +1 (acompanhantes).
+     */
+    public function companions(): BelongsToMany
+    {
+        return $this->belongsToMany(Guest::class, 'parent_id')
+            ->withTimestamps();
+    }
+
+    /**
+     * Verifica se é um convidado +1.
+     */
+    public function isCompanion(): bool
+    {
+        return $this->parent_id !== null;
     }
 
     /**

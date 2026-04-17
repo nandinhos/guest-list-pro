@@ -6,7 +6,9 @@ use App\Models\Event;
 use App\Models\Guest;
 use App\Models\Sector;
 use App\Models\User;
-use Carbon\Carbon;
+use App\Rules\CheckinRule;
+use App\Rules\GuestLimitRule;
+use App\Rules\TimeWindowRule;
 
 class GuestService
 {
@@ -15,33 +17,18 @@ class GuestService
      */
     public function checkinByQrToken(string $qrToken, User $validator): array
     {
-        // 1. Verificar permissão do usuário que realiza a ação
-        if (! in_array($validator->role, [\App\Enums\UserRole::ADMIN, \App\Enums\UserRole::VALIDATOR])) {
+        $validation = CheckinRule::validateCheckin($validator, $qrToken);
+
+        if (! $validation['allowed']) {
             return [
                 'success' => false,
-                'message' => 'Você não tem permissão para realizar check-ins.',
+                'message' => $validation['message'],
             ];
         }
 
-        // 2. Buscar convidado pelo token
-        $guest = Guest::where('qr_token', $qrToken)->first();
+        /** @var Guest $guest */
+        $guest = $validation['guest'];
 
-        if (! $guest) {
-            return [
-                'success' => false,
-                'message' => 'Convidado não encontrado.',
-            ];
-        }
-
-        // 3. Verificar se já realizou check-in
-        if ($guest->is_checked_in) {
-            return [
-                'success' => false,
-                'message' => 'Este convidado já realizou o check-in.',
-            ];
-        }
-
-        // 4. Realizar check-in
         $guest->update([
             'is_checked_in' => true,
             'checked_in_at' => now(),
@@ -60,59 +47,21 @@ class GuestService
      */
     public function canRegisterGuest(User $user, int $eventId, int $sectorId): array
     {
-        // 1. Verificar se o usuário é um promoter ativo
-        if ($user->role !== \App\Enums\UserRole::PROMOTER || ! $user->is_active) {
-            return [
-                'allowed' => false,
-                'message' => 'Usuário sem permissão de promoter ou inativo.',
-            ];
+        $limitCheck = GuestLimitRule::validateLimit($user, $eventId, $sectorId);
+
+        if (! $limitCheck['allowed']) {
+            return $limitCheck;
         }
 
-        // 2. Buscar a permissão específica
-        $permission = \App\Models\EventAssignment::where('user_id', $user->id)
-            ->where('event_id', $eventId)
-            ->where('sector_id', $sectorId)
-            ->first();
+        $timeCheck = TimeWindowRule::validateTimeWindow($user->id, $eventId, $sectorId);
 
-        if (! $permission) {
-            return [
-                'allowed' => false,
-                'message' => 'Você não tem permissão para cadastrar convidados neste setor/evento.',
-            ];
-        }
-
-        // 3. Verificar janela de horário (se definida)
-        $now = now();
-        if ($permission->start_time && $now->format('H:i:s') < $permission->start_time) {
-            return [
-                'allowed' => false,
-                'message' => 'O cadastro para este setor só abre às '.Carbon::parse($permission->start_time)->format('H:i').'.',
-            ];
-        }
-
-        if ($permission->end_time && $now->format('H:i:s') > $permission->end_time) {
-            return [
-                'allowed' => false,
-                'message' => 'O cadastro para este setor encerrou às '.Carbon::parse($permission->end_time)->format('H:i').'.',
-            ];
-        }
-
-        // 4. Verificar limite de convidados
-        $count = Guest::where('promoter_id', $user->id)
-            ->where('event_id', $eventId)
-            ->where('sector_id', $sectorId)
-            ->count();
-
-        if ($count >= $permission->guest_limit) {
-            return [
-                'allowed' => false,
-                'message' => "Limite de convidados atingido ({$permission->guest_limit}).",
-            ];
+        if (! $timeCheck['allowed']) {
+            return $timeCheck;
         }
 
         return [
             'allowed' => true,
-            'remaining' => $permission->guest_limit - $count,
+            'remaining' => $limitCheck['remaining'] ?? 0,
         ];
     }
 

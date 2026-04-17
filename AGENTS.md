@@ -69,6 +69,29 @@ Ou manualmente:
 
 ---
 
+## Context Mode (Obrigatório)
+
+Este projeto usa context-mode para proteção do context window.
+
+### Think in Code — MANDATÓRIO
+Ao analisar dados: **escreva código** via `ctx_execute` e `console.log()` apenas o resultado.
+
+### Comandos BLOCKED
+- `curl`/`wget` — use `ctx_fetch_and_index`
+- HTTP inline — use `ctx_execute` com fetch
+
+### Hierarquia de Ferramentas
+1. `ctx_batch_execute` — múltiplos comandos + busca em uma chamada
+2. `ctx_search(queries)` — consulta conteúdo indexado
+3. `ctx_execute` / `ctx_execute_file` — execução em sandbox
+4. `ctx_fetch_and_index` + `ctx_search` — web
+
+### Comandos Úteis
+- `ctx stats` — estatísticas de economia de tokens
+- `ctx doctor` — diagnóstico da instalação
+
+---
+
 **Após ler este arquivo, execute `/activate-agents` ou leia `.aidev/QUICKSTART.md`**
 
 *Atualizado em 2026-02-18*

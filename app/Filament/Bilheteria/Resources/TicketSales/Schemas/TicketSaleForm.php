@@ -6,11 +6,13 @@ use App\Enums\DocumentType;
 use App\Enums\PaymentMethod;
 use App\Models\Event;
 use App\Models\Sector;
+use App\Models\TicketType;
 use App\Rules\DocumentValidation;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
@@ -58,26 +60,49 @@ class TicketSaleForm
                     ]),
 
                 Section::make('Dados do Ingresso')
-                    ->description('Informações do ingresso a ser emitido')
-                    ->columns(2)
+                    ->description('Selecione o tipo de ingresso')
                     ->schema([
-                        Select::make('sector_id')
-                            ->label('Setor')
-                            ->options(fn () => Sector::query()
-                                ->where('event_id', session('selected_event_id'))
-                                ->pluck('name', 'id'))
-                            ->required()
-                            ->searchable()
-                            ->preload(),
+                        Grid::make(['default' => 1, 'md' => 2])->schema([
+                            Select::make('ticket_type_id')
+                                ->label('Tipo de Ingresso')
+                                ->options(fn () => TicketType::query()
+                                    ->where('event_id', session('selected_event_id'))
+                                    ->where('is_active', true)
+                                    ->pluck('name', 'id'))
+                                ->live()
+                                ->searchable()
+                                ->preload()
+                                ->required(),
+
+                            Select::make('sector_id')
+                                ->label('Setor')
+                                ->options(fn () => Sector::query()
+                                    ->where('event_id', session('selected_event_id'))
+                                    ->pluck('name', 'id'))
+                                ->searchable()
+                                ->preload()
+                                ->required(),
+                        ]),
 
                         Placeholder::make('ticket_price')
-                            ->label('Valor do Ingresso')
-                            ->content(function () {
-                                $event = Event::find(session('selected_event_id'));
+                            ->label('Valor')
+                            ->content(function (Get $get) {
+                                $ticketType = TicketType::find($get('ticket_type_id'));
 
-                                return $event?->ticket_price
-                                    ? 'R$ '.number_format($event->ticket_price, 2, ',', '.')
-                                    : 'Não definido';
+                                if (! $ticketType) {
+                                    $event = Event::find(session('selected_event_id'));
+
+                                    return $event?->ticket_price
+                                        ? 'R$ '.number_format($event->ticket_price, 2, ',', '.')
+                                        : 'Selecione um tipo';
+                                }
+
+                                return 'R$ '.number_format($ticketType->price, 2, ',', '.');
+                            })
+                            ->hint(function (Get $get) {
+                                $ticketType = TicketType::find($get('ticket_type_id'));
+
+                                return $ticketType?->description;
                             }),
                     ]),
 
@@ -96,7 +121,15 @@ class TicketSaleForm
                             ->numeric()
                             ->prefix('R$')
                             ->required()
-                            ->default(fn () => Event::find(session('selected_event_id'))?->ticket_price),
+                            ->default(function (Get $get) {
+                                $ticketType = TicketType::find($get('ticket_type_id'));
+
+                                if ($ticketType) {
+                                    return $ticketType->price;
+                                }
+
+                                return Event::find(session('selected_event_id'))?->ticket_price;
+                            }),
                     ]),
 
                 Section::make('Observações')
