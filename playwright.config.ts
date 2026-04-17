@@ -6,10 +6,15 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 0,
   workers: 1,
-  reporter: 'line',
+  reporter: [
+    ['html', { outputFolder: 'docs/report_e2e/results/html' }],
+    ['json', { outputFile: 'docs/report_e2e/results/test-results.json' }],
+  ],
   use: {
-    baseURL: 'http://localhost:8200',
+    baseURL: 'http://localhost:8888',
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
   projects: [
     {
@@ -18,8 +23,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'vendor/bin/sail up -d && vendor/bin/sail php artisan serve --port=8200',
-    url: 'http://localhost:8200',
+    command: 'vendor/bin/sail up -d',
+    url: 'http://localhost:8888',
     reuseExistingServer: true,
     stdout: 'ignore',
     stderr: 'ignore',
