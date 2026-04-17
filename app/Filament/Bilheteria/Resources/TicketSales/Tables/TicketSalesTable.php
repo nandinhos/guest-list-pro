@@ -15,7 +15,7 @@ class TicketSalesTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn ($query) => $query->with(['guest', 'seller', 'event']))
+            ->modifyQueryUsing(fn ($query) => $query->with(['guest', 'seller', 'event', 'ticketType']))
             ->columns([
                 \Filament\Tables\Columns\ViewColumn::make('mobile_card')
                     ->label('VENDA')
@@ -29,21 +29,27 @@ class TicketSalesTable
 
                 TextColumn::make('buyer_name')
                     ->label('Comprador')
-                    ->description(fn ($record) => $record->buyer_document ?? '-')
+                    ->description(fn ($record) => $record->buyer_document_masked ?? '-')
+                    ->formatStateUsing(fn ($record) => $record->buyer_name_masked ?? $record->buyer_name)
                     ->searchable(['buyer_name', 'buyer_document'])
                     ->sortable()
                     ->visibleFrom('md'),
 
-                TextColumn::make('guest.name')
-                    ->label('Convidado Gerado')
-                    ->description(fn ($record) => $record->guest?->sector?->name)
-                    ->searchable()
+                TextColumn::make('ticketType.name')
+                    ->label('Tipo')
+                    ->badge()
+                    ->color('info')
+                    ->sortable()
+                    ->visibleFrom('md'),
+
+                TextColumn::make('sector.name')
+                    ->label('Setor')
                     ->sortable()
                     ->visibleFrom('md'),
 
                 TextColumn::make('value')
                     ->label('Valor')
-                    ->money('BRL')
+                    ->formatStateUsing(fn ($record) => format_money($record->value))
                     ->sortable()
                     ->visibleFrom('md'),
 
@@ -61,11 +67,24 @@ class TicketSalesTable
 
                 TextColumn::make('created_at')
                     ->label('Data/Hora')
-                    ->dateTime('d/m/Y H:i')
+                    ->formatStateUsing(fn ($record) => format_datetime($record->created_at))
                     ->sortable()
                     ->visibleFrom('md'),
             ])
             ->filters([
+                SelectFilter::make('ticket_type')
+                    ->label('Tipo de Ingresso')
+                    ->options(fn () => \App\Models\TicketType::query()
+                        ->where('event_id', session('selected_event_id'))
+                        ->where('is_active', true)
+                        ->pluck('name', 'id'))
+                    ->query(fn ($query, array $data) => $query->when(
+                        $data['value'],
+                        fn ($q, $typeId) => $q->where('ticket_type_id', $typeId)
+                    ))
+                    ->searchable()
+                    ->preload(),
+
                 SelectFilter::make('sector')
                     ->label('Setor')
                     ->options(fn () => \App\Models\Sector::query()
@@ -73,7 +92,7 @@ class TicketSalesTable
                         ->pluck('name', 'id'))
                     ->query(fn ($query, array $data) => $query->when(
                         $data['value'],
-                        fn ($q, $sectorId) => $q->whereHas('guest', fn ($g) => $g->where('sector_id', $sectorId))
+                        fn ($q, $sectorId) => $q->where('sector_id', $sectorId)
                     ))
                     ->searchable()
                     ->preload(),
@@ -84,7 +103,7 @@ class TicketSalesTable
 
                 SelectFilter::make('sold_by')
                     ->label('Vendedor')
-                    ->relationship('seller', 'name')
+                    ->relationship('seller', 'name', fn ($query) => $query->where('role', \App\Enums\UserRole::BILHETERIA))
                     ->searchable()
                     ->preload(),
 
@@ -102,7 +121,7 @@ class TicketSalesTable
                         ->when($data['until'], fn ($q, $dateTime) => $q->where('created_at', '<=', $dateTime))),
             ])
             ->filtersLayout(FiltersLayout::AboveContent)
-            ->filtersFormColumns(4)
+            ->filtersFormColumns(5)
             ->defaultSort('created_at', 'desc');
     }
 }
