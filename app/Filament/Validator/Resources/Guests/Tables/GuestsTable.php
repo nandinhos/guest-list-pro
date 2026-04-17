@@ -22,7 +22,6 @@ class GuestsTable
         return $table
             ->modifyQueryUsing(fn ($query) => $query->with(['sector', 'validator']))
             ->columns([
-
                 // Mobile Layout (Custom Card View)
                 \Filament\Tables\Columns\ViewColumn::make('mobile_card')
                     ->view('filament.validator.resources.guests.tables.columns.mobile_card')
@@ -62,7 +61,7 @@ class GuestsTable
                 TextColumn::make('checked_in_at')
                     ->label('CHECK-IN')
                     ->default('Pendente')
-                    ->formatStateUsing(fn ($state) => $state instanceof \DateTimeInterface ? $state->format('d/m/Y \à\s H:i') : $state)
+                    ->formatStateUsing(fn ($state) => format_datetime($state))
                     ->color(fn ($record) => $record->is_checked_in ? 'success' : 'warning')
                     ->icon(fn ($record) => $record->is_checked_in ? 'heroicon-m-check-circle' : 'heroicon-m-clock')
                     ->iconColor(fn ($record) => $record->is_checked_in ? 'success' : 'warning')
@@ -127,8 +126,9 @@ class GuestsTable
                 'Mostrando %d convidado(s) do evento selecionado',
                 $livewire->getFilteredTableQuery()->count()
             ))
-            ->recordActions([
-                \Filament\Actions\Action::make('checkIn')
+            ->recordUrl(null)
+            ->actions([
+                \Filament\Tables\Actions\Action::make('checkIn')
                     ->label('ENTRADA')
                     ->icon('heroicon-m-check-circle')
                     ->color('success')
@@ -136,59 +136,18 @@ class GuestsTable
                     ->size('sm')
                     ->extraAttributes(['class' => 'hidden md:inline-flex'])
                     ->hidden(fn ($record) => $record?->is_checked_in ?? false)
-                    ->requiresConfirmation()
-                    ->modalHeading('Confirmar Check-in')
-                    ->modalDescription(fn ($record) => "Confirmar entrada de {$record->name}?")
-                    ->modalSubmitActionLabel('Confirmar Entrada')
-                    ->action(function ($record) {
-                        try {
-                            \Illuminate\Support\Facades\DB::transaction(function () use ($record) {
-                                $guest = \App\Models\Guest::lockForUpdate()->find($record->id);
-                                if ($guest->is_checked_in) {
-                                    throw new \Exception('checkin_exists');
-                                }
-                                $guest->update([
-                                    'is_checked_in' => true,
-                                    'checked_in_at' => now(),
-                                    'checked_in_by' => auth()->id(),
-                                ]);
-                            });
-                            \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
-                                'event_id' => $record->event_id,
-                                'validator_id' => auth()->id(),
-                                'guest_id' => $record->id,
-                                'result' => 'success',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ]);
-                            \Filament\Notifications\Notification::make()
-                                ->title('Check-in realizado!')
-                                ->body("Entrada confirmada para {$record->name}")
-                                ->success()
-                                ->send();
-                        } catch (\Exception $e) {
-                            $isAlreadyCheckedIn = $e->getMessage() === 'checkin_exists';
-                            \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
-                                'event_id' => $record->event_id,
-                                'validator_id' => auth()->id(),
-                                'guest_id' => $record->id,
-                                'result' => $isAlreadyCheckedIn ? 'already_checked_in' : 'error',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ]);
-                            \Filament\Notifications\Notification::make()
-                                ->title($isAlreadyCheckedIn ? 'Check-in já realizado!' : 'Erro no check-in')
-                                ->body($isAlreadyCheckedIn ? 'Este convidado já entrou.' : $e->getMessage())
-                                ->danger()
-                                ->send();
-                        }
-                    }),
+                    ->slideOver()
+                    ->form([
+                        \Filament\Forms\Components\Placeholder::make('guest_name')
+                            ->label('Convidado')
+                            ->content(fn ($record) => $record->name),
+                        \Filament\Forms\Components\Placeholder::make('sector')
+                            ->label('Setor')
+                            ->content(fn ($record) => $record->sector?->name ?? '-'),
+                    ])
+                    ->action(fn ($record) => static::doCheckIn($record)),
 
-                \Filament\Actions\Action::make('undoCheckIn')
+                \Filament\Tables\Actions\Action::make('undoCheckIn')
                     ->label('Estornar')
                     ->icon('heroicon-m-arrow-path')
                     ->color('warning')
@@ -197,46 +156,13 @@ class GuestsTable
                     ->size('sm')
                     ->extraAttributes(['class' => 'hidden md:inline-flex'])
                     ->visible(fn ($record) => ($record?->is_checked_in ?? false))
-                    ->requiresConfirmation()
-                    ->modalHeading('Estornar Check-in')
-                    ->modalDescription(fn ($record) => "Estornar entrada de {$record->name}? Esta ação marcará o convidado como 'Pendente' novamente.")
-                    ->modalSubmitActionLabel('Confirmar Estorno')
-                    ->action(function ($record) {
-                        try {
-                            \Illuminate\Support\Facades\DB::transaction(function () use ($record) {
-                                $guest = \App\Models\Guest::lockForUpdate()->find($record->id);
-                                if (! $guest->is_checked_in) {
-                                    throw new \Exception('guest_not_checked_in');
-                                }
-                                $guest->update([
-                                    'is_checked_in' => false,
-                                    'checked_in_at' => null,
-                                    'checked_in_by' => null,
-                                ]);
-                            });
-                            \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
-                                'event_id' => $record->event_id,
-                                'validator_id' => auth()->id(),
-                                'guest_id' => $record->id,
-                                'result' => 'estorno',
-                                'ip_address' => request()->ip(),
-                                'user_agent' => request()->userAgent(),
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ]);
-                            \Filament\Notifications\Notification::make()
-                                ->title('Check-in estornado')
-                                ->body("{$record->name} voltou para a fila de entrada.")
-                                ->warning()
-                                ->send();
-                        } catch (\Exception $e) {
-                            \Filament\Notifications\Notification::make()
-                                ->title('Erro ao estornar')
-                                ->body($e->getMessage())
-                                ->danger()
-                                ->send();
-                        }
-                    }),
+                    ->slideOver()
+                    ->form([
+                        \Filament\Forms\Components\Placeholder::make('guest_name')
+                            ->label('Convidado')
+                            ->content(fn ($record) => $record->name),
+                    ])
+                    ->action(fn ($record) => static::doUndoCheckIn($record)),
             ])
             ->striped()
             ->defaultSort('name')
@@ -345,5 +271,97 @@ class GuestsTable
                         }
                     }),
             ]);
+    }
+
+    public static function doCheckIn($record): void
+    {
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($record) {
+                $guest = \App\Models\Guest::lockForUpdate()->find($record->id);
+                if ($guest->is_checked_in) {
+                    throw new \Exception('checkin_exists');
+                }
+                $guest->update([
+                    'is_checked_in' => true,
+                    'checked_in_at' => now(),
+                    'checked_in_by' => auth()->id(),
+                ]);
+            });
+
+            \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
+                'event_id' => $record->event_id,
+                'validator_id' => auth()->id(),
+                'guest_id' => $record->id,
+                'result' => 'success',
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            Notification::make()
+                ->title('Check-in realizado!')
+                ->body("Entrada confirmada para {$record->name}")
+                ->success()
+                ->send();
+        } catch (\Exception $e) {
+            $isAlreadyCheckedIn = $e->getMessage() === 'checkin_exists';
+            \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
+                'event_id' => $record->event_id,
+                'validator_id' => auth()->id(),
+                'guest_id' => $record->id,
+                'result' => $isAlreadyCheckedIn ? 'already_checked_in' : 'error',
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            Notification::make()
+                ->title($isAlreadyCheckedIn ? 'Check-in já realizado!' : 'Erro no check-in')
+                ->body($isAlreadyCheckedIn ? 'Este convidado já entrou.' : $e->getMessage())
+                ->danger()
+                ->send();
+        }
+    }
+
+    public static function doUndoCheckIn($record): void
+    {
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($record) {
+                $guest = \App\Models\Guest::lockForUpdate()->find($record->id);
+                if (! $guest->is_checked_in) {
+                    throw new \Exception('guest_not_checked_in');
+                }
+                $guest->update([
+                    'is_checked_in' => false,
+                    'checked_in_at' => null,
+                    'checked_in_by' => null,
+                ]);
+            });
+
+            \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
+                'event_id' => $record->event_id,
+                'validator_id' => auth()->id(),
+                'guest_id' => $record->id,
+                'result' => 'estorno',
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            Notification::make()
+                ->title('Check-in estornado')
+                ->body("{$record->name} voltou para a fila de entrada.")
+                ->warning()
+                ->send();
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Erro ao estornar')
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 }
