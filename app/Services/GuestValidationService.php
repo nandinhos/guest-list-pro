@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\EventAssignment;
 use App\Models\Guest;
 use App\Models\User;
-use App\Rules\CheckinRule;
 use App\Rules\GuestLimitRule;
 use App\Rules\PlusOneRule;
 use App\Rules\TimeWindowRule;
@@ -46,11 +45,6 @@ class GuestValidationService
     public function canAddCompanion(): array
     {
         return PlusOneRule::validatePlusOne($this->user, $this->eventId, $this->sectorId);
-    }
-
-    public function canCheckin(string $qrToken): array
-    {
-        return CheckinRule::validateCheckin($this->user, $qrToken);
     }
 
     public function getPermission(): ?EventAssignment

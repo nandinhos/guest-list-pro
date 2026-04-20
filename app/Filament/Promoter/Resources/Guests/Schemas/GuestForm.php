@@ -42,12 +42,32 @@ class GuestForm
 
                             Select::make('sector_id')
                                 ->label('Setor')
-                                ->options(fn (Get $get) => \App\Models\Sector::whereIn('id',
-                                    \App\Models\PromoterPermission::where('user_id', $userId)
-                                        ->where('event_id', $get('event_id'))
-                                        ->pluck('sector_id')
-                                )->pluck('name', 'id')
-                                )
+                                ->options(function (Get $get) use ($userId) {
+                                    $eventId = $get('event_id');
+                                    if (! $eventId) {
+                                        return [];
+                                    }
+
+                                    $permission = \App\Models\PromoterPermission::where('user_id', $userId)
+                                        ->where('event_id', $eventId)
+                                        ->first();
+
+                                    if (! $permission) {
+                                        return [];
+                                    }
+
+                                    if (is_null($permission->sector_id)) {
+                                        return \App\Models\Sector::where('event_id', $eventId)
+                                            ->pluck('name', 'id')
+                                            ->toArray();
+                                    }
+
+                                    return \App\Models\Sector::whereIn('id',
+                                        \App\Models\PromoterPermission::where('user_id', $userId)
+                                            ->where('event_id', $eventId)
+                                            ->pluck('sector_id')
+                                    )->pluck('name', 'id')->toArray();
+                                })
                                 ->searchable()
                                 ->preload()
                                 ->required()

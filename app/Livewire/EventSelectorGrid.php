@@ -18,7 +18,7 @@ class EventSelectorGrid extends Component
 
     /**
      * Retorna os eventos atribuidos ao usuario atual.
-     * Para o painel Bilheteria, filtra apenas eventos com bilheteria habilitada.
+     * A lógica de filtragem por painel é feita via EventAssignment (source of truth).
      *
      * @return Collection<int, \App\Models\Event>
      */
@@ -33,11 +33,6 @@ class EventSelectorGrid extends Component
         }
 
         $events = $user->getAssignedEvents();
-
-        // Filtrar eventos com bilheteria habilitada para o painel Bilheteria
-        if ($this->panelId === 'bilheteria') {
-            $events = $events->filter(fn ($event) => $event->bilheteria_enabled);
-        }
 
         return $events;
     }

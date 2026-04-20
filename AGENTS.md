@@ -1,13 +1,13 @@
-# 🚀 BOOTSTRAP — Leia este arquivo primeiro
+# BOOTSTRAP - Leia este arquivo primeiro
 
-> **Para qualquer LLM ou assistente de IA:**
-> Este arquivo contém instruções para ativar o modo agente deste projeto.
+> Para qualquer LLM ou assistente de IA:
+> Este arquivo contém instruções para ativar o modo agente deste Projeto.
 
 ---
 
-## ⚠️ IMPORTANTE: Docker/Sail
+## IMPORTANTE: Docker/Sail
 
-> Este projeto roda em containers Docker. **SEMPRE** use `vendor/bin/sail` para comandos!
+> Este projeto roda em containers Docker. SEMPRE use `vendor/bin/sail` para comandos!
 
 ```bash
 # Errado
@@ -21,9 +21,9 @@ Adicione ao seu shell: `alias sail='vendor/bin/sail'`
 
 ---
 
-## Ativação Rápida
+## Ativacao Rapida
 
-Execute o workflow de ativação:
+Execute o workflow de ativacao:
 
 ```
 /activate-agents
@@ -31,67 +31,67 @@ Execute o workflow de ativação:
 
 Ou manualmente:
 
-1. Leia `.aidev/QUICKSTART.md`
-2. Leia `.aidev/agents/orchestrator.md`
-3. Confirme ativação ao desenvolvedor
+1. Leia `.devorq/rules/project.md`
+2. Leia `.devorq/state/lessons-learned/_INDEX.md`
+3. Confirme ativacao ao desenvolvedor
 
 ---
 
 ## Sobre este Projeto
 
-| 属性 | Valor |
-|------|-------|
+| Atributo | Valor |
+|----------|-------|
 | **Nome** | guest-list-pro |
 | **Stack** | filament (Laravel 12 + Filament v4 + Livewire v3) |
-| **Objetivo** | Sistema de Gestão de Convidados com controle de duplicidade, aprovações e bilheteria |
+| **Objetivo** | Sistema de Gestao de Convidados com controle de duplicidade, aprovacoes e bilheteria |
 | **Docker** | Use sempre `vendor/bin/sail` |
+| **Orquestrador** | DEVORQ v2.1 |
 
 ---
 
 ## Arquivos Importantes
 
-| Arquivo | Propósito |
+| Arquivo | Proposito |
 |---------|-----------|
-| `.aidev/QUICKSTART.md` | Quickstart do modo agente |
-| `.aidev/agents/orchestrator.md` | Orquestrador principal |
-| `.aidev/context/PROJECT.md` | Contexto do projeto |
-| `docs/CONSOLIDATED/INDEX.md` | Índice de documentação |
+| `.devorq/rules/project.md` | Regras e gates do projeto |
+| `.devorq/state/lessons-learned/_INDEX.md` | Indice de licoes aprendidas |
+| `docs/CONSOLIDATED/INDEX.md` | Indice de documentacao |
 | `docs/CONSOLIDATED/stack/` | Regras de stack |
 
 ---
 
-## Princípio Fundamental
+## Principio Fundamental
 
-> **Documentação vem antes do código.**
+> Documentacao vem antes do codigo.
 > Sempre valide antes de implementar.
-> Sempre use **sail** para comandos!
-> Sempre use TDD (RED → GREEN → REFACTOR).
+> Sempre use sail para comandos!
+> Sempre use TDD (RED -> GREEN -> REFACTOR).
 
 ---
 
-## Context Mode (Obrigatório)
+## Context Mode (Obrigatorio)
 
-Este projeto usa context-mode para proteção do context window.
+Este projeto usa context-mode para protecao do context window.
 
-### Think in Code — MANDATÓRIO
-Ao analisar dados: **escreva código** via `ctx_execute` e `console.log()` apenas o resultado.
+### Think in Code - MANDATORIO
+Ao analisar dados: escreva codigo via `ctx_execute` e `console.log()` apenas o resultado.
 
 ### Comandos BLOCKED
-- `curl`/`wget` — use `ctx_fetch_and_index`
-- HTTP inline — use `ctx_execute` com fetch
+- `curl`/`wget` - use `ctx_fetch_and_index`
+- HTTP inline - use `ctx_execute` com fetch
 
 ### Hierarquia de Ferramentas
-1. `ctx_batch_execute` — múltiplos comandos + busca em uma chamada
-2. `ctx_search(queries)` — consulta conteúdo indexado
-3. `ctx_execute` / `ctx_execute_file` — execução em sandbox
-4. `ctx_fetch_and_index` + `ctx_search` — web
+1. `ctx_batch_execute` - multiplos comandos + busca em uma chamada
+2. `ctx_search(queries)` - consulta conteudo indexado
+3. `ctx_execute` / `ctx_execute_file` - execucao em sandbox
+4. `ctx_fetch_and_index` + `ctx_search` - web
 
-### Comandos Úteis
-- `ctx stats` — estatísticas de economia de tokens
-- `ctx doctor` — diagnóstico da instalação
+### Comandos Uteis
+- `ctx stats` - estatisticas de economia de tokens
+- `ctx doctor` - diagnostico da instalacao
 
 ---
 
-**Após ler este arquivo, execute `/activate-agents` ou leia `.aidev/QUICKSTART.md`**
+Apos ler este arquivo, execute `/activate-agents` ou leia `.devorq/rules/project.md`
 
-*Atualizado em 2026-02-18*
+*Atualizado em 2026-04-20*

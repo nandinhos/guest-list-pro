@@ -15,8 +15,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ImportGuests extends Page
 {
-    use WithFileUploads;
     use \App\Traits\HasGuestImport;
+    use WithFileUploads;
 
     protected static string $resource = GuestResource::class;
 
@@ -61,11 +61,13 @@ class ImportGuests extends Page
     {
         if (! $this->file) {
             Notification::make()->title('Selecione um arquivo')->danger()->send();
+
             return;
         }
 
         if (! $this->sectorId) {
             Notification::make()->title('Selecione um setor')->danger()->send();
+
             return;
         }
 
@@ -104,11 +106,13 @@ class ImportGuests extends Page
     {
         if (empty($this->textContent)) {
             Notification::make()->title('Cole o texto com os convidados')->danger()->send();
+
             return;
         }
 
         if (! $this->textSectorId) {
             Notification::make()->title('Selecione um setor')->danger()->send();
+
             return;
         }
 
@@ -124,7 +128,7 @@ class ImportGuests extends Page
             $documentNormalized = preg_replace('/\D/', '', $line['document']);
 
             // Verifica duplicidade
-            if (!empty($documentNormalized)) {
+            if (! empty($documentNormalized)) {
                 $exists = Guest::query()
                     ->where('event_id', $eventId)
                     ->where('document_normalized', $documentNormalized)
@@ -132,6 +136,7 @@ class ImportGuests extends Page
 
                 if ($exists) {
                     $skipped++;
+
                     continue;
                 }
             }

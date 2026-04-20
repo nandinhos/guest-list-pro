@@ -1,0 +1,132 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - img [ref=e6]
+        - generic [ref=e8]: Guest List Pro
+      - generic [ref=e9]:
+        - link "Funcionalidades" [ref=e10] [cursor=pointer]:
+          - /url: "#features"
+        - link "Benefícios" [ref=e11] [cursor=pointer]:
+          - /url: "#benefits"
+        - link "Painéis" [ref=e12] [cursor=pointer]:
+          - /url: "#paineis"
+      - link "Entrar" [ref=e14] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - img [ref=e21]
+          - heading "Transforme a Gestão do seu Evento com GuestListPro" [level=1] [ref=e23]:
+            - text: Transforme a Gestão do seu Evento
+            - text: com GuestListPro
+          - paragraph [ref=e24]: A plataforma ultra-moderna que redefine o controle de acesso. Do check-in instantâneo via QR Code à inteligência de dados em tempo real, garantimos o sucesso da sua produção com segurança e sofisticação.
+          - generic [ref=e25]:
+            - link "Começar Agora" [ref=e26] [cursor=pointer]:
+              - /url: /login
+              - img [ref=e27]
+              - text: Começar Agora
+            - link "Explorar Soluções" [ref=e29] [cursor=pointer]:
+              - /url: "#features"
+              - img [ref=e30]
+              - text: Explorar Soluções
+        - img "GuestListPro Dashboard" [ref=e39]
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - heading "Funcionalidades de Próxima Geração" [level=2] [ref=e42]
+          - paragraph [ref=e43]: Tecnologia de ponta para automatizar cada detalhe da sua produção.
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - img [ref=e47]
+            - heading "Gestão de Listas Elite" [level=3] [ref=e49]
+            - paragraph [ref=e50]: Importação inteligente, segmentação avançada e controle total de permissões hierárquicas.
+          - generic [ref=e51]:
+            - img [ref=e53]
+            - heading "Check-in Ultra Rápido" [level=3] [ref=e56]
+            - paragraph [ref=e57]: Validação de QR Code em milissegundos com detecção de fraudes e sincronização offline.
+          - generic [ref=e58]:
+            - img [ref=e60]
+            - heading "Bilheteria Inteligente" [level=3] [ref=e62]
+            - paragraph [ref=e63]: Venda PDV, gestão de "Convite Amigo" e fechamento de caixa automatizado com auditoria.
+          - generic [ref=e64]:
+            - img [ref=e66]
+            - heading "Insights Estratégicos" [level=3] [ref=e68]
+            - paragraph [ref=e69]: Dashboards analíticos em tempo real para monitorar performance de promoters e fluxo de entrada.
+      - generic [ref=e70]:
+        - generic [ref=e71]:
+          - heading "Padrão GuestListPro Gold" [level=2] [ref=e72]
+          - paragraph [ref=e73]: Muito além de uma lista, uma infraestrutura completa para o sucesso.
+        - generic [ref=e74]:
+          - generic [ref=e75]:
+            - img [ref=e77]
+            - generic [ref=e79]:
+              - heading "Sync Instantâneo" [level=4] [ref=e80]
+              - paragraph [ref=e81]: Sincronização em tempo real entre todos os terminais, mesmo em redes instáveis.
+          - generic [ref=e82]:
+            - img [ref=e84]
+            - generic [ref=e86]:
+              - heading "AI Insights" [level=4] [ref=e87]
+              - paragraph [ref=e88]: Predição de fluxo e análise comportamental para otimizar sua próxima produção.
+          - generic [ref=e89]:
+            - img [ref=e91]
+            - generic [ref=e93]:
+              - heading "API para Desenvolvedores" [level=4] [ref=e94]
+              - paragraph [ref=e95]: Integre o GuestListPro ao seu ecossistema existente com nossa API robusta.
+          - generic [ref=e96]:
+            - img [ref=e98]
+            - generic [ref=e100]:
+              - heading "Segurança Bancária" [level=4] [ref=e101]
+              - paragraph [ref=e102]: Criptografia de ponta a ponta e proteção total contra duplicatas e fraudes.
+          - generic [ref=e103]:
+            - img [ref=e105]
+            - generic [ref=e107]:
+              - heading "Marca Própria" [level=4] [ref=e108]
+              - paragraph [ref=e109]: Customize cores e logos para que a plataforma tenha a identidade da sua marca.
+          - generic [ref=e110]:
+            - img [ref=e112]
+            - generic [ref=e114]:
+              - heading "Suporte VIP 24/7" [level=4] [ref=e115]
+              - paragraph [ref=e116]: Atendimento prioritário e consultoria para grandes eventos garantidos.
+      - generic [ref=e117]:
+        - generic [ref=e118]:
+          - heading "Ecossistema de Gestão" [level=2] [ref=e119]
+          - paragraph [ref=e120]: Quatro painéis especializados projetados para máxima eficiência operacional.
+        - generic [ref=e121]:
+          - link "Central do Admin Controle total da infraestrutura, auditoria financeira e BI avançado para tomadores de decisão. Assumir Comando →" [ref=e122] [cursor=pointer]:
+            - /url: /login?role=admin
+            - generic [ref=e124]:
+              - img [ref=e126]
+              - heading "Central do Admin" [level=3] [ref=e128]
+              - paragraph [ref=e129]: Controle total da infraestrutura, auditoria financeira e BI avançado para tomadores de decisão.
+              - generic [ref=e130]: Assumir Comando →
+          - link "Hub do Promoter Ferramenta de alta performance para conversão de convidados e gestão autônoma de listas VIP. Ativar Listas →" [ref=e131] [cursor=pointer]:
+            - /url: /login?role=promoter
+            - generic [ref=e133]:
+              - img [ref=e135]
+              - heading "Hub do Promoter" [level=3] [ref=e137]
+              - paragraph [ref=e138]: Ferramenta de alta performance para conversão de convidados e gestão autônoma de listas VIP.
+              - generic [ref=e139]: Ativar Listas →
+          - link "Terminal de Acesso Interface otimizada para portaria de alto fluxo, garantindo entrada sem atritos e zero filas. Abrir Portaria →" [ref=e140] [cursor=pointer]:
+            - /url: /login?role=validator
+            - generic [ref=e142]:
+              - img [ref=e144]
+              - heading "Terminal de Acesso" [level=3] [ref=e146]
+              - paragraph [ref=e147]: Interface otimizada para portaria de alto fluxo, garantindo entrada sem atritos e zero filas.
+              - generic [ref=e148]: Abrir Portaria →
+          - link "Painel Financeiro Módulo especializado em PDV e emissão instantânea, integrado ao fechamento em tempo real. Operar Caixa →" [ref=e149] [cursor=pointer]:
+            - /url: /login?role=bilheteria
+            - generic [ref=e151]:
+              - img [ref=e153]
+              - heading "Painel Financeiro" [level=3] [ref=e155]
+              - paragraph [ref=e156]: Módulo especializado em PDV e emissão instantânea, integrado ao fechamento em tempo real.
+              - generic [ref=e157]: Operar Caixa →
+      - generic [ref=e160]:
+        - heading "Pronto para começar?" [level=3] [ref=e161]
+        - paragraph [ref=e162]: Acesse o sistema agora e revolucione a gestão dos seus eventos.
+        - link "Entrar Agora" [ref=e163] [cursor=pointer]:
+          - /url: /login
+          - img [ref=e164]
+          - text: Entrar Agora
+  - contentinfo [ref=e166]:
+    - paragraph [ref=e168]: © 2026 Guest List Pro. Todos os direitos reservados.

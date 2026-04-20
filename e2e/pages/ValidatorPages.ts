@@ -1,4 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { WAIT_TIMES } from '../config/wait-times';
+import { waitForLivewireLoad, waitForLivewireResponse } from '../helpers/livewire-helpers';
 
 export class ValidatorDashboardPage {
   readonly page: Page;
@@ -6,6 +8,7 @@ export class ValidatorDashboardPage {
   readonly searchInput: Locator;
   readonly checkinButton: Locator;
   readonly statsWidget: Locator;
+  readonly eventCards: ReturnType<Page['locator']>;
 
   constructor(page: Page) {
     this.page = page;
@@ -13,11 +16,19 @@ export class ValidatorDashboardPage {
     this.searchInput = page.locator('input[placeholder*="buscar"], input[placeholder*="nome"], input[type="search"]');
     this.checkinButton = page.locator('button:has-text("ENTRADA"), button:has-text("Check-in")');
     this.statsWidget = page.locator('[class*="stat"], [class*="widget"]');
+    this.eventCards = page.locator('button:has-text("Festival Teste"), [class*="event"]:has(button), button[class*="event"]');
   }
 
   async goto() {
     await this.page.goto('/validator');
     await this.page.waitForLoadState('networkidle');
+    await waitForLivewireLoad(this.page);
+
+    if (await this.eventCards.count() > 0) {
+      await this.eventCards.first().click();
+      await waitForLivewireResponse(this.page);
+      await this.page.waitForLoadState('networkidle');
+    }
   }
 
   async expectToBeOnValidatorDashboard() {
@@ -26,7 +37,7 @@ export class ValidatorDashboardPage {
 
   async searchGuest(nameOrDocument: string) {
     await this.searchInput.fill(nameOrDocument);
-    await this.page.waitForTimeout(1000);
+    await waitForLivewireLoad(this.page);
   }
 
   async performCheckin(guestName: string) {
@@ -37,7 +48,7 @@ export class ValidatorDashboardPage {
       const checkinBtn = this.checkinButton.first();
       if (await checkinBtn.isVisible()) {
         await checkinBtn.click();
-        await this.page.waitForTimeout(1000);
+        await waitForLivewireLoad(this.page);
       }
     }
   }
@@ -61,6 +72,15 @@ export class ValidatorGuestListPage {
   async goto() {
     await this.page.goto('/validator/guests');
     await this.page.waitForLoadState('networkidle');
+    await waitForLivewireLoad(this.page);
+  }
+
+  async searchGuest(nameOrDocument: string) {
+    const searchVisible = await this.searchInput.isVisible({ timeout: 3000 }).catch(() => false);
+    if (searchVisible) {
+      await this.searchInput.fill(nameOrDocument);
+      await waitForLivewireLoad(this.page);
+    }
   }
 
   async getGuestCount(): Promise<number> {
@@ -71,7 +91,7 @@ export class ValidatorGuestListPage {
     const statusFilter = this.page.locator('select:has-text("Status"), select:has-text("check-in")');
     if (await statusFilter.isVisible()) {
       await statusFilter.selectOption(status);
-      await this.page.waitForTimeout(500);
+      await waitForLivewireLoad(this.page);
     }
   }
 }
@@ -96,12 +116,13 @@ export class ValidatorEmergencyRequestPage {
   async goto() {
     await this.page.goto('/validator/guests');
     await this.page.waitForLoadState('networkidle');
+    await waitForLivewireLoad(this.page);
   }
 
   async openEmergencyModal() {
     if (await this.emergencyButton.isVisible()) {
       await this.emergencyButton.click();
-      await this.page.waitForTimeout(500);
+      await this.page.waitForTimeout(WAIT_TIMES.MODAL_OPEN);
     }
   }
 
@@ -109,7 +130,7 @@ export class ValidatorEmergencyRequestPage {
     await this.nameInput.fill(data.name);
     await this.documentInput.fill(data.document);
     await this.submitButton.click();
-    await this.page.waitForTimeout(1000);
+    await waitForLivewireLoad(this.page);
   }
 }
 

@@ -1,0 +1,356 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - button "Expandir barra lateral" [ref=e4] [cursor=pointer]:
+      - img [ref=e5]
+    - button "Abrir notificações" [ref=e524] [cursor=pointer]:
+      - img [ref=e525]
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - img [ref=e11]
+        - generic [ref=e13]: Festival Teste 2026
+        - button "Trocar Evento" [ref=e14] [cursor=pointer]:
+          - img [ref=e15]
+      - button "Validador Exemplo" [ref=e20] [cursor=pointer]:
+        - img [ref=e21]
+        - generic [ref=e22]: Validador Exemplo
+        - img [ref=e23]
+  - generic [ref=e25]:
+    - complementary [ref=e26]:
+      - navigation [ref=e29]:
+        - list [ref=e30]:
+          - listitem [ref=e31]:
+            - list [ref=e32]:
+              - listitem [ref=e33]:
+                - link "Painel de Controle" [ref=e34] [cursor=pointer]:
+                  - /url: http://localhost:8888/validator
+                  - img [ref=e35]
+                  - generic [ref=e37]: Painel de Controle
+              - listitem [ref=e38]:
+                - link "Check-in" [ref=e39] [cursor=pointer]:
+                  - /url: http://localhost:8888/validator/guests
+                  - img [ref=e40]
+                  - generic [ref=e42]: Check-in
+              - listitem [ref=e43]:
+                - link "Minhas Solicitações" [ref=e44] [cursor=pointer]:
+                  - /url: http://localhost:8888/validator/my-requests
+                  - img [ref=e45]
+                  - generic [ref=e47]: Minhas Solicitações
+    - main [ref=e49]:
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - navigation [ref=e54]:
+              - list [ref=e55]:
+                - listitem [ref=e56]:
+                  - link "Check-in De Convidados" [ref=e57] [cursor=pointer]:
+                    - /url: http://localhost:8888/validator/guests
+                - listitem [ref=e58]:
+                  - img [ref=e59]
+                  - generic [ref=e61]: Listar
+            - heading "Check-in De Convidados" [level=1] [ref=e62]
+          - button "Ler QR Code" [ref=e65] [cursor=pointer]:
+            - img [ref=e66]
+            - text: Ler QR Code
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - generic [ref=e78]:
+              - paragraph [ref=e80]: Mostrando 55 convidado(s) do evento selecionado
+              - button "Não está na lista" [ref=e82] [cursor=pointer]:
+                - img [ref=e83]
+                - text: Não está na lista
+            - generic [ref=e86]:
+              - generic [ref=e87]:
+                - heading "Filtros" [level=2] [ref=e88]
+                - button "Limpar filtros" [ref=e90] [cursor=pointer]
+              - generic [ref=e91]:
+                - generic [ref=e98]:
+                  - generic [ref=e102]: Setor
+                  - button "Todos" [ref=e109] [cursor=pointer]:
+                    - generic [ref=e111]: Todos
+                - generic [ref=e118]:
+                  - generic [ref=e122]: Promoter
+                  - button "Todos" [ref=e129] [cursor=pointer]:
+                    - generic [ref=e131]: Todos
+                - generic [ref=e138]:
+                  - generic [ref=e142]: Status
+                  - combobox "Status" [ref=e146]:
+                    - option "Todos" [selected]
+                    - option "Confirmados"
+                    - option "Pendentes"
+                - generic [ref=e153]:
+                  - generic [ref=e157]: Duplicados
+                  - combobox "Duplicados" [ref=e161]:
+                    - option "Todos" [selected]
+                    - option "Possíveis Duplicados"
+                    - option "Únicos"
+              - button "Aplicar filtros" [ref=e163] [cursor=pointer]
+            - generic [ref=e166]:
+              - generic [ref=e167]: Pesquisar
+              - generic [ref=e168]:
+                - img [ref=e170]
+                - searchbox "Pesquisar" [ref=e173]
+          - table [ref=e175]:
+            - rowgroup [ref=e176]:
+              - row "NOME / DOC SETOR CHECK-IN VALIDADOR Ações" [ref=e177]:
+                - columnheader "NOME / DOC" [ref=e178]:
+                  - button "NOME / DOC" [ref=e179] [cursor=pointer]:
+                    - text: NOME / DOC
+                    - img [ref=e180]
+                - columnheader "SETOR" [ref=e182]
+                - columnheader "CHECK-IN" [ref=e183]
+                - columnheader "VALIDADOR" [ref=e184]
+                - columnheader "Ações" [ref=e185]
+            - rowgroup [ref=e186]:
+              - row "Adriana Claro 94645645678 Bilheteria User VIP Pendente - ENTRADA" [ref=e187]:
+                - cell "Adriana Claro 94645645678 Bilheteria User" [ref=e188]:
+                  - generic [ref=e190]:
+                    - paragraph [ref=e191]: Adriana Claro
+                    - paragraph
+                    - generic [ref=e192]:
+                      - generic [ref=e193]:
+                        - img [ref=e194]
+                        - generic [ref=e196]: "94645645678"
+                      - generic [ref=e197]:
+                        - img [ref=e198]
+                        - generic [ref=e201]: Bilheteria User
+                    - paragraph
+                - cell "VIP" [ref=e202]:
+                  - generic [ref=e205]: VIP
+                - cell "Pendente" [ref=e206]:
+                  - paragraph [ref=e209]: Pendente
+                - cell "-" [ref=e210]:
+                  - paragraph [ref=e213]: "-"
+                - cell "ENTRADA" [ref=e214]:
+                  - button "ENTRADA" [ref=e216] [cursor=pointer]:
+                    - img [ref=e217]
+                    - text: ENTRADA
+              - row "Aline Pinto 98089089012 Bilheteria User VIP Pendente - ENTRADA" [ref=e219]:
+                - cell "Aline Pinto 98089089012 Bilheteria User" [ref=e220]:
+                  - generic [ref=e222]:
+                    - paragraph [ref=e223]: Aline Pinto
+                    - paragraph
+                    - generic [ref=e224]:
+                      - generic [ref=e225]:
+                        - img [ref=e226]
+                        - generic [ref=e228]: "98089089012"
+                      - generic [ref=e229]:
+                        - img [ref=e230]
+                        - generic [ref=e233]: Bilheteria User
+                    - paragraph
+                - cell "VIP" [ref=e234]:
+                  - generic [ref=e237]: VIP
+                - cell "Pendente" [ref=e238]:
+                  - paragraph [ref=e241]: Pendente
+                - cell "-" [ref=e242]:
+                  - paragraph [ref=e245]: "-"
+                - cell "ENTRADA" [ref=e246]:
+                  - button "ENTRADA" [ref=e248] [cursor=pointer]:
+                    - img [ref=e249]
+                    - text: ENTRADA
+              - row "Ana Silva 12345678901 Promoter User Pista 17/04/2026 22:03 Admin User Estornar" [ref=e251]:
+                - cell "Ana Silva 12345678901 Promoter User" [ref=e252]:
+                  - generic [ref=e254]:
+                    - paragraph [ref=e255]: Ana Silva
+                    - paragraph
+                    - generic [ref=e256]:
+                      - generic [ref=e257]:
+                        - img [ref=e258]
+                        - generic [ref=e260]: "12345678901"
+                      - generic [ref=e261]:
+                        - img [ref=e262]
+                        - generic [ref=e265]: Promoter User
+                    - paragraph
+                - cell "Pista" [ref=e266]:
+                  - generic [ref=e269]: Pista
+                - cell "17/04/2026 22:03" [ref=e270]:
+                  - generic [ref=e272]:
+                    - img [ref=e273]
+                    - text: 17/04/2026 22:03
+                - cell "Admin User" [ref=e275]:
+                  - generic [ref=e277]:
+                    - img [ref=e278]
+                    - text: Admin User
+                - cell "Estornar" [ref=e280]:
+                  - button "Estornar" [ref=e282] [cursor=pointer]:
+                    - img [ref=e283]
+                    - text: Estornar
+              - row "Beatriz Lima 90000111223 Bilheteria User VIP Pendente - ENTRADA" [ref=e285]:
+                - cell "Beatriz Lima 90000111223 Bilheteria User" [ref=e286]:
+                  - generic [ref=e288]:
+                    - paragraph [ref=e289]: Beatriz Lima
+                    - paragraph
+                    - generic [ref=e290]:
+                      - generic [ref=e291]:
+                        - img [ref=e292]
+                        - generic [ref=e294]: "90000111223"
+                      - generic [ref=e295]:
+                        - img [ref=e296]
+                        - generic [ref=e299]: Bilheteria User
+                    - paragraph
+                - cell "VIP" [ref=e300]:
+                  - generic [ref=e303]: VIP
+                - cell "Pendente" [ref=e304]:
+                  - paragraph [ref=e307]: Pendente
+                - cell "-" [ref=e308]:
+                  - paragraph [ref=e311]: "-"
+                - cell "ENTRADA" [ref=e312]:
+                  - button "ENTRADA" [ref=e314] [cursor=pointer]:
+                    - img [ref=e315]
+                    - text: ENTRADA
+              - row "Bruno Costa 23456789012 Promoter User Pista 17/04/2026 22:08 Admin User Estornar" [ref=e317]:
+                - cell "Bruno Costa 23456789012 Promoter User" [ref=e318]:
+                  - generic [ref=e320]:
+                    - paragraph [ref=e321]: Bruno Costa
+                    - paragraph
+                    - generic [ref=e322]:
+                      - generic [ref=e323]:
+                        - img [ref=e324]
+                        - generic [ref=e326]: "23456789012"
+                      - generic [ref=e327]:
+                        - img [ref=e328]
+                        - generic [ref=e331]: Promoter User
+                    - paragraph
+                - cell "Pista" [ref=e332]:
+                  - generic [ref=e335]: Pista
+                - cell "17/04/2026 22:08" [ref=e336]:
+                  - generic [ref=e338]:
+                    - img [ref=e339]
+                    - text: 17/04/2026 22:08
+                - cell "Admin User" [ref=e341]:
+                  - generic [ref=e343]:
+                    - img [ref=e344]
+                    - text: Admin User
+                - cell "Estornar" [ref=e346]:
+                  - button "Estornar" [ref=e348] [cursor=pointer]:
+                    - img [ref=e349]
+                    - text: Estornar
+              - row "Bruno Ferrari 97978978901 Bilheteria User Pista Pendente - ENTRADA" [ref=e351]:
+                - cell "Bruno Ferrari 97978978901 Bilheteria User" [ref=e352]:
+                  - generic [ref=e354]:
+                    - paragraph [ref=e355]: Bruno Ferrari
+                    - paragraph
+                    - generic [ref=e356]:
+                      - generic [ref=e357]:
+                        - img [ref=e358]
+                        - generic [ref=e360]: "97978978901"
+                      - generic [ref=e361]:
+                        - img [ref=e362]
+                        - generic [ref=e365]: Bilheteria User
+                    - paragraph
+                - cell "Pista" [ref=e366]:
+                  - generic [ref=e369]: Pista
+                - cell "Pendente" [ref=e370]:
+                  - paragraph [ref=e373]: Pendente
+                - cell "-" [ref=e374]:
+                  - paragraph [ref=e377]: "-"
+                - cell "ENTRADA" [ref=e378]:
+                  - button "ENTRADA" [ref=e380] [cursor=pointer]:
+                    - img [ref=e381]
+                    - text: ENTRADA
+              - row "Camila Fernanda 96667778899 Bilheteria User VIP Pendente - ENTRADA" [ref=e383]:
+                - cell "Camila Fernanda 96667778899 Bilheteria User" [ref=e384]:
+                  - generic [ref=e386]:
+                    - paragraph [ref=e387]: Camila Fernanda
+                    - paragraph
+                    - generic [ref=e388]:
+                      - generic [ref=e389]:
+                        - img [ref=e390]
+                        - generic [ref=e392]: "96667778899"
+                      - generic [ref=e393]:
+                        - img [ref=e394]
+                        - generic [ref=e397]: Bilheteria User
+                    - paragraph
+                - cell "VIP" [ref=e398]:
+                  - generic [ref=e401]: VIP
+                - cell "Pendente" [ref=e402]:
+                  - paragraph [ref=e405]: Pendente
+                - cell "-" [ref=e406]:
+                  - paragraph [ref=e409]: "-"
+                - cell "ENTRADA" [ref=e410]:
+                  - button "ENTRADA" [ref=e412] [cursor=pointer]:
+                    - img [ref=e413]
+                    - text: ENTRADA
+              - row "carla 43434343343 Promoter User Backstage Pendente - ENTRADA" [ref=e415]:
+                - cell "carla 43434343343 Promoter User" [ref=e416]:
+                  - generic [ref=e418]:
+                    - paragraph [ref=e419]: carla
+                    - paragraph
+                    - generic [ref=e420]:
+                      - generic [ref=e421]:
+                        - img [ref=e422]
+                        - generic [ref=e424]: "43434343343"
+                      - generic [ref=e425]:
+                        - img [ref=e426]
+                        - generic [ref=e429]: Promoter User
+                    - paragraph
+                - cell "Backstage" [ref=e430]:
+                  - generic [ref=e433]: Backstage
+                - cell "Pendente" [ref=e434]:
+                  - paragraph [ref=e437]: Pendente
+                - cell "-" [ref=e438]:
+                  - paragraph [ref=e441]: "-"
+                - cell "ENTRADA" [ref=e442]:
+                  - button "ENTRADA" [ref=e444] [cursor=pointer]:
+                    - img [ref=e445]
+                    - text: ENTRADA
+              - row "Carlos Santos 34567890123 Admin User Pista 17/04/2026 22:13 Admin User Estornar" [ref=e447]:
+                - cell "Carlos Santos 34567890123 Admin User" [ref=e448]:
+                  - generic [ref=e450]:
+                    - paragraph [ref=e451]: Carlos Santos
+                    - paragraph
+                    - generic [ref=e452]:
+                      - generic [ref=e453]:
+                        - img [ref=e454]
+                        - generic [ref=e456]: "34567890123"
+                      - generic [ref=e457]:
+                        - img [ref=e458]
+                        - generic [ref=e461]: Admin User
+                    - paragraph
+                - cell "Pista" [ref=e462]:
+                  - generic [ref=e465]: Pista
+                - cell "17/04/2026 22:13" [ref=e466]:
+                  - generic [ref=e468]:
+                    - img [ref=e469]
+                    - text: 17/04/2026 22:13
+                - cell "Admin User" [ref=e471]:
+                  - generic [ref=e473]:
+                    - img [ref=e474]
+                    - text: Admin User
+                - cell "Estornar" [ref=e476]:
+                  - button "Estornar" [ref=e478] [cursor=pointer]:
+                    - img [ref=e479]
+                    - text: Estornar
+              - row "Companheiro 1 Silva 9998887701 Admin User Pista Pendente - ENTRADA" [ref=e481]:
+                - cell "Companheiro 1 Silva 9998887701 Admin User" [ref=e482]:
+                  - generic [ref=e484]:
+                    - paragraph [ref=e485]: Companheiro 1 Silva
+                    - paragraph
+                    - generic [ref=e486]:
+                      - generic [ref=e487]:
+                        - img [ref=e488]
+                        - generic [ref=e490]: "9998887701"
+                      - generic [ref=e491]:
+                        - img [ref=e492]
+                        - generic [ref=e495]: Admin User
+                    - paragraph
+                - cell "Pista" [ref=e496]:
+                  - generic [ref=e499]: Pista
+                - cell "Pendente" [ref=e500]:
+                  - paragraph [ref=e503]: Pendente
+                - cell "-" [ref=e504]:
+                  - paragraph [ref=e507]: "-"
+                - cell "ENTRADA" [ref=e508]:
+                  - button "ENTRADA" [ref=e510] [cursor=pointer]:
+                    - img [ref=e511]
+                    - text: ENTRADA
+          - navigation "Paginação" [ref=e513]:
+            - generic [ref=e516]:
+              - generic [ref=e518]: por página
+              - combobox "por página" [ref=e520]:
+                - option "5"
+                - option "10" [selected]
+                - option "25"
+                - option "50"
+            - button "Próxima" [ref=e521] [cursor=pointer]
+  - generic:
+    - status

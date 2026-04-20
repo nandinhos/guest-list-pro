@@ -6,6 +6,8 @@ use App\Enums\DocumentType;
 use App\Models\Sector;
 use App\Services\ApprovalRequestService;
 use App\Services\GuestSearchService;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -60,8 +62,8 @@ class GuestsTable
 
                 TextColumn::make('checked_in_at')
                     ->label('CHECK-IN')
-                    ->default('Pendente')
-                    ->formatStateUsing(fn ($state) => format_datetime($state))
+                    ->placeholder('Pendente')
+                    ->formatStateUsing(fn ($state) => $state ? format_datetime($state) : null)
                     ->color(fn ($record) => $record->is_checked_in ? 'success' : 'warning')
                     ->icon(fn ($record) => $record->is_checked_in ? 'heroicon-m-check-circle' : 'heroicon-m-clock')
                     ->iconColor(fn ($record) => $record->is_checked_in ? 'success' : 'warning')
@@ -127,8 +129,8 @@ class GuestsTable
                 $livewire->getFilteredTableQuery()->count()
             ))
             ->recordUrl(null)
-            ->actions([
-                \Filament\Tables\Actions\Action::make('checkIn')
+            ->recordActions([
+                Action::make('checkIn')
                     ->label('ENTRADA')
                     ->icon('heroicon-m-check-circle')
                     ->color('success')
@@ -137,17 +139,20 @@ class GuestsTable
                     ->extraAttributes(['class' => 'hidden md:inline-flex'])
                     ->hidden(fn ($record) => $record?->is_checked_in ?? false)
                     ->slideOver()
-                    ->form([
-                        \Filament\Forms\Components\Placeholder::make('guest_name')
+                    ->schema([
+                        Placeholder::make('guest_name')
                             ->label('Convidado')
                             ->content(fn ($record) => $record->name),
-                        \Filament\Forms\Components\Placeholder::make('sector')
+                        Placeholder::make('sector')
                             ->label('Setor')
                             ->content(fn ($record) => $record->sector?->name ?? '-'),
                     ])
-                    ->action(fn ($record) => static::doCheckIn($record)),
+                    ->action(function ($record, \Livewire\Component $livewire) {
+                        static::doCheckIn($record);
+                        $livewire->resetTable();
+                    }),
 
-                \Filament\Tables\Actions\Action::make('undoCheckIn')
+                Action::make('undoCheckIn')
                     ->label('Estornar')
                     ->icon('heroicon-m-arrow-path')
                     ->color('warning')
@@ -157,25 +162,28 @@ class GuestsTable
                     ->extraAttributes(['class' => 'hidden md:inline-flex'])
                     ->visible(fn ($record) => ($record?->is_checked_in ?? false))
                     ->slideOver()
-                    ->form([
-                        \Filament\Forms\Components\Placeholder::make('guest_name')
+                    ->schema([
+                        Placeholder::make('guest_name')
                             ->label('Convidado')
                             ->content(fn ($record) => $record->name),
                     ])
-                    ->action(fn ($record) => static::doUndoCheckIn($record)),
+                    ->action(function ($record, \Livewire\Component $livewire) {
+                        static::doUndoCheckIn($record);
+                        $livewire->resetTable();
+                    }),
             ])
             ->striped()
             ->defaultSort('name')
             ->poll('30s')
             ->headerActions([
-                \Filament\Actions\Action::make('emergencyCheckinRequest')
+                Action::make('emergencyCheckinRequest')
                     ->label('Não está na lista')
                     ->icon('heroicon-m-exclamation-triangle')
                     ->color('warning')
                     ->modalHeading('Solicitar Check-in Emergencial')
                     ->modalDescription('Preencha os dados do convidado que não está na lista. A solicitação será enviada para aprovação do administrador.')
                     ->slideOver()
-                    ->form([
+                    ->schema([
                         TextInput::make('guest_name')
                             ->label('Nome completo')
                             ->required()
@@ -245,7 +253,7 @@ class GuestsTable
                             }
 
                             $request = $service->createEmergencyCheckinRequest(
-                                auth()->user(),
+                                \Illuminate\Support\Facades\Auth::user(),
                                 session('selected_event_id'),
                                 $data['sector_id'],
                                 [
@@ -284,13 +292,13 @@ class GuestsTable
                 $guest->update([
                     'is_checked_in' => true,
                     'checked_in_at' => now(),
-                    'checked_in_by' => auth()->id(),
+                    'checked_in_by' => \Illuminate\Support\Facades\Auth::id(),
                 ]);
             });
 
             \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
                 'event_id' => $record->event_id,
-                'validator_id' => auth()->id(),
+                'validator_id' => \Illuminate\Support\Facades\Auth::id(),
                 'guest_id' => $record->id,
                 'result' => 'success',
                 'ip_address' => request()->ip(),
@@ -308,7 +316,7 @@ class GuestsTable
             $isAlreadyCheckedIn = $e->getMessage() === 'checkin_exists';
             \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
                 'event_id' => $record->event_id,
-                'validator_id' => auth()->id(),
+                'validator_id' => \Illuminate\Support\Facades\Auth::id(),
                 'guest_id' => $record->id,
                 'result' => $isAlreadyCheckedIn ? 'already_checked_in' : 'error',
                 'ip_address' => request()->ip(),
@@ -342,7 +350,7 @@ class GuestsTable
 
             \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
                 'event_id' => $record->event_id,
-                'validator_id' => auth()->id(),
+                'validator_id' => \Illuminate\Support\Facades\Auth::id(),
                 'guest_id' => $record->id,
                 'result' => 'estorno',
                 'ip_address' => request()->ip(),

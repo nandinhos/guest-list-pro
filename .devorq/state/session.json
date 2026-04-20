@@ -1,0 +1,10 @@
+{
+  "stack": "filament",
+  "project_type": "brownfield",
+  "llm": "opencode",
+  "runtime": "terminal-cli",
+  "database": "mysql",
+  "prd": "",
+  "initialized_at": "2026-04-19T02:55:41-03:00",
+  "version": "1.0.0-dev"
+}

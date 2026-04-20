@@ -35,7 +35,7 @@ class TicketSaleObserver
                 ->title('Check-in automático')
                 ->body("Venda #{$ticketSale->id} gerada - {$guest->name} já está com entrada confirmada")
                 ->success()
-                ->sendTo($ticketSale->seller);
+                ->sendToDatabase($ticketSale->seller);
         }
     }
 }

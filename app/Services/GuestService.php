@@ -3,45 +3,13 @@
 namespace App\Services;
 
 use App\Models\Event;
-use App\Models\Guest;
 use App\Models\Sector;
 use App\Models\User;
-use App\Rules\CheckinRule;
 use App\Rules\GuestLimitRule;
 use App\Rules\TimeWindowRule;
 
 class GuestService
 {
-    /**
-     * Realiza o check-in de um convidado através do token do QR Code (ULID).
-     */
-    public function checkinByQrToken(string $qrToken, User $validator): array
-    {
-        $validation = CheckinRule::validateCheckin($validator, $qrToken);
-
-        if (! $validation['allowed']) {
-            return [
-                'success' => false,
-                'message' => $validation['message'],
-            ];
-        }
-
-        /** @var Guest $guest */
-        $guest = $validation['guest'];
-
-        $guest->update([
-            'is_checked_in' => true,
-            'checked_in_at' => now(),
-            'checked_in_by' => $validator->id,
-        ]);
-
-        return [
-            'success' => true,
-            'message' => 'Check-in realizado com sucesso!',
-            'guest' => $guest,
-        ];
-    }
-
     /**
      * Verifica se o promoter pode cadastrar convidados para um determinado evento e setor.
      */

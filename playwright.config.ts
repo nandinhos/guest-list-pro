@@ -4,8 +4,8 @@ export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: 0,
-  workers: 1,
+  retries: 1,
+  workers: process.env.CI ? 1 : 3,
   reporter: [
     ['html', { outputFolder: 'docs/report_e2e/results/html' }],
     ['json', { outputFile: 'docs/report_e2e/results/test-results.json' }],

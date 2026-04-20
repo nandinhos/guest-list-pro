@@ -1,0 +1,146 @@
+- generic [ref=e1]:
+  - navigation [ref=e3]:
+    - button "Expandir barra lateral" [ref=e4] [cursor=pointer]:
+      - img [ref=e5]
+    - button "Abrir notificações" [ref=e524] [cursor=pointer]:
+      - img [ref=e525]
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - img [ref=e11]
+        - generic [ref=e13]: Festival Teste 2026
+        - button "Trocar Evento" [ref=e14] [cursor=pointer]:
+          - img [ref=e15]
+      - button "Validador Exemplo" [ref=e20] [cursor=pointer]:
+        - img [ref=e21]
+        - generic [ref=e22]: Validador Exemplo
+        - img [ref=e23]
+  - generic [ref=e25]:
+    - complementary [ref=e26]:
+      - navigation [ref=e29]:
+        - list [ref=e30]:
+          - listitem [ref=e31]:
+            - list [ref=e32]:
+              - listitem [ref=e33]:
+                - link "Painel de Controle" [ref=e34] [cursor=pointer]:
+                  - /url: http://localhost:8888/validator
+                  - img [ref=e35]
+                  - generic [ref=e37]: Painel de Controle
+              - listitem [ref=e38]:
+                - link "Check-in" [ref=e39] [cursor=pointer]:
+                  - /url: http://localhost:8888/validator/guests
+                  - img [ref=e40]
+                  - generic [ref=e42]: Check-in
+              - listitem [ref=e43]:
+                - link "Minhas Solicitações" [ref=e44] [cursor=pointer]:
+                  - /url: http://localhost:8888/validator/my-requests
+                  - img [ref=e45]
+                  - generic [ref=e47]: Minhas Solicitações
+    - main [ref=e49]:
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - navigation [ref=e54]:
+              - list [ref=e55]:
+                - listitem [ref=e56]:
+                  - link "Check-in De Convidados" [ref=e57] [cursor=pointer]:
+                    - /url: http://localhost:8888/validator/guests
+                - listitem [ref=e58]:
+                  - img [ref=e59]
+                  - generic [ref=e61]: Listar
+            - heading "Check-in De Convidados" [level=1] [ref=e62]
+          - button "Ler QR Code" [ref=e65] [cursor=pointer]:
+            - img [ref=e66]
+            - text: Ler QR Code
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - generic [ref=e78]:
+              - paragraph [ref=e80]: Mostrando 1 convidado(s) do evento selecionado
+              - button "Não está na lista" [ref=e82] [cursor=pointer]:
+                - img [ref=e83]
+                - text: Não está na lista
+            - generic [ref=e86]:
+              - generic [ref=e87]:
+                - heading "Filtros" [level=2] [ref=e88]
+                - button "Limpar filtros" [ref=e90] [cursor=pointer]
+              - generic [ref=e91]:
+                - generic [ref=e98]:
+                  - generic [ref=e102]: Setor
+                  - button "Todos" [ref=e109] [cursor=pointer]:
+                    - generic [ref=e111]: Todos
+                - generic [ref=e118]:
+                  - generic [ref=e122]: Promoter
+                  - button "Todos" [ref=e129] [cursor=pointer]:
+                    - generic [ref=e131]: Todos
+                - generic [ref=e138]:
+                  - generic [ref=e142]: Status
+                  - combobox "Status" [ref=e146]:
+                    - option "Todos" [selected]
+                    - option "Confirmados"
+                    - option "Pendentes"
+                - generic [ref=e153]:
+                  - generic [ref=e157]: Duplicados
+                  - combobox "Duplicados" [ref=e161]:
+                    - option "Todos" [selected]
+                    - option "Possíveis Duplicados"
+                    - option "Únicos"
+              - button "Aplicar filtros" [ref=e163] [cursor=pointer]
+            - generic [ref=e166]:
+              - generic [ref=e167]: Pesquisar
+              - generic [ref=e168]:
+                - img [ref=e170]
+                - searchbox "Pesquisar" [active] [ref=e173]: Adriana
+          - generic [ref=e527]:
+            - generic [ref=e528]:
+              - generic [ref=e529]: Filtros ativos
+              - generic [ref=e531]:
+                - generic [ref=e533]: "Pesquisar: Adriana"
+                - button "Remover filtro" [ref=e534] [cursor=pointer]:
+                  - img [ref=e535]
+                  - generic [ref=e537]: Remover filtro
+            - button [ref=e538] [cursor=pointer]:
+              - img [ref=e539]
+          - table [ref=e175]:
+            - rowgroup [ref=e176]:
+              - row "NOME / DOC SETOR CHECK-IN VALIDADOR Ações" [ref=e177]:
+                - columnheader "NOME / DOC" [ref=e178]:
+                  - button "NOME / DOC" [ref=e179] [cursor=pointer]:
+                    - text: NOME / DOC
+                    - img [ref=e180]
+                - columnheader "SETOR" [ref=e182]
+                - columnheader "CHECK-IN" [ref=e183]
+                - columnheader "VALIDADOR" [ref=e184]
+                - columnheader "Ações" [ref=e185]
+            - rowgroup [ref=e186]:
+              - row "Adriana Claro 94645645678 Bilheteria User VIP Pendente - ENTRADA" [ref=e187]:
+                - cell "Adriana Claro 94645645678 Bilheteria User" [ref=e188]:
+                  - generic [ref=e190]:
+                    - paragraph [ref=e191]: Adriana Claro
+                    - paragraph
+                    - generic [ref=e192]:
+                      - generic [ref=e193]:
+                        - img [ref=e194]
+                        - generic [ref=e196]: "94645645678"
+                      - generic [ref=e197]:
+                        - img [ref=e198]
+                        - generic [ref=e201]: Bilheteria User
+                    - paragraph
+                - cell "VIP" [ref=e202]:
+                  - generic [ref=e205]: VIP
+                - cell "Pendente" [ref=e206]:
+                  - paragraph [ref=e209]: Pendente
+                - cell "-" [ref=e210]:
+                  - paragraph [ref=e213]: "-"
+                - cell "ENTRADA" [ref=e214]:
+                  - button "ENTRADA" [ref=e216] [cursor=pointer]:
+                    - img [ref=e217]
+                    - text: ENTRADA
+          - navigation "Paginação" [ref=e513]:
+            - generic [ref=e516]:
+              - generic [ref=e518]: por página
+              - combobox "por página" [ref=e520]:
+                - option "5"
+                - option "10" [selected]
+                - option "25"
+                - option "50"
+  - generic:
+    - status

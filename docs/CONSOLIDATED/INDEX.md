@@ -9,7 +9,7 @@
 
 | Necessidade | Arquivo |
 |-------------|---------|
-| Contexto do projeto | `.aidev/context/PROJECT.md` |
+| Contexto do projeto | `.devorq/rules/project.md` |
 | **⚠️ Docker/Sail** | Use sempre `vendor/bin/sail artisan ...` |
 | Arquitetura do sistema | `architecture/system.md` |
 | Stack (Laravel/Filament) | `stack/` |
@@ -101,10 +101,10 @@ alias sail='vendor/bin/sail'
 ## 🎯 Agentes e Contexto
 
 Para desenvolvimento assistido por IA, consulte:
-- `.aidev/agents/orchestrator.md` - Orquestrador principal
-- `.aidev/context/PROJECT.md` - Contexto do projeto
-- `.aidev/rules/PROJECT.md` - Regras específicas
+- `.devorq/rules/project.md` - Regras e gates do projeto
+- `.devorq/state/lessons-learned/_INDEX.md` - Índice de lições aprendidas
+- `.devorq/version` - Versão do DEVORQ (v2.1)
 
 ---
 
-*Última atualização: 2026-02-21*
+*Última atualização: 2026-04-20*

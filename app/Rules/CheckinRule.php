@@ -37,7 +37,7 @@ class CheckinRule implements ValidationRule
             return self::failure('Você não tem permissão para realizar check-ins.');
         }
 
-        $guest = Guest::where('qr_token', $qrToken)->first();
+        $guest = Guest::where('guest_token', $qrToken)->first();
 
         if (! $guest) {
             return self::failure('Convidado não encontrado.');

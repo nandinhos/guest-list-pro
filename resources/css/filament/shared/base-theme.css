@@ -102,10 +102,10 @@ h4 {
     }
 }
 
-/* Page content animation */
-.fi-main>* {
+/* Page content animation - disabled to avoid breaking fixed positioning on modals */
+/* .fi-main>* {
     animation: fadeInUp 0.4s var(--ease-premium) forwards;
-}
+} */
 
 /* ========================================
    SIDEBAR STYLES
@@ -292,10 +292,10 @@ h4 {
    MODALS
    ======================================== */
 
-/* Modal backdrop */
-.fi-modal-window {
+/* Modal animation - disabled to avoid conflict with native transitions */
+/* .fi-modal-window {
     animation: scaleIn 0.2s var(--ease-bounce) forwards;
-}
+} */
 
 /* Modal content */
 .fi-modal {

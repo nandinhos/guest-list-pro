@@ -5,7 +5,6 @@ namespace App\Filament\Promoter\Resources\Guests\Pages;
 use App\Filament\Promoter\Resources\Guests\GuestResource;
 use App\Services\ApprovalRequestService;
 use App\Services\GuestService;
-use Filament\Notifications\Actions\Action as NotificationAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 
@@ -119,11 +118,6 @@ class CreateGuest extends CreateRecord
                 ->body("Você atingiu o limite ou está fora do horário permitido. Uma solicitação #{$request->id} foi enviada para aprovação do administrador.")
                 ->warning()
                 ->persistent()
-                ->actions([
-                    NotificationAction::make('view')
-                        ->label('Ver Solicitações')
-                        ->url(route('filament.promoter.pages.my-requests')),
-                ])
                 ->send();
         } catch (\Exception $e) {
             Notification::make()

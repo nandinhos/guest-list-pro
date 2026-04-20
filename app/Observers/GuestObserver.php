@@ -17,16 +17,16 @@ class GuestObserver
         $this->normalizeName($guest);
         $this->fillNormalizedColumns($guest);
         $this->validateUniqueDocumentInEvent($guest);
-        $this->generateQrToken($guest);
+        $this->generateGuestToken($guest);
     }
 
     /**
-     * Gera um token ULID único para o QR Code caso ainda não exista.
+     * Generates a unique ULID token for guest identification.
      */
-    protected function generateQrToken(Guest $guest): void
+    protected function generateGuestToken(Guest $guest): void
     {
-        if (empty($guest->qr_token)) {
-            $guest->qr_token = (string) Str::ulid();
+        if (empty($guest->guest_token)) {
+            $guest->guest_token = (string) Str::ulid();
         }
     }
 

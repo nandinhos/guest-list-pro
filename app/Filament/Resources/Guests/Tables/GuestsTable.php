@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Guests\Tables;
 
-use App\Rules\CheckinRule;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
@@ -12,7 +11,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class GuestsTable
 {
@@ -116,9 +114,9 @@ class GuestsTable
                     ->modalHeading('Confirmar Check-in')
                     ->modalDescription(fn ($record) => "Confirmar entrada de {$record->name}?")
                     ->modalSubmitActionLabel('Confirmar Entrada')
-                    ->action(function ($record) {
+                    ->action(function ($record, \Livewire\Component $livewire) {
                         $user = auth()->user();
-                        $result = CheckinRule::validateCheckin($user, $record->qr_token);
+                        $result = \App\Rules\CheckinRule::canCheckin($user, $record);
 
                         if (! $result['allowed']) {
                             \Filament\Notifications\Notification::make()
@@ -175,6 +173,7 @@ class GuestsTable
                                 ->danger()
                                 ->send();
                         }
+                        $livewire->resetTable();
                     }),
 
                 Action::make('undoCheckIn')
@@ -189,7 +188,7 @@ class GuestsTable
                     ->modalHeading('Estornar Check-in')
                     ->modalDescription(fn ($record) => "Estornar entrada de {$record->name}?")
                     ->modalSubmitActionLabel('Confirmar Estorno')
-                    ->action(function ($record) {
+                    ->action(function ($record, \Livewire\Component $livewire) {
                         try {
                             \Illuminate\Support\Facades\DB::transaction(function () use ($record) {
                                 $guest = \App\Models\Guest::lockForUpdate()->find($record->id);
@@ -224,29 +223,7 @@ class GuestsTable
                                 ->danger()
                                 ->send();
                         }
-                    }),
-
-                Action::make('downloadQr')
-                    ->label('Baixar QR')
-                    ->hiddenLabel()
-                    ->icon('heroicon-o-qr-code')
-                    ->color('gray')
-                    ->tooltip('Baixar QR Code')
-                    ->extraAttributes(['class' => 'hidden md:inline-flex'])
-                    ->action(function ($record) {
-                        if (empty($record->qr_token)) {
-                            \Filament\Notifications\Notification::make()
-                                ->title('Este convidado não possui um token de QR Code.')
-                                ->danger()
-                                ->send();
-
-                            return;
-                        }
-
-                        return response()->streamDownload(
-                            fn () => print (QrCode::format('svg')->size(200)->generate($record->qr_token)),
-                            "qr-code-{$record->qr_token}.svg"
-                        );
+                        $livewire->resetTable();
                     }),
 
                 EditAction::make()

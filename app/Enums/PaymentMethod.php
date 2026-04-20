@@ -39,7 +39,7 @@ enum PaymentMethod: string implements HasColor, HasIcon, HasLabel
             self::Cash => 'heroicon-m-banknotes',
             self::CreditCard => 'heroicon-m-credit-card',
             self::DebitCard => 'heroicon-m-credit-card',
-            self::Pix => 'heroicon-m-qr-code',
+            self::Pix => 'heroicon-m-device-phone-mobile',
         };
     }
 }

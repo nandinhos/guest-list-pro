@@ -1,4 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { WAIT_TIMES } from '../config/wait-times';
+import { waitForLivewireLoad } from '../helpers/livewire-helpers';
 
 export class LoginPage {
   readonly page: Page;
@@ -13,20 +15,21 @@ export class LoginPage {
     this.emailInput = page.locator('input[type="email"], input[name="email"]');
     this.passwordInput = page.locator('input[type="password"], input[name="password"]');
     this.submitButton = page.locator('button[type="submit"]');
-    this.errorMessage = page.locator('[role="alert"], .error-message, .alert-danger');
+    this.errorMessage = page.locator('[class*="error"]:visible, [role="alert"]:visible, p.text-red-400');
     this.appLogo = page.locator('header img, .brand-logo, text=Guest List Pro');
   }
 
   async goto() {
     await this.page.goto('/login');
     await this.page.waitForLoadState('networkidle');
+    await waitForLivewireLoad(this.page);
   }
 
   async login(email: string, password: string) {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.submitButton.click();
-    await this.page.waitForLoadState('networkidle');
+    await waitForLivewireLoad(this.page);
   }
 
   async expectToBeOnLoginPage() {
@@ -36,18 +39,36 @@ export class LoginPage {
   }
 
   async expectLoginToFail() {
-    await expect(this.errorMessage).toBeVisible({ timeout: 5000 });
+    await expect(this.errorMessage).toBeVisible({ timeout: WAIT_TIMES.ELEMENT_VISIBLE });
   }
 
   async expectLoginSuccess() {
-    await this.page.waitForURL(/\/(admin|promoter|validator|bilheteria)/, { timeout: 10000 });
+    await this.page.waitForURL(/\/(admin|promoter|validator|bilheteria)/, { timeout: WAIT_TIMES.URL_MATCH });
   }
 
   async logout() {
-    const logoutButton = this.page.locator('button:has-text("Sair"), a:has-text("Logout"), [href="/logout"]');
-    if (await logoutButton.isVisible()) {
+    await this.page.waitForLoadState('networkidle');
+    
+    const userMenuTrigger = this.page.locator('.fi-user-menu-trigger, [aria-label*="user"], button:has-text("Admin")');
+    if (await userMenuTrigger.isVisible()) {
+      await userMenuTrigger.click();
+      await this.page.waitForTimeout(500);
+    }
+    
+    const logoutForm = this.page.locator('form[action*="logout"]');
+    if (await logoutForm.isVisible()) {
+      const logoutButton = logoutForm.locator('button[type="submit"]');
+      await logoutButton.click();
+    } else {
+      const logoutButton = this.page.locator('button:has-text("Sair"), button:has-text("Logout")');
       await logoutButton.click();
     }
-    await this.page.waitForURL(/\/login/, { timeout: 5000 });
+    
+    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForURL(/\/(login|admin\/login|\/)$/, { timeout: WAIT_TIMES.URL_MATCH });
+  }
+
+  async getPageTitle(): Promise<string> {
+    return await this.page.title();
   }
 }

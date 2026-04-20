@@ -144,7 +144,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ### Folder Structure
 ```
-.aidev/plans/
+.devorq/plans/
 ├── backlog/      # Ideias não priorizadas
 ├── features/     # Planejadas com sprint
 ├── current/      # Em execução (sprint ativa)

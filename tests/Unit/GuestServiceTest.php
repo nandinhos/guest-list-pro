@@ -15,101 +15,10 @@ class GuestServiceTest extends TestCase
 
     private GuestService $service;
 
-    private User $admin;
-
-    private User $validator;
-
-    private User $promoter;
-
     protected function setUp(): void
     {
         parent::setUp();
         $this->service = app(GuestService::class);
-    }
-
-    public function test_checkin_by_qr_token_success(): void
-    {
-        $validator = User::factory()->create([
-            'role' => UserRole::VALIDATOR,
-            'is_active' => true,
-        ]);
-
-        $guest = Guest::factory()->create([
-            'qr_token' => 'test-token-123',
-            'is_checked_in' => false,
-        ]);
-
-        $result = $this->service->checkinByQrToken('test-token-123', $validator);
-
-        $this->assertTrue($result['success']);
-        $this->assertEquals('Check-in realizado com sucesso!', $result['message']);
-
-        $guest->refresh();
-        $this->assertTrue($guest->is_checked_in);
-        $this->assertEquals($validator->id, $guest->checked_in_by);
-        $this->assertNotNull($guest->checked_in_at);
-    }
-
-    public function test_checkin_by_qr_token_admin_can_also_checkin(): void
-    {
-        $admin = User::factory()->create([
-            'role' => UserRole::ADMIN,
-            'is_active' => true,
-        ]);
-
-        $guest = Guest::factory()->create([
-            'qr_token' => 'admin-token-456',
-            'is_checked_in' => false,
-        ]);
-
-        $result = $this->service->checkinByQrToken('admin-token-456', $admin);
-
-        $this->assertTrue($result['success']);
-        $this->assertEquals('Check-in realizado com sucesso!', $result['message']);
-    }
-
-    public function test_checkin_by_qr_token_returns_error_for_non_validator(): void
-    {
-        $promoter = User::factory()->create([
-            'role' => UserRole::PROMOTER,
-            'is_active' => true,
-        ]);
-
-        $result = $this->service->checkinByQrToken('any-token', $promoter);
-
-        $this->assertFalse($result['success']);
-        $this->assertEquals('Você não tem permissão para realizar check-ins.', $result['message']);
-    }
-
-    public function test_checkin_by_qr_token_returns_error_when_token_not_found(): void
-    {
-        $validator = User::factory()->create([
-            'role' => UserRole::VALIDATOR,
-            'is_active' => true,
-        ]);
-
-        $result = $this->service->checkinByQrToken('non-existent-token', $validator);
-
-        $this->assertFalse($result['success']);
-        $this->assertEquals('Convidado não encontrado.', $result['message']);
-    }
-
-    public function test_checkin_by_qr_token_returns_error_when_already_checked_in(): void
-    {
-        $validator = User::factory()->create([
-            'role' => UserRole::VALIDATOR,
-            'is_active' => true,
-        ]);
-
-        $guest = Guest::factory()->create([
-            'qr_token' => 'already-checked-token',
-            'is_checked_in' => true,
-        ]);
-
-        $result = $this->service->checkinByQrToken('already-checked-token', $validator);
-
-        $this->assertFalse($result['success']);
-        $this->assertEquals('Este convidado já realizou o check-in.', $result['message']);
     }
 
     public function test_can_register_guest_returns_true_for_promoter_with_permission(): void
@@ -331,34 +240,5 @@ class GuestServiceTest extends TestCase
 
         $this->assertCount(1, $sectors);
         $this->assertEquals($sector1->id, $sectors->first()->id);
-    }
-
-    public function test_admin_cannot_checkin_without_validator_role(): void
-    {
-        $admin = User::factory()->create([
-            'role' => UserRole::ADMIN,
-            'is_active' => true,
-        ]);
-
-        $guest = Guest::factory()->create([
-            'qr_token' => 'admin-test-token',
-            'is_checked_in' => false,
-        ]);
-
-        $result = $this->service->checkinByQrToken('admin-test-token', $admin);
-
-        $this->assertTrue($result['success']);
-    }
-
-    public function test_inactive_validator_cannot_checkin(): void
-    {
-        $validator = User::factory()->create([
-            'role' => UserRole::VALIDATOR,
-            'is_active' => false,
-        ]);
-
-        $result = $this->service->checkinByQrToken('any-token', $validator);
-
-        $this->assertFalse($result['success']);
     }
 }

@@ -1,80 +1,44 @@
-# laravel - Instrucoes Antigravity
+# DEVORQ v2.1 - Orquestrador de Desenvolvimento
 
-## AI Dev Superpowers
+## Visão Geral
 
-Este projeto usa **AI Dev Superpowers** para governanca de desenvolvimento com IA.
-
-### Ativacao do Modo Agente
-
-**Opcao 1 - Comando direto (recomendado):**
-```bash
-aidev agent | xclip -selection clipboard
-```
-Cole o prompt gerado aqui.
-
-**Opcao 2 - Ativacao por trigger:**
-```
-"modo agente" | "aidev" | "superpowers"
-```
-
-### O que acontece ao ativar
-
-1. **Orquestrador** coordena 9 agentes especializados
-2. **TDD obrigatorio** - RED -> GREEN -> REFACTOR
-3. **Skills** automatizam workflows (brainstorming, planning, code-review, debugging)
-4. **Regras da stack** filament sao aplicadas
-
-### Estrutura
-
-```
-.aidev/
-├── agents/      # 9 agentes especializados
-├── skills/      # 6 workflows automatizados
-├── rules/       # Convencoes por stack
-└── state/       # Estado persistente
-```
-
-### MCPs Disponiveis
-
-O Antigravity tem acesso aos seguintes MCPs:
-- **serena** - Analise semantica de codigo
-- **basic-memory** - Memoria persistente
-- **context7** - Documentacao de bibliotecas
-
-### Agentes Disponiveis
-
-| Agente | Responsabilidade |
-|--------|------------------|
-| orchestrator | Coordenacao geral |
-| architect | Design e planejamento |
-| backend | Implementacao server-side (TDD) |
-| frontend | Implementacao client-side (TDD) |
-| code-reviewer | Revisao de qualidade |
-| qa | Testes e validacao |
-| security-guardian | Seguranca e OWASP |
-| devops | Deploy e infra |
-| legacy-analyzer | Codigo legado |
-
-### Skills Disponiveis
-
-| Skill | Quando usar |
-|-------|-------------|
-| brainstorming | Nova feature ou projeto |
-| writing-plans | Criar plano de implementacao |
-| test-driven-development | Implementar codigo |
-| code-review | Revisar PR ou codigo |
-| systematic-debugging | Corrigir bugs |
-| learned-lesson | Documentar aprendizados |
-
-### Comandos CLI
-
-| Comando | Descricao |
-|---------|-----------|
-| `aidev agent` | Gera prompt de ativacao |
-| `aidev start` | Mostra instrucoes de ativacao |
-| `aidev status` | Mostra status |
-| `aidev doctor` | Diagnostico |
-| `aidev snapshot` | Context passport |
+Este projeto usa **DEVORQ** como orquestrador único de desenvolvimento.
 
 ---
-*Gerado por AI Dev Superpowers v3*
+
+## Ativação
+
+Execute `/activate-agents` ou leia `.devorq/rules/project.md`
+
+---
+
+## Estrutura DEVORQ
+
+```
+.devorq/
+├── rules/project.md    # Regras e gates do projeto
+├── state/lessons-learned/  # 23 lições aprendidas
+├── plans/              # Planos de implementação
+└── version             # v2.1.1
+```
+
+---
+
+## Fluxo DEVORQ
+
+1. **Gate 1-4**: Especificação e validação
+2. **Gate 5**: Captura de lições aprendidas
+3. **Gate 6**: Validação de lições
+4. **Gate 7**: Aplicação de lições
+
+---
+
+## Princípios
+
+- **TDD**: RED → GREEN → REFACTOR
+- **Documentação antes do código**
+- **Sempre use sail** para comandos Artisan
+
+---
+
+*Substitui o antigo .aidev - limpa em 2026-04-20*

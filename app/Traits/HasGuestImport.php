@@ -2,10 +2,7 @@
 
 namespace App\Traits;
 
-use App\Models\Guest;
-use App\Models\Sector;
 use Filament\Actions\Action;
-use Illuminate\Support\Str;
 
 trait HasGuestImport
 {
@@ -78,13 +75,14 @@ trait HasGuestImport
             ->color('gray')
             ->action(function () {
                 $path = storage_path('app/templates/modelo-importacao-convidados.xlsx');
-                
-                if (!file_exists($path)) {
+
+                if (! file_exists($path)) {
                     \Filament\Notifications\Notification::make()
                         ->title('Erro')
                         ->body('Arquivo de modelo não encontrado.')
                         ->danger()
                         ->send();
+
                     return;
                 }
 

@@ -29,8 +29,6 @@ class ListGuests extends ListRecords
 
     protected function getHeaderWidgets(): array
     {
-        return [
-            \App\Filament\Promoter\Widgets\PendingRequestsTableWidget::class,
-        ];
+        return [];
     }
 }

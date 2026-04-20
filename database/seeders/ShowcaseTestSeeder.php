@@ -92,9 +92,10 @@ class ShowcaseTestSeeder extends Seeder
                 'end_time' => '23:59:00',
                 'location' => 'Arena Showcase',
                 'status' => EventStatus::ACTIVE,
+                'bilheteria_enabled' => true,
             ]
         );
-        $this->command->info("  - Festival Teste 2026 (ID: {$event->id})");
+        $this->command->info("  - Festival Teste 2026 (ID: {$event->id}, bilheteria_enabled: true)");
 
         // 3. SECTORS
         $this->command->info('');
@@ -189,6 +190,28 @@ class ShowcaseTestSeeder extends Seeder
             ]
         );
         $this->command->info('  - promoter@guestlist.pro: quota=50, +1 enabled (limit 10)');
+
+        EventAssignment::updateOrCreate(
+            [
+                'user_id' => $validator->id,
+                'event_id' => $event->id,
+            ],
+            [
+                'role' => UserRole::VALIDATOR,
+            ]
+        );
+        $this->command->info('  - validador@guestlist.pro: validator role');
+
+        EventAssignment::updateOrCreate(
+            [
+                'user_id' => $bilheteria->id,
+                'event_id' => $event->id,
+            ],
+            [
+                'role' => UserRole::BILHETERIA,
+            ]
+        );
+        $this->command->info('  - bilheteria@guestlist.pro: bilheteria role');
 
         // 6. GUESTS (40 total)
         $this->command->info('');

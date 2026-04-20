@@ -8,7 +8,6 @@ use App\Models\Event;
 use App\Models\Guest;
 use App\Models\User;
 use App\Services\ApprovalRequestService;
-use App\Services\GuestService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -166,25 +165,6 @@ class ApiController extends Controller
         $guest->delete();
 
         return response()->json(['message' => 'Convidado deletado']);
-    }
-
-    public function checkinByQr(Request $request): JsonResponse
-    {
-        $request->validate([
-            'qr_token' => 'required|string',
-        ]);
-
-        $guestService = new GuestService;
-        $result = $guestService->checkinByQrToken($request->qr_token, $request->user());
-
-        if (! $result['success']) {
-            return response()->json(['error' => $result['message']], 400);
-        }
-
-        return response()->json([
-            'data' => $result['guest'],
-            'message' => $result['message'],
-        ]);
     }
 
     public function listApprovalRequests(Request $request): JsonResponse

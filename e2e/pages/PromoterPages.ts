@@ -1,21 +1,32 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { WAIT_TIMES } from '../config/wait-times';
+import { waitForLivewireLoad, waitForLivewireResponse } from '../helpers/livewire-helpers';
 
 export class PromoterDashboardPage {
   readonly page: Page;
   readonly quotaWidget: Locator;
   readonly myGuestsButton: Locator;
   readonly createGuestButton: Locator;
+  readonly eventCards: ReturnType<Page['locator']>;
 
   constructor(page: Page) {
     this.page = page;
     this.quotaWidget = page.locator('[class*="quota"], [class*="widget"]');
     this.myGuestsButton = page.locator('a:has-text("Meus Convidados"), [href*="/guests"]');
     this.createGuestButton = page.locator('a:has-text("Cadastrar"), button:has-text("Novo")');
+    this.eventCards = page.locator('button:has-text("Festival Teste"), [class*="event"]:has(button), button[class*="event"]');
   }
 
   async goto() {
     await this.page.goto('/promoter');
     await this.page.waitForLoadState('networkidle');
+    await waitForLivewireLoad(this.page);
+
+    if (await this.eventCards.count() > 0) {
+      await this.eventCards.first().click();
+      await waitForLivewireResponse(this.page);
+      await this.page.waitForLoadState('networkidle');
+    }
   }
 
   async expectToBeOnPromoterDashboard() {
@@ -23,7 +34,8 @@ export class PromoterDashboardPage {
   }
 
   async getQuotaInfo(): Promise<{ used: number; total: number }> {
-    const quotaText = await this.quotaWidget.textContent();
+    const quotaWidgetEl = this.quotaWidget.first();
+    const quotaText = await quotaWidgetEl.textContent();
     const match = quotaText?.match(/(\d+)\s*\/\s*(\d+)/);
     if (match) {
       return { used: parseInt(match[1]), total: parseInt(match[2]) };
@@ -37,31 +49,51 @@ export class PromoterGuestListPage {
   readonly table: Locator;
   readonly createButton: Locator;
   readonly searchInput: Locator;
+  readonly eventCards: ReturnType<Page['locator']>;
 
   constructor(page: Page) {
     this.page = page;
     this.table = page.locator('table');
     this.createButton = page.locator('a:has-text("Cadastrar Convidado"), [href*="/create"]');
     this.searchInput = page.locator('input[placeholder*="buscar"], input[placeholder*="nome"]');
+    this.eventCards = page.locator('button:has-text("Festival Teste"), [class*="event"]:has(button), button[class*="event"]');
   }
 
   async goto() {
     await this.page.goto('/promoter/guests');
     await this.page.waitForLoadState('networkidle');
+    await waitForLivewireLoad(this.page);
+
+    await this.page.waitForTimeout(2000);
+
+    const eventOverlayVisible = await this.page.locator('text="Selecionar Evento"').isVisible().catch(() => false);
+    if (eventOverlayVisible) {
+      const eventButton = this.page.locator('button:has-text("Festival"), [class*="event-card"]').first();
+      const buttonExists = await eventButton.isVisible({ timeout: 2000 }).catch(() => false);
+      if (buttonExists) {
+        await eventButton.click();
+        await waitForLivewireResponse(this.page);
+        await this.page.waitForSelector(this.page.locator('text="Selecionar Evento"'), { state: 'hidden', timeout: 8000 }).catch(() => {});
+        await waitForLivewireLoad(this.page);
+      }
+    }
   }
 
   async expectTableToBeVisible() {
-    await expect(this.table).toBeVisible({ timeout: 10000 });
+    await expect(this.table).toBeVisible({ timeout: WAIT_TIMES.ELEMENT_VISIBLE });
   }
 
   async clickCreateGuest() {
     await this.createButton.click();
-    await this.page.waitForTimeout(500);
+    await this.page.waitForTimeout(WAIT_TIMES.MODAL_OPEN);
   }
 
   async searchGuest(name: string) {
-    await this.searchInput.fill(name);
-    await this.page.waitForTimeout(500);
+    const searchInputVisible = await this.searchInput.isVisible({ timeout: 3000 }).catch(() => false);
+    if (searchInputVisible) {
+      await this.searchInput.fill(name);
+      await waitForLivewireLoad(this.page);
+    }
   }
 }
 
@@ -104,7 +136,7 @@ export class PromoterGuestFormPage {
     }
 
     if (data.sector) {
-      await this.sectorSelect.selectOption({ label: data.sector });
+      await selectOptionAndWait(this.page, this.sectorSelect, { label: data.sector });
     }
 
     if (data.hasPlusOne && await this.plusOneToggle.isVisible()) {
@@ -114,7 +146,7 @@ export class PromoterGuestFormPage {
 
   async submitForm() {
     await this.saveButton.click();
-    await this.page.waitForTimeout(1000);
+    await waitForLivewireLoad(this.page);
   }
 
   async expectFormToHaveValidationError() {

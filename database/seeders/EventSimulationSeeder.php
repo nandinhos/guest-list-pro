@@ -4,11 +4,11 @@ namespace Database\Seeders;
 
 use App\Enums\DocumentType;
 use App\Enums\EventStatus;
+use App\Enums\UserRole;
 use App\Models\Event;
 use App\Models\Guest;
 use App\Models\Sector;
 use App\Models\User;
-use App\Enums\UserRole;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
@@ -20,8 +20,9 @@ class EventSimulationSeeder extends Seeder
         $promoter = User::where('role', UserRole::PROMOTER)->first();
         $validator = User::where('role', UserRole::VALIDATOR)->first();
 
-        if (!$promoter || !$validator) {
+        if (! $promoter || ! $validator) {
             $this->command->error('Promoter ou Validator não encontrados. Execute o UserSeeder primeiro.');
+
             return;
         }
 
@@ -92,7 +93,7 @@ class EventSimulationSeeder extends Seeder
             // Criar 10 convidados por setor
             for ($i = 0; $i < 10; $i++) {
                 $isCheckedIn = $event->status === EventStatus::FINISHED || ($event->status === EventStatus::ACTIVE && $faker->boolean(40));
-                
+
                 Guest::firstOrCreate(
                     [
                         'event_id' => $event->id,

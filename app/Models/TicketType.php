@@ -37,6 +37,11 @@ class TicketType extends Model
         return $this->hasMany(TicketSale::class);
     }
 
+    public function sectorPrices(): HasMany
+    {
+        return $this->hasMany(TicketTypeSector::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

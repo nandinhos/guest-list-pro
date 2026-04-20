@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserRole;
 use App\Filament\Bilheteria\Resources\TicketSales\Pages\ListTicketSales;
 use App\Models\Event;
 use App\Models\Sector;
@@ -20,7 +21,10 @@ class TicketSalesMobileViewTest extends TestCase
     {
         parent::setUp();
 
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'role' => UserRole::BILHETERIA,
+            'is_active' => true,
+        ]);
         $this->actingAs($user);
 
         $event = Event::factory()->create();

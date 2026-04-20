@@ -15,8 +15,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ImportGuests extends Page
 {
-    use WithFileUploads;
     use \App\Traits\HasGuestImport;
+    use WithFileUploads;
 
     protected static string $resource = GuestResource::class;
 
@@ -113,21 +113,25 @@ class ImportGuests extends Page
     {
         if (! $this->file) {
             Notification::make()->title('Selecione um arquivo')->danger()->send();
+
             return;
         }
 
         if (! $this->eventId) {
             Notification::make()->title('Selecione um evento')->danger()->send();
+
             return;
         }
 
         if (! $this->sectorId) {
             Notification::make()->title('Selecione um setor')->danger()->send();
+
             return;
         }
 
         if (! $this->promoterId) {
             Notification::make()->title('Selecione um promoter')->danger()->send();
+
             return;
         }
 
@@ -165,21 +169,25 @@ class ImportGuests extends Page
     {
         if (empty($this->textContent)) {
             Notification::make()->title('Cole o texto com os convidados')->danger()->send();
+
             return;
         }
 
         if (! $this->textEventId) {
             Notification::make()->title('Selecione um evento')->danger()->send();
+
             return;
         }
 
         if (! $this->textSectorId) {
             Notification::make()->title('Selecione um setor')->danger()->send();
+
             return;
         }
 
         if (! $this->textPromoterId) {
             Notification::make()->title('Selecione um promoter')->danger()->send();
+
             return;
         }
 
@@ -191,7 +199,7 @@ class ImportGuests extends Page
         foreach ($lines as $line) {
             $documentNormalized = preg_replace('/\D/', '', $line['document']);
 
-            if (!empty($documentNormalized)) {
+            if (! empty($documentNormalized)) {
                 $exists = Guest::query()
                     ->where('event_id', $this->textEventId)
                     ->where('document_normalized', $documentNormalized)
@@ -199,6 +207,7 @@ class ImportGuests extends Page
 
                 if ($exists) {
                     $skipped++;
+
                     continue;
                 }
             }

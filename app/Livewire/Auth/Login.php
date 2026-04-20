@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Auth;
 
-use App\Services\AuthenticationService;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;

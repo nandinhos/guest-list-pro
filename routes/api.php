@@ -21,9 +21,6 @@ Route::prefix('')->group(function () {
     Route::put('/guests/{id}', [ApiController::class, 'updateGuest'])->middleware('auth:sanctum');
     Route::delete('/guests/{id}', [ApiController::class, 'deleteGuest'])->middleware('auth:sanctum');
 
-    // Check-in via QR
-    Route::post('/checkin/qr', [ApiController::class, 'checkinByQr'])->middleware('auth:sanctum');
-
     // Approval Requests
     Route::get('/approval-requests', [ApiController::class, 'listApprovalRequests'])->middleware('auth:sanctum');
     Route::post('/approval-requests', [ApiController::class, 'createApprovalRequest'])->middleware('auth:sanctum');

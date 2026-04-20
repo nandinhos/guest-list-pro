@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Sector extends Model
@@ -48,5 +49,11 @@ class Sector extends Model
     public function ticketSales(): HasMany
     {
         return $this->hasMany(TicketSale::class);
+    }
+
+    public function ticketTypePrices(): BelongsToMany
+    {
+        return $this->belongsToMany(TicketType::class, 'ticket_type_sector')
+            ->withPivot('price');
     }
 }

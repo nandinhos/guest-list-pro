@@ -4,7 +4,7 @@ test.describe('API Authentication', () => {
   test('should login with valid credentials', async ({ request }) => {
     const response = await request.post('/api/auth/login', {
       data: {
-        email: 'admin@admin.com',
+        email: 'admin@guestlist.pro',
         password: 'password',
       },
     });
@@ -34,13 +34,13 @@ test.describe('API Authentication', () => {
       },
     });
 
-    expect(response.status()).toBe(403);
+    expect(response.status()).toBe(401);
   });
 
   test('should logout successfully', async ({ request }) => {
     const loginResponse = await request.post('/api/auth/login', {
       data: {
-        email: 'admin@admin.com',
+        email: 'admin@guestlist.pro',
         password: 'password',
       },
     });
@@ -62,7 +62,7 @@ test.describe('API Events', () => {
   test.beforeAll(async ({ request }) => {
     const response = await request.post('/api/auth/login', {
       data: {
-        email: 'admin@admin.com',
+        email: 'admin@guestlist.pro',
         password: 'password',
       },
     });
@@ -129,7 +129,7 @@ test.describe('API Guests', () => {
   test.beforeAll(async ({ request }) => {
     const response = await request.post('/api/auth/login', {
       data: {
-        email: 'admin@admin.com',
+        email: 'admin@guestlist.pro',
         password: 'password',
       },
     });
@@ -232,7 +232,7 @@ test.describe('API Approval Requests', () => {
   test.beforeAll(async ({ request }) => {
     const response = await request.post('/api/auth/login', {
       data: {
-        email: 'admin@admin.com',
+        email: 'admin@guestlist.pro',
         password: 'password',
       },
     });
@@ -316,7 +316,7 @@ test.describe('API Stats', () => {
   test.beforeAll(async ({ request }) => {
     const response = await request.post('/api/auth/login', {
       data: {
-        email: 'admin@admin.com',
+        email: 'admin@guestlist.pro',
         password: 'password',
       },
     });
@@ -369,7 +369,7 @@ test.describe('API Security', () => {
 
   test('should validate required fields', async ({ request }) => {
     const loginRes = await request.post('/api/auth/login', {
-      data: { email: 'admin@admin.com', password: 'password' },
+      data: { email: 'admin@guestlist.pro', password: 'password' },
     });
     const { token: testToken } = await loginRes.json();
 

@@ -2,14 +2,23 @@
 
 namespace App\Filament\Promoter\Pages;
 
+use App\Enums\DocumentType;
 use App\Enums\RequestStatus;
 use App\Enums\RequestType;
 use App\Models\ApprovalRequest;
+use App\Models\Event;
+use App\Models\PromoterPermission;
+use App\Models\Sector;
 use App\Services\ApprovalRequestService;
 use BackedEnum;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -50,6 +59,108 @@ class MyRequests extends Page implements HasTable
     public static function getNavigationBadgeColor(): string|array|null
     {
         return 'warning';
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('createRequest')
+                ->label('Nova Solicitação')
+                ->icon('heroicon-m-plus')
+                ->color('primary')
+                ->modalHeading('Criar Solicitação de Inclusão')
+                ->form([
+                    Grid::make(['default' => 1, 'md' => 2])->schema([
+                        Select::make('event_id')
+                            ->label('Evento')
+                            ->options(fn () => Event::whereIn('id',
+                                PromoterPermission::where('user_id', auth()->id())->pluck('event_id')
+                            )->pluck('name', 'id')->toArray())
+                            ->live()
+                            ->searchable()
+                            ->required(),
+
+                        Select::make('sector_id')
+                            ->label('Setor')
+                            ->options(function (Get $get) {
+                                $eventId = $get('event_id');
+                                if (! $eventId) {
+                                    return [];
+                                }
+
+                                $permission = PromoterPermission::where('user_id', auth()->id())
+                                    ->where('event_id', $eventId)
+                                    ->first();
+
+                                if (! $permission) {
+                                    return [];
+                                }
+
+                                if (is_null($permission->sector_id)) {
+                                    return Sector::where('event_id', $eventId)
+                                        ->pluck('name', 'id')
+                                        ->toArray();
+                                }
+
+                                return Sector::whereIn('id',
+                                    PromoterPermission::where('user_id', auth()->id())
+                                        ->where('event_id', $eventId)
+                                        ->pluck('sector_id')
+                                )->pluck('name', 'id')->toArray();
+                            })
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+                    ]),
+                    TextInput::make('guest_name')
+                        ->label('Nome Completo')
+                        ->required()
+                        ->maxLength(255),
+
+                    Grid::make(['default' => 1, 'md' => 2])->schema([
+                        Select::make('guest_document_type')
+                            ->label('Tipo de Documento')
+                            ->options(DocumentType::class)
+                            ->default(DocumentType::CPF->value)
+                            ->live()
+                            ->required(),
+
+                        TextInput::make('guest_document')
+                            ->label('Documento')
+                            ->maxLength(20),
+                    ]),
+
+                    TextInput::make('guest_email')
+                        ->label('E-mail')
+                        ->email()
+                        ->maxLength(255),
+
+                    Textarea::make('notes')
+                        ->label('Observações (opcional)')
+                        ->rows(2),
+                ])
+                ->action(function (array $data) {
+                    $service = app(ApprovalRequestService::class);
+                    $request = $service->createGuestInclusionRequest(
+                        auth()->user(),
+                        $data['event_id'],
+                        $data['sector_id'],
+                        [
+                            'name' => $data['guest_name'],
+                            'document' => $data['guest_document'] ?? null,
+                            'document_type' => $data['guest_document_type'] ?? null,
+                            'email' => $data['guest_email'] ?? null,
+                        ],
+                        $data['notes'] ?? null
+                    );
+
+                    Notification::make()
+                        ->title('Solicitação criada')
+                        ->body("Solicitação #{$request->id} enviada para aprovação.")
+                        ->success()
+                        ->send();
+                }),
+        ];
     }
 
     public function table(Table $table): Table
