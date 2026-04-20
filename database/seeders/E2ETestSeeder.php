@@ -6,6 +6,7 @@ use App\Enums\DocumentType;
 use App\Enums\EventStatus;
 use App\Enums\UserRole;
 use App\Models\Event;
+use App\Models\EventAssignment;
 use App\Models\Guest;
 use App\Models\Sector;
 use App\Models\User;
@@ -74,6 +75,39 @@ class E2ETestSeeder extends Seeder
         );
         $this->command->info('Created event: E2E Test Event (id='.$event->id.')');
 
+        $festivalEvent = Event::updateOrCreate(
+            ['name' => 'Festival Teste 2026'],
+            [
+                'date' => '2026-06-15',
+                'start_time' => '18:00:00',
+                'end_time' => '04:00:00',
+                'location' => 'Arena Central',
+                'status' => EventStatus::ACTIVE,
+                'ticket_price' => 150.00,
+            ]
+        );
+        $this->command->info('Created event: Festival Teste 2026 (id='.$festivalEvent->id.')');
+
+        EventAssignment::updateOrCreate(
+            ['user_id' => $validator->id, 'event_id' => $festivalEvent->id],
+            [
+                'role' => UserRole::VALIDATOR,
+                'guest_limit' => 0,
+            ]
+        );
+        $this->command->info('Assigned Festival Teste 2026 to validator');
+
+        EventAssignment::updateOrCreate(
+            ['user_id' => $promoter->id, 'event_id' => $festivalEvent->id],
+            [
+                'role' => UserRole::PROMOTER,
+                'guest_limit' => 100,
+                'plus_one_enabled' => true,
+                'plus_one_limit' => 10,
+            ]
+        );
+        $this->command->info('Assigned Festival Teste 2026 to promoter');
+
         $vipSector = Sector::updateOrCreate(
             ['event_id' => $event->id, 'name' => 'VIP'],
             [
@@ -104,6 +138,47 @@ class E2ETestSeeder extends Seeder
         ];
 
         $sectors = [$vipSector, $pistaSector];
+
+        $festivalGuests = [
+            ['name' => 'Lucas Silva', 'document' => '11122233344'],
+            ['name' => 'Maria Oliveira', 'document' => '22233344455'],
+            ['name' => 'Pedro Santos', 'document' => '33344455566'],
+            ['name' => 'Ana Costa', 'document' => '44455566677'],
+            ['name' => 'João Lima', 'document' => '55566677788'],
+        ];
+
+        $festivalSectors = Sector::where('event_id', $festivalEvent->id)->get();
+        if ($festivalSectors->isEmpty()) {
+            $festivalVip = Sector::updateOrCreate(
+                ['event_id' => $festivalEvent->id, 'name' => 'VIP'],
+                ['capacity' => 100]
+            );
+            $festivalPista = Sector::updateOrCreate(
+                ['event_id' => $festivalEvent->id, 'name' => 'Pista'],
+                ['capacity' => 500]
+            );
+            $festivalSectors = collect([$festivalVip, $festivalPista]);
+        }
+
+        foreach ($festivalGuests as $index => $guestData) {
+            $sector = $festivalSectors[$index % $festivalSectors->count()];
+            $existingGuest = Guest::where('event_id', $festivalEvent->id)
+                ->where('document', $guestData['document'])
+                ->first();
+
+            if (! $existingGuest) {
+                Guest::create([
+                    'event_id' => $festivalEvent->id,
+                    'document' => $guestData['document'],
+                    'name' => $guestData['name'],
+                    'document_type' => DocumentType::CPF,
+                    'sector_id' => $sector->id,
+                    'promoter_id' => $promoter->id,
+                    'is_checked_in' => false,
+                ]);
+            }
+        }
+        $this->command->info('Created '.count($festivalGuests).' guests for Festival Teste 2026');
 
         foreach ($guests as $index => $guestData) {
             $sector = $sectors[$index % count($sectors)];

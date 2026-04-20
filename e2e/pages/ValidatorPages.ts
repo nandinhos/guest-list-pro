@@ -60,6 +60,7 @@ export class ValidatorGuestListPage {
   readonly searchInput: Locator;
   readonly statusFilters: Locator;
   readonly guestRows: Locator;
+  readonly eventCards: ReturnType<Page['locator']>;
 
   constructor(page: Page) {
     this.page = page;
@@ -67,12 +68,33 @@ export class ValidatorGuestListPage {
     this.searchInput = page.locator('input[placeholder*="buscar"], input[placeholder*="nome"], input[placeholder*="documento"]');
     this.statusFilters = page.locator('select');
     this.guestRows = page.locator('table tbody tr');
+    this.eventCards = page.locator('button:has-text("Festival"), [class*="event-card"]:has(button), button[class*="event"]');
   }
 
   async goto() {
     await this.page.goto('/validator/guests');
     await this.page.waitForLoadState('networkidle');
     await waitForLivewireLoad(this.page);
+
+    await this.page.waitForTimeout(2000);
+
+    const hasOverlay = await this.page.locator('text="Selecionar Evento"').isVisible().catch(() => false);
+
+    if (hasOverlay) {
+      const eventButtons = this.page.locator('button:has-text("Festival"), button:has-text("Summer"), button:has-text("Night")');
+      const count = await eventButtons.count();
+
+      if (count > 0) {
+        await eventButtons.first().click();
+        await waitForLivewireResponse(this.page);
+        await this.page.waitForTimeout(2000);
+
+        await this.page.goto('/validator/guests');
+        await this.page.waitForLoadState('networkidle');
+        await waitForLivewireLoad(this.page);
+        await this.page.waitForTimeout(2000);
+      }
+    }
   }
 
   async searchGuest(nameOrDocument: string) {
