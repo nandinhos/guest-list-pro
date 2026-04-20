@@ -1,7 +1,7 @@
 # Índice de Lições Aprendidas — DEVORQ
 
 **Data:** 2026-04-20
-**Total:** 23 lições (22 + 1 arquivada)
+**Total:** 24 lições (23 + 1 arquivada)
 
 ---
 
@@ -45,6 +45,7 @@
 | ID | Título | Tags |
 |----|--------|------|
 | 2026-04-20-userfactory-role-auth-bug | UserFactory sem role/is_active causa 403 em Tests | testing, auth, filament |
+| 2026-04-20-e2e-tests-and-seeder-fixes | E2E Tests e Seeder — EventAssignment e parsing de quota | e2e, testing, seeder, eventassignment |
 
 ---
 
@@ -59,6 +60,7 @@
 | ID | Título |
 |----|--------|
 | 2026-04-20-userfactory-role-auth-bug | UserFactory sem role/is_active causa 403 em Tests |
+| 2026-04-20-e2e-tests-and-seeder-fixes | E2E Tests e Seeder — EventAssignment e parsing de quota |
 | 2026-02-17-seeder-idempotente | Seeders Idempotentes |
 | 2026-02-17-pint-formatting | Pint — Formatação Automática |
 | 2026-02-21-tdd-stuck-tests | TDD e Testes Travados |
