@@ -143,7 +143,7 @@ test.describe('🔍 E2E Full Admin Panel Audit', () => {
 
   test('AUDIT-008: Tipos de Ingresso - Listagem', async ({ page }) => {
     await setupPageListeners(page, 'TicketTypes');
-    await page.goto('/admin/ticket-types');
+    await page.goto('/admin/ticket-type/ticket-types');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
     await capturePageScreenshot(page, 'TicketTypes', 'list');
@@ -157,10 +157,10 @@ test.describe('🔍 E2E Full Admin Panel Audit', () => {
 
   test('AUDIT-009: Tipos de Ingresso - Criar Novo', async ({ page }) => {
     await setupPageListeners(page, 'TicketTypes-Create');
-    await page.goto('/admin/ticket-types');
+    await page.goto('/admin/ticket-type/ticket-types');
     await page.waitForLoadState('networkidle');
     
-    const createBtn = page.locator('a:has-text("Criar"), [href*="/ticket-types/create"]').first();
+    const createBtn = page.locator('a:has-text("Criar"), [href*="/ticket-type/ticket-types/create"]').first();
     if (await createBtn.isVisible().catch(() => false)) {
       await createBtn.click();
       await page.waitForLoadState('networkidle');

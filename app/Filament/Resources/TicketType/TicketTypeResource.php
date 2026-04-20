@@ -18,6 +18,8 @@ class TicketTypeResource extends Resource
 {
     protected static ?string $model = TicketType::class;
 
+    protected static ?string $policy = \App\Policies\TicketTypePolicy::class;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTicket;
 
     protected static ?string $modelLabel = 'Tipo de Ingresso';

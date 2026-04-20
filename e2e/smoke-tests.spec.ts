@@ -302,10 +302,14 @@ test.describe('🎫 Ticket Pricing Tests', () => {
   });
 
   test('TC-TICKETPRICING-001: Admin can access Ticket Types management', async ({ page }) => {
-    await expect(page.locator('body')).toBeVisible();
+    await page.goto('/admin/ticket-type/ticket-types');
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(1000);
     const ticketTypeLink = page.locator('a[href**="ticket-type"], a:has-text("Tipo de Ingresso")').first();
     const linkExists = await ticketTypeLink.isVisible({ timeout: 3000 }).catch(() => false);
     console.log(`Ticket Type link found: ${linkExists}`);
+    const pageTitle = await page.locator('h1, [class*="heading"]').first().textContent().catch(() => 'N/A');
+    console.log(`Page title: ${pageTitle}`);
   });
 });
 

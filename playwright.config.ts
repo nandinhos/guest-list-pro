@@ -16,18 +16,4 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-  ],
-  webServer: {
-    command: 'vendor/bin/sail up -d',
-    url: 'http://localhost:8888',
-    reuseExistingServer: true,
-    stdout: 'ignore',
-    stderr: 'ignore',
-    timeout: 120000,
-  },
 });

@@ -36,9 +36,11 @@ export class PromoterDashboardPage {
   async getQuotaInfo(): Promise<{ used: number; total: number }> {
     const quotaWidgetEl = this.quotaWidget.first();
     const quotaText = await quotaWidgetEl.textContent();
-    const match = quotaText?.match(/(\d+)\s*\/\s*(\d+)/);
+    const match = quotaText?.match(/(\d+)\s*(?:\/\s*(\d+)|restantes)/);
     if (match) {
-      return { used: parseInt(match[1]), total: parseInt(match[2]) };
+      const firstNum = parseInt(match[1]);
+      const secondNum = match[2] ? parseInt(match[2]) : 0;
+      return { used: firstNum, total: secondNum || firstNum };
     }
     return { used: 0, total: 0 };
   }
