@@ -37,18 +37,15 @@ class TicketTypeForm
                             ->label('Descrição')
                             ->maxLength(500),
 
-                        TextInput::make('price')
-                            ->label('Preço Padrão')
-                            ->numeric()
-                            ->prefix('R$')
-                            ->required(),
-
                         Toggle::make('is_active')
                             ->label('Ativo'),
+
+                        Toggle::make('is_visible')
+                            ->label('Visível na Bilheteria'),
                     ])->columns(2),
 
                 Section::make('Preços por Setor')
-                    ->description('Configure preços específicos por setor (opcional)')
+                    ->description('Configure o preço para cada setor (obrigatório)')
                     ->schema([
                         Repeater::make('sector_prices')
                             ->label('')
@@ -65,14 +62,18 @@ class TicketTypeForm
                                         return Sector::where('event_id', $eventId)
                                             ->pluck('name', 'id');
                                     })
-                                    ->disabled(fn (Get $get) => ! $get('../../event_id')),
+                                    ->disabled(fn (Get $get) => ! $get('../../event_id'))
+                                    ->required(),
                                 TextInput::make('price')
-                                    ->label('Preço Customizado')
+                                    ->label('Preço')
                                     ->numeric()
-                                    ->prefix('R$'),
+                                    ->prefix('R$')
+                                    ->required(),
                             ])
                             ->columns(2)
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->required()
+                            ->minItems(1),
                     ])
                     ->collapsible(),
             ]);

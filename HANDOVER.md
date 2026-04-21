@@ -1,467 +1,351 @@
-# 🔄 HANDOVER — guest-list-pro
+# HANDOVER.md - Guest List Pro
 
-**Para:** Agente de IA autônomo
-**De:** Sessão anterior (2026-04-20 17:45 BRT)
-**Objetivo:** Contribuir no projeto guest-list-pro com autonomia e seguimento das práticas DEVORQ
+> **Para agentes autônomos:** Leia este documento completamente antes de iniciar qualquer tarefa.
 
----
-
-## 🎯 Contexto do Projeto
-
-### O que é o guest-list-pro?
-Sistema de gestão de convidados para eventos/festas com:
-- **Controle de duplicidade** — guests únicos por documento+evento
-- **Sistema de aprovações** — approval requests pendentes
-- **Bilheteria** — vendas de tickets
-- **Portal do validator** — check-in de convidados
-- **Portal do promoter** — cadastro de convidados com quota
-
-### Stack Tecnológica
-| Componente | Tecnologia |
-|------------|------------|
-| Backend | Laravel 12 (PHP 8.4) |
-| Admin Panel | Filament v4 |
-| Frontend | Livewire v4 + Alpine.js |
-| Frontend CSS | Tailwind CSS |
-| Database | MySQL (Docker) |
-| Tests E2E | Playwright |
-| Orquestrador | DEVORQ v2.1 |
+**Última atualização:** 2026-04-21
+**Versão do Projeto:** 2.1.1
+**Stack:** Laravel 12 + Filament 4 + Livewire 3
 
 ---
 
-## 📁 Estrutura de Diretórios (Completa)
+## 1. VISÃO GERAL DO PROJETO
+
+Sistema de gestão de convidados com controle de duplicidade, aprovações e bilheteria.
+
+### 1.1 Objetivos
+- Controle de acesso a eventos por setores
+- Gestão de promotores e validadores
+- Sistema de aprovações para convidados duplicados
+- Bilheteria com vendas de ingressos
+- Relatórios e dashboards em tempo real
+
+### 1.2 Painéis do Sistema
+
+| Painel | Path | Descrição |
+|--------|------|-----------|
+| Admin | `/admin` | Gestão completa: eventos, setores, usuários, tickets, relatórios |
+| Bilheteria | `/bilheteria` | Vendas de ingressos com seleção por setor/tipo |
+| Promoter | `/promoter` | Cadastro de convidados com quota limitada |
+| Validator | `/validator` | Check-in de convidados |
+
+---
+
+## 2. ARQUITETURA ATUAL
+
+### 2.1 Modelos Principais
 
 ```
-guest-list-pro/
-├── app/
-│   ├── Enums/                          # UserRole, DocumentType, EventStatus, RequestStatus
-│   ├── Filament/
-│   │   ├── Admin/                      # Painel Admin
-│   │   │   ├── Resources/
-│   │   │   │   ├── Guests/
-│   │   │   │   │   ├── Pages/
-│   │   │   │   │   ├── Schemas/
-│   │   │   │   │   └── Tables/
-│   │   │   │   ├── TicketType/         # RECENTLY ADDED - verificar policy
-│   │   │   │   ├── Event/
-│   │   │   │   ├── Sector/
-│   │   │   │   ├── User/
-│   │   │   │   └── PromoterPermission/
-│   │   │   └── Widgets/
-│   │   ├── Bilheteria/                 # Painel Bilheteria
-│   │   │   └── Resources/TicketSale/
-│   │   ├── Validator/                  # Painel Validator (check-in)
-│   │   │   └── Resources/Guests/
-│   │   └── Promoter/                  # Painel Promoter
-│   │       └── Resources/Guests/
-│   ├── Http/
-│   │   └── Middleware/
-│   │       └── EnsureEventSelected.php  # Redirect para select-event se não há evento na session
-│   ├── Livewire/
-│   │   └── EventSelectorGrid.php       # Grid de seleção de evento (Livewire component)
-│   ├── Models/
-│   │   ├── Guest.php                   # guest_token (ULID), document_type, is_checked_in
-│   │   ├── Event.php                   # EventStatus enum
-│   │   ├── EventAssignment.php         # Permissão user/evento/role (substitui PromoterPermission)
-│   │   ├── Sector.php
-│   │   ├── TicketSale.php
-│   │   ├── TicketType.php
-│   │   ├── User.php                    # getAssignedEvents() consulta event_assignments
-│   │   └── ApprovalRequest.php
-│   ├── Observers/
-│   │   ├── GuestObserver.php           # normalizeDocument, validateUniqueDocumentInEvent, generateGuestToken
-│   │   └── TicketSaleObserver.php      # Notification via sendToDatabase (não sendTo anymore!)
-│   ├── Policies/
-│   │   ├── GuestPolicy.php
-│   │   ├── TicketTypePolicy.php        # ADMIN e BILHETERIA apenas
-│   │   └── ...
-│   ├── Providers/
-│   │   └── Filament/AdminPanelProvider.php  # Auto-discovers resources
-│   └── Services/
-│       ├── GuestService.php
-│       └── GuestValidationService.php
-├── config/
-│   └── filament.php
-├── database/
-│   ├── migrations/
-│   │   ├── 2026_04_20_014917_rename_qr_token_to_guest_token_in_guests_table.php  # QR → guest_token
-│   │   └── ... (outras migrations)
-│   └── seeders/
-│       ├── DatabaseSeeder.php          # Chama UserSeeder + EventSimulationSeeder
-│       ├── UserSeeder.php              # admin@guestlist.pro, promoter@guestlist.pro, validator@guestlist.pro, bilheteria@guestlist.pro
-│       ├── E2ETestSeeder.php            # Para testes - credentials em email@email.com, EVENTO DIFERENTE
-│       ├── EventSimulationSeeder.php   # Summer Festival 2026, Night Club Live, Retro Party 2025
-│       └── ShowcaseTestSeeder.php      # Demo completo com guests
-├── e2e/
-│   ├── config/
-│   │   └── wait-times.ts
-│   ├── helpers/
-│   │   └── livewire-helpers.ts
-│   ├── pages/
-│   │   ├── LoginPage.ts
-│   │   ├── AdminPages.ts
-│   │   ├── BilheteriaPages.ts
-│   │   ├── ValidatorPages.ts           # CRÍTICO: goto() precisa lidar com event selection overlay
-│   │   ├── PromoterPages.ts
-│   │   └── ...
-│   ├── *.spec.ts                       # Playwright tests
-│   └── playwright.config.ts
-├── docs/
-│   ├── SPECS/implemented/
-│   │   └── SPEC-0006-20-04-2026-qrcode-removal-and-guest-token-refactoring.md
-│   └── report_e2e/
-│       └── AUDIT-FULL-2026-04-20.md
-├── resources/
-│   └── views/
-│       ├── filament/
-│       │   └── pages/
-│       │       └── select-event.blade.php   # Usa Livewire:event-selector-grid
-│       └── livewire/
-│           └── event-selector-grid.blade.php
-├── routes/
-│   └── api.php                         # Sem rota de checkin/qr mais (removida)
-└── .devorq/
-    ├── version                         # 2.1
-    ├── rules/project.md
-    ├── state/
-    │   ├── STATUS.md                   # STATUS ATUAL - VER SEMPRE ANTES DE COMEÇAR
-    │   ├── session.json
-    │   └── lessons-learned/
-    │       ├── _INDEX.md               # ÍNDICE com 24 lições
-    │       └── 2026-04-20-e2e-tests-and-seeder-fixes.md  # ÚLTIMA LIÇÃO
-    └── plans/
+Event
+├── Sector (1:N)
+├── TicketType (1:N)
+│   └── TicketTypeSector (N:N com Sector - preços por setor)
+├── Guest (1:N)
+├── TicketSale (1:N)
+└── EventAssignment (N:N com User - permissões)
+
+User
+├── EventAssignment (1:N) - permissões por evento
+├── Guest (1:N) - convidados cadastrados
+└── TicketSale (1:N) - vendas realizadas
+```
+
+### 2.2 Ticket Pricing - Arquitetura Refatorada (2026-04-21)
+
+**ANTES:** TicketType tinha campo `price` (preço único global)
+
+**AGORA:**
+- TicketType é apenas um "molde" (ex: "1º Lote", "2º Lote")
+- Preço existe apenas na combinação **TicketType + Setor** via `ticket_type_sector`
+- Campo `is_visible` controla quais tipos aparecem na bilheteria
+
+```
+TIPO: "Pista Premium"
+├── PISTA     → R$ 150,00
+├── VIP       → R$ 250,00
+├── CAMAROTE  → R$ 400,00
+└── BACKSTAGE → R$ 300,00
+```
+
+**Arquivos da refatoração:**
+- `app/Models/TicketType.php` - sem `price`, com `is_visible`
+- `app/Services/TicketSaleService.php` - lança exceção se preço não configurado
+- `app/Filament/Resources/TicketType/Schemas/TicketTypeForm.php` - setor_prices obrigatório
+- `app/Filament/Bilheteria/Resources/TicketSales/Schemas/TicketSaleForm.php` - setor primeiro
+
+### 2.3 Fluxo na Bilheteria (Atual)
+
+```
+1. Selecionar SETOR primeiro
+2. Listar TicketTypes que:
+   - is_visible = true
+   - Têm configuração em ticket_type_sector para o setor
+3. Selecionar TIPO
+4. Preço aparece automaticamente
 ```
 
 ---
 
-## 🔧 Comandos Essenciais (NUNCA ESQUECER)
+## 3. STACK TÉCNICA
+
+### 3.1 Tecnologias
+- **Backend:** Laravel 12, PHP 8.4
+- **Frontend:** Filament 4, Livewire 3, Alpine.js, Tailwind CSS
+- **Database:** MySQL (produção), SQLite (dev), PostgreSQL (suportado)
+- **Cache:** Laravel Cache (database driver)
+- **Auth:** Filament built-in
+
+### 3.2 Estrutura de Diretórios
+
+```
+app/
+├── Enums/                 # Enumerações (DocumentType, PaymentMethod, etc)
+├── Filament/
+│   ├── Admin/            # Painel Admin
+│   ├── Bilheteria/       # Painel Bilheteria
+│   ├── Promoter/         # Painel Promoter
+│   ├── Validator/        # Painel Validator
+│   └── Widgets/          # Widgets compartilhados
+├── Http/
+│   └── Middleware/       # EnsureEventSelected
+├── Livewire/             # Componentes Livewire
+├── Models/              # Eloquent models
+├── Policies/            # Policies de autorização
+├── Rules/               # Regras de validação customizadas
+├── Services/            # Serviços (GuestService, TicketSaleService)
+└── Observers/           # Observers (GuestObserver)
+```
+
+### 3.3 Database Migrations
+
+Migrations importantes em ordem cronológica:
+
+| Migration | Descrição |
+|-----------|-----------|
+| `2026_04_19_041341_create_ticket_type_sector_table.php` | Tabela pivot para preços por setor |
+| `2026_04_21_161945_update_ticket_types_remove_price_add_is_visible.php` | Remove price, adiciona is_visible |
+
+### 3.4 Comandos Úteis
 
 ```bash
-# Docker/Sail - OBRIGATÓRIO
+# Docker/Sail (SEMPRE usar vendor/bin/sail)
 alias sail='vendor/bin/sail'
 
-# Tests unitários
-vendor/bin/sail test tests/Unit --no-coverage
+# Testes
+sail artisan test                    # Unit tests
+node node_modules/.bin/playwright test e2e/smoke-tests.spec.ts  # E2E
 
-# Tests E2E (Playwright) - pode demorar
-npx playwright test e2e/smoke-tests.spec.ts
+# Database
+sail artisan migrate
+sail artisan migrate:fresh --seed --seeder=ShowcaseTestSeeder
+sail artisan db:seed --class=ShowcaseTestSeeder
 
-# Test específico
-npx playwright test e2e/smoke-tests.spec.ts --grep="TC-VALIDATOR-003"
-
-# Reset database completo
-vendor/bin/sail artisan migrate:fresh --seed
-
-# Seed específico (depois de migrate)
-vendor/bin/sail artisan db:seed --class=E2ETestSeeder
-
-# Limpar cache
-vendor/bin/sail artisan cache:clear && vendor/bin/sail artisan config:clear
-
-# Ver logs
-vendor/bin/sail logs -f
+# Cache
+sail artisan cache:clear
+sail artisan config:clear
 ```
 
 ---
 
-## 📖 Regras do Projeto (OBRIGATÓRIAS)
+## 4. DADOS DE TESTE
 
-### AGENTS.md — Início de Cada Sessão
+### 4.1 Usuários (senha: `password`)
+
+| Email | Role |
+|-------|------|
+| admin@guestlist.pro | Admin |
+| promoter@guestlist.pro | Promoter |
+| validador@guestlist.pro | Validator |
+| bilheteria@guestlist.pro | Bilheteria |
+
+### 4.2 Evento de Teste
+- **Nome:** Festival Teste 2026 (ID: 1)
+- **Setores:** Pista, VIP, Camarote, Backstage
+- **Bilheteria:** Habilitada
+
+### 4.3 Ticket Types Configurados
+
+| Tipo | Pista | VIP | Camarote | Backstage |
+|------|-------|-----|----------|----------|
+| Pista Premium | R$150 | R$250 | R$400 | R$300 |
+| VIP Experience | R$250 | R$350 | R$500 | R$450 |
+| Camarote Open Bar | R$400 | R$500 | R$600 | R$550 |
+| Backstage Pass | R$300 | R$450 | R$550 | R$800 |
+
+---
+
+## 5. PENDÊNCIAS E ROADMAP
+
+### 5.1 Bugs/Issues Conhecidos
+
+| Issue | Prioridade | Descrição |
+|-------|------------|-----------|
+| - | - | Nenhum bug crítico conhecido |
+
+### 5.2 Melhorias Planejadas
+
+| Feature | Status | Descrição |
+|---------|--------|-----------|
+| SPEC-0005 Ticket Pricing | ✅ Implementado | Refatoração completa em 2026-04-21 |
+| E2E Tests Ticket Pricing | ⚠️ Pendente | Criar testes E2E para validar nova arquitetura |
+| DEVORQ v3 | 🔍 Em investigação | Versão atual 2.1.1 |
+
+### 5.3 SPECs Implementadas
 
 ```
-1. SEMPRE use vendor/bin/sail para comandos (não php artisan direto!)
-2. SEMPRE use TDD (RED -> GREEN -> REFACTOR)
-3. Documentação vem antes do código
-4. Sempre valide antes de implementar
-```
-
-### DEVORQ Workflow
-
-```
-1. Ler .devorq/rules/project.md
-2. Consultar lições aprendidas relevantes (.devorq/state/lessons-learned/)
-3. Criar SPEC ou plano antes de implementar
-4. Implementar com TDD
-5. Documentar nova lição se discover algo novo
-6. Commitar com mensagem descritiva
-7. Atualizar STATUS.md se necessário
-```
-
-### Mensagens de Commit
-
-```
-fix: corrigir bug no guest check-in
-feat: adicionar novo tipo de relatório
-docs: atualizar documentação de API
-refactor: simplificar lógica de validação
-test: adicionar testes para fluxo de aprovação
+docs/SPECS/implemented/
+├── SPEC-0001-07-04-2026-code-review-fixes.md
+├── SPEC-0002-17-04-2026-refatoracao-evolucao.md
+├── SPEC-0003-17-04-2026-traducao-formatacao.md
+├── SPEC-0004-17-04-2026-e2e-infraestrutura.md
+├── SPEC-0005-19-04-2026-ticket-pricing-por-setor.md (REFATORADO 2026-04-21)
+└── SPEC-PERM-17-04-2026-permissions-design.md
 ```
 
 ---
 
-## ✅ Estado Atual do Projeto (2026-04-20)
+## 6. LIÇÕES APRENDIDAS
 
-### Completo
-| Item | Status | Commit |
-|------|--------|--------|
-| QR Code system | ✅ REMOVIDO | `41be79b` |
-| `qr_token` → `guest_token` | ✅ Migration aplicada | `41be79b` |
-| DEVORQ orchestrator | ✅ Configurado | `41be79b` |
-| E2E Test: TC-VALIDATOR-003 | ✅ Corrigido (5 guests) | `94e1b3c` |
-| E2E Test: TC-PROMOTER-001 | ✅ Regex corrigido | `d39f014` |
-| E2E Test: TC-TICKETPRICING-001 | ✅ Navegação direta | `d39f014` |
-| E2E Seeder: EventAssignment | ✅ Adicionado | `94e1b3c` |
-| Lições aprendidas | ✅ 24 catalogadas | `0ba6870` |
-| STATUS.md | ✅ Criado | `2b5a049` |
+### 6.1 Arquivos de Lições
 
-### Métricas de Testes
 ```
-Unit Tests:   29 passing (70 assertions, ~4s)
-E2E Smoke:    27 passing (autenticação, admin, bilheteria, validator, promoter, ticket pricing)
+.devorq/state/lessons-learned/
+├── _INDEX.md
+├── 2026-04-20-e2e-tests-and-seeder-fixes.md      (LL-024)
+└── 2026-04-21-sqlite-vs-mysql-production.md     (LL-025)
 ```
 
-### Pendências Técnicas (Não-Bloqueantes)
-| Item | Severidade | Nota |
-|------|------------|------|
-| LSP errors em Filament resources | Baixa | False positives do LSP com syntax Filament |
-| PromoterQuotaOverview pode mudar formato | Baixa | Widget depende de implementação |
+### 6.2 Pontos Importantes
+
+1. **Sempre usar `vendor/bin/sail`** para comandos Laravel
+2. **E2E Test Seeder** precisa criar EventAssignment para o validator
+3. **SQLite não tem função HOUR()** - usar `strftime('%H', col)` para compatibilidade
+4. **TicketType.price** removido em favor de `ticket_type_sector`
 
 ---
 
-## 🧠 Lições Aprendidas (Highlights)
+## 7. AUTENTICAÇÃO E SESSÃO
 
-### LL-024: E2E Tests e Seeder (MAIS IMPORTANTE)
-**Arquivo:** `.devorq/state/lessons-learned/2026-04-20-e2e-tests-and-seeder-fixes.md`
+### 7.1 Middleware EnsureEventSelected
 
-Pontos críticos:
+Os painéis `promoter`, `validator` e `bilheteria` requerem que um evento esteja selecionado na sessão (`session('selected_event_id')`).
 
-1. **E2E Seeder NÃO cria EventAssignment por padrão**
-   - Seeder cria users, eventos, setores, guests
-   - MAS não cria `EventAssignment` para os users
-   - Resultado: Validator não vê eventos no selector → redirect loop
+Se não houver evento selecionado, o middleware redireciona para `/select-event`.
 
-2. **Como criar EventAssignment:**
-```php
-use App\Models\EventAssignment;
-use App\Enums\UserRole;
+### 7.2 Seleção de Evento
 
-EventAssignment::updateOrCreate(
-    ['user_id' => $validator->id, 'event_id' => $event->id],
-    ['role' => UserRole::VALIDATOR, 'guest_limit' => 0]
-);
-```
-
-3. **Credentials não batem**
-   - UserSeeder usa: `admin@guestlist.pro`, `validator@guestlist.pro`
-   - E2ETestSeeder criava: `admin@admin.com`, `validator@validator.com`
-   - **CORRIGIDO:** E2ETestSeeder agora usa `validador@guestlist.pro`
-
-4. **Tabela `guests` não tem coluna `status`**
-   - Guest::create() não pode receber `status => 'confirmed'`
-
-5. **URLs do Filament para resources compostos**
-   - ERRADO: `/admin/ticket-types`
-   - CORRETO: `/admin/ticket-type/ticket-types` (singular/plural)
-
-6. **Regex de parsing de widget**
-   - Widget exibe "X restantes" ou "used/total"
-   - Regex deve capturar ambos: `/(\d+)\s*(?:\/\s*(\d+)|restantes)/`
-
-### LL-023: UserFactory sem role
-**Arquivo:** `.devorq/state/lessons-learned/2026-04-20-userfactory-role-auth-bug.md`
-
-```php
-// ERRADO - factory sem role
-$user = User::factory()->create(); // role = null → 403 em tests
-
-// CORRETO - factory com role
-$user = User::factory()->admin()->create(); // role = ADMIN
-```
+- Feita via `EventSelectorGrid` (Livewire component)
+- Armazenada em `session('selected_event_id')`
+- Usada em todos os widgets e formulários
 
 ---
 
-## 🔍 Como Investigar Issues
+## 8. POLICIES E AUTORIZAÇÃO
 
-### Framework Systematic Debugging
+| Policy | Descrição |
+|--------|-----------|
+| `TicketTypePolicy` | Admin-only para CRUD |
+| `TicketSalePolicy` | Verifica se evento selecionado é o mesmo |
 
-```
-1. IDENTIFICAR O SYMPTOM
-   - O que está quebrado? O que deveria acontecer?
+---
 
-2. ISOLAR A CAUSA RAIZ (não o symptom!)
-   - O erro no log é a causa ou efeito?
-   - Testar em isolamento
+## 9. WIDGETS DO SISTEMA
 
-3. FORMAR HIPÓTESE
-   - O que eu acho que está causando?
+### 9.1 Widgets Admin
+- `AdminOverview` - Visão geral com métricas
+- `SalesTimelineChart` - Timeline de vendas (⚠️ SQLite compatible)
+- `CheckinFlowChart` - Fluxo de check-ins (⚠️ SQLite compatible)
+- `SectorMetricsTable` - Métricas por setor
+- `SectorOccupancyChart` - Ocupação por setor
+- `TicketTypeReportTable` - Relatório de tipos de ingresso
+- `ApprovalMetricsChart` - Métricas de aprovação
 
-4. TESTAR
-   - Adicionar logs, breakpoints, testes
+### 9.2 Widgets Bilheteria
+- `BilheteriaOverview` - Visão geral da bilheteria
 
-5. CORRIGIR OU DESCARTAR
-   - Se não ajudar,voltar ao passo 2
-```
+### 9.3 Widgets Promoter
+- `PromoterQuotaOverview` -Quota do promoter
+- `PendingRequestsTableWidget` - Solicitações pendentes
 
-### Debugging Checklist para E2E Tests
+### 9.4 Widgets Validator
+- `PendingRequestsWidget` - Solicitações pendentes
+- `ValidatorOverview` - Visão geral
 
-```typescript
-// Ao investigar, verificar:
-1. Seeder criou users/guests corretamente?
-   // Roles: ADMIN, PROMOTER, VALIDATOR, BILHETERIA
-   // Credentials devem bater com TEST_USERS no spec
+---
 
-2. EventAssignment existe para o user?
-   // Sem isso, EventSelectorGrid não mostra eventos
+## 10. TESTES
 
-3. URL do resource está correta?
-   // Check Filament naming: ticket-type/ticket-types (não ticket-types)
+### 10.1 Unit Tests
+- **Local:** `tests/Unit/`
+- **Feature:** `tests/Feature/`
+- **Status:** 72 tests passing
 
-4. Regex de parsing captura formato real do widget?
-   // Widget pode mostrar "44 restantes" ou "12/50"
+### 10.2 E2E Tests
+- **Local:** `e2e/smoke-tests.spec.ts`
+- **Framework:** Playwright
+- **Status:** 27 tests passing
 
-5. Event status é ACTIVE?
-   // getAssignedEvents() filtra por EventStatus::ACTIVE
+### 10.3 Rodar Testes
 
-6. Session tem selected_event_id?
-   // EnsureEventSelected middleware verifica isso
+```bash
+# Unit tests
+vendor/bin/sail artisan test
+
+# E2E tests
+node node_modules/.bin/playwright test e2e/smoke-tests.spec.ts --reporter=list
 ```
 
 ---
 
-## 🔗 Recursos e Links
+## 11. DEPLOY E CONFIGURAÇÃO
 
-### Arquivos de Referência
-| Arquivo | Propósito |
-|---------|-----------|
-| `.devorq/state/STATUS.md` | Status completo do projeto |
-| `.devorq/state/lessons-learned/_INDEX.md` | Índice de 24 lições |
-| `docs/SPECS/implemented/SPEC-0006-*.md` | Especificação QR→guest_token |
-| `app/Http/Middleware/EnsureEventSelected.php` | Lógica de seleção de evento |
-| `app/Livewire/EventSelectorGrid.php` | Component que lista eventos |
-| `app/Models/User.php` | Método getAssignedEvents() |
+### 11.1 Variáveis de Ambiente
 
-### Models e Relaciones
-
-```php
-// User → EventAssignment → Event (getAssignedEvents)
-User 1 ──< EventAssignment >── Event
-
-// Guest pertence a Event + Sector + Promoter(User)
-Guest → Event
-Guest → Sector
-Guest → User (promoter_id)
-
-// EventAssignment define permissões
-EventAssignment: user_id, event_id, role, guest_limit, sector_id (nullable)
+```bash
+# .env.production (template)
+APP_ENV=production
+APP_DEBUG=false
+DB_CONNECTION=mysql
+DB_HOST=guestlist.fssdev.com.br
+DB_DATABASE=guestlist_pro
 ```
 
-### Fluxo de Check-in (Validator)
+### 11.2 Observações de Deploy
 
-```
-1. Validator acessa /validator/guests
-2. Middleware EnsureEventSelected:
-   - Verifica session('selected_event_id')
-   - Se não existe → redirect para /validator/pages/select-event
-3. SelectEvent page carrega EventSelectorGrid
-4. EventSelectorGrid usa User::getAssignedEvents():
-   - Consulta event_assignments WHERE user_id = auth()->id
-   - Retorna apenas eventos com EventStatus::ACTIVE
-5. User clica em evento → session('selected_event_id') = eventId
-6. Redireciona para /validator (dashboard)
-7. Validator pode navegar para /validator/guests
-8. Guest list mostra apenas guests do evento selecionado
-```
+- Produção usa **MySQL** (não SQLite)
+- SQLite funciona localmente mas gráficos usam `HOUR()` que não existe no SQLite
+- Para compatibilidade SQLite, usar `strftime('%H', col)` ao invés de `HOUR(col)`
 
 ---
 
-## 🚀 Próximos Passos Sugeridos para Agente
+## 12. PRÓXIMOS PASSOS SUGERIDOS
 
-### Prioridade Alta
-1. **Validar LSP errors** — 确定 se são bugs reais ou false positives
-   - Files com errors: GuestResource.php, GuestsTable.php, PromoterQuotaOverview.php
-   - Testar se código funciona apesar do LSP
-
-2. **Testes de integração** — cobrir mais fluxos:
-   - Fluxo completo: Promoter cria guest → Bilheteria vende → Validator check-in
-   - Approval request: criar, aprovar, rejeitar
-
-### Prioridade Média
-3. **Performance review** — EventSelectorGrid pode se beneficiar de cache
-4. **Documentação de APIs** — Gerar documentação OpenAPI/Swagger
-
-### Prioridade Baixa
-5. **Cleanup de código legado** — Remover comentários obsoletos
-6. **Testes de stress** — Simular muitos concurrent users
+1. **Criar E2E Tests para Ticket Pricing** - Validar nova arquitetura
+2. **Investigar DEVORQ v3** - Versão atual é 2.1.1
+3. **Implementar notificações push** - Enhancement opcional
+4. **Relatórios exportáveis** - Enhancement opcional
 
 ---
 
-## 📝 Checklist para Novas Features
+## 13. ARQUIVOS MODIFICADOS RECENTEMENTE
 
-```markdown
-- [ ] Verificar se SPEC já existe em .devorq/plans/
-- [ ] Consultar lições aprendidas relevantes
-- [ ] Criar SPEC se não existir
-- [ ] Implementar com TDD
-- [ ] Commitar com mensagem descritiva
-- [ ] Atualizar STATUS.md se necessário
-- [ ] Documentar nova lição aprendida se discovering algo novo
-```
-
----
-
-## ⚠️ Armadilhas Comuns (Evitar)
-
-1. **Não usar `php artisan` direto** — usar `vendor/bin/sail artisan`
-2. **Não assumir que seeder criou EventAssignment** — verificar sempre
-3. **Não usar `status` em Guest::create()** — tabela não tem essa coluna
-4. **Não assumir URL do Filament** — resources compostos usam path estranho
-5. **Não commitar sem rodar testes** — verificar se não quebrou nada
+| Arquivo | Data | Descrição |
+|---------|------|-----------|
+| `app/Models/TicketType.php` | 2026-04-21 | Removido price, adicionado is_visible |
+| `app/Services/TicketSaleService.php` | 2026-04-21 | Lança exceção se preço não encontrado |
+| `app/Filament/Resources/TicketType/Schemas/TicketTypeForm.php` | 2026-04-21 | setor_prices obrigatório |
+| `app/Filament/Bilheteria/Resources/TicketSales/Schemas/TicketSaleForm.php` | 2026-04-21 | Setor primeiro, filtra tipos |
+| `database/migrations/..._update_ticket_types_...` | 2026-04-21 | Nova migration |
+| `database/seeders/ShowcaseTestSeeder.php` | 2026-04-21 | Preços por setor |
+| `docs/SPECS/implemented/SPEC-0005-...` | 2026-04-21 | Atualizado com nova arquitetura |
 
 ---
 
-## 📞 Comunicação e Reporting
+## 14. CONTATO E SUPORTE
 
-- **Idioma:** Português do Brasil (preferencial) ou English
-- **Commits:** Mensagens descritivas seguindoConventional Commits
-- **STATUS.md:** Atualizar após mudanças significativas
-- **Lições:** Documentar se discovering algo novo que outros deveriam saber
-
----
-
-## 🧬 DNA do Projeto
-
-### Valores
-- **TDD** — sempre escrever testes antes
-- **Documentação** — antes de codar, documentar
-- **Idempotência** — seeders podem rodar múltiplas vezes
-- **Performance** — índices, cache, queries otimizadas
-
-### Code Smells a Evitar
-- Métodos longos (refatorar)
-- Nomes não descritivos
-- Comentários desatualizados
-- Duplicação de lógica
-
-### Patterns Recomendados
-- Policy classes para autorização (GuestPolicy, TicketTypePolicy)
-- Form Request classes para validação
-- Service classes para lógica de negócio
-- Observer classes para side effects (GuestObserver, TicketSaleObserver)
+- **Documentação:** `docs/CONSOLIDATED/INDEX.md`
+- **Regras do Projeto:** `.devorq/rules/project.md`
+- **Status:** `.devorq/state/STATUS.md`
 
 ---
 
-## 🎓 Onde Aprendi Mais (Lições Mais Valiosas)
-
-| LL # | Título | Por Que Importa |
-|------|--------|-----------------|
-| LL-024 | E2E Tests e Seeder Fixes | EventAssignment é crucial para permissions |
-| LL-023 | UserFactory sem role | Tests falham silenciosamente sem role |
-| LL-016 | Notifications não suportam Actions | breaking change do Laravel |
-| LL-015 | ULID para QR Codes | performance em check-in massivo |
-
----
-
-*Atenção: Follow DEVORQ rules, use TDD, document lessons learned.*
-*Última atualização: 2026-04-20 17:45 BRT*
-*Commit do HANDOVER: inclua no commit message "HANDOVER.md updated"*
-*Para perguntas: releia STATUS.md e lições aprendidas antes de perguntar.*
+*Este documento foi gerado automaticamente para handover de agente autônomo.*

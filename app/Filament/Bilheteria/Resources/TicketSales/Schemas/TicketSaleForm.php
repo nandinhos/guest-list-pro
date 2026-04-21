@@ -4,10 +4,10 @@ namespace App\Filament\Bilheteria\Resources\TicketSales\Schemas;
 
 use App\Enums\DocumentType;
 use App\Enums\PaymentMethod;
-use App\Models\Event;
 use App\Models\Sector;
 use App\Models\TicketType;
 use App\Rules\DocumentValidation;
+use App\Services\TicketSaleService;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -60,25 +60,39 @@ class TicketSaleForm
                     ]),
 
                 Section::make('Dados do Ingresso')
-                    ->description('Selecione o tipo de ingresso')
+                    ->description('Selecione o setor e o tipo de ingresso')
                     ->schema([
                         Grid::make(['default' => 1, 'md' => 2])->schema([
-                            Select::make('ticket_type_id')
-                                ->label('Tipo de Ingresso')
-                                ->options(fn () => TicketType::query()
+                            Select::make('sector_id')
+                                ->label('Setor')
+                                ->options(fn () => Sector::query()
                                     ->where('event_id', session('selected_event_id'))
-                                    ->where('is_active', true)
                                     ->pluck('name', 'id'))
                                 ->live()
                                 ->searchable()
                                 ->preload()
                                 ->required(),
 
-                            Select::make('sector_id')
-                                ->label('Setor')
-                                ->options(fn () => Sector::query()
-                                    ->where('event_id', session('selected_event_id'))
-                                    ->pluck('name', 'id'))
+                            Select::make('ticket_type_id')
+                                ->label('Tipo de Ingresso')
+                                ->options(function (Get $get) {
+                                    $sectorId = $get('sector_id');
+                                    $eventId = session('selected_event_id');
+
+                                    if (! $sectorId) {
+                                        return [];
+                                    }
+
+                                    return TicketType::query()
+                                        ->where('event_id', $eventId)
+                                        ->where('is_active', true)
+                                        ->where('is_visible', true)
+                                        ->whereHas('sectorPrices', function ($query) use ($sectorId) {
+                                            $query->where('sector_id', $sectorId);
+                                        })
+                                        ->pluck('name', 'id');
+                                })
+                                ->live()
                                 ->searchable()
                                 ->preload()
                                 ->required(),
@@ -88,16 +102,20 @@ class TicketSaleForm
                             ->label('Valor')
                             ->content(function (Get $get) {
                                 $ticketType = TicketType::find($get('ticket_type_id'));
+                                $sectorId = $get('sector_id');
 
-                                if (! $ticketType) {
-                                    $event = Event::find(session('selected_event_id'));
-
-                                    return $event?->ticket_price
-                                        ? 'R$ '.number_format($event->ticket_price, 2, ',', '.')
-                                        : 'Selecione um tipo';
+                                if (! $ticketType || ! $sectorId) {
+                                    return 'Selecione o setor e o tipo';
                                 }
 
-                                return 'R$ '.number_format($ticketType->price, 2, ',', '.');
+                                try {
+                                    $price = TicketSaleService::getPriceForSector($ticketType, $sectorId);
+                                    $sector = Sector::find($sectorId);
+
+                                    return 'R$ '.number_format($price, 2, ',', '.').' ('.$sector->name.')';
+                                } catch (\RuntimeException $e) {
+                                    return 'Preço não configurado';
+                                }
                             })
                             ->hint(function (Get $get) {
                                 $ticketType = TicketType::find($get('ticket_type_id'));
@@ -123,12 +141,17 @@ class TicketSaleForm
                             ->required()
                             ->default(function (Get $get) {
                                 $ticketType = TicketType::find($get('ticket_type_id'));
+                                $sectorId = $get('sector_id');
 
-                                if ($ticketType) {
-                                    return $ticketType->price;
+                                if (! $ticketType || ! $sectorId) {
+                                    return 0;
                                 }
 
-                                return Event::find(session('selected_event_id'))?->ticket_price;
+                                try {
+                                    return TicketSaleService::getPriceForSector($ticketType, $sectorId);
+                                } catch (\RuntimeException $e) {
+                                    return 0;
+                                }
                             }),
                     ]),
 

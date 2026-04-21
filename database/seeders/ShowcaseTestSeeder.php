@@ -17,6 +17,7 @@ use App\Models\PaymentSplit;
 use App\Models\Sector;
 use App\Models\TicketSale;
 use App\Models\TicketType;
+use App\Models\TicketTypeSector;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -135,41 +136,85 @@ class ShowcaseTestSeeder extends Seeder
             ['event_id' => $event->id, 'name' => 'Pista Premium'],
             [
                 'description' => 'Ingresso para área pista premium',
-                'price' => 150.00,
                 'is_active' => true,
+                'is_visible' => true,
             ]
         );
-        $this->command->info('  - Pista Premium (R$ 150,00)');
+        $this->command->info('  - Pista Premium');
 
         $ticketTypes['VIP Experience'] = TicketType::updateOrCreate(
             ['event_id' => $event->id, 'name' => 'VIP Experience'],
             [
                 'description' => 'Experiência VIP completa',
-                'price' => 350.00,
                 'is_active' => true,
+                'is_visible' => true,
             ]
         );
-        $this->command->info('  - VIP Experience (R$ 350,00)');
+        $this->command->info('  - VIP Experience');
 
         $ticketTypes['Camarote Open Bar'] = TicketType::updateOrCreate(
             ['event_id' => $event->id, 'name' => 'Camarote Open Bar'],
             [
                 'description' => 'Acesso ao camarote com open bar',
-                'price' => 500.00,
                 'is_active' => true,
+                'is_visible' => true,
             ]
         );
-        $this->command->info('  - Camarote Open Bar (R$ 500,00)');
+        $this->command->info('  - Camarote Open Bar');
 
         $ticketTypes['Backstage Pass'] = TicketType::updateOrCreate(
             ['event_id' => $event->id, 'name' => 'Backstage Pass'],
             [
                 'description' => 'Acesso backstage com encontro com artista',
-                'price' => 800.00,
                 'is_active' => true,
+                'is_visible' => true,
             ]
         );
-        $this->command->info('  - Backstage Pass (R$ 800,00)');
+        $this->command->info('  - Backstage Pass');
+
+        // 4.1 TICKET TYPE SECTOR PRICES
+        $this->command->info('');
+        $this->command->info('4.1 Creating sector prices for ticket types...');
+
+        $sectorPrices = [
+            'Pista Premium' => [
+                'Pista' => 150.00,
+                'VIP' => 250.00,
+                'Camarote' => 400.00,
+                'Backstage' => 300.00,
+            ],
+            'VIP Experience' => [
+                'Pista' => 250.00,
+                'VIP' => 350.00,
+                'Camarote' => 500.00,
+                'Backstage' => 450.00,
+            ],
+            'Camarote Open Bar' => [
+                'Pista' => 400.00,
+                'VIP' => 500.00,
+                'Camarote' => 600.00,
+                'Backstage' => 550.00,
+            ],
+            'Backstage Pass' => [
+                'Pista' => 300.00,
+                'VIP' => 450.00,
+                'Camarote' => 550.00,
+                'Backstage' => 800.00,
+            ],
+        ];
+
+        foreach ($sectorPrices as $typeName => $prices) {
+            foreach ($prices as $sectorName => $price) {
+                TicketTypeSector::updateOrCreate(
+                    [
+                        'ticket_type_id' => $ticketTypes[$typeName]->id,
+                        'sector_id' => $sectors[$sectorName]->id,
+                    ],
+                    ['price' => $price]
+                );
+            }
+            $this->command->info("  - {$typeName}: ".implode(', ', array_map(fn ($s, $p) => "{$s}=R\${$p}", array_keys($prices), $prices)));
+        }
 
         // 5. PROMOTER PERMISSION / EVENT ASSIGNMENT
         $this->command->info('');
@@ -471,6 +516,12 @@ class ShowcaseTestSeeder extends Seeder
                          ($ticketTypeName === 'Backstage Pass' ? 'Backstage' : 'Pista'));
             $sector = $sectors[$sectorName];
 
+            $sectorPrice = TicketTypeSector::where('ticket_type_id', $ticketType->id)
+                ->where('sector_id', $sector->id)
+                ->first();
+
+            $price = $sectorPrice?->price ?? 0;
+
             $saleData = [
                 'sale' => [
                     'event_id' => $event->id,
@@ -478,7 +529,7 @@ class ShowcaseTestSeeder extends Seeder
                     'guest_id' => $buyerGuests[$i]->id,
                     'sector_id' => $sector->id,
                     'sold_by' => $bilheteria->id,
-                    'value' => $ticketType->price,
+                    'value' => $price,
                     'payment_method' => $method,
                     'buyer_name' => $buyer['name'],
                     'buyer_document' => $buyer['doc'],
@@ -491,21 +542,21 @@ class ShowcaseTestSeeder extends Seeder
             if ($i === 5) {
                 // Split: 50% cash + 50% pix
                 $saleData['splits'] = [
-                    ['method' => PaymentMethod::Cash, 'value' => $ticketType->price * 0.5],
-                    ['method' => PaymentMethod::Pix, 'value' => $ticketType->price * 0.5],
+                    ['method' => PaymentMethod::Cash, 'value' => $price * 0.5],
+                    ['method' => PaymentMethod::Pix, 'value' => $price * 0.5],
                 ];
             } elseif ($i === 10) {
                 // Split: 30% credit + 70% debit
                 $saleData['splits'] = [
-                    ['method' => PaymentMethod::CreditCard, 'value' => $ticketType->price * 0.3],
-                    ['method' => PaymentMethod::DebitCard, 'value' => $ticketType->price * 0.7],
+                    ['method' => PaymentMethod::CreditCard, 'value' => $price * 0.3],
+                    ['method' => PaymentMethod::DebitCard, 'value' => $price * 0.7],
                 ];
             } elseif ($i === 15) {
                 // 3-way split
                 $saleData['splits'] = [
-                    ['method' => PaymentMethod::Cash, 'value' => $ticketType->price * 0.4],
-                    ['method' => PaymentMethod::Pix, 'value' => $ticketType->price * 0.3],
-                    ['method' => PaymentMethod::CreditCard, 'value' => $ticketType->price * 0.3],
+                    ['method' => PaymentMethod::Cash, 'value' => $price * 0.4],
+                    ['method' => PaymentMethod::Pix, 'value' => $price * 0.3],
+                    ['method' => PaymentMethod::CreditCard, 'value' => $price * 0.3],
                 ];
             }
 

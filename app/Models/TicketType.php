@@ -15,15 +15,15 @@ class TicketType extends Model
         'event_id',
         'name',
         'description',
-        'price',
         'is_active',
+        'is_visible',
     ];
 
     protected function casts(): array
     {
         return [
-            'price' => 'decimal:2',
             'is_active' => 'boolean',
+            'is_visible' => 'boolean',
         ];
     }
 
@@ -45,5 +45,10 @@ class TicketType extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function scopeVisible($query)
+    {
+        return $query->where('is_visible', true);
     }
 }
