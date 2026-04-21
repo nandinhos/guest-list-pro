@@ -1,7 +1,7 @@
 # Índice de Lições Aprendidas — DEVORQ
 
-**Data:** 2026-04-20
-**Total:** 24 lições (23 + 1 arquivada)
+**Data:** 2026-04-21
+**Total:** 25 lições (24 + 1 arquivada)
 
 ---
 
@@ -47,6 +47,11 @@
 | 2026-04-20-userfactory-role-auth-bug | UserFactory sem role/is_active causa 403 em Tests | testing, auth, filament |
 | 2026-04-20-e2e-tests-and-seeder-fixes | E2E Tests e Seeder — EventAssignment e parsing de quota | e2e, testing, seeder, eventassignment |
 
+### 2026-04-21
+| ID | Título | Tags |
+|----|--------|------|
+| 2026-04-21-sqlite-vs-mysql-production | SQLite vs MySQL em Produção — gráficos e session | production, database, sqlite, mysql |
+
 ---
 
 ## Por Tags
@@ -64,6 +69,12 @@
 | 2026-02-17-seeder-idempotente | Seeders Idempotentes |
 | 2026-02-17-pint-formatting | Pint — Formatação Automática |
 | 2026-02-21-tdd-stuck-tests | TDD e Testes Travados |
+
+### 🗄️ Database
+| ID | Título |
+|----|--------|
+| 2026-04-21-sqlite-vs-mysql-production | SQLite vs MySQL em Produção — gráficos e session |
+| 2026-02-17-database-performance | Database Performance e Índices |
 
 ### 📝 Blade
 | ID | Título |

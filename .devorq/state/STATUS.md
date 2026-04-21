@@ -42,10 +42,21 @@
 
 | Commit | Descrição |
 |--------|-----------|
+| `e032c75` | fix: make widgets SQLite-compatible by detecting database driver |
 | `0ba6870` | docs: add LL-024 e2e-tests-and-seeder-fixes lesson learned |
 | `94e1b3c` | fix: resolve validator guest list test and improve E2E seeder |
 | `d39f014` | fix: resolve 3 smoke test issues |
 | `41be79b` | refactor: remove QR code system and migrate to DEVORQ orchestrator |
+
+---
+
+## Aviso Importante: SQLite vs MySQL
+
+**Produção NÃO deve usar SQLite.**
+
+SQLite não suporta funções MySQL como `HOUR()`, `DAY()`, `MONTH()`, etc. causing 500 errors nos gráficos.
+
+**Recomendado:** Configurar MySQL no cPanel antes do deploy.
 
 ---
 
@@ -114,6 +125,32 @@ Promoter:
 ### Melhorias Identificadas
 - Testes E2E podem se beneficiar de page objects mais robustos para event selection
 - PromoterQuotaOverview widget formato de display pode mudar entre versões
+
+---
+
+## Recomendação de Produção
+
+### Banco de Dados
+| Opção | Recomendação |
+|-------|--------------|
+| SQLite | ❌ NÃO usar em produção |
+| MySQL | ✅ Recomendado |
+| PostgreSQL | ✅ Também funciona |
+
+### Configuração MySQL para cPanel
+```env
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=guestlist_pro
+DB_USERNAME=guestlist_user
+DB_PASSWORD=(senha forte)
+```
+
+Após configurar MySQL, rodar:
+```bash
+php artisan migrate --force
+```
 
 ---
 
