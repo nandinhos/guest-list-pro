@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Models\CheckinAttempt;
 use App\Models\TicketSale;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\DB;
 
 class SalesTimelineChart extends ChartWidget
 {
@@ -20,21 +21,27 @@ class SalesTimelineChart extends ChartWidget
     {
         $eventId = session('selected_event_id');
 
+        $isSqlite = DB::connection()->getDriverName() === 'sqlite';
+
+        $hourExpr = $isSqlite
+            ? "strftime('%H', created_at)"
+            : 'HOUR(created_at)';
+
         $checkinsByHour = CheckinAttempt::query()
-            ->selectRaw('HOUR(created_at) as hour, COUNT(*) as total')
+            ->selectRaw("{$hourExpr} as hour, COUNT(*) as total")
             ->when($eventId, fn ($q) => $q->where('event_id', $eventId))
             ->whereDate('created_at', today())
             ->where('result', 'success')
-            ->groupByRaw('HOUR(created_at)')
-            ->orderByRaw('HOUR(created_at)')
+            ->groupByRaw('hour')
+            ->orderByRaw('hour')
             ->get();
 
         $salesByHour = TicketSale::query()
-            ->selectRaw('HOUR(created_at) as hour, COUNT(*) as total')
+            ->selectRaw("{$hourExpr} as hour, COUNT(*) as total")
             ->when($eventId, fn ($q) => $q->where('event_id', $eventId))
             ->whereDate('created_at', today())
-            ->groupByRaw('HOUR(created_at)')
-            ->orderByRaw('HOUR(created_at)')
+            ->groupByRaw('hour')
+            ->orderByRaw('hour')
             ->get();
 
         $labels = [];

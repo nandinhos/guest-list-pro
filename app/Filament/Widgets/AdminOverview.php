@@ -10,6 +10,7 @@ use App\Models\TicketSale;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class AdminOverview extends StatsOverviewWidget
 {
@@ -133,10 +134,13 @@ class AdminOverview extends StatsOverviewWidget
      */
     private function getCheckinTrend(int $eventId): array
     {
+        $isSqlite = DB::connection()->getDriverName() === 'sqlite';
+        $hourExpr = $isSqlite ? "strftime('%H', checked_in_at)" : 'HOUR(checked_in_at)';
+
         $data = Guest::where('event_id', $eventId)
             ->where('is_checked_in', true)
             ->whereDate('checked_in_at', now()->today())
-            ->selectRaw('HOUR(checked_in_at) as hour, count(*) as count')
+            ->selectRaw("{$hourExpr} as hour, count(*) as count")
             ->groupBy('hour')
             ->orderBy('hour')
             ->get()
@@ -151,14 +155,14 @@ class AdminOverview extends StatsOverviewWidget
         return $trend;
     }
 
-    /**
-     * @return array<int>
-     */
     private function getSalesTrend(int $eventId): array
     {
+        $isSqlite = DB::connection()->getDriverName() === 'sqlite';
+        $hourExpr = $isSqlite ? "strftime('%H', created_at)" : 'HOUR(created_at)';
+
         $data = TicketSale::where('event_id', $eventId)
             ->whereDate('created_at', now()->today())
-            ->selectRaw('HOUR(created_at) as hour, count(*) as count')
+            ->selectRaw("{$hourExpr} as hour, count(*) as count")
             ->groupBy('hour')
             ->orderBy('hour')
             ->get()

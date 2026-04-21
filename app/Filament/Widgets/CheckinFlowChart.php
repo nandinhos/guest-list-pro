@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\Guest;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\DB;
 
 class CheckinFlowChart extends ChartWidget
 {
@@ -17,16 +18,18 @@ class CheckinFlowChart extends ChartWidget
     {
         $eventId = session('selected_event_id');
 
+        $isSqlite = DB::connection()->getDriverName() === 'sqlite';
+        $hourExpr = $isSqlite ? "strftime('%H', checked_in_at)" : 'HOUR(checked_in_at)';
+
         $query = Guest::where('is_checked_in', true)
             ->whereDate('checked_in_at', now()->today());
 
-        // Admin vê dados globais se não tiver evento selecionado
         if ($eventId) {
             $query->where('event_id', $eventId);
         }
 
         $data = $query
-            ->selectRaw('HOUR(checked_in_at) as hour, count(*) as count')
+            ->selectRaw("{$hourExpr} as hour, count(*) as count")
             ->groupBy('hour')
             ->orderBy('hour')
             ->get()
