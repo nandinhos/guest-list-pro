@@ -17,9 +17,13 @@ class AdminOverview extends StatsOverviewWidget
     protected ?string $pollingInterval = '30s';
 
     /**
-     * Cache TTL in seconds (60s = 1 minute).
+     * Cache TTL in seconds (15s).
+     *
+     * @see P4 (DEVORQ review 2026-04-21): Reduzido de 60s para 15s.
+     * Dados de check-in/vendas são sensiveis ao tempo no dia do evento.
+     * Polling do widget é 30s — TTL de 15s garante no-max 15s de lag.
      */
-    private const CACHE_TTL = 60;
+    private const CACHE_TTL = 15;
 
     protected function getStats(): array
     {

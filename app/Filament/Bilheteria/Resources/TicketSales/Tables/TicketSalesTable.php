@@ -29,8 +29,7 @@ class TicketSalesTable
 
                 TextColumn::make('buyer_name')
                     ->label('Comprador')
-                    ->description(fn ($record) => $record->buyer_document_masked ?? '-')
-                    ->formatStateUsing(fn ($record) => $record->buyer_name_masked ?? $record->buyer_name)
+                    ->description(fn ($record) => $record->buyer_document ?? '-')
                     ->searchable(['buyer_name', 'buyer_document'])
                     ->sortable()
                     ->visibleFrom('md'),

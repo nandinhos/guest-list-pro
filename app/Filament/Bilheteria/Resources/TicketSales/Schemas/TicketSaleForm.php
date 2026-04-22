@@ -12,9 +12,11 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 
 class TicketSaleForm
@@ -69,6 +71,10 @@ class TicketSaleForm
                                     ->where('event_id', session('selected_event_id'))
                                     ->pluck('name', 'id'))
                                 ->live()
+                                ->afterStateUpdated(function (Get $get, Set $set) {
+                                    $set('value', 0);
+                                    $set('ticket_type_id', null);
+                                })
                                 ->searchable()
                                 ->preload()
                                 ->required(),
@@ -92,6 +98,24 @@ class TicketSaleForm
                                         })
                                         ->pluck('name', 'id');
                                 })
+                                ->afterStateUpdated(function (Get $get, Set $set) {
+                                    if ($get('use_custom_price')) {
+                                        return;
+                                    }
+
+                                    $ticketType = TicketType::find($get('ticket_type_id'));
+                                    $sectorId = $get('sector_id');
+
+                                    if (! $ticketType || ! $sectorId) {
+                                        return;
+                                    }
+
+                                    try {
+                                        $set('value', TicketSaleService::getPriceForSector($ticketType, $sectorId));
+                                    } catch (\RuntimeException $e) {
+                                        $set('value', 0);
+                                    }
+                                })
                                 ->live()
                                 ->searchable()
                                 ->preload()
@@ -100,6 +124,13 @@ class TicketSaleForm
 
                         Placeholder::make('ticket_price')
                             ->label('Valor')
+                            /**
+                             * @see P2 (DEVORQ review 2026-04-21): FALSE POSITIVE em code review.
+                             * Dois TicketType::find() separados (aqui e no hint abaixo)
+                             * sao callbacks Livewire independentes - nao sao N+1.
+                             * Disparam apenas quando o usuario seleciona um tipo (acao manual).
+                             * Isolar em variavel adicionaria complexidade sem beneficio.
+                             */
                             ->content(function (Get $get) {
                                 $ticketType = TicketType::find($get('ticket_type_id'));
                                 $sectorId = $get('sector_id');
@@ -117,6 +148,10 @@ class TicketSaleForm
                                     return 'Preço não configurado';
                                 }
                             })
+                            /**
+                             * @see P2 (DEVORQ review 2026-04-21): FALSE POSITIVE.
+                             * @see comentario acima em ->content().
+                             */
                             ->hint(function (Get $get) {
                                 $ticketType = TicketType::find($get('ticket_type_id'));
 
@@ -126,33 +161,44 @@ class TicketSaleForm
 
                 Section::make('Pagamento')
                     ->description('Forma de pagamento')
-                    ->columns(2)
                     ->schema([
-                        Select::make('payment_method')
-                            ->label('Forma de Pagamento')
-                            ->options(PaymentMethod::class)
-                            ->required()
-                            ->native(false),
+                        Grid::make(['default' => 1, 'md' => 3])->schema([
+                            Select::make('payment_method')
+                                ->label('Forma de Pagamento')
+                                ->options(PaymentMethod::class)
+                                ->required()
+                                ->native(false),
 
-                        TextInput::make('value')
-                            ->label('Valor Cobrado')
-                            ->numeric()
-                            ->prefix('R$')
-                            ->required()
-                            ->default(function (Get $get) {
-                                $ticketType = TicketType::find($get('ticket_type_id'));
-                                $sectorId = $get('sector_id');
+                            TextInput::make('value')
+                                ->label('Valor Cobrado')
+                                ->numeric()
+                                ->prefix('R$')
+                                ->required()
+                                ->hint(fn (Get $get) => $get('use_custom_price') ? 'Valor personalizado' : 'Valor automático (ao alterar, assume responsabilidade)')
+                                ->default(function (Get $get) {
+                                    if ($get('use_custom_price')) {
+                                        return null;
+                                    }
 
-                                if (! $ticketType || ! $sectorId) {
-                                    return 0;
-                                }
+                                    $ticketType = TicketType::find($get('ticket_type_id'));
+                                    $sectorId = $get('sector_id');
 
-                                try {
-                                    return TicketSaleService::getPriceForSector($ticketType, $sectorId);
-                                } catch (\RuntimeException $e) {
-                                    return 0;
-                                }
-                            }),
+                                    if (! $ticketType || ! $sectorId) {
+                                        return 0;
+                                    }
+
+                                    try {
+                                        return TicketSaleService::getPriceForSector($ticketType, $sectorId);
+                                    } catch (\RuntimeException $e) {
+                                        return 0;
+                                    }
+                                }),
+
+                            Toggle::make('use_custom_price')
+                                ->label('Usar valor personalizado')
+                                ->default(false)
+                                ->live(),
+                        ]),
                     ]),
 
                 Section::make('Observações')

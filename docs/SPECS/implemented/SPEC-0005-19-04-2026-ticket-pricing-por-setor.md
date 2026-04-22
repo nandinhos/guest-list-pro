@@ -116,6 +116,9 @@ public static function getPriceForSector(TicketType $ticketType, int $sectorId):
    - Têm configuração de preço para o setor selecionado
 3. Selecionar TIPO
 4. Preço aparece automaticamente (ticket_type_sector.price)
+5. Opcional: Ativar toggle "Usar valor personalizado"
+   - Se OFF: Valor Cobrado = preço configurado (desabilitado)
+   - Se ON: Valor Cobrado = editável (para casos especiais)
 ```
 
 ---
@@ -157,6 +160,7 @@ public static function getPriceForSector(TicketType $ticketType, int $sectorId):
 | RF04 | Admin define visibilidade (is_visible) | Alta |
 | RF05 | Bilheteria filtra tipos visíveis por setor | Alta |
 | RF06 | Preço mostrado automaticamente após seleção | Alta |
+| RF07 | Operador pode usar valor customizado via toggle | Alta |
 
 ---
 
@@ -202,6 +206,33 @@ Nova arquitetura implementada com as seguintes mudanças:
 - Inverte ordem: Setor PRIMEIRO, depois Tipo
 - Filtra TicketTypes por `is_visible=true` E que tenham preço para setor
 - Preço calculado via `getPriceForSector()`
+- **Toggle "Usar valor personalizado"**: permite cobrar valor diferente do configurado
+  - Toggle OFF: campo "Valor Cobrado" desabilitado, usa preço automático
+  - Toggle ON: campo "Valor Cobrado" editável para casos especiais
+
+### 2026-04-21: Toggle de Valor Customizado
+
+Feature que permite ao operador da bilheteria cobrar valor diferente do configurado:
+
+**Implementação:**
+- Adicionado `use_custom_price` (boolean, default false) no formulário
+- Campo `value` fica desabilitado quando `use_custom_price = false`
+- Quando `use_custom_price = true`, operador pode digitar valor customizado
+
+**UI:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Pagamento                                                  │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  Forma de Pagamento: [PIX              ▼]                  │
+│                                                             │
+│  Valor Cobrado: [R$ 150,00] (desabilitado) ← toggle OFF   │
+│  Valor Cobrado: [R$ 200,00] (editável)     ← toggle ON     │
+│                                                             │
+│  [ ] Usar valor personalizado                              │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ---
 

@@ -12,7 +12,15 @@ use App\Models\Sector;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class E2ETestSeeder extends Seeder
+/**
+ * E2E Test Seeder
+ *
+ * ATENCAO: Se alterar nomes de eventos aqui, atualizar tambem:
+ * @see tests/fixtures/e2e-events.ts (TypeScript)
+ * @see e2e/pages/ValidatorPages.ts
+ *
+ * @used-by E2ETestSeeder
+ */
 {
     public function run(): void
     {

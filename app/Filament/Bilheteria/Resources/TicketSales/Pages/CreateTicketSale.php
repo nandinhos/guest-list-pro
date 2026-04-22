@@ -64,9 +64,11 @@ class CreateTicketSale extends CreateRecord
     protected function handleRecordCreation(array $data): \Illuminate\Database\Eloquent\Model
     {
         return DB::transaction(function () use ($data) {
+            $sectorId = $data['sector_id'];
+
             $guest = Guest::create([
                 'event_id' => $data['event_id'],
-                'sector_id' => $data['sector_id'],
+                'sector_id' => $sectorId,
                 'promoter_id' => auth()->id(),
                 'name' => $data['buyer_name'],
                 'document' => $data['buyer_document'] ?? null,
@@ -78,6 +80,7 @@ class CreateTicketSale extends CreateRecord
             $ticketSale = static::getModel()::create([
                 ...$data,
                 'guest_id' => $guest->id,
+                'sector_id' => $sectorId,
             ]);
 
             return $ticketSale;

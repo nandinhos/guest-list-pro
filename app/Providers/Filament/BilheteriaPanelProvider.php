@@ -3,6 +3,8 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Bilheteria\Pages\SelectEvent;
+use App\Filament\Bilheteria\Widgets\BilheteriaOverview;
+use App\Filament\Bilheteria\Widgets\PaymentMethodRevenueWidget;
 use App\Http\Middleware\EnsureEventSelected;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -45,6 +47,8 @@ class BilheteriaPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Bilheteria/Widgets'), for: 'App\Filament\Bilheteria\Widgets')
             ->widgets([
+                BilheteriaOverview::class,
+                PaymentMethodRevenueWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

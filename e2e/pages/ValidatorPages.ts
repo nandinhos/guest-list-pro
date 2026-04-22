@@ -1,6 +1,15 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { WAIT_TIMES } from '../config/wait-times';
 import { waitForLivewireLoad, waitForLivewireResponse } from '../helpers/livewire-helpers';
+import { E2E_EVENT_PARTIALS, E2E_EVENTS } from '../../tests/fixtures/e2e-events';
+
+/**
+ * P5 (DEVORQ review 2026-04-21): Locators de evento agora usam constantes
+ * sincronizadas com E2ETestSeeder. Se o seeder mudar nomes, os tests vao falhar
+ * na hora de compilar (TypeScript) antes mesmo de rodar — forca consistencia.
+ * @see tests/fixtures/e2e-events.ts
+ * @see E2ETestSeeder.php
+ */
 
 export class ValidatorDashboardPage {
   readonly page: Page;
@@ -16,7 +25,9 @@ export class ValidatorDashboardPage {
     this.searchInput = page.locator('input[placeholder*="buscar"], input[placeholder*="nome"], input[type="search"]');
     this.checkinButton = page.locator('button:has-text("ENTRADA"), button:has-text("Check-in")');
     this.statsWidget = page.locator('[class*="stat"], [class*="widget"]');
-    this.eventCards = page.locator('button:has-text("Festival Teste"), [class*="event"]:has(button), button[class*="event"]');
+    this.eventCards = page.locator(`button:has-text("${E2E_EVENTS.FESTIVAL}")`).or(
+      page.locator('[class*="event"]:has(button)')
+    );
   }
 
   async goto() {
@@ -68,7 +79,7 @@ export class ValidatorGuestListPage {
     this.searchInput = page.locator('input[placeholder*="buscar"], input[placeholder*="nome"], input[placeholder*="documento"]');
     this.statusFilters = page.locator('select');
     this.guestRows = page.locator('table tbody tr');
-    this.eventCards = page.locator('button:has-text("Festival"), [class*="event-card"]:has(button), button[class*="event"]');
+    this.eventCards = page.locator(`button:has-text("${E2E_EVENT_PARTIALS.FESTIVAL}")`);
   }
 
   async goto() {
@@ -81,7 +92,9 @@ export class ValidatorGuestListPage {
     const hasOverlay = await this.page.locator('text="Selecionar Evento"').isVisible().catch(() => false);
 
     if (hasOverlay) {
-      const eventButtons = this.page.locator('button:has-text("Festival"), button:has-text("Summer"), button:has-text("Night")');
+      const eventButtons = this.page.locator(
+        `button:has-text("${E2E_EVENT_PARTIALS.FESTIVAL}")`
+      );
       const count = await eventButtons.count();
 
       if (count > 0) {

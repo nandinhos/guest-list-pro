@@ -42,11 +42,6 @@ class TicketTypeReportTable extends BaseWidget
                 ->label('Descrição')
                 ->toggleable(),
 
-            TextColumn::make('price')
-                ->label('Preço Unitário')
-                ->formatStateUsing(fn ($record) => format_money($record->price))
-                ->sortable(),
-
             TextColumn::make('is_active')
                 ->label('Status')
                 ->badge()
