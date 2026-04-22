@@ -36,6 +36,10 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
             return $this->role === \App\Enums\UserRole::BILHETERIA && $this->is_active;
         }
 
+        if ($panel->getId() === 'excursionista') {
+            return $this->role === \App\Enums\UserRole::EXCURSIONISTA && $this->is_active;
+        }
+
         return false;
     }
 
