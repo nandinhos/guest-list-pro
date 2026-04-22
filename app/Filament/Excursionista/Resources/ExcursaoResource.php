@@ -5,6 +5,7 @@ namespace App\Filament\Excursionista\Resources;
 use App\Filament\Excursionista\Resources\ExcursaoResource\Pages\CreateExcursao;
 use App\Filament\Excursionista\Resources\ExcursaoResource\Pages\EditExcursao;
 use App\Filament\Excursionista\Resources\ExcursaoResource\Pages\ListExcursoes;
+use App\Filament\Excursionista\Resources\ExcursaoResource\RelationManagers\MonitoresRelationManager;
 use App\Filament\Excursionista\Resources\ExcursaoResource\RelationManagers\VeiculosRelationManager;
 use App\Models\Excursao;
 use BackedEnum;
@@ -76,6 +77,7 @@ class ExcursaoResource extends Resource
     {
         return [
             VeiculosRelationManager::class,
+            MonitoresRelationManager::class,
         ];
     }
 

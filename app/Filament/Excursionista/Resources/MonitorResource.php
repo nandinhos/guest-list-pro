@@ -9,7 +9,6 @@ use App\Models\Monitor;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -67,7 +66,7 @@ class MonitorResource extends Resource
                                 return \App\Models\Veiculo::query()
                                     ->whereHas('excursao', function ($q) use ($eventId, $userId) {
                                         $q->where('event_id', $eventId)
-                                          ->where('criado_por', $userId);
+                                            ->where('criado_por', $userId);
                                     })
                                     ->with('excursao')
                                     ->get()

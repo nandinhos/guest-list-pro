@@ -41,12 +41,14 @@ class UsersTable
                         'admin' => 'danger',
                         'promoter' => 'primary',
                         'validator' => 'success',
+                        'excursionista' => 'teal',
                         default => 'gray',
                     })
                     ->icon(fn ($state) => match ($state?->value) {
                         'admin' => 'heroicon-m-shield-check',
                         'promoter' => 'heroicon-m-megaphone',
                         'validator' => 'heroicon-m-ticket',
+                        'excursionista' => 'heroicon-m-user-group',
                         default => 'heroicon-m-user',
                     })
                     ->sortable()
