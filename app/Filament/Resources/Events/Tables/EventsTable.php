@@ -32,7 +32,6 @@ class EventsTable
             ->recordActions([
                 EditAction::make(),
             ])
-            ->visibleFrom('md')
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
