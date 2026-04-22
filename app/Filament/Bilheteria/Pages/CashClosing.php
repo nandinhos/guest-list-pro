@@ -82,6 +82,7 @@ class CashClosing extends Page
 
         return TicketSale::query()
             ->where('event_id', $eventId)
+            ->notRefunded()
             ->when($this->data['start_datetime'] ?? null, fn ($q, $start) => $q->where('created_at', '>=', $start))
             ->when($this->data['end_datetime'] ?? null, fn ($q, $end) => $q->where('created_at', '<=', $end))
             ->when($this->data['payment_method'] ?? null, fn ($q, $method) => $q->where('payment_method', $method))
@@ -166,7 +167,6 @@ class CashClosing extends Page
             'generatedAt' => now()->format('d/m/Y H:i:s'),
         ];
 
-        // Log do fechamento de caixa
         activity()
             ->causedBy(Auth::user())
             ->withProperties([

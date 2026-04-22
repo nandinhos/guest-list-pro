@@ -78,7 +78,7 @@
                                     {{ $sale->created_at->format('H:i') }}
                                 </span>
                             </div>
-                            
+
                             <div class="flex flex-col">
                                 <span class="text-sm font-bold text-gray-900 dark:text-white">{{ $sale->buyer_name }}</span>
                                 <span class="text-xs text-gray-500">{{ $sale->buyer_document ?: 'Sem documento' }}</span>
@@ -89,7 +89,7 @@
                                 <span class="text-sm font-bold text-primary-600 dark:text-primary-400">
                                     R$ {{ number_format($sale->value, 2, ',', '.') }}
                                 </span>
-                                
+
                                 @php
                                     $paymentMethod = \App\Enums\PaymentMethod::tryFrom($sale->payment_method);
                                 @endphp

@@ -27,13 +27,34 @@ class TicketSale extends Model
         'buyer_name',
         'buyer_document',
         'notes',
+        'is_refunded',
+        'refunded_at',
+        'refunded_by',
+        'refund_reason',
     ];
 
     protected function casts(): array
     {
         return [
             'value' => 'decimal:2',
+            'is_refunded' => 'boolean',
+            'refunded_at' => 'datetime',
         ];
+    }
+
+    public function scopeNotRefunded($query)
+    {
+        return $query->where('is_refunded', false);
+    }
+
+    public function scopeRefunded($query)
+    {
+        return $query->where('is_refunded', true);
+    }
+
+    public function refundRequest(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(RefundRequest::class);
     }
 
     /**
