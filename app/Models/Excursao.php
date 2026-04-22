@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Excursao extends Model
 {
-    /** @use HasFactory<\Database\Factories\ExcursaoFactory> */
     use HasFactory;
 
     protected $table = 'excursoes';
@@ -25,13 +24,13 @@ class Excursao extends Model
         return $this->belongsTo(Event::class);
     }
 
-    public function criadoPor(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'criado_por');
-    }
-
     public function veiculos(): HasMany
     {
         return $this->hasMany(Veiculo::class, 'excursao_id');
+    }
+
+    public function criadoPor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'criado_por');
     }
 }

@@ -34,6 +34,7 @@ class ExcursionistaPanelProvider extends PanelProvider
                 'gray' => Color::Slate,
             ])
             ->font('Inter')
+            ->viteTheme('resources/css/filament/excursionista/theme.css')
             ->defaultThemeMode(\Filament\Enums\ThemeMode::Dark)
             ->discoverResources(in: app_path('Filament/Excursionista/Resources'), for: 'App\Filament\Excursionista\Resources')
             ->discoverPages(in: app_path('Filament/Excursionista/Pages'), for: 'App\Filament\Excursionista\Pages')

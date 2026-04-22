@@ -14,7 +14,7 @@ class EnsureEventSelected
      *
      * @var array<string>
      */
-    protected array $panelsRequiringEvent = ['promoter', 'validator', 'bilheteria'];
+    protected array $panelsRequiringEvent = ['promoter', 'validator', 'bilheteria', 'excursionista'];
 
     /**
      * Handle an incoming request.
