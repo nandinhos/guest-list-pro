@@ -15,7 +15,7 @@ class TicketTypesTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn ($query) => $query->with(['event'])->withCount('ticketSales'))
+            ->modifyQueryUsing(fn ($query) => $query->with(['event'])->with(['sectorPrices.sector', 'ticketSales'])->withCount('ticketSales'))
             ->contentGrid([
                 'default' => 1,
                 'md' => null,
@@ -48,6 +48,11 @@ class TicketTypesTable
                     ->color(fn ($state) => $state ? 'info' : 'gray')
                     ->icon(fn ($state) => $state ? 'heroicon-m-eye' : 'heroicon-m-eye-slash')
                     ->formatStateUsing(fn ($state) => $state ? 'PÚBLICO' : 'OCULTO')
+                    ->visibleFrom('md'),
+
+                ViewColumn::make('sectors_list')
+                    ->label('Setores / Preços')
+                    ->view('filament.resources.ticket-type.tables.columns.sectors_list')
                     ->visibleFrom('md'),
             ])
             ->filters([

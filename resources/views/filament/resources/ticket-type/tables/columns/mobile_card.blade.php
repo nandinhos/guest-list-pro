@@ -31,15 +31,36 @@
         </div>
     </div>
 
-    {{-- Body: Descrição e Vendas --}}
-    <div class="py-2">
+    {{-- Body: Descrição, Setores e Vendas --}}
+    <div class="py-2 space-y-2">
         @if($getRecord()->description)
-            <p class="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-2 mb-2 italic bg-gray-50 dark:bg-gray-800/40 p-2 rounded-lg border border-gray-100/50 dark:border-gray-800/50">
+            <p class="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-2 italic bg-gray-50 dark:bg-gray-800/40 p-2 rounded-lg border border-gray-100/50 dark:border-gray-800/50">
                 "{{ $getRecord()->description }}"
             </p>
         @endif
 
-        <div class="flex items-center gap-2 bg-gray-50/50 dark:bg-gray-800/30 p-2 rounded-xl">
+        @php
+            $sectorPrices = $getRecord()->sectorPrices->sortBy(fn ($sp) => $sp->sector->name ?? '');
+        @endphp
+        @if($sectorPrices->count() > 0)
+            <div class="flex flex-col gap-0.5">
+                <span class="text-[9px] font-medium text-gray-400 dark:text-gray-500 uppercase tracking-tighter">Setores</span>
+                @foreach($sectorPrices as $sp)
+                    @php
+                        $soldCount = $getRecord()->ticketSales->where('sector_id', $sp->sector_id)->count();
+                    @endphp
+                    <div class="flex items-center gap-2 text-[10px] py-0.5 px-1.5 rounded bg-gray-50 dark:bg-gray-800/30">
+                        <span class="w-16 text-gray-600 dark:text-gray-400 truncate">{{ $sp->sector->name ?? 'N/A' }}</span>
+                        @if($soldCount > 0)
+                            <span class="text-gray-400 dark:text-gray-500 text-[9px]">({{ $soldCount }})</span>
+                        @endif
+                        <span class="text-primary-600 dark:text-primary-400 font-medium ml-auto">R$ {{ number_format($sp->price, 2, ',', '.') }}</span>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
+        <div class="flex items-center gap-2 bg-gray-50/50 dark:bg-gray-800/30 p-2 rounded-xl mt-1">
             <div class="flex flex-col">
                 <span class="text-[9px] font-medium text-gray-400 dark:text-gray-500 uppercase tracking-tighter">Vendas</span>
                 <div class="flex items-center gap-1 mt-0.5">
