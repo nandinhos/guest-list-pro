@@ -131,6 +131,10 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-orange-400 shadow-[0_0_8_rgba(251,146,60,0.8)]"></span>
                 Bilheteria
             </span>
+            <span class="px-2.5 py-1 glass-subtle rounded-lg text-[10px] font-bold text-surface-primary border border-[var(--glass-border)] flex items-center gap-1.5 shadow-sm transform hover:scale-105 transition-transform duration-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shadow-[0_0_8_rgba(45,212,191,0.8)]"></span>
+                Excursionista
+            </span>
         </div>
     </div>
 </div>

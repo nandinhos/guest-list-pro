@@ -18,6 +18,7 @@ class AuthenticationService
         'promoter' => '/promoter',
         'validator' => '/validator',
         'bilheteria' => '/bilheteria',
+        'excursionista' => '/excursionista',
     ];
 
     /**
