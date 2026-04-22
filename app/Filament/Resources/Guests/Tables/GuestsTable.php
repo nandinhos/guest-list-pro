@@ -124,6 +124,7 @@ class GuestsTable
                     ->modalHeading('Confirmar Check-in')
                     ->modalDescription(fn ($record) => "Confirmar entrada de {$record->name}?")
                     ->modalSubmitActionLabel('Confirmar Entrada')
+                    ->extraAttributes(['class' => 'hidden md:inline-flex'])
                     ->action(function ($record, \Livewire\Component $livewire) {
                         /** @var \App\Models\User $user */
                         $user = \Filament\Facades\Filament::auth()->user();
@@ -199,6 +200,7 @@ class GuestsTable
                     ->modalHeading('Estornar Check-in')
                     ->modalDescription(fn ($record) => "Estornar entrada de {$record->name}?")
                     ->modalSubmitActionLabel('Confirmar Estorno')
+                    ->extraAttributes(['class' => 'hidden md:inline-flex'])
                     ->action(function ($record, \Livewire\Component $livewire) {
                         try {
                             \Illuminate\Support\Facades\DB::transaction(function () use ($record) {
@@ -237,7 +239,7 @@ class GuestsTable
                         $livewire->resetTable();
                     }),
 
-                EditAction::make(),
+                EditAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

@@ -1,0 +1,14 @@
+{
+  "version": "3.1.0",
+  "description": "DEVORQ v3 lifecycle hooks configuration",
+  "hooks": {
+    "session_start": [{ "matcher": "startup|clear|compact", "hooks": [{ "type": "command", "command": "${DEVORQ_ROOT}/.devorq/hooks/session_start", "async": false }] }],
+    "pre_tool": [{ "matcher": ".*", "hooks": [{ "type": "sandbox", "tool": "devorq-context-save", "async": false }] }],
+    "post_tool": [{ "matcher": "Read|search_files|terminal|browser_navigate", "hooks": [{ "type": "cache", "tool": "devorq-context-cache", "async": true }] }],
+    "pre_compact": [{ "matcher": ".*", "hooks": [{ "type": "index", "tool": "devorq-context-index", "async": false }] }]
+  },
+  "requirements": {
+    "jq": { "required": true, "fallback": "pure_bash" },
+    "git": { "required": true, "fallback": null }
+  }
+}

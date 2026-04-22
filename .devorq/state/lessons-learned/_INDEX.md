@@ -1,7 +1,7 @@
 # Índice de Lições Aprendidas — DEVORQ
 
 **Data:** 2026-04-21
-**Total:** 25 lições (24 + 1 arquivada)
+**Total:** 26 lições (25 + 1 arquivada)
 
 ---
 
@@ -51,6 +51,7 @@
 | ID | Título | Tags |
 |----|--------|------|
 | 2026-04-21-sqlite-vs-mysql-production | SQLite vs MySQL em Produção — gráficos e session | production, database, sqlite, mysql |
+| 2026-04-21-guest-middleware-laravel11 | Middleware 'guest' não registrado no Laravel 11+ | auth, middleware, laravel11 |
 
 ---
 
@@ -76,6 +77,11 @@
 | 2026-04-21-sqlite-vs-mysql-production | SQLite vs MySQL em Produção — gráficos e session |
 | 2026-02-17-database-performance | Database Performance e Índices |
 
+### 🔐 Auth/Middleware (novo)
+| ID | Título |
+|----|--------|
+| 2026-04-21-guest-middleware-laravel11 | Middleware 'guest' não registrado no Laravel 11+ |
+
 ### 📝 Blade
 | ID | Título |
 |----|--------|
@@ -87,7 +93,7 @@
 
 | Status | Quantidade |
 |--------|------------|
-| Migradas | 19 |
+| Migradas | 20 |
 | Arquivadas | 1 (LL-004 - substituída) |
 | Pendentes | 0 |
 
@@ -102,4 +108,4 @@ devorq lessons validate
 
 ---
 
-*Atualizado em: 2026-04-20*
+*Atualizado em: 2026-04-21*

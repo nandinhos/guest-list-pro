@@ -79,10 +79,6 @@ class SectorsTable
                 EditAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
                 DeleteAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
             ])
-            ->recordActions([
-                EditAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
-                DeleteAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
-            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

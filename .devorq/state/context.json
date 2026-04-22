@@ -1,0 +1,17 @@
+{
+  "stack": "filament",
+  "stack_version": "v4",
+  "runtime": "terminal-cli",
+  "llm": "MiniMax-M2.7",
+  "llm_provider": "minimax",
+  "project_type": "brownfield",
+  "project_path": "/home/nandodev/projects/guest-list-pro",
+  "last_session": "2026-04-22T00:00:00",
+  "active_branch": "main",
+  "gates_passed": [],
+  "pending_actions": [],
+  "hub_enabled": false,
+  "drive_folder_id": "",
+  "devorq_version": "3.1.0",
+  "spec_version": "2.1-reviewed"
+}

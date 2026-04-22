@@ -1,0 +1,132 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - button "Expandir barra lateral" [ref=e4] [cursor=pointer]:
+      - img [ref=e5]
+    - button "Menu do usuário" [ref=e10] [cursor=pointer]:
+      - img "Avatar de Admin User" [ref=e11]
+  - generic [ref=e12]:
+    - complementary [ref=e13]:
+      - navigation [ref=e16]:
+        - list [ref=e17]:
+          - listitem [ref=e18]:
+            - list [ref=e19]:
+              - listitem [ref=e20]:
+                - link "Painel de Controle" [ref=e21] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin
+                  - img [ref=e22]
+                  - generic [ref=e24]: Painel de Controle
+              - listitem [ref=e25]:
+                - link "Eventos" [ref=e26] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/events
+                  - img [ref=e27]
+                  - generic [ref=e29]: Eventos
+              - listitem [ref=e30]:
+                - link "Convidados" [ref=e31] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/guests
+                  - img [ref=e32]
+                  - generic [ref=e34]: Convidados
+              - listitem [ref=e35]:
+                - link "Permissões" [ref=e36] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/promoter-permissions
+                  - img [ref=e37]
+                  - generic [ref=e39]: Permissões
+              - listitem [ref=e40]:
+                - link "Setores" [ref=e41] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/sectors
+                  - img [ref=e42]
+                  - generic [ref=e44]: Setores
+              - listitem [ref=e45]:
+                - link "Tipos De Ingresso" [ref=e46] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/ticket-type/ticket-types
+                  - img [ref=e47]
+                  - generic [ref=e49]: Tipos De Ingresso
+              - listitem [ref=e50]:
+                - link "Usuários" [ref=e51] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/users
+                  - img [ref=e52]
+                  - generic [ref=e54]: Usuários
+          - listitem [ref=e55]:
+            - generic [ref=e56] [cursor=pointer]:
+              - generic [ref=e57]: Sistema
+              - button "Sistema" [expanded] [ref=e58]:
+                - img [ref=e59]
+            - list [ref=e61]:
+              - listitem [ref=e62]:
+                - link "Logs De Auditoria" [ref=e63] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/audits
+                  - img [ref=e64]
+                  - generic [ref=e66]: Logs De Auditoria
+          - listitem [ref=e67]:
+            - generic [ref=e68] [cursor=pointer]:
+              - generic [ref=e69]: Gestão
+              - button "Gestão" [expanded] [ref=e70]:
+                - img [ref=e71]
+            - list [ref=e73]:
+              - listitem [ref=e74]:
+                - link "Solicitações 4" [ref=e75] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/approval-requests
+                  - img [ref=e76]
+                  - generic [ref=e78]: Solicitações
+                  - generic [ref=e82]: "4"
+              - listitem [ref=e83]:
+                - link "Estornos" [ref=e84] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/refund-request/refund-requests
+                  - img [ref=e85]
+                  - generic [ref=e87]: Estornos
+    - main [ref=e89]:
+      - generic [ref=e91]:
+        - heading "Painel de Controle" [level=1] [ref=e94]
+        - generic [ref=e101]:
+          - generic [ref=e105]:
+            - heading "Check-ins e Vendas por Horário" [level=2] [ref=e106]
+            - paragraph [ref=e107]: "Entradas: 4 | Vendas: 0"
+          - generic [ref=e120]:
+            - link "Solicitações Pendentes 4 Aguardando sua aprovação" [ref=e123] [cursor=pointer]:
+              - /url: http://localhost:8888/admin/approval-requests
+              - generic [ref=e124]:
+                - generic [ref=e126]: Solicitações Pendentes
+                - generic [ref=e127]: "4"
+                - generic [ref=e128]:
+                  - generic [ref=e129]: Aguardando sua aprovação
+                  - img [ref=e130]
+            - generic [ref=e135]:
+              - generic [ref=e137]: Total de Eventos
+              - generic [ref=e138]: "3"
+              - generic [ref=e139]:
+                - generic [ref=e140]: Eventos cadastrados
+                - img [ref=e141]
+            - generic [ref=e146]:
+              - generic [ref=e148]: Total de Convidados
+              - generic [ref=e149]: "60"
+              - generic [ref=e150]:
+                - generic [ref=e151]: 19 presentes (31.7%)
+                - img [ref=e152]
+            - generic [ref=e157]:
+              - generic [ref=e159]: Receita Total
+              - generic [ref=e160]: R$ 10.250,00
+              - generic [ref=e161]:
+                - generic [ref=e162]: Vendas de bilheteria
+                - img [ref=e163]
+          - generic [ref=e172]:
+            - link "Total Pendentes 4 Solicitações aguardando revisão" [ref=e175] [cursor=pointer]:
+              - /url: http://localhost:8888/admin/approval-requests
+              - generic [ref=e176]:
+                - generic [ref=e178]: Total Pendentes
+                - generic [ref=e179]: "4"
+                - generic [ref=e180]:
+                  - generic [ref=e181]: Solicitações aguardando revisão
+                  - img [ref=e182]
+            - generic [ref=e187]:
+              - generic [ref=e189]: Inclusões (Promoters)
+              - generic [ref=e190]: "3"
+            - generic [ref=e194]:
+              - generic [ref=e196]: Check-ins (Validadores)
+              - generic [ref=e197]: "1"
+          - generic [ref=e201]:
+            - heading "Métricas de Solicitações" [level=2] [ref=e202]
+            - paragraph [ref=e203]: Distribuição por status
+          - generic [ref=e212]:
+            - heading "Convidados vs Bilheteria" [level=2] [ref=e213]
+            - paragraph [ref=e214]: "Lista: 69.8% | Bilheteria: 30.2%"
+  - generic:
+    - status

@@ -1,0 +1,247 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - button "Expandir barra lateral" [ref=e4] [cursor=pointer]:
+      - img [ref=e5]
+    - button "Menu do usuário" [ref=e10] [cursor=pointer]:
+      - img "Avatar de Admin User" [ref=e11]
+  - generic [ref=e12]:
+    - complementary [ref=e13]:
+      - navigation [ref=e16]:
+        - list [ref=e17]:
+          - listitem [ref=e18]:
+            - list [ref=e19]:
+              - listitem [ref=e20]:
+                - link "Painel de Controle" [ref=e21] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin
+                  - img [ref=e22]
+                  - generic [ref=e24]: Painel de Controle
+              - listitem [ref=e25]:
+                - link "Eventos" [ref=e26] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/events
+                  - img [ref=e27]
+                  - generic [ref=e29]: Eventos
+              - listitem [ref=e30]:
+                - link "Convidados" [ref=e31] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/guests
+                  - img [ref=e32]
+                  - generic [ref=e34]: Convidados
+              - listitem [ref=e35]:
+                - link "Permissões" [ref=e36] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/promoter-permissions
+                  - img [ref=e37]
+                  - generic [ref=e39]: Permissões
+              - listitem [ref=e40]:
+                - link "Setores" [ref=e41] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/sectors
+                  - img [ref=e42]
+                  - generic [ref=e44]: Setores
+              - listitem [ref=e45]:
+                - link "Tipos De Ingresso" [ref=e46] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/ticket-type/ticket-types
+                  - img [ref=e47]
+                  - generic [ref=e49]: Tipos De Ingresso
+              - listitem [ref=e50]:
+                - link "Usuários" [ref=e51] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/users
+                  - img [ref=e52]
+                  - generic [ref=e54]: Usuários
+          - listitem [ref=e55]:
+            - generic [ref=e56] [cursor=pointer]:
+              - generic [ref=e57]: Sistema
+              - button "Sistema" [expanded] [ref=e58]:
+                - img [ref=e59]
+            - list [ref=e61]:
+              - listitem [ref=e62]:
+                - link "Logs De Auditoria" [ref=e63] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/audits
+                  - img [ref=e64]
+                  - generic [ref=e66]: Logs De Auditoria
+          - listitem [ref=e67]:
+            - generic [ref=e68] [cursor=pointer]:
+              - generic [ref=e69]: Gestão
+              - button "Gestão" [expanded] [ref=e70]:
+                - img [ref=e71]
+            - list [ref=e73]:
+              - listitem [ref=e74]:
+                - link "Solicitações 4" [ref=e75] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/approval-requests
+                  - img [ref=e76]
+                  - generic [ref=e78]: Solicitações
+                  - generic [ref=e82]: "4"
+              - listitem [ref=e83]:
+                - link "Estornos" [ref=e84] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/refund-request/refund-requests
+                  - img [ref=e85]
+                  - generic [ref=e87]: Estornos
+    - main [ref=e89]:
+      - generic [ref=e91]:
+        - generic [ref=e92]:
+          - heading "Usuários" [level=1] [ref=e94]
+          - link "Criar Usuário" [ref=e97] [cursor=pointer]:
+            - /url: http://localhost:8888/admin/users/create
+        - generic [ref=e105]:
+          - generic [ref=e108]:
+            - generic [ref=e109]:
+              - generic [ref=e110]: Pesquisar
+              - generic [ref=e111]:
+                - img [ref=e113]
+                - searchbox "Pesquisar" [ref=e116]
+            - button "Alternar colunas" [ref=e119] [cursor=pointer]:
+              - img [ref=e120]
+          - table [ref=e123]:
+            - rowgroup [ref=e124]:
+              - row "Marcar/desmarcar todos os itens para ações em massa. Dados do Usuário" [ref=e125]:
+                - columnheader "Marcar/desmarcar todos os itens para ações em massa." [ref=e126]:
+                  - checkbox "Marcar/desmarcar todos os itens para ações em massa." [ref=e127]
+                - columnheader "Dados do Usuário" [ref=e128]
+            - rowgroup [ref=e129]:
+              - 'row "Marcar/desmarcar o item 1 para ações em massa. Usuário #1 Usuário Ativo Admin User admin@guestlist.pro Nível de Acesso Administrador Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e130]':
+                - cell "Marcar/desmarcar o item 1 para ações em massa." [ref=e131]:
+                  - checkbox "Marcar/desmarcar o item 1 para ações em massa." [ref=e132]
+                - 'cell "Usuário #1 Usuário Ativo Admin User admin@guestlist.pro Nível de Acesso Administrador Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e133]':
+                  - 'link "Usuário #1 Usuário Ativo Admin User admin@guestlist.pro Nível de Acesso Administrador Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e134] [cursor=pointer]':
+                    - /url: http://localhost:8888/admin/users/1/edit
+                    - generic [ref=e135]:
+                      - generic [ref=e137]:
+                        - generic [ref=e138]:
+                          - generic [ref=e139]:
+                            - generic [ref=e140]: "Usuário #1"
+                            - generic "Usuário Ativo" [ref=e141]
+                          - heading "Admin User" [level=3] [ref=e142]
+                          - generic [ref=e143]:
+                            - img [ref=e144]
+                            - generic [ref=e147]: admin@guestlist.pro
+                        - button "Editar" [ref=e149]:
+                          - img [ref=e150]
+                      - generic [ref=e154]:
+                        - generic [ref=e155]: Nível de Acesso
+                        - generic [ref=e159]: Administrador
+                      - generic [ref=e160]:
+                        - generic [ref=e161]:
+                          - generic [ref=e162]: Status da Conta
+                          - generic [ref=e166]: ATIVO
+                        - generic [ref=e167]:
+                          - generic [ref=e168]: Cadastrado em
+                          - generic [ref=e169]: 21/04/2026
+              - 'row "Marcar/desmarcar o item 2 para ações em massa. Usuário #2 Usuário Ativo Promoter User promoter@guestlist.pro Nível de Acesso Promoter Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e170]':
+                - cell "Marcar/desmarcar o item 2 para ações em massa." [ref=e171]:
+                  - checkbox "Marcar/desmarcar o item 2 para ações em massa." [ref=e172]
+                - 'cell "Usuário #2 Usuário Ativo Promoter User promoter@guestlist.pro Nível de Acesso Promoter Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e173]':
+                  - 'link "Usuário #2 Usuário Ativo Promoter User promoter@guestlist.pro Nível de Acesso Promoter Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e174] [cursor=pointer]':
+                    - /url: http://localhost:8888/admin/users/2/edit
+                    - generic [ref=e175]:
+                      - generic [ref=e177]:
+                        - generic [ref=e178]:
+                          - generic [ref=e179]:
+                            - generic [ref=e180]: "Usuário #2"
+                            - generic "Usuário Ativo" [ref=e181]
+                          - heading "Promoter User" [level=3] [ref=e182]
+                          - generic [ref=e183]:
+                            - img [ref=e184]
+                            - generic [ref=e187]: promoter@guestlist.pro
+                        - button "Editar" [ref=e189]:
+                          - img [ref=e190]
+                      - generic [ref=e194]:
+                        - generic [ref=e195]: Nível de Acesso
+                        - generic [ref=e199]: Promoter
+                      - generic [ref=e200]:
+                        - generic [ref=e201]:
+                          - generic [ref=e202]: Status da Conta
+                          - generic [ref=e206]: ATIVO
+                        - generic [ref=e207]:
+                          - generic [ref=e208]: Cadastrado em
+                          - generic [ref=e209]: 21/04/2026
+              - 'row "Marcar/desmarcar o item 3 para ações em massa. Usuário #3 Usuário Ativo Validador Exemplo validator@guestlist.pro Nível de Acesso Validador Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e210]':
+                - cell "Marcar/desmarcar o item 3 para ações em massa." [ref=e211]:
+                  - checkbox "Marcar/desmarcar o item 3 para ações em massa." [ref=e212]
+                - 'cell "Usuário #3 Usuário Ativo Validador Exemplo validator@guestlist.pro Nível de Acesso Validador Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e213]':
+                  - 'link "Usuário #3 Usuário Ativo Validador Exemplo validator@guestlist.pro Nível de Acesso Validador Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e214] [cursor=pointer]':
+                    - /url: http://localhost:8888/admin/users/3/edit
+                    - generic [ref=e215]:
+                      - generic [ref=e217]:
+                        - generic [ref=e218]:
+                          - generic [ref=e219]:
+                            - generic [ref=e220]: "Usuário #3"
+                            - generic "Usuário Ativo" [ref=e221]
+                          - heading "Validador Exemplo" [level=3] [ref=e222]
+                          - generic [ref=e223]:
+                            - img [ref=e224]
+                            - generic [ref=e227]: validator@guestlist.pro
+                        - button "Editar" [ref=e229]:
+                          - img [ref=e230]
+                      - generic [ref=e234]:
+                        - generic [ref=e235]: Nível de Acesso
+                        - generic [ref=e239]: Validador
+                      - generic [ref=e240]:
+                        - generic [ref=e241]:
+                          - generic [ref=e242]: Status da Conta
+                          - generic [ref=e246]: ATIVO
+                        - generic [ref=e247]:
+                          - generic [ref=e248]: Cadastrado em
+                          - generic [ref=e249]: 21/04/2026
+              - 'row "Marcar/desmarcar o item 4 para ações em massa. Usuário #4 Usuário Ativo Bilheteria User bilheteria@guestlist.pro Nível de Acesso Bilheteria Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e250]':
+                - cell "Marcar/desmarcar o item 4 para ações em massa." [ref=e251]:
+                  - checkbox "Marcar/desmarcar o item 4 para ações em massa." [ref=e252]
+                - 'cell "Usuário #4 Usuário Ativo Bilheteria User bilheteria@guestlist.pro Nível de Acesso Bilheteria Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e253]':
+                  - 'link "Usuário #4 Usuário Ativo Bilheteria User bilheteria@guestlist.pro Nível de Acesso Bilheteria Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e254] [cursor=pointer]':
+                    - /url: http://localhost:8888/admin/users/4/edit
+                    - generic [ref=e255]:
+                      - generic [ref=e257]:
+                        - generic [ref=e258]:
+                          - generic [ref=e259]:
+                            - generic [ref=e260]: "Usuário #4"
+                            - generic "Usuário Ativo" [ref=e261]
+                          - heading "Bilheteria User" [level=3] [ref=e262]
+                          - generic [ref=e263]:
+                            - img [ref=e264]
+                            - generic [ref=e267]: bilheteria@guestlist.pro
+                        - button "Editar" [ref=e269]:
+                          - img [ref=e270]
+                      - generic [ref=e274]:
+                        - generic [ref=e275]: Nível de Acesso
+                        - generic [ref=e279]: Bilheteria
+                      - generic [ref=e280]:
+                        - generic [ref=e281]:
+                          - generic [ref=e282]: Status da Conta
+                          - generic [ref=e286]: ATIVO
+                        - generic [ref=e287]:
+                          - generic [ref=e288]: Cadastrado em
+                          - generic [ref=e289]: 21/04/2026
+              - 'row "Marcar/desmarcar o item 5 para ações em massa. Usuário #5 Usuário Ativo Validator User validador@guestlist.pro Nível de Acesso Validador Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e290]':
+                - cell "Marcar/desmarcar o item 5 para ações em massa." [ref=e291]:
+                  - checkbox "Marcar/desmarcar o item 5 para ações em massa." [ref=e292]
+                - 'cell "Usuário #5 Usuário Ativo Validator User validador@guestlist.pro Nível de Acesso Validador Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e293]':
+                  - 'link "Usuário #5 Usuário Ativo Validator User validador@guestlist.pro Nível de Acesso Validador Status da Conta ATIVO Cadastrado em 21/04/2026" [ref=e294] [cursor=pointer]':
+                    - /url: http://localhost:8888/admin/users/5/edit
+                    - generic [ref=e295]:
+                      - generic [ref=e297]:
+                        - generic [ref=e298]:
+                          - generic [ref=e299]:
+                            - generic [ref=e300]: "Usuário #5"
+                            - generic "Usuário Ativo" [ref=e301]
+                          - heading "Validator User" [level=3] [ref=e302]
+                          - generic [ref=e303]:
+                            - img [ref=e304]
+                            - generic [ref=e307]: validador@guestlist.pro
+                        - button "Editar" [ref=e309]:
+                          - img [ref=e310]
+                      - generic [ref=e314]:
+                        - generic [ref=e315]: Nível de Acesso
+                        - generic [ref=e319]: Validador
+                      - generic [ref=e320]:
+                        - generic [ref=e321]:
+                          - generic [ref=e322]: Status da Conta
+                          - generic [ref=e326]: ATIVO
+                        - generic [ref=e327]:
+                          - generic [ref=e328]: Cadastrado em
+                          - generic [ref=e329]: 21/04/2026
+          - navigation "Paginação" [ref=e330]:
+            - generic [ref=e332]:
+              - combobox "por página" [ref=e335]:
+                - option "5"
+                - option "10" [selected]
+                - option "25"
+                - option "50"
+              - generic [ref=e336]: por página
+  - generic:
+    - status

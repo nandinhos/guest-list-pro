@@ -78,13 +78,9 @@ class UsersTable
             ->filters([
                 //
             ])
-            ->actions([
-                EditAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
-                DeleteAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
-            ])
             ->recordActions([
-                EditAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
-                DeleteAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
+                EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

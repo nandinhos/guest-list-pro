@@ -1,0 +1,276 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - button "Expandir barra lateral" [ref=e4] [cursor=pointer]:
+      - img [ref=e5]
+    - button "Menu do usuário" [ref=e10] [cursor=pointer]:
+      - img "Avatar de Admin User" [ref=e11]
+  - generic [ref=e12]:
+    - complementary [ref=e13]:
+      - navigation [ref=e16]:
+        - list [ref=e17]:
+          - listitem [ref=e18]:
+            - list [ref=e19]:
+              - listitem [ref=e20]:
+                - link "Painel de Controle" [ref=e21] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin
+                  - img [ref=e22]
+                  - generic [ref=e24]: Painel de Controle
+              - listitem [ref=e25]:
+                - link "Eventos" [ref=e26] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/events
+                  - img [ref=e27]
+                  - generic [ref=e29]: Eventos
+              - listitem [ref=e30]:
+                - link "Convidados" [ref=e31] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/guests
+                  - img [ref=e32]
+                  - generic [ref=e34]: Convidados
+              - listitem [ref=e35]:
+                - link "Permissões" [ref=e36] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/promoter-permissions
+                  - img [ref=e37]
+                  - generic [ref=e39]: Permissões
+              - listitem [ref=e40]:
+                - link "Setores" [ref=e41] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/sectors
+                  - img [ref=e42]
+                  - generic [ref=e44]: Setores
+              - listitem [ref=e45]:
+                - link "Tipos De Ingresso" [ref=e46] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/ticket-type/ticket-types
+                  - img [ref=e47]
+                  - generic [ref=e49]: Tipos De Ingresso
+              - listitem [ref=e50]:
+                - link "Usuários" [ref=e51] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/users
+                  - img [ref=e52]
+                  - generic [ref=e54]: Usuários
+          - listitem [ref=e55]:
+            - generic [ref=e56] [cursor=pointer]:
+              - generic [ref=e57]: Sistema
+              - button "Sistema" [expanded] [ref=e58]:
+                - img [ref=e59]
+            - list [ref=e61]:
+              - listitem [ref=e62]:
+                - link "Logs De Auditoria" [ref=e63] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/audits
+                  - img [ref=e64]
+                  - generic [ref=e66]: Logs De Auditoria
+          - listitem [ref=e67]:
+            - generic [ref=e68] [cursor=pointer]:
+              - generic [ref=e69]: Gestão
+              - button "Gestão" [expanded] [ref=e70]:
+                - img [ref=e71]
+            - list [ref=e73]:
+              - listitem [ref=e74]:
+                - link "Solicitações 4" [ref=e75] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/approval-requests
+                  - img [ref=e76]
+                  - generic [ref=e78]: Solicitações
+                  - generic [ref=e82]: "4"
+              - listitem [ref=e83]:
+                - link "Estornos" [ref=e84] [cursor=pointer]:
+                  - /url: http://localhost:8888/admin/refund-request/refund-requests
+                  - img [ref=e85]
+                  - generic [ref=e87]: Estornos
+    - main [ref=e89]:
+      - generic [ref=e91]:
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - navigation [ref=e94]:
+              - list [ref=e95]:
+                - listitem [ref=e96]:
+                  - link "Permissões" [ref=e97] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions
+                - listitem [ref=e98]:
+                  - img [ref=e99]
+                  - generic [ref=e101]: Listar
+            - heading "Permissões" [level=1] [ref=e102]
+          - link "Criar Permissão" [ref=e105] [cursor=pointer]:
+            - /url: http://localhost:8888/admin/promoter-permissions/create
+        - generic [ref=e113]:
+          - generic [ref=e116]:
+            - generic [ref=e117]:
+              - generic [ref=e118]: Pesquisar
+              - generic [ref=e119]:
+                - img [ref=e121]
+                - searchbox "Pesquisar" [ref=e124]
+            - button "Filtrar" [ref=e127] [cursor=pointer]:
+              - img [ref=e128]
+              - generic [ref=e131]: "0"
+            - button "Alternar colunas" [ref=e134] [cursor=pointer]:
+              - img [ref=e135]
+          - table [ref=e138]:
+            - rowgroup [ref=e139]:
+              - row "Marcar/desmarcar todos os itens para ações em massa. Usuário Função Evento Setor Limite Início Fim Ações" [ref=e140]:
+                - columnheader "Marcar/desmarcar todos os itens para ações em massa." [ref=e141]:
+                  - checkbox "Marcar/desmarcar todos os itens para ações em massa." [ref=e142]
+                - columnheader "Usuário" [ref=e143]:
+                  - button "Usuário" [ref=e144] [cursor=pointer]:
+                    - text: Usuário
+                    - img [ref=e145]
+                - columnheader "Função" [ref=e147]:
+                  - button "Função" [ref=e148] [cursor=pointer]:
+                    - text: Função
+                    - img [ref=e149]
+                - columnheader "Evento" [ref=e151]:
+                  - button "Evento" [ref=e152] [cursor=pointer]:
+                    - text: Evento
+                    - img [ref=e153]
+                - columnheader "Setor" [ref=e155]:
+                  - button "Setor" [ref=e156] [cursor=pointer]:
+                    - text: Setor
+                    - img [ref=e157]
+                - columnheader "Limite" [ref=e159]:
+                  - button "Limite" [ref=e160] [cursor=pointer]:
+                    - text: Limite
+                    - img [ref=e161]
+                - columnheader "Início" [ref=e163]:
+                  - button "Início" [ref=e164] [cursor=pointer]:
+                    - text: Início
+                    - img [ref=e165]
+                - columnheader "Fim" [ref=e167]:
+                  - button "Fim" [ref=e168] [cursor=pointer]:
+                    - text: Fim
+                    - img [ref=e169]
+                - columnheader "Ações" [ref=e171]
+            - rowgroup [ref=e172]:
+              - row "Marcar/desmarcar o item 1 para ações em massa. Promoter User Promoter Updated Event Name - 50 22/04/2026 18:00 22/04/2026 23:59 Editar Cota Editar Excluir" [ref=e173]:
+                - cell "Marcar/desmarcar o item 1 para ações em massa." [ref=e174]:
+                  - checkbox "Marcar/desmarcar o item 1 para ações em massa." [ref=e175]
+                - cell "Promoter User" [ref=e176]:
+                  - link "Promoter User" [ref=e177] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/1/edit
+                    - generic [ref=e178]: Promoter User
+                - cell "Promoter" [ref=e179]:
+                  - link "Promoter" [ref=e180] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/1/edit
+                    - generic [ref=e182]: Promoter
+                - cell "Updated Event Name" [ref=e183]:
+                  - link "Updated Event Name" [ref=e184] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/1/edit
+                    - generic [ref=e185]: Updated Event Name
+                - cell "-" [ref=e186]:
+                  - link "-" [ref=e187] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/1/edit
+                    - paragraph [ref=e189]: "-"
+                - cell "50" [ref=e190]:
+                  - link "50" [ref=e191] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/1/edit
+                    - generic [ref=e192]: "50"
+                - cell "22/04/2026 18:00" [ref=e193]:
+                  - link "22/04/2026 18:00" [ref=e194] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/1/edit
+                    - generic [ref=e195]: 22/04/2026 18:00
+                - cell "22/04/2026 23:59" [ref=e196]:
+                  - link "22/04/2026 23:59" [ref=e197] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/1/edit
+                    - generic [ref=e198]: 22/04/2026 23:59
+                - cell "Editar Cota Editar Excluir" [ref=e199]:
+                  - generic [ref=e200]:
+                    - button "Editar Cota" [ref=e201] [cursor=pointer]:
+                      - img [ref=e202]
+                      - text: Editar Cota
+                    - link "Editar" [ref=e205] [cursor=pointer]:
+                      - /url: http://localhost:8888/admin/promoter-permissions/1/edit
+                      - img [ref=e206]
+                      - text: Editar
+                    - button "Excluir" [ref=e209] [cursor=pointer]:
+                      - img [ref=e210]
+                      - text: Excluir
+              - row "Marcar/desmarcar o item 2 para ações em massa. Validator User Validador Updated Event Name - - Sem restrição Sem restrição Editar Cota Editar Excluir" [ref=e212]:
+                - cell "Marcar/desmarcar o item 2 para ações em massa." [ref=e213]:
+                  - checkbox "Marcar/desmarcar o item 2 para ações em massa." [ref=e214]
+                - cell "Validator User" [ref=e215]:
+                  - link "Validator User" [ref=e216] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/2/edit
+                    - generic [ref=e217]: Validator User
+                - cell "Validador" [ref=e218]:
+                  - link "Validador" [ref=e219] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/2/edit
+                    - generic [ref=e221]: Validador
+                - cell "Updated Event Name" [ref=e222]:
+                  - link "Updated Event Name" [ref=e223] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/2/edit
+                    - generic [ref=e224]: Updated Event Name
+                - cell "-" [ref=e225]:
+                  - link "-" [ref=e226] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/2/edit
+                    - paragraph [ref=e228]: "-"
+                - cell "-" [ref=e229]:
+                  - link "-" [ref=e230] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/2/edit
+                    - paragraph [ref=e232]: "-"
+                - cell "Sem restrição" [ref=e233]:
+                  - link "Sem restrição" [ref=e234] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/2/edit
+                    - paragraph [ref=e236]: Sem restrição
+                - cell "Sem restrição" [ref=e237]:
+                  - link "Sem restrição" [ref=e238] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/2/edit
+                    - paragraph [ref=e240]: Sem restrição
+                - cell "Editar Cota Editar Excluir" [ref=e241]:
+                  - generic [ref=e242]:
+                    - button "Editar Cota" [ref=e243] [cursor=pointer]:
+                      - img [ref=e244]
+                      - text: Editar Cota
+                    - link "Editar" [ref=e247] [cursor=pointer]:
+                      - /url: http://localhost:8888/admin/promoter-permissions/2/edit
+                      - img [ref=e248]
+                      - text: Editar
+                    - button "Excluir" [ref=e251] [cursor=pointer]:
+                      - img [ref=e252]
+                      - text: Excluir
+              - row "Marcar/desmarcar o item 3 para ações em massa. Bilheteria User Bilheteria Updated Event Name - - Sem restrição Sem restrição Editar Cota Editar Excluir" [ref=e254]:
+                - cell "Marcar/desmarcar o item 3 para ações em massa." [ref=e255]:
+                  - checkbox "Marcar/desmarcar o item 3 para ações em massa." [ref=e256]
+                - cell "Bilheteria User" [ref=e257]:
+                  - link "Bilheteria User" [ref=e258] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/3/edit
+                    - generic [ref=e259]: Bilheteria User
+                - cell "Bilheteria" [ref=e260]:
+                  - link "Bilheteria" [ref=e261] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/3/edit
+                    - generic [ref=e263]: Bilheteria
+                - cell "Updated Event Name" [ref=e264]:
+                  - link "Updated Event Name" [ref=e265] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/3/edit
+                    - generic [ref=e266]: Updated Event Name
+                - cell "-" [ref=e267]:
+                  - link "-" [ref=e268] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/3/edit
+                    - paragraph [ref=e270]: "-"
+                - cell "-" [ref=e271]:
+                  - link "-" [ref=e272] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/3/edit
+                    - paragraph [ref=e274]: "-"
+                - cell "Sem restrição" [ref=e275]:
+                  - link "Sem restrição" [ref=e276] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/3/edit
+                    - paragraph [ref=e278]: Sem restrição
+                - cell "Sem restrição" [ref=e279]:
+                  - link "Sem restrição" [ref=e280] [cursor=pointer]:
+                    - /url: http://localhost:8888/admin/promoter-permissions/3/edit
+                    - paragraph [ref=e282]: Sem restrição
+                - cell "Editar Cota Editar Excluir" [ref=e283]:
+                  - generic [ref=e284]:
+                    - button "Editar Cota" [ref=e285] [cursor=pointer]:
+                      - img [ref=e286]
+                      - text: Editar Cota
+                    - link "Editar" [ref=e289] [cursor=pointer]:
+                      - /url: http://localhost:8888/admin/promoter-permissions/3/edit
+                      - img [ref=e290]
+                      - text: Editar
+                    - button "Excluir" [ref=e293] [cursor=pointer]:
+                      - img [ref=e294]
+                      - text: Excluir
+          - navigation "Paginação" [ref=e296]:
+            - generic [ref=e299]:
+              - generic [ref=e301]: por página
+              - combobox "por página" [ref=e303]:
+                - option "5"
+                - option "10" [selected]
+                - option "25"
+                - option "50"
+  - generic:
+    - status
