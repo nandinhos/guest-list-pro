@@ -19,7 +19,7 @@ class EventsTable
                     ->alignLeft(),
             ])
             ->contentGrid([
-                'default' => 2,
+                'default' => 1,
                 'md' => 3,
                 'xl' => 4,
             ])
@@ -30,9 +30,9 @@ class EventsTable
                 //
             ])
             ->recordActions([
-                EditAction::make()
-                    ->extraAttributes(['class' => 'hidden']),
+                EditAction::make(),
             ])
+            ->visibleFrom('md')
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

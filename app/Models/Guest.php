@@ -76,6 +76,14 @@ class Guest extends Model
     }
 
     /**
+     * Relacionamento para o validador que realizou o check-in.
+     */
+    public function checkedInBy(): BelongsTo
+    {
+        return $this->validator();
+    }
+
+    /**
      * Convidado pai (para +1).
      */
     public function parent(): BelongsTo

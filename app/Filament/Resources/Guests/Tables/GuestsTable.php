@@ -17,11 +17,16 @@ class GuestsTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn ($query) => $query->with(['event', 'sector', 'promoter', 'validator']))
+            ->modifyQueryUsing(fn ($query) => $query->with(['event', 'sector', 'promoter', 'checkedInBy']))
+            ->contentGrid([
+                'default' => 1,
+                'md' => null,
+            ])
             ->columns([
                 ViewColumn::make('mobile_card')
                     ->view('filament.resources.guests.tables.columns.mobile_card')
-                    ->label('Dados do Convidado')
+                    ->label('DADOS DO CONVIDADO')
+                    ->getStateUsing(fn ($record) => $record)
                     ->hiddenFrom('md'),
 
                 TextColumn::make('name')
@@ -29,12 +34,14 @@ class GuestsTable
                     ->description(fn (\App\Models\Guest $record): string => $record->document ?? '-')
                     ->searchable(['name', 'document'])
                     ->sortable()
+                    ->weight('bold')
                     ->visibleFrom('md'),
 
-                TextColumn::make('event.name')
-                    ->label('Evento / Setor')
-                    ->description(fn (\App\Models\Guest $record): string => $record->sector->name ?? '-')
+                TextColumn::make('sector.name')
+                    ->label('Setor / Evento')
+                    ->description(fn (\App\Models\Guest $record): string => $record->event->name ?? '-')
                     ->sortable()
+                    ->icon('heroicon-m-map-pin')
                     ->visibleFrom('md'),
 
                 TextColumn::make('promoter.name')
@@ -42,33 +49,36 @@ class GuestsTable
                     ->searchable()
                     ->sortable()
                     ->toggleable()
+                    ->icon('heroicon-m-user')
                     ->visibleFrom('md'),
 
                 TextColumn::make('is_checked_in')
                     ->label('Status')
                     ->badge()
-                    ->color(fn ($state) => $state ? 'success' : 'gray')
-                    ->formatStateUsing(fn ($state) => $state ? 'Check-in' : 'Pendente')
+                    ->color(fn ($state) => $state ? 'success' : 'amber')
+                    ->icon(fn ($state) => $state ? 'heroicon-m-check-badge' : 'heroicon-m-clock')
+                    ->formatStateUsing(fn ($state) => $state ? 'PRESENTE' : 'PENDENTE')
                     ->sortable()
                     ->visibleFrom('md'),
 
-                TextColumn::make('validator.name')
+                TextColumn::make('checkedInBy.name')
                     ->label('Validado por')
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
+                    ->icon('heroicon-m-shield-check')
                     ->visibleFrom('md'),
 
                 TextColumn::make('checked_in_at')
                     ->label('Check-in em')
-                    ->formatStateUsing(fn ($state) => format_datetime($state))
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable()
                     ->visibleFrom('md'),
 
                 TextColumn::make('created_at')
                     ->label('Cadastrado em')
-                    ->formatStateUsing(fn ($state) => format_datetime($state))
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->visibleFrom('md'),
@@ -115,7 +125,8 @@ class GuestsTable
                     ->modalDescription(fn ($record) => "Confirmar entrada de {$record->name}?")
                     ->modalSubmitActionLabel('Confirmar Entrada')
                     ->action(function ($record, \Livewire\Component $livewire) {
-                        $user = auth()->user();
+                        /** @var \App\Models\User $user */
+                        $user = \Filament\Facades\Filament::auth()->user();
                         $result = \App\Rules\CheckinRule::canCheckin($user, $record);
 
                         if (! $result['allowed']) {
@@ -137,12 +148,12 @@ class GuestsTable
                                 $guest->update([
                                     'is_checked_in' => true,
                                     'checked_in_at' => now(),
-                                    'checked_in_by' => auth()->id(),
+                                    'checked_in_by' => \Filament\Facades\Filament::auth()->id(),
                                 ]);
                             });
                             \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
                                 'event_id' => $record->event_id,
-                                'validator_id' => auth()->id(),
+                                'validator_id' => \Filament\Facades\Filament::auth()->id(),
                                 'guest_id' => $record->id,
                                 'result' => 'success',
                                 'ip_address' => request()->ip(),
@@ -159,7 +170,7 @@ class GuestsTable
                             $isAlreadyCheckedIn = $e->getMessage() === 'checkin_exists';
                             \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
                                 'event_id' => $record->event_id,
-                                'validator_id' => auth()->id(),
+                                'validator_id' => \Filament\Facades\Filament::auth()->id(),
                                 'guest_id' => $record->id,
                                 'result' => $isAlreadyCheckedIn ? 'already_checked_in' : 'error',
                                 'ip_address' => request()->ip(),
@@ -203,7 +214,7 @@ class GuestsTable
                             });
                             \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
                                 'event_id' => $record->event_id,
-                                'validator_id' => auth()->id(),
+                                'validator_id' => \Filament\Facades\Filament::auth()->id(),
                                 'guest_id' => $record->id,
                                 'result' => 'estorno',
                                 'ip_address' => request()->ip(),
@@ -226,8 +237,7 @@ class GuestsTable
                         $livewire->resetTable();
                     }),
 
-                EditAction::make()
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                EditAction::make(),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

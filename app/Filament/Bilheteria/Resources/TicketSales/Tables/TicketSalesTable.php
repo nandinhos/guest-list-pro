@@ -3,8 +3,8 @@
 namespace App\Filament\Bilheteria\Resources\TicketSales\Tables;
 
 use App\Enums\PaymentMethod;
-use Filament\Actions\Action;
 use App\Models\TicketSale;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
@@ -18,7 +18,11 @@ class TicketSalesTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn ($query) => $query->with(['guest', 'seller', 'event', 'ticketType', 'refundRequest']))
+            ->modifyQueryUsing(fn ($query) => $query->with(['guest', 'seller', 'event', 'ticketType', 'sector', 'refundRequest']))
+            ->contentGrid([
+                'default' => 1,
+                'md' => null,
+            ])
             ->columns([
                 \Filament\Tables\Columns\ViewColumn::make('mobile_card')
                     ->label('VENDA')
@@ -142,7 +146,7 @@ class TicketSalesTable
                     })
                     ->modalSubmitAction(false)
                     ->modalCancelAction(fn ($action) => $action->label('Fechar'))
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    ->extraAttributes(['class' => '']),
 
                 Action::make('requestRefund')
                     ->label('')
@@ -155,11 +159,12 @@ class TicketSalesTable
                         if ($record->refundRequest && $record->refundRequest->isPending()) {
                             return false;
                         }
+
                         return true;
                     })
                     ->requiresConfirmation()
                     ->modalHeading('Solicitar Estorno')
-                    ->modalDescription(fn (TicketSale $record): string => "Solicitar estorno para venda #{$record->id}\n\nComprador: {$record->buyer_name}\nValor: R$ ".number_format($record->value, 2, ',', '.'))
+                    ->modalDescription(fn (TicketSale $record): string => "Solicitar estorno para venda #{$record->id}\n\nComprador: {$record->buyer_name}\nValor: R$ ".number_format((float) $record->value, 2, ',', '.'))
                     ->form([
                         Textarea::make('refund_reason')
                             ->label('Motivo do Estorno')
@@ -176,13 +181,17 @@ class TicketSalesTable
                                 ->body('Informe o motivo do estorno.')
                                 ->warning()
                                 ->send();
+
                             return;
                         }
 
                         try {
+                            /** @var \App\Models\User $user */
+                            $user = \Filament\Facades\Filament::auth()->user();
+
                             app(\App\Services\RefundRequestService::class)->createRefundRequest(
                                 $record,
-                                auth()->user(),
+                                $user,
                                 $reason
                             );
 
@@ -201,7 +210,7 @@ class TicketSalesTable
                                 ->send();
                         }
                     })
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    ->extraAttributes(['class' => '']),
             ])
             ->defaultSort('created_at', 'desc');
     }

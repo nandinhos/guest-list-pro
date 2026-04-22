@@ -23,11 +23,16 @@ class ApprovalRequestsTable
     {
         return $table
             ->modifyQueryUsing(fn ($query) => $query->with(['event', 'sector', 'requester', 'reviewer']))
+            ->contentGrid([
+                'default' => 1,
+                'md' => null,
+            ])
             ->columns([
                 // Mobile Layout (Custom Card View)
                 ViewColumn::make('mobile_card')
                     ->view('filament.resources.approval-requests.tables.columns.mobile_card')
                     ->label('SOLICITAÇÕES')
+                    ->getStateUsing(fn ($record) => $record)
                     ->hiddenFrom('md'),
 
                 // Desktop Layout (Standard Table Columns)
@@ -122,8 +127,7 @@ class ApprovalRequestsTable
                     ->modalContent(fn (ApprovalRequest $record) => view('filament.modals.approval-request-details', ['record' => $record]))
                     ->modalSubmitAction(false)
                     ->modalCancelAction(fn ($action) => $action->label('Fechar'))
-                    ->modalWidth(\Filament\Support\Enums\Width::Large)
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    ->modalWidth(\Filament\Support\Enums\Width::Large),
 
                 // Aprovar
                 Action::make('approve')
@@ -143,9 +147,12 @@ class ApprovalRequestsTable
                     ])
                     ->action(function (ApprovalRequest $record, array $data): void {
                         try {
+                            /** @var \App\Models\User $user */
+                            $user = \Filament\Facades\Filament::auth()->user();
+
                             app(ApprovalRequestService::class)->approve(
                                 $record,
-                                auth()->user(),
+                                $user,
                                 $data['notes'] ?? null
                             );
 
@@ -165,8 +172,7 @@ class ApprovalRequestsTable
                                 ->danger()
                                 ->send();
                         }
-                    })
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    }),
 
                 // Aprovar em Outro Setor (quando convidado já existe em outro setor)
                 Action::make('approveWithSectorUpdate')
@@ -193,9 +199,12 @@ class ApprovalRequestsTable
                     ])
                     ->action(function (ApprovalRequest $record, array $data): void {
                         try {
+                            /** @var \App\Models\User $user */
+                            $user = \Filament\Facades\Filament::auth()->user();
+
                             app(ApprovalRequestService::class)->approveWithSectorUpdate(
                                 $record,
-                                auth()->user(),
+                                $user,
                                 $data['notes'] ?? null
                             );
 
@@ -211,8 +220,7 @@ class ApprovalRequestsTable
                                 ->danger()
                                 ->send();
                         }
-                    })
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    }),
 
                 // Rejeitar
                 Action::make('reject')
@@ -233,9 +241,12 @@ class ApprovalRequestsTable
                     ])
                     ->action(function (ApprovalRequest $record, array $data): void {
                         try {
+                            /** @var \App\Models\User $user */
+                            $user = \Filament\Facades\Filament::auth()->user();
+
                             app(ApprovalRequestService::class)->reject(
                                 $record,
-                                auth()->user(),
+                                $user,
                                 $data['reason']
                             );
 
@@ -251,8 +262,7 @@ class ApprovalRequestsTable
                                 ->danger()
                                 ->send();
                         }
-                    })
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    }),
 
                 // Reconsiderar (para rejeitados/cancelados)
                 Action::make('reconsider')
@@ -272,9 +282,12 @@ class ApprovalRequestsTable
                     ])
                     ->action(function (ApprovalRequest $record, array $data): void {
                         try {
+                            /** @var \App\Models\User $user */
+                            $user = \Filament\Facades\Filament::auth()->user();
+
                             app(ApprovalRequestService::class)->reconsider(
                                 $record,
-                                auth()->user(),
+                                $user,
                                 $data['notes'] ?? null
                             );
 
@@ -290,8 +303,7 @@ class ApprovalRequestsTable
                                 ->danger()
                                 ->send();
                         }
-                    })
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    }),
 
                 // Reverter aprovação (para aprovados por engano)
                 Action::make('revert')
@@ -312,9 +324,12 @@ class ApprovalRequestsTable
                     ])
                     ->action(function (ApprovalRequest $record, array $data): void {
                         try {
+                            /** @var \App\Models\User $user */
+                            $user = \Filament\Facades\Filament::auth()->user();
+
                             app(ApprovalRequestService::class)->revert(
                                 $record,
-                                auth()->user(),
+                                $user,
                                 $data['reason']
                             );
 
@@ -330,8 +345,7 @@ class ApprovalRequestsTable
                                 ->danger()
                                 ->send();
                         }
-                    })
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    }),
             ])
             ->bulkActions([
                 BulkAction::make('approveSelected')
@@ -346,10 +360,13 @@ class ApprovalRequestsTable
                         $approved = 0;
                         $skipped = 0;
 
+                        /** @var \App\Models\User $user */
+                        $user = \Filament\Facades\Filament::auth()->user();
+
                         foreach ($records as $record) {
                             if ($record->isPending()) {
                                 try {
-                                    $service->approve($record, auth()->user());
+                                    $service->approve($record, $user);
                                     $approved++;
                                 } catch (\Exception) {
                                     $skipped++;
@@ -385,10 +402,13 @@ class ApprovalRequestsTable
                         $rejected = 0;
                         $skipped = 0;
 
+                        /** @var \App\Models\User $user */
+                        $user = \Filament\Facades\Filament::auth()->user();
+
                         foreach ($records as $record) {
                             if ($record->isPending()) {
                                 try {
-                                    $service->reject($record, auth()->user(), $data['reason']);
+                                    $service->reject($record, $user, $data['reason']);
                                     $rejected++;
                                 } catch (\Exception) {
                                     $skipped++;
@@ -425,10 +445,13 @@ class ApprovalRequestsTable
                         $reconsidered = 0;
                         $skipped = 0;
 
+                        /** @var \App\Models\User $user */
+                        $user = \Filament\Facades\Filament::auth()->user();
+
                         foreach ($records as $record) {
                             if ($record->canBeReconsidered()) {
                                 try {
-                                    $service->reconsider($record, auth()->user(), $data['notes'] ?? null);
+                                    $service->reconsider($record, $user, $data['notes'] ?? null);
                                     $reconsidered++;
                                 } catch (\Exception) {
                                     $skipped++;
@@ -466,10 +489,13 @@ class ApprovalRequestsTable
                         $reverted = 0;
                         $skipped = 0;
 
+                        /** @var \App\Models\User $user */
+                        $user = \Filament\Facades\Filament::auth()->user();
+
                         foreach ($records as $record) {
                             if ($record->canBeReverted()) {
                                 try {
-                                    $service->revert($record, auth()->user(), $data['reason']);
+                                    $service->revert($record, $user, $data['reason']);
                                     $reverted++;
                                 } catch (\Exception) {
                                     $skipped++;

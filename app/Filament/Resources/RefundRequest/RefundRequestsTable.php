@@ -21,6 +21,10 @@ class RefundRequestsTable
     {
         return $table
             ->modifyQueryUsing(fn ($query) => $query->with(['ticketSale', 'requester', 'reviewer', 'ticketSale.event']))
+            ->contentGrid([
+                'default' => 1,
+                'md' => null,
+            ])
             ->columns([
                 ViewColumn::make('mobile_card')
                     ->view('filament.resources.refund-requests.tables.columns.mobile_card')
@@ -140,8 +144,7 @@ class RefundRequestsTable
                     ->modalContent(fn (RefundRequest $record) => view('filament.modals.refund-request-details', ['record' => $record]))
                     ->modalSubmitAction(false)
                     ->modalCancelAction(fn ($action) => $action->label('Fechar'))
-                    ->modalWidth(\Filament\Support\Enums\Width::Large)
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    ->modalWidth(\Filament\Support\Enums\Width::Large),
 
                 Action::make('approve')
                     ->label('Aprovar')
@@ -160,9 +163,12 @@ class RefundRequestsTable
                     ])
                     ->action(function (RefundRequest $record, array $data): void {
                         try {
+                            /** @var \App\Models\User $user */
+                            $user = \Filament\Facades\Filament::auth()->user();
+
                             app(RefundRequestService::class)->approve(
                                 $record,
-                                auth()->user(),
+                                $user,
                                 $data['notes'] ?? null
                             );
 
@@ -178,8 +184,7 @@ class RefundRequestsTable
                                 ->danger()
                                 ->send();
                         }
-                    })
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    }),
 
                 Action::make('reject')
                     ->label('Rejeitar')
@@ -199,9 +204,12 @@ class RefundRequestsTable
                     ])
                     ->action(function (RefundRequest $record, array $data): void {
                         try {
+                            /** @var \App\Models\User $user */
+                            $user = \Filament\Facades\Filament::auth()->user();
+
                             app(RefundRequestService::class)->reject(
                                 $record,
-                                auth()->user(),
+                                $user,
                                 $data['reason']
                             );
 
@@ -217,8 +225,7 @@ class RefundRequestsTable
                                 ->danger()
                                 ->send();
                         }
-                    })
-                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                    }),
             ])
             ->poll('30s')
             ->emptyStateHeading('Nenhum estorno encontrado')

@@ -3,9 +3,9 @@
 namespace App\Filament\Resources\PromoterPermissions\Tables;
 
 use App\Enums\UserRole;
-use App\Models\Guest;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Notifications\Notification;
@@ -51,28 +51,12 @@ class PromoterPermissionsTable
                     ->sortable()
                     ->visibleFrom('md'),
 
-                TextColumn::make('guest_count')
-                    ->label('Usados')
-                    ->getStateUsing(fn ($record) => Guest::where('promoter_id', $record->user_id)
-                        ->where('event_id', $record->event_id)
-                        ->where('sector_id', $record->sector_id)
-                        ->count())
-                    ->sortable(),
-
                 TextColumn::make('guest_limit')
                     ->label('Limite')
                     ->numeric()
                     ->placeholder('-')
                     ->sortable()
                     ->visibleFrom('md'),
-
-                TextColumn::make('remaining')
-                    ->label('Restantes')
-                    ->getStateUsing(fn ($record) => max(0, $record->guest_limit - Guest::where('promoter_id', $record->user_id)
-                        ->where('event_id', $record->event_id)
-                        ->where('sector_id', $record->sector_id)
-                        ->count()))
-                    ->color(fn (int $state): string => $state > 10 ? 'success' : ($state > 0 ? 'warning' : 'danger')),
 
                 TextColumn::make('start_time')
                     ->label('Início')
@@ -114,8 +98,7 @@ class PromoterPermissionsTable
                     ->searchable()
                     ->preload(),
             ])
-            ->actionsColumnLabel('Ações')
-            ->recordActions([
+            ->actions([
                 Action::make('quickEdit')
                     ->label('Editar Cota')
                     ->icon('heroicon-m-pencil-square')
@@ -136,10 +119,10 @@ class PromoterPermissionsTable
                             ->success()
                             ->send();
                     })
-                    ->fillForm(fn ($record): array => ['guest_limit' => $record->guest_limit]),
-
-                EditAction::make()
+                    ->fillForm(fn ($record): array => ['guest_limit' => $record->guest_limit])
                     ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                EditAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
+                DeleteAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
