@@ -116,9 +116,16 @@ public static function getPriceForSector(TicketType $ticketType, int $sectorId):
    - Têm configuração de preço para o setor selecionado
 3. Selecionar TIPO
 4. Preço aparece automaticamente (ticket_type_sector.price)
-5. Opcional: Ativar toggle "Usar valor personalizado"
-   - Se OFF: Valor Cobrado = preço configurado (desabilitado)
-   - Se ON: Valor Cobrado = editável (para casos especiais)
+5. Toggle "Usar valor personalizado":
+   - OFF: Campo disabled, mostra valor automático (travado)
+   - ON: Campo enabled, limpa para receber valor customizado
+```
+
+**Fluxo do Toggle:**
+```
+1. Toggle OFF → campo disabled + valor automático (recalculado)
+2. Toggle ON → campo enabled + limpa para valor customizado
+3. Toggle OFF novamente → campo disabled + recalcula automático
 ```
 
 ---
@@ -160,7 +167,7 @@ public static function getPriceForSector(TicketType $ticketType, int $sectorId):
 | RF04 | Admin define visibilidade (is_visible) | Alta |
 | RF05 | Bilheteria filtra tipos visíveis por setor | Alta |
 | RF06 | Preço mostrado automaticamente após seleção | Alta |
-| RF07 | Operador pode usar valor customizado via toggle | Alta |
+| RF07 | Operador pode usar valor customizado via toggle com limpeza/recálculo automático | Alta |
 
 ---
 

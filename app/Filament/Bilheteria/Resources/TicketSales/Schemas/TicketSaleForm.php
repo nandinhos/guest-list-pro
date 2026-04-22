@@ -174,7 +174,8 @@ class TicketSaleForm
                                 ->numeric()
                                 ->prefix('R$')
                                 ->required()
-                                ->hint(fn (Get $get) => $get('use_custom_price') ? 'Valor personalizado' : 'Valor automático (ao alterar, assume responsabilidade)')
+                                ->disabled(fn (Get $get) => ! $get('use_custom_price'))
+                                ->hint(fn (Get $get) => $get('use_custom_price') ? 'Digite o valor personalizado' : 'Valor automático')
                                 ->default(function (Get $get) {
                                     if ($get('use_custom_price')) {
                                         return null;
@@ -197,7 +198,25 @@ class TicketSaleForm
                             Toggle::make('use_custom_price')
                                 ->label('Usar valor personalizado')
                                 ->default(false)
-                                ->live(),
+                                ->live()
+                                ->afterStateUpdated(function (Get $get, Set $set) {
+                                    if ($get('use_custom_price')) {
+                                        $set('value', null);
+                                    } else {
+                                        $ticketType = TicketType::find($get('ticket_type_id'));
+                                        $sectorId = $get('sector_id');
+
+                                        if (! $ticketType || ! $sectorId) {
+                                            return;
+                                        }
+
+                                        try {
+                                            $set('value', TicketSaleService::getPriceForSector($ticketType, $sectorId));
+                                        } catch (\RuntimeException $e) {
+                                            $set('value', 0);
+                                        }
+                                    }
+                                }),
                         ]),
                     ]),
 
