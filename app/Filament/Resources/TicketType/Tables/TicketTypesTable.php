@@ -34,13 +34,6 @@ class TicketTypesTable
                     ->weight('bold')
                     ->visibleFrom('md'),
 
-                TextColumn::make('price')
-                    ->label('Preço Unitário')
-                    ->money('BRL')
-                    ->sortable()
-                    ->icon('heroicon-m-banknotes')
-                    ->visibleFrom('md'),
-
                 TextColumn::make('is_active')
                     ->label('Status')
                     ->badge()
@@ -61,10 +54,6 @@ class TicketTypesTable
                 //
             ])
             ->actions([
-                EditAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
-                DeleteAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
-            ])
-            ->recordActions([
                 EditAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
                 DeleteAction::make()->extraAttributes(['class' => 'hidden md:inline-flex']),
             ])
