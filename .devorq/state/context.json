@@ -6,12 +6,13 @@
   "llm_provider": "minimax",
   "project_type": "brownfield",
   "project_path": "/home/nandodev/projects/guest-list-pro",
-  "last_session": "2026-04-22T00:00:00",
-  "active_branch": "main",
+  "last_session": "2026-04-22T06:00:00",
+  "active_branch": "feat/SPEC-0007-excursionista",
   "gates_passed": [],
-  "pending_actions": [],
+  "pending_actions": ["SPEC-0007: aguardar GATE-1 approval"],
   "hub_enabled": false,
   "drive_folder_id": "",
-  "devorq_version": "3.1.0",
-  "spec_version": "2.1-reviewed"
+  "devorq_version": "3.2.1",
+  "spec_version": "2.1-reviewed",
+  "current_spec": "SPEC-0007-painel-excursionista"
 }
