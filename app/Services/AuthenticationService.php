@@ -15,10 +15,10 @@ class AuthenticationService
      */
     private const PANEL_ROUTES = [
         'admin' => '/admin',
-        'promoter' => '/promoter',
-        'validator' => '/validator',
-        'bilheteria' => '/bilheteria',
-        'excursionista' => '/excursionista',
+        'promoter' => '/promoter/select-event',
+        'validator' => '/validator/select-event',
+        'bilheteria' => '/bilheteria/select-event',
+        'excursionista' => '/excursionista/select-event',
     ];
 
     /**

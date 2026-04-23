@@ -24,7 +24,9 @@ class Login extends Component
     public function mount(): void
     {
         if (Auth::check()) {
-            $this->redirect('/', navigate: false);
+            $authService = app(\App\Services\AuthenticationService::class);
+            $redirectUrl = $authService->getPanelUrl(Auth::user()->role);
+            $this->redirect($redirectUrl, navigate: false);
         }
     }
 
