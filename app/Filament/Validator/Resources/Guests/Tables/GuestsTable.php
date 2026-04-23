@@ -139,13 +139,22 @@ class GuestsTable
                     ->extraAttributes(['class' => 'hidden md:inline-flex'])
                     ->hidden(fn ($record) => $record?->is_checked_in ?? false)
                     ->slideOver()
+                    ->modalHeading('Confirmar Check-in')
+                    ->modalWidth('md')
                     ->schema([
-                        Placeholder::make('guest_name')
-                            ->label('Convidado')
-                            ->content(fn ($record) => $record->name),
-                        Placeholder::make('sector')
-                            ->label('Setor')
-                            ->content(fn ($record) => $record->sector?->name ?? '-'),
+                        \Filament\Schemas\Components\Section::make()
+                            ->schema([
+                                \Filament\Forms\Components\Placeholder::make('guest_name')
+                                    ->label('Nome do Convidado')
+                                    ->content(fn ($record) => $record->name)
+                                    ->extraAttributes(['class' => 'text-2xl font-bold text-success-600']),
+                                \Filament\Forms\Components\Placeholder::make('document')
+                                    ->label('Documento')
+                                    ->content(fn ($record) => $record->document),
+                                \Filament\Forms\Components\Placeholder::make('sector')
+                                    ->label('Setor')
+                                    ->content(fn ($record) => $record->sector?->name ?? '-'),
+                            ])->columns(1),
                     ])
                     ->action(function ($record, \Livewire\Component $livewire) {
                         static::doCheckIn($record);
@@ -162,10 +171,25 @@ class GuestsTable
                     ->extraAttributes(['class' => 'hidden md:inline-flex'])
                     ->visible(fn ($record) => ($record?->is_checked_in ?? false))
                     ->slideOver()
+                    ->modalHeading('Estornar Check-in')
+                    ->modalWidth('md')
                     ->schema([
-                        Placeholder::make('guest_name')
-                            ->label('Convidado')
-                            ->content(fn ($record) => $record->name),
+                        \Filament\Schemas\Components\Section::make()
+                            ->schema([
+                                \Filament\Forms\Components\Placeholder::make('guest_name')
+                                    ->label('Nome do Convidado')
+                                    ->content(fn ($record) => $record->name)
+                                    ->extraAttributes(['class' => 'text-2xl font-bold text-warning-600']),
+                                \Filament\Forms\Components\Placeholder::make('document')
+                                    ->label('Documento')
+                                    ->content(fn ($record) => $record->document),
+                                \Filament\Forms\Components\Placeholder::make('sector')
+                                    ->label('Setor')
+                                    ->content(fn ($record) => $record->sector?->name ?? '-'),
+                                \Filament\Forms\Components\Placeholder::make('checked_in_at')
+                                    ->label('Check-in realizado em')
+                                    ->content(fn ($record) => $record->checked_in_at ? format_datetime($record->checked_in_at) : '-'),
+                            ])->columns(1),
                     ])
                     ->action(function ($record, \Livewire\Component $livewire) {
                         static::doUndoCheckIn($record);

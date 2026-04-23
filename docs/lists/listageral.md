@@ -1,6 +1,6 @@
 ### Convidados da Britt do MKT (Ana) ###
 
-*PISTA*
+# PISTA # 
 
 Felipe Xavier dos Santos, 01343642019 
 Maria do Carmo Nagy Prates, 85071196034
@@ -8,7 +8,7 @@ Maria do Carmo Nagy Prates, 85071196034
 
 ### Convidados Erick ###
 
-*BACKSTAGE* 
+# BACKSTAGE # 
 
 Wellington Miranda, 27589191841 
 Priscilla Stocco, 22010456823
@@ -33,9 +33,9 @@ Eduardo Hara, 27864483879
 Eduardo Egidio, 39195513892
 Guilherme Gonçalves, 35866983800
 Cristiano Alves Guimarães, 05319936630
-Omi Israel Burgos Puente, N⁰ Passaporte N07913844
-Jose Ulises Puente Farfan, N⁰ Passaporte N00047267
-Alejandro Vallado Mendoza, N ⁰ Passaporte N13725072
+Omi Israel Burgos Puente, Passaporte N07913844
+Jose Ulises Puente Farfan, Passaporte N00047267
+Alejandro Vallado Mendoza, Passaporte N13725072
 Vinicius Leandro Tavares Ferrao, 31506673805
 Elton Hitoshi de Moraes Inoue, 35943577831
 Fábio Duarte, 14489153848
@@ -46,10 +46,10 @@ Roque Varela Filho, 09094126850
 Régis Carvalho, 13781070808
 Flavio castellano schmutzler, 18217248877
 André Mamede Silveira, 33441290828
-Aloizio Pereira Correa neto,  300 386 398 31 
-Luiza Pereira Correa,  404 666 758 36 
-Bianca Lima Fernandes, 3981451082 3
-Giovani gidel messias da s, RG 59 878 734 3
+Aloizio Pereira Correa neto, 30038639831
+Luiza Pereira Correa, 40466675836
+Bianca Lima Fernandes, 39814510823
+Giovani gidel messias da s, RG598787343
 Fabiana Brito, 22105908845
 Fernando Felix, 06847093846
 Bruno Henrique Novo, 41304184838
@@ -64,7 +64,7 @@ Astor Yanonn Guimarães Rodriguez, 13379511706
 Bruno Garcia, 12447813716
 
 
-*PISTA*
+# PISTA # 
 
 LUCAS SÓGLIA LAROTONDA, 41813773858
 LARA VIEIRA CAMPOS, 45558881895
@@ -79,7 +79,7 @@ Júlia lima Kühn, 84694190210
 
 ### Convidados Miler ###
 
-*BACKSTAGE*
+# BACKSTAGE #
 
 Amanda Lopes Costa, 48148546843
 Amanda Ozório Kozoroski, 43033706819
@@ -103,7 +103,7 @@ Nicole Shimabukuro, 42951486871
 Nicolly Albano Mercemburg, 47700274860
 
 
-*PISTA*
+# PISTA # 
 
 Aimê Sprotte, 10511757980
 Amanda Cristina Da Silva, 46160193805
@@ -169,7 +169,7 @@ Yasmin Gabrielle Alvarez Souza, 50655928880
 
 ### Convidados Imprensa ###
 
-*BACKSTAGE*
+# BACKSTAGE #
 
 Endara Santos do Nascimento, 37810362860
 Gabriel Antonio Ribeiro, 47701231838
@@ -192,7 +192,7 @@ Pedro Henrique Feltrin Silva, 49710894897
 
 ### Convidados Boka ###
 
-*BACKSTAGE*
+# BACKSTAGE #
 
 André Schons, 05075407943
 Angélica da Silva de Mello, 02219046036
@@ -201,14 +201,14 @@ Angélica da Silva de Mello, 02219046036
 
 ###  Convidados Houde Mag ###
 
-*BACKSTAGE*
+# BACKSTAGE #
  
 Gisele Aparecida dos Santos Abduch do Amaral, 33125019893
 Daniel Abduch do Amaral, 34135674895
 
 ### Convidados Angélica ###
 
-*BACKSTAGE*
+# BACKSTAGE #
 
 LUCAS GABRIEL DOS ANJOS SILVA, 11061718964
 Bruno Marcon, 28259671816
@@ -216,7 +216,7 @@ Anna Carolina Ferreira, 46933605892
 
 ### Convidados Eric Oliver ###
 
-*BACKSTAGE*
+# BACKSTAGE #
 
 Maycon Douglas, 46787986840
 Izadhora Golin, 37232581823
@@ -306,12 +306,12 @@ Yuri Fernando de Faria Borat, 11811019641
 
 ### Convidados Timelapse ###
 
-*BACKSTAGE*
+# BACKSTAGE #
 
 Stephany Camila Machado Souza, 47553213870
 Trycia Pinto da Costa Oliveira, 07362264356
 
-*PISTA*
+# PISTA # 
 
 Gabrielle Pereira de Araújo, 42957036874
 Sabrina Fraga de Lima, 47276326837
@@ -324,7 +324,7 @@ Samantha Araujo Carneiro da Silva, 15464581740
 
 ### Convidados Adriano ###
 
-*PISTA*
+# PISTA # 
 
 Adriano da Rocha Rodrigues, 41693208830
 Jurandyr Gomes de Azevedo Neto, 39377346860
@@ -348,14 +348,14 @@ Wanessa de Souza Silva, 26754573880
 
 ### Convidados Ardito ###
 
-*BACKSTAGE*
+# BACKSTAGE #
 
 Leticia Fernandes Tambolim, 43179931809
 Gabriel Laurindo Pasquarelli De Godoy, 45944051850
 Rafael Missaglia Ardito, 35777612881
 Ricardo Lopes Salomao, 27070558830
 
-*PISTA*
+# PISTA # 
 
 Alice Oliveira do Vale, 39863547867
 Ana Carolina Nazareno, 11253892652
@@ -395,12 +395,12 @@ Willian Carlos dos Santos, 41228859817
 
 ### Convidados Sinisgali ###
 
-*BACKSTAGE*
+# BACKSTAGE #
 
 Maria Eduarda de Asara Alvarenga, 53615462831
 Júlia Foganholo, 22072532876
 
-*PISTA*
+# PISTA # 
 
 Camila Conti, 51210869896
 Soraia Rodrigues de Araujo, 33483040838
@@ -435,7 +435,7 @@ Kamilla Farias Bonfim, 42844804802
 
 ### Convidados MDAccula ###
 
-*BACKSTAGE*
+# BACKSTAGE #
 
 Caio Felipe Faria, 11527606619
 Carolina Veloso, 47486242800
@@ -444,7 +444,7 @@ Isabella de Oliveira Pereira Diegues, 42110673893
 Lea Haddad, 19391206832
 Renato Salles, 44851297807
 
-*PISTA*
+# PISTA # 
 
 Alejandro Rodrigues Dias Santos, 11645927695
 Amanda Martins Ferreira, 48702954826
