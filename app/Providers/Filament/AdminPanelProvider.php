@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Admin\Pages\BackupManagement;
 use App\Filament\Admin\Pages\GuestsReport;
 use App\Filament\Widgets\AdminOverview;
 use App\Filament\Widgets\ApprovalMetricsChart;
@@ -48,6 +49,7 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
                 GuestsReport::class,
+                BackupManagement::class,
             ])
             // ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([

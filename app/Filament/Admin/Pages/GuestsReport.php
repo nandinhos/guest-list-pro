@@ -26,7 +26,7 @@ class GuestsReport extends Page
 
     protected static ?string $slug = 'reports/guests-summary';
 
-    protected static ?string $navigationGroup = 'Relatórios';
+    protected static UnitEnum|string|null $navigationGroup = 'Relatórios';
 
     protected static ?int $navigationSort = 3;
 
