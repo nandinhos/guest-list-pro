@@ -5,14 +5,13 @@ namespace App\Filament\Admin\Pages;
 use App\Enums\NavigationGroup;
 use BackedEnum;
 use Filament\Actions\Action;
-use Filament\Pages\Page;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Form;
+use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\Validate;
 use UnitEnum;
 
 class ProfilePage extends Page
@@ -31,33 +30,22 @@ class ProfilePage extends Page
 
     protected string $view = 'filament.admin.pages.profile-page';
 
-    #[Validate('required|string|max:255')]
-    public string $name = '';
-
-    #[Validate('required|email|max:255|unique:users,email')]
-    public string $email = '';
-
-    public string $current_password = '';
-
-    #[Validate('nullable|string|min:8|confirmed')]
-    public string $password = '';
-
-    #[Validate('nullable|string|min:8')]
-    public string $password_confirmation = '';
-
-    public bool $passwordChanged = false;
+    public ?array $data = [];
 
     public function mount(): void
     {
         $user = auth()->user();
-        $this->name = $user->name;
-        $this->email = $user->email;
+        $this->form->fill([
+            'name' => $user->name,
+            'email' => $user->email,
+        ]);
     }
 
-    public function form(Form $schema): Form
+    public function form(Schema $schema): Schema
     {
         return $schema
             ->columns(1)
+            ->statePath('data')
             ->components([
                 Section::make('Dados Pessoais')
                     ->schema([
@@ -72,21 +60,13 @@ class ProfilePage extends Page
                             ->unique('users', 'email', ignoreRecord: true)
                             ->maxLength(255),
                     ]),
-            ]);
-    }
 
-    public function formPassword(Form $schema): Form
-    {
-        return $schema
-            ->columns(1)
-            ->components([
                 Section::make('Alterar Senha')
                     ->description('Deixe em branco se não quiser alterar')
                     ->schema([
                         TextInput::make('current_password')
                             ->label('Senha Atual')
-                            ->password()
-                            ->currentPassword(),
+                            ->password(),
                         TextInput::make('password')
                             ->label('Nova Senha')
                             ->password()
@@ -111,34 +91,32 @@ class ProfilePage extends Page
 
     public function save(): void
     {
-        $this->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . auth()->id(),
-        ]);
+        $data = $this->form->getState();
 
         $user = auth()->user();
 
-        if (! empty($this->password)) {
-            if (! Hash::check($this->current_password, $user->password)) {
+        if (! empty($data['password'])) {
+            if (empty($data['current_password']) || ! Hash::check($data['current_password'], $user->password)) {
                 ValidationException::withMessages([
                     'current_password' => 'A senha atual está incorreta.',
                 ]);
+                return;
             }
 
-            $user->password = Hash::make($this->password);
-            $this->passwordChanged = true;
+            $user->password = Hash::make($data['password']);
         }
 
-        $user->name = $this->name;
-        $user->email = $this->email;
+        $user->name = $data['name'];
+        $user->email = $data['email'];
         $user->save();
 
-        $this->current_password = '';
-        $this->password = '';
-        $this->password_confirmation = '';
+        $this->form->fill([
+            'name' => $user->name,
+            'email' => $user->email,
+        ]);
 
         \Filament\Notifications\Notification::make()
-            ->title($this->passwordChanged ? 'Perfil e senha atualizados!' : 'Perfil atualizado!')
+            ->title('Perfil atualizado com sucesso!')
             ->success()
             ->send();
     }

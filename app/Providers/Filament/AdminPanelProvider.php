@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Admin\Pages\BackupManagement;
 use App\Filament\Admin\Pages\GuestsReport;
 use App\Filament\Admin\Pages\ProfilePage;
+use Filament\Navigation\MenuItem;
 use App\Filament\Widgets\AdminOverview;
 use App\Filament\Widgets\ApprovalMetricsChart;
 use App\Filament\Widgets\GuestsVsTicketsChart;
@@ -83,7 +84,7 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->userMenuItems([
-                \Filament\Pages\Users\UserMenuItem::make()
+                MenuItem::make()
                     ->label('Meu Perfil')
                     ->url(fn () => route('filament.admin.pages.profile'))
                     ->icon('heroicon-o-user-circle'),
