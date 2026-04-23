@@ -4,6 +4,7 @@ namespace App\Filament\Excursionista\Resources\ExcursaoResource\RelationManagers
 
 use App\Enums\DocumentType;
 use App\Enums\TipoVeiculo;
+use App\Models\Veiculo;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -15,6 +16,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class VeiculosRelationManager extends RelationManager
 {
@@ -23,6 +25,21 @@ class VeiculosRelationManager extends RelationManager
     protected static ?string $modelLabel = 'Veículo';
 
     protected static ?string $pluralModelLabel = 'Veículos';
+
+    protected function canCreate(): bool
+    {
+        return auth()->user()->can('create', Veiculo::class);
+    }
+
+    protected function canEdit(Model $record): bool
+    {
+        return auth()->user()->can('update', $record);
+    }
+
+    protected function canDelete(Model $record): bool
+    {
+        return auth()->user()->can('delete', $record);
+    }
 
     public function table(Table $table): Table
     {
