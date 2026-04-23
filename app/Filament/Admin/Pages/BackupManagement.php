@@ -20,7 +20,7 @@ class BackupManagement extends Page
 
     protected static ?string $slug = 'backups';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Sistema';
+    protected static UnitEnum|string|null $navigationGroup = 'Sistema';
 
     protected static ?int $navigationSort = 99;
 
