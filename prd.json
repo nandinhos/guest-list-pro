@@ -1,0 +1,79 @@
+{
+  "project": "guest-list-pro",
+  "created": "2026-04-23T12:00:00Z",
+  "stories": [
+    {
+      "id": "feat-001",
+      "title": "Corrigir N+1 queries no AdminPromoterQuotaWidget",
+      "description": "Substituir getStateUsing() com queries individuais por subquery em addSelect. Impacto: ~80 queries para ≤5 queries.",
+      "acceptanceCriteria": [
+        "Widget carrega com ≤5 queries",
+        "Contadores de guests corretos",
+        "E2E tests passando"
+      ],
+      "priority": 1,
+      "passes": true,
+      "notes": "P0 - CRÍTICO. Commit: 100f4bb"
+    },
+    {
+      "id": "feat-002",
+      "title": "Adicionar veiculo_id no VeiculosRelationManager repeater",
+      "description": "No mutateRelationshipDataBeforeCreateUsing do Repeater de monitores, adicionar veiculo_id.",
+      "acceptanceCriteria": [
+        "Monitor criado via repeater tem veiculo_id preenchido",
+        "ListMonitores mostra monitores do veículo correto"
+      ],
+      "priority": 2,
+      "passes": true,
+      "notes": "P1 - BUG. Commit: f34cc5a"
+    },
+    {
+      "id": "feat-003",
+      "title": "Adicionar authorization nos RelationManagers",
+      "description": "Implementar canCreate(), canEdit(), canDelete() em VeiculosRelationManager e MonitoresRelationManager.",
+      "acceptanceCriteria": [
+        "Usuário não consegue criar/editar/deletar recursos de outros",
+        "Retorna 403 quando negado"
+      ],
+      "priority": 3,
+      "passes": true,
+      "notes": "P1 - SECURITY. Commit: bb4eb61"
+    },
+    {
+      "id": "feat-004",
+      "title": "Corrigir mass assignment em Guest model",
+      "description": "Remover is_checked_in, checked_in_at, checked_in_by do $fillable. Check-in via método dedicado.",
+      "acceptanceCriteria": [
+        "is_checked_in não pode ser setado via fill()",
+        "Check-in funciona via GuestService ou Observer"
+      ],
+      "priority": 4,
+      "passes": true,
+      "notes": "P1 - SECURITY. Commit: c3c9a5a"
+    },
+    {
+      "id": "feat-005",
+      "title": "Adicionar validação no ValidatorGuestForm",
+      "description": "Seguir padrão do PromoterGuestForm: maxLength, placeholder, labels.",
+      "acceptanceCriteria": [
+        "Todos campos com validação adequada",
+        "Consistência com PromoterGuestForm"
+      ],
+      "priority": 5,
+      "passes": true,
+      "notes": "P2 - BUG. Commit: 2863c91"
+    },
+    {
+      "id": "feat-006",
+      "title": "Corrigir unique constraint em monitores",
+      "description": "Constraint única em [event_id, document_type, document_number].",
+      "acceptanceCriteria": [
+        "Constraint única com 3 colunas",
+        "Dados migrados corretamente"
+      ],
+      "priority": 6,
+      "passes": true,
+      "notes": "P2 - DATA INTEGRITY. Commit: c11d036"
+    }
+  ]
+}

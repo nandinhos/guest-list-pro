@@ -1,0 +1,2 @@
+# devorq-auto progress — guest-list-pro
+# Formato: [HH:MM] ✅|❌ Story Title — PASSED|FAILED
