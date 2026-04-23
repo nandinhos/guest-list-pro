@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Pages;
 
+use App\Enums\NavigationGroup;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Pages\Page;
@@ -9,6 +10,7 @@ use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
+use UnitEnum;
 
 class BackupManagement extends Page
 {
@@ -20,7 +22,7 @@ class BackupManagement extends Page
 
     protected static ?string $slug = 'backups';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Sistema';
+    protected static UnitEnum|string|null $navigationGroup = NavigationGroup::CONFIGURACOES;
 
     protected static ?int $navigationSort = 99;
 
