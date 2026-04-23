@@ -133,7 +133,10 @@ class CashClosing extends Page
                 ->action(function () {
                     return $this->exportPdf();
                 })
-                ->disabled(fn () => $this->sales->isEmpty()),
+                ->disabled(fn () => $this->sales->isEmpty())
+                ->tooltip(fn () => $this->sales->isEmpty()
+                    ? 'Selecione um período com vendas para exportar'
+                    : null),
 
             Action::make('refresh')
                 ->label('Atualizar')
