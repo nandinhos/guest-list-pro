@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Pages;
 
+use App\Enums\NavigationGroup;
 use App\Models\Event;
 use App\Models\Guest;
 use BackedEnum;
@@ -15,6 +16,7 @@ use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
+use UnitEnum;
 
 class GuestsReport extends Page
 {
@@ -26,9 +28,9 @@ class GuestsReport extends Page
 
     protected static ?string $slug = 'reports/guests-summary';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Relatórios';
-
     protected static ?int $navigationSort = 3;
+
+    protected static UnitEnum|string|null $navigationGroup = NavigationGroup::RELATORIOS;
 
     protected string $view = 'filament.admin.pages.guests-report';
 
