@@ -19,6 +19,7 @@ class EventSimulationSeeder extends Seeder
         // 1. Identificar Usuários
         $promoter = User::where('role', UserRole::PROMOTER)->first();
         $validator = User::where('role', UserRole::VALIDATOR)->first();
+        $excursionista = User::where('role', UserRole::EXCURSIONISTA)->first();
 
         if (! $promoter || ! $validator) {
             $this->command->error('Promoter ou Validator não encontrados. Execute o UserSeeder primeiro.');
@@ -80,6 +81,22 @@ class EventSimulationSeeder extends Seeder
 
             // 4. Criar Convidados (Simulação)
             $this->seedGuests($event, $createdSectors, $promoter, $validator);
+
+            // 5. Atribuir excursionista aos eventos ativos
+            if ($excursionista && $event->status === EventStatus::ACTIVE) {
+                \App\Models\EventAssignment::firstOrCreate(
+                    [
+                        'user_id' => $excursionista->id,
+                        'event_id' => $event->id,
+                        'role' => UserRole::EXCURSIONISTA->value,
+                    ],
+                    [
+                        'user_id' => $excursionista->id,
+                        'event_id' => $event->id,
+                        'role' => UserRole::EXCURSIONISTA->value,
+                    ]
+                );
+            }
         }
 
         $this->command->info('Simulação de eventos concluída com sucesso!');

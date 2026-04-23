@@ -13,6 +13,7 @@ enum DocumentType: string implements \Filament\Support\Contracts\HasColor, \Fila
 {
     case CPF = 'cpf';
     case RG = 'rg';
+    case CNH = 'cnh';
     case PASSPORT = 'passport';
 
     public function getLabel(): ?string
@@ -20,6 +21,7 @@ enum DocumentType: string implements \Filament\Support\Contracts\HasColor, \Fila
         return match ($this) {
             self::CPF => 'CPF',
             self::RG => 'RG',
+            self::CNH => 'CNH',
             self::PASSPORT => 'Passaporte',
         };
     }
@@ -29,7 +31,8 @@ enum DocumentType: string implements \Filament\Support\Contracts\HasColor, \Fila
         return match ($this) {
             self::CPF => 'success',
             self::RG => 'info',
-            self::PASSPORT => 'warning',
+            self::CNH => 'warning',
+            self::PASSPORT => 'gray',
         };
     }
 
@@ -38,6 +41,7 @@ enum DocumentType: string implements \Filament\Support\Contracts\HasColor, \Fila
         return match ($this) {
             self::CPF => 'heroicon-m-identification',
             self::RG => 'heroicon-m-credit-card',
+            self::CNH => 'heroicon-m-truck',
             self::PASSPORT => 'heroicon-m-globe-alt',
         };
     }
@@ -49,8 +53,9 @@ enum DocumentType: string implements \Filament\Support\Contracts\HasColor, \Fila
     {
         return match ($this) {
             self::CPF => '###.###.###-##',
-            self::RG => null, // Formato varia por estado
-            self::PASSPORT => null, // Formato alfanumérico livre
+            self::RG => '##.###.###-#',
+            self::CNH => '###########',
+            self::PASSPORT => null,
         };
     }
 
@@ -62,6 +67,7 @@ enum DocumentType: string implements \Filament\Support\Contracts\HasColor, \Fila
         return match ($this) {
             self::CPF => '000.000.000-00',
             self::RG => 'Ex: 12.345.678-9',
+            self::CNH => '00000000000',
             self::PASSPORT => 'Ex: AB123456',
         };
     }
@@ -72,20 +78,18 @@ enum DocumentType: string implements \Filament\Support\Contracts\HasColor, \Fila
     public static function detectFromValue(string $value): ?self
     {
         $normalized = preg_replace('/\D/', '', $value);
+        $hasLetters = preg_match('/[a-zA-Z]/', $value);
 
-        // CPF tem exatamente 11 dígitos numéricos
+        if ($hasLetters) {
+            return self::PASSPORT;
+        }
+
         if (strlen($normalized) === 11) {
             return self::CPF;
         }
 
-        // RG geralmente tem entre 7 e 9 dígitos
         if (strlen($normalized) >= 7 && strlen($normalized) <= 9) {
             return self::RG;
-        }
-
-        // Se contém letras, provavelmente é passaporte
-        if (preg_match('/[a-zA-Z]/', $value)) {
-            return self::PASSPORT;
         }
 
         return null;

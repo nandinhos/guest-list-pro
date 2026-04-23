@@ -73,6 +73,17 @@ class LoginTest extends TestCase
             ->assertRedirect('/bilheteria');
     }
 
+    public function test_excursionista_is_redirected_to_excursionista_panel(): void
+    {
+        $user = User::factory()->create(['role' => UserRole::EXCURSIONISTA, 'is_active' => true]);
+
+        Livewire::test(\App\Livewire\Auth\Login::class)
+            ->set('email', $user->email)
+            ->set('password', 'password')
+            ->call('authenticate')
+            ->assertRedirect('/excursionista');
+    }
+
     public function test_invalid_credentials_show_error(): void
     {
         User::factory()->create(['role' => UserRole::ADMIN, 'is_active' => true]);

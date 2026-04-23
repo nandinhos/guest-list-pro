@@ -23,17 +23,19 @@ Adicione ao seu shell: `alias sail='vendor/bin/sail'`
 
 ## Ativacao Rapida
 
-Execute o workflow de ativacao:
+Execute o workflow DEVORQ:
 
+```bash
+devorq flow "<tarefa>"
 ```
-/activate-agents
+
+Ou comandos individuais:
+
+```bash
+devorq context      # Ver contexto atual
+devorq gate [1-7]   # Executar gate especifico
+devorq lessons search "<query>"  # Buscar licoes
 ```
-
-Ou manualmente:
-
-1. Leia `.devorq/rules/project.md`
-2. Leia `.devorq/state/lessons-learned/_INDEX.md`
-3. Confirme ativacao ao desenvolvedor
 
 ---
 
@@ -45,7 +47,32 @@ Ou manualmente:
 | **Stack** | filament (Laravel 12 + Filament v4 + Livewire v3) |
 | **Objetivo** | Sistema de Gestao de Convidados com controle de duplicidade, aprovacoes e bilheteria |
 | **Docker** | Use sempre `vendor/bin/sail` |
-| **Orquestrador** | DEVORQ v2.1 |
+| **Orquestrador** | DEVORQ v3.2.1 |
+
+---
+
+## DEVORQ v3 — Workflow
+
+```
+devorq flow "<intent>"     # Workflow completo (gates 1-7)
+devorq gate [1-7]          # Executar gate especifico
+devorq lessons capture     # Capturar licao aprendida
+devorq lessons validate    # Validar licao com Context7
+devorq compact            # Gerar handoff
+devorq stats              # Ver estatisticas
+```
+
+### Os 7 Gates (Bloqueantes)
+
+| Gate | Nome | Criterio |
+|------|------|----------|
+| 1 | SPEC | Contrato detalhado aprovado |
+| 2 | Pre-Flight | Tipos, enums, deps validados |
+| 3 | Quality | Pint clean, tests passando |
+| 4 | Code Review | Revisao por pares |
+| 5 | Lesson Learned | Captura de learnings |
+| 6 | Handoff | Contexto compactado |
+| 7 | Deploy | Deploy aprovado |
 
 ---
 
@@ -53,8 +80,8 @@ Ou manualmente:
 
 | Arquivo | Proposito |
 |---------|-----------|
-| `.devorq/rules/project.md` | Regras e gates do projeto |
-| `.devorq/state/lessons-learned/_INDEX.md` | Indice de licoes aprendidas |
+| `.devorq/state/context.json` | Contexto atual do projeto |
+| `.devorq/state/lessons/` | Licoes aprendidas (captured/downloaded) |
 | `docs/CONSOLIDATED/INDEX.md` | Indice de documentacao |
 | `docs/CONSOLIDATED/stack/` | Regras de stack |
 
@@ -92,6 +119,6 @@ Ao analisar dados: escreva codigo via `ctx_execute` e `console.log()` apenas o r
 
 ---
 
-Apos ler este arquivo, execute `/activate-agents` ou leia `.devorq/rules/project.md`
+Apos ler este arquivo, execute `devorq context` para ver o estado atual do projeto.
 
-*Atualizado em 2026-04-20*
+*Atualizado em 2026-04-22 - DEVORQ v3.2.1*

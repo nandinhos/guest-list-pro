@@ -76,5 +76,22 @@
                 </span>
             </div>
         </a>
+
+        <!-- EXCURSIONISTA CARD -->
+        <a href="/login?role=excursionista" class="role-card role-card-excursionista group">
+            <div class="role-card-bg"></div>
+            <div class="role-card-content role-card-border">
+                <div class="role-card-icon group-hover:scale-110 transition-all duration-500">
+                    <x-heroicon-o-user-group class="w-10 h-10" />
+                </div>
+                <h3 class="role-card-title">Portal do Excursionista</h3>
+                <p class="role-card-description">
+                    Gestão de ônibus, monitores e excursionistas com controle de eventos e veiculos dedicados.
+                </p>
+                <span class="role-card-tag group-hover:translate-x-2 transition-transform">
+                    Acessar Portal &rarr;
+                </span>
+            </div>
+        </a>
     </div>
 </div>

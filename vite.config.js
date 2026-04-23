@@ -12,6 +12,7 @@ export default defineConfig({
                 'resources/css/filament/promoter/theme.css',
                 'resources/css/filament/validator/theme.css',
                 'resources/css/filament/bilheteria/theme.css',
+                'resources/css/filament/excursionista/theme.css',
             ],
             refresh: true,
         }),

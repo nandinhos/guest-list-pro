@@ -57,5 +57,16 @@ class UserSeeder extends Seeder
                 'is_active' => true,
             ]
         );
+
+        // Excursionista para Testes
+        User::firstOrCreate(
+            ['email' => 'excursionista@guestlist.pro'],
+            [
+                'name' => 'Excursionista Teste',
+                'password' => Hash::make('password'),
+                'role' => UserRole::EXCURSIONISTA,
+                'is_active' => true,
+            ]
+        );
     }
 }

@@ -9,6 +9,7 @@ namespace App\Enums;
  * PROMOTER: Cadastro de convidados dentro de limites.
  * VALIDATOR: Realização de check-ins nos eventos.
  * BILHETERIA: Venda e controle de ingressos.
+ * EXCURSIONISTA: Organização de excursões (caravanas).
  */
 enum UserRole: string implements \Filament\Support\Contracts\HasColor, \Filament\Support\Contracts\HasIcon, \Filament\Support\Contracts\HasLabel
 {
@@ -16,6 +17,7 @@ enum UserRole: string implements \Filament\Support\Contracts\HasColor, \Filament
     case PROMOTER = 'promoter';
     case VALIDATOR = 'validator';
     case BILHETERIA = 'bilheteria';
+    case EXCURSIONISTA = 'excursionista';
 
     public function getLabel(): ?string
     {
@@ -24,6 +26,7 @@ enum UserRole: string implements \Filament\Support\Contracts\HasColor, \Filament
             self::PROMOTER => 'Promoter',
             self::VALIDATOR => 'Validador',
             self::BILHETERIA => 'Bilheteria',
+            self::EXCURSIONISTA => 'Excursionista',
         };
     }
 
@@ -34,6 +37,7 @@ enum UserRole: string implements \Filament\Support\Contracts\HasColor, \Filament
             self::PROMOTER => 'warning',
             self::VALIDATOR => 'success',
             self::BILHETERIA => 'orange',
+            self::EXCURSIONISTA => 'teal',
         };
     }
 
@@ -44,6 +48,7 @@ enum UserRole: string implements \Filament\Support\Contracts\HasColor, \Filament
             self::PROMOTER => 'heroicon-m-user-group',
             self::VALIDATOR => 'heroicon-m-check-badge',
             self::BILHETERIA => 'heroicon-m-ticket',
+            self::EXCURSIONISTA => 'heroicon-m-bus',
         };
     }
 }

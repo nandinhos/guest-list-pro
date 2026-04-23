@@ -24,11 +24,7 @@ class TicketSaleObserver
             return;
         }
 
-        $guest->update([
-            'is_checked_in' => true,
-            'checked_in_at' => now(),
-            'checked_in_by' => $ticketSale->sold_by,
-        ]);
+        $guest->checkIn($ticketSale->sold_by);
 
         if ($ticketSale->seller) {
             Notification::make()

@@ -24,7 +24,13 @@ class AdminPromoterQuotaWidget extends BaseWidget
         return EventAssignment::query()
             ->where('event_id', $eventId)
             ->where('role', \App\Enums\UserRole::PROMOTER)
-            ->with(['user', 'sector']);
+            ->with(['user', 'sector'])
+            ->addSelect([
+                'guest_count' => Guest::selectRaw('COUNT(*)')
+                    ->whereColumn('promoter_id', 'event_assignments.user_id')
+                    ->whereColumn('event_id', 'event_assignments.event_id')
+                    ->whereColumn('sector_id', 'event_assignments.sector_id'),
+            ]);
     }
 
     protected function getTableColumns(): array
@@ -41,10 +47,6 @@ class AdminPromoterQuotaWidget extends BaseWidget
 
             TextColumn::make('guest_count')
                 ->label('Cadastrados')
-                ->getStateUsing(fn (EventAssignment $record): int => Guest::where('promoter_id', $record->user_id)
-                    ->where('event_id', $record->event_id)
-                    ->where('sector_id', $record->sector_id)
-                    ->count())
                 ->sortable(),
 
             TextColumn::make('guest_limit')
@@ -53,29 +55,22 @@ class AdminPromoterQuotaWidget extends BaseWidget
 
             TextColumn::make('remaining')
                 ->label('Restantes')
-                ->getStateUsing(fn (EventAssignment $record): int => max(0, $record->guest_limit - Guest::where('promoter_id', $record->user_id)
-                    ->where('event_id', $record->event_id)
-                    ->where('sector_id', $record->sector_id)
-                    ->count()))
+                ->getStateUsing(fn (EventAssignment $record): int => max(0, $record->guest_limit - $record->guest_count))
                 ->color(fn (int $state): string => $state > 10 ? 'success' : ($state > 0 ? 'warning' : 'danger')),
 
             TextColumn::make('usage')
                 ->label('Ocupação')
                 ->getStateUsing(function (EventAssignment $record): string {
-                    $used = Guest::where('promoter_id', $record->user_id)
-                        ->where('event_id', $record->event_id)
-                        ->where('sector_id', $record->sector_id)
-                        ->count();
-                    $percentage = $record->guest_limit > 0 ? round(($used / $record->guest_limit) * 100) : 0;
+                    $percentage = $record->guest_limit > 0
+                        ? round(($record->guest_count / $record->guest_limit) * 100)
+                        : 0;
 
                     return "{$percentage}%";
                 })
                 ->color(function (EventAssignment $record): string {
-                    $used = Guest::where('promoter_id', $record->user_id)
-                        ->where('event_id', $record->event_id)
-                        ->where('sector_id', $record->sector_id)
-                        ->count();
-                    $percentage = $record->guest_limit > 0 ? ($used / $record->guest_limit) * 100 : 0;
+                    $percentage = $record->guest_limit > 0
+                        ? ($record->guest_count / $record->guest_limit) * 100
+                        : 0;
 
                     return $percentage >= 100 ? 'danger' : ($percentage >= 80 ? 'warning' : 'success');
                 }),

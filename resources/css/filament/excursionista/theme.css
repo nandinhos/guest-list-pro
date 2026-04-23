@@ -1,0 +1,254 @@
+/**
+ * Filament Excursionista Theme - Guest List Pro
+ *
+ * Tema do painel Excursionista com cores Teal.
+ * Estende o base-theme.css com customizacoes especificas.
+ */
+
+/* Fonts - must be first */
+@import url('https://fonts.bunny.net/css?family=outfit:400,500,600,700&family=inter:400,500,600,700');
+
+/* Import Filament base */
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+/* Import shared base theme */
+@import '../shared/base-theme.css';
+
+/* Source files for Tailwind */
+@source '../../../../app/Filament/Excursionista/**/*.php';
+@source '../../../../resources/views/filament/excursionista/**/*.blade.php';
+@source '../../../../resources/views/livewire/**/*.blade.php';
+
+/* ========================================
+   EXCURSIONISTA PANEL COLORS (TEAL)
+   ======================================== */
+
+:root {
+    /* Panel brand color - Teal */
+    --panel-color: oklch(0.55 0.15 180);
+    --panel-color-light: oklch(0.70 0.12 180);
+    --panel-color-dark: oklch(0.45 0.12 180);
+    --panel-color-50: oklch(0.97 0.02 180);
+    --panel-color-100: oklch(0.93 0.04 180);
+    --panel-color-500: oklch(0.55 0.15 180);
+    --panel-color-600: oklch(0.45 0.12 180);
+
+    /* Glow effect */
+    --shadow-glow: 0 0 20px -5px oklch(0.55 0.15 180 / 0.3);
+}
+
+.dark {
+    --shadow-glow: 0 0 30px -5px oklch(0.55 0.15 180 / 0.4);
+}
+
+/* ========================================
+   BODY BACKGROUND
+   ======================================== */
+
+/* Light mode gradient */
+.fi-body {
+    background:
+        radial-gradient(ellipse at 0% 0%, oklch(0.93 0.04 180 / 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, oklch(0.90 0.04 170 / 0.2) 0%, transparent 50%),
+        linear-gradient(180deg, rgb(248 252 252) 0%, rgb(240 250 250) 100%) !important;
+    background-attachment: fixed !important;
+}
+
+/* Dark mode gradient */
+.dark .fi-body {
+    background:
+        radial-gradient(ellipse at 0% 0%, oklch(0.25 0.08 180 / 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, oklch(0.22 0.06 170 / 0.2) 0%, transparent 50%),
+        linear-gradient(180deg, rgb(20 28 28) 0%, rgb(20 28 28) 100%) !important;
+    background-attachment: fixed !important;
+}
+
+/* ========================================
+   LOGIN PAGE
+   ======================================== */
+
+/* Light mode login */
+.fi-simple-layout {
+    background:
+        radial-gradient(ellipse at 30% 20%, oklch(0.93 0.04 180 / 0.5) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, oklch(0.90 0.04 170 / 0.3) 0%, transparent 50%),
+        linear-gradient(135deg, rgb(248 252 252) 0%, rgb(240 250 250) 100%) !important;
+}
+
+/* Dark mode login */
+.dark .fi-simple-layout {
+    background:
+        radial-gradient(ellipse at 30% 20%, oklch(0.28 0.08 180 / 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, oklch(0.25 0.06 170 / 0.3) 0%, transparent 50%),
+        linear-gradient(135deg, rgb(20 28 28) 0%, rgb(20 28 28) 100%) !important;
+}
+
+/* Login card */
+.fi-simple-main {
+    background: var(--glass-bg-strong) !important;
+    backdrop-filter: blur(var(--glass-blur-lg));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 1.25rem !important;
+    box-shadow: var(--shadow-elevated), var(--shadow-glow);
+}
+
+/* ========================================
+   SIDEBAR ACTIVE STATE
+   ======================================== */
+
+/* Active sidebar item */
+.fi-sidebar-item-active {
+    background: linear-gradient(135deg, oklch(0.55 0.15 180 / 0.15) 0%, oklch(0.45 0.12 180 / 0.1) 100%) !important;
+    border-left: 3px solid oklch(0.55 0.15 180) !important;
+    margin-left: -3px;
+    padding-left: calc(0.75rem + 3px) !important;
+}
+
+.dark .fi-sidebar-item-active {
+    background: linear-gradient(135deg, oklch(0.55 0.15 180 / 0.25) 0%, oklch(0.45 0.12 180 / 0.15) 100%) !important;
+}
+
+/* Active item text color */
+.fi-sidebar-item-active .fi-sidebar-item-label {
+    color: oklch(0.35 0.10 180) !important;
+    font-weight: 600;
+}
+
+.dark .fi-sidebar-item-active .fi-sidebar-item-label {
+    color: oklch(0.85 0.10 180) !important;
+}
+
+/* Active item icon */
+.fi-sidebar-item-active .fi-sidebar-item-icon {
+    color: oklch(0.55 0.15 180) !important;
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
+/* Primary button with gradient */
+.fi-btn-primary {
+    background: linear-gradient(135deg, oklch(0.55 0.15 180) 0%, oklch(0.45 0.12 180) 100%) !important;
+    border: none !important;
+}
+
+.fi-btn-primary:hover {
+    background: linear-gradient(135deg, oklch(0.50 0.15 180) 0%, oklch(0.40 0.12 180) 100%) !important;
+    box-shadow: var(--shadow-glow), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Focus state */
+.fi-btn-primary:focus {
+    box-shadow: 0 0 0 2px var(--glass-bg-strong), 0 0 0 4px oklch(0.55 0.15 180 / 0.5) !important;
+}
+
+/* ========================================
+   LINKS & INTERACTIVE ELEMENTS
+   ======================================== */
+
+/* Link color */
+.fi-link {
+    color: oklch(0.45 0.12 180) !important;
+    transition: color var(--duration-fast) var(--ease-premium);
+}
+
+.fi-link:hover {
+    color: oklch(0.35 0.10 180) !important;
+}
+
+/* ========================================
+   TABLE ROW HOVER
+   ======================================== */
+
+.fi-ta-row:hover {
+    background-color: oklch(0.97 0.02 180 / 0.5) !important;
+}
+
+.dark .fi-ta-row:hover {
+    background-color: oklch(0.28 0.08 180 / 0.2) !important;
+}
+
+/* ========================================
+   TABS ACTIVE STATE
+   ======================================== */
+
+.fi-tabs-item-active {
+    background: oklch(0.55 0.15 180 / 0.1) !important;
+    color: oklch(0.35 0.10 180) !important;
+}
+
+.dark .fi-tabs-item-active {
+    background: oklch(0.55 0.15 180 / 0.2) !important;
+    color: oklch(0.85 0.10 180) !important;
+}
+
+/* ========================================
+   FOCUS RING
+   ======================================== */
+
+.fi-input:focus,
+.fi-select:focus,
+.fi-textarea:focus {
+    box-shadow: 0 0 0 2px var(--glass-bg-strong), 0 0 0 4px oklch(0.55 0.15 180 / 0.5) !important;
+}
+
+/* ========================================
+   STATS & WIDGETS HOVER GLOW
+   ======================================== */
+
+.fi-stats-overview-stat:hover,
+.fi-widget:hover {
+    box-shadow: var(--shadow-elevated), var(--shadow-glow);
+}
+
+/* ========================================
+   HEADER ACCENTS
+   ======================================== */
+
+.fi-header {
+    border-bottom: 1px solid var(--glass-border);
+}
+
+/* ========================================
+   CHECKBOX & RADIO
+   ======================================== */
+
+.fi-checkbox-input:checked,
+.fi-radio-input:checked {
+    background-color: oklch(0.55 0.15 180) !important;
+    border-color: oklch(0.55 0.15 180) !important;
+}
+
+/* ========================================
+   TOGGLE SWITCH
+   ======================================== */
+
+.fi-toggle-input:checked {
+    background-color: oklch(0.55 0.15 180) !important;
+}
+
+/* ========================================
+   PROGRESS INDICATORS
+   ======================================== */
+
+.fi-progress-bar {
+    background-color: oklch(0.55 0.15 180) !important;
+}
+
+/* ========================================
+   EXCURSIONISTA-SPECIFIC: BUS/VEHICLE INDICATORS
+   ======================================== */
+
+/* Teal badge for excursionista context */
+.fi-badge-teal {
+    background-color: oklch(0.93 0.04 180) !important;
+    color: oklch(0.35 0.10 180) !important;
+    border: 1px solid oklch(0.80 0.10 180 / 0.3);
+}
+
+.dark .fi-badge-teal {
+    background-color: oklch(0.30 0.08 180) !important;
+    color: oklch(0.90 0.08 180) !important;
+}

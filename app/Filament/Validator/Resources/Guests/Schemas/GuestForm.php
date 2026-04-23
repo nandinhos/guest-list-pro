@@ -17,24 +17,44 @@ class GuestForm
                 Select::make('event_id')
                     ->relationship('event', 'name')
                     ->required(),
+
                 Select::make('sector_id')
                     ->relationship('sector', 'name')
                     ->required(),
+
                 Select::make('promoter_id')
                     ->relationship('promoter', 'name')
                     ->required(),
+
                 TextInput::make('name')
-                    ->required(),
+                    ->label('Nome Completo')
+                    ->required()
+                    ->maxLength(255)
+                    ->placeholder('Nome como no documento'),
+
                 TextInput::make('document')
-                    ->required(),
+                    ->label('Documento')
+                    ->required()
+                    ->maxLength(20),
+
                 TextInput::make('email')
-                    ->label('Email address')
-                    ->email(),
+                    ->label('E-mail')
+                    ->email()
+                    ->maxLength(255)
+                    ->placeholder('email@exemplo.com (opcional)'),
+
                 Toggle::make('is_checked_in')
-                    ->required(),
-                DateTimePicker::make('checked_in_at'),
+                    ->label('Já realizou Check-in?')
+                    ->disabled(),
+
+                DateTimePicker::make('checked_in_at')
+                    ->label('Horário do Check-in')
+                    ->disabled(),
+
                 TextInput::make('checked_in_by')
-                    ->numeric(),
+                    ->label('Validado por')
+                    ->numeric()
+                    ->disabled(),
             ]);
     }
 }

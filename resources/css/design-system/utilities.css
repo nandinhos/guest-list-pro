@@ -1184,6 +1184,50 @@
     color: var(--color-brand-bilheteria-200);
 }
 
+/* EXCURSIONISTA CARD */
+.role-card-excursionista:hover {
+    background: linear-gradient(to bottom, oklch(0.70 0.20 175 / 0.5), oklch(0.58 0.18 175 / 0.5));
+    box-shadow: 0 25px 50px -12px oklch(0.70 0.20 175 / 0.2);
+}
+
+.role-card-excursionista .role-card-icon {
+    background: var(--color-brand-excursionista-100);
+    color: var(--color-brand-excursionista-600);
+}
+
+.dark .role-card-excursionista .role-card-icon {
+    background: oklch(0.70 0.20 175 / 0.2);
+    color: var(--color-brand-excursionista-400);
+}
+
+.role-card-excursionista:hover .role-card-icon {
+    background: var(--color-brand-excursionista-500);
+    color: white;
+    box-shadow: 0 0 20px oklch(0.70 0.20 175 / 0.5);
+}
+
+.role-card-excursionista:hover .role-card-title {
+    color: var(--color-brand-excursionista-700);
+}
+
+.dark .role-card-excursionista:hover .role-card-title {
+    color: var(--color-brand-excursionista-200);
+}
+
+.role-card-excursionista:hover .role-card-border {
+    border-color: oklch(0.70 0.20 175 / 0.3);
+}
+
+.role-card-excursionista:hover .role-card-tag {
+    background: oklch(0.70 0.20 175 / 0.2);
+    border-color: oklch(0.70 0.20 175 / 0.3);
+    color: var(--color-brand-excursionista-700);
+}
+
+.dark .role-card-excursionista:hover .role-card-tag {
+    color: var(--color-brand-excursionista-200);
+}
+
 /* Role Card Inner Components */
 .role-card-bg {
     position: absolute;

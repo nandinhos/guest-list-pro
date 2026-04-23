@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -19,6 +20,13 @@ class Login extends Component
     public string $password = '';
 
     public bool $remember = false;
+
+    public function mount(): void
+    {
+        if (Auth::check()) {
+            $this->redirect('/', navigate: false);
+        }
+    }
 
     public function authenticate(): void
     {

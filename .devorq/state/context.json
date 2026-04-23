@@ -1,17 +1,13 @@
 {
-  "stack": "filament",
-  "stack_version": "v4",
-  "runtime": "terminal-cli",
-  "llm": "MiniMax-M2.7",
-  "llm_provider": "minimax",
-  "project_type": "brownfield",
-  "project_path": "/home/nandodev/projects/guest-list-pro",
-  "last_session": "2026-04-22T00:00:00",
-  "active_branch": "main",
-  "gates_passed": [],
-  "pending_actions": [],
-  "hub_enabled": false,
-  "drive_folder_id": "",
-  "devorq_version": "3.1.0",
-  "spec_version": "2.1-reviewed"
+  "project": "guest-list-pro",
+  "stack": [
+    "Laravel 12",
+    "Filament v4",
+    "Livewire v3",
+    "MySQL",
+    "Docker"
+  ],
+  "intent": "Sistema de Gestao de Convidados com controle de duplicidade, aprovacoes e bilheteria",
+  "gates_completed": [],
+  "last_updated": "2026-04-22T23:31:06.550Z"
 }
