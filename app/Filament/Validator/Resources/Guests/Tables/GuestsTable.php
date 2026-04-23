@@ -289,11 +289,7 @@ class GuestsTable
                 if ($guest->is_checked_in) {
                     throw new \Exception('checkin_exists');
                 }
-                $guest->update([
-                    'is_checked_in' => true,
-                    'checked_in_at' => now(),
-                    'checked_in_by' => \Illuminate\Support\Facades\Auth::id(),
-                ]);
+                $guest->checkIn(\Illuminate\Support\Facades\Auth::id());
             });
 
             \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([
@@ -341,11 +337,7 @@ class GuestsTable
                 if (! $guest->is_checked_in) {
                     throw new \Exception('guest_not_checked_in');
                 }
-                $guest->update([
-                    'is_checked_in' => false,
-                    'checked_in_at' => null,
-                    'checked_in_by' => null,
-                ]);
+                $guest->undoCheckIn();
             });
 
             \Illuminate\Support\Facades\DB::table('checkin_attempts')->insert([

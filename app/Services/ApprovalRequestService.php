@@ -172,7 +172,7 @@ class ApprovalRequestService
      */
     private function createGuestFromRequest(ApprovalRequest $request): Guest
     {
-        return Guest::create([
+        $guest = Guest::create([
             'event_id' => $request->event_id,
             'sector_id' => $request->sector_id,
             'promoter_id' => $request->requester_id,
@@ -180,12 +180,13 @@ class ApprovalRequestService
             'document' => $request->guest_document,
             'document_type' => $request->guest_document_type,
             'email' => $request->guest_email,
-            'is_checked_in' => $request->type === RequestType::EMERGENCY_CHECKIN,
-            'checked_in_at' => $request->type === RequestType::EMERGENCY_CHECKIN ? now() : null,
-            'checked_in_by' => $request->type === RequestType::EMERGENCY_CHECKIN
-                ? $request->requester_id
-                : null,
         ]);
+
+        if ($request->type === RequestType::EMERGENCY_CHECKIN) {
+            $guest->checkIn($request->requester_id);
+        }
+
+        return $guest;
     }
 
     /**

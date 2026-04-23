@@ -214,11 +214,7 @@ class ApprovalRequestResourceTest extends TestCase
 
         // Fazer check-in manual do Guest
         $guest = Guest::find($request->guest_id);
-        $guest->update([
-            'is_checked_in' => true,
-            'checked_in_at' => now(),
-            'checked_in_by' => $this->validator->id,
-        ]);
+        $guest->checkIn($this->validator->id);
 
         // Tentar reverter - o botão não deve estar visível
         $this->assertFalse($request->fresh()->canBeReverted());

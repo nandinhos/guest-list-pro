@@ -29,9 +29,6 @@ class Guest extends Model
         'document',
         'document_type',
         'email',
-        'is_checked_in',
-        'checked_in_at',
-        'checked_in_by',
     ];
 
     protected function casts(): array
@@ -106,6 +103,28 @@ class Guest extends Model
     public function isCompanion(): bool
     {
         return $this->parent_id !== null;
+    }
+
+    /**
+     * Marca o convidado como check-in.
+     */
+    public function checkIn(int $validatedBy): void
+    {
+        $this->is_checked_in = true;
+        $this->checked_in_at = now();
+        $this->checked_in_by = $validatedBy;
+        $this->save();
+    }
+
+    /**
+     * Desfaz o check-in do convidado.
+     */
+    public function undoCheckIn(): void
+    {
+        $this->is_checked_in = false;
+        $this->checked_in_at = null;
+        $this->checked_in_by = null;
+        $this->save();
     }
 
     /**
