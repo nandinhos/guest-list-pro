@@ -97,6 +97,7 @@ class VeiculosRelationManager extends RelationManager
                     ])
                     ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
                         $data['event_id'] = session('selected_event_id');
+                        $data['veiculo_id'] = $this->getOwnerRecord()->id;
                         $data['criado_por'] = auth()->id();
 
                         return $data;
