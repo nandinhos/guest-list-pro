@@ -20,6 +20,7 @@ class PromoterPermissionForm
         UserRole::PROMOTER,
         UserRole::VALIDATOR,
         UserRole::BILHETERIA,
+        UserRole::EXCURSIONISTA,
     ];
 
     public static function configure(Schema $schema): Schema

@@ -47,15 +47,16 @@ class MonitorResource extends Resource
                             ->maxLength(150)
                             ->placeholder('Nome do monitor'),
 
-                        \Filament\Forms\Components\TextInput::make('cpf')
-                            ->label('CPF')
+                        \Filament\Forms\Components\Select::make('document_type')
+                            ->label('Tipo do Documento')
+                            ->options(\App\Enums\DocumentType::class)
                             ->required()
-                            ->maxLength(14)
-                            ->placeholder('000.000.000-00')
-                            ->rules(['regex:/^\d{3}\.\d{3}\.\d{3}-\d{2}$/'])
-                            ->validationMessages([
-                                'regex' => 'CPF deve estar no formato 000.000.000-00 (somente números)',
-                            ]),
+                            ->native(false),
+
+                        \Filament\Forms\Components\TextInput::make('document_number')
+                            ->label('Número do Documento')
+                            ->required()
+                            ->maxLength(20),
 
                         \Filament\Forms\Components\Select::make('veiculo_id')
                             ->label('Veículo')
@@ -85,28 +86,38 @@ class MonitorResource extends Resource
     {
         return $table
             ->columns([
+                \Filament\Tables\Columns\ViewColumn::make('mobile_card')
+                    ->view('filament.excursionista.resources.monitor-resource.tables.columns.mobile_card')
+                    ->label('MONITORES')
+                    ->hiddenFrom('md'),
+
                 \Filament\Tables\Columns\TextColumn::make('nome')
-                    ->label('Nome')
+                    ->label('NOME')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 \Filament\Tables\Columns\TextColumn::make('cpf')
                     ->label('CPF')
                     ->formatStateUsing(fn ($state) => $state)
-                    ->searchable(),
+                    ->searchable()
+                    ->visibleFrom('md'),
 
                 \Filament\Tables\Columns\TextColumn::make('veiculo.excursao.nome')
-                    ->label('Excursão')
-                    ->searchable(),
+                    ->label('EXCURSÃO')
+                    ->searchable()
+                    ->visibleFrom('md'),
 
                 \Filament\Tables\Columns\TextColumn::make('veiculo.tipo')
-                    ->label('Veículo')
-                    ->formatStateUsing(fn ($state) => \App\Enums\TipoVeiculo::tryFrom($state)?->label() ?? $state),
+                    ->label('VEÍCULO')
+                    ->formatStateUsing(fn ($state) => $state instanceof \App\Enums\TipoVeiculo ? $state->label() : \App\Enums\TipoVeiculo::tryFrom($state)?->label() ?? $state)
+                    ->visibleFrom('md'),
 
                 \Filament\Tables\Columns\TextColumn::make('created_at')
-                    ->label('Criado em')
+                    ->label('CRIADO EM')
                     ->dateTime('d/m/Y H:i')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
             ])
             ->defaultSort('created_at', 'desc');
     }

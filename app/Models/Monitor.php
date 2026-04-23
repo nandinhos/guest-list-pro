@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DocumentType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,9 +18,17 @@ class Monitor extends Model
         'veiculo_id',
         'event_id',
         'nome',
-        'cpf',
+        'document_type',
+        'document_number',
         'criado_por',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'document_type' => DocumentType::class,
+        ];
+    }
 
     public function veiculo(): BelongsTo
     {

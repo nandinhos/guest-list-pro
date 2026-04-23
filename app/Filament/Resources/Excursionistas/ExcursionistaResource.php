@@ -6,9 +6,11 @@ use App\Enums\UserRole;
 use App\Filament\Resources\Excursionistas\Pages\CreateExcursionista;
 use App\Filament\Resources\Excursionistas\Pages\EditExcursionista;
 use App\Filament\Resources\Excursionistas\Pages\ListExcursionistas;
+use App\Filament\Resources\Excursionistas\Schemas\ExcursionistaForm;
 use App\Models\User;
 use BackedEnum;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class ExcursionistaResource extends Resource
@@ -34,27 +36,36 @@ class ExcursionistaResource extends Resource
     {
         return $table
             ->columns([
+                \Filament\Tables\Columns\ViewColumn::make('mobile_card')
+                    ->view('filament.resources.excursionistas.tables.columns.mobile_card')
+                    ->label('EXCURSIONISTAS')
+                    ->hiddenFrom('md'),
+
                 \Filament\Tables\Columns\TextColumn::make('name')
-                    ->label('Nome')
+                    ->label('NOME')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 \Filament\Tables\Columns\TextColumn::make('email')
-                    ->label('E-mail')
+                    ->label('E-MAIL')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 \Filament\Tables\Columns\TextColumn::make('is_active')
-                    ->label('Status')
+                    ->label('STATUS')
                     ->badge()
                     ->color(fn ($state) => $state ? 'success' : 'danger')
                     ->formatStateUsing(fn ($state) => $state ? 'ATIVO' : 'INATIVO')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 \Filament\Tables\Columns\TextColumn::make('created_at')
-                    ->label('Criado em')
+                    ->label('CRIADO EM')
                     ->dateTime('d/m/Y H:i')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
@@ -65,6 +76,11 @@ class ExcursionistaResource extends Resource
                         '0' => 'Inativo',
                     ]),
             ]);
+    }
+
+    public static function form(Schema $schema): Schema
+    {
+        return ExcursionistaForm::configure($schema);
     }
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder

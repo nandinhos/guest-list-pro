@@ -2,7 +2,8 @@
 
 namespace App\Filament\Excursionista\Resources\ExcursaoResource\RelationManagers;
 
-use App\Models\Veiculo;
+use App\Enums\DocumentType;
+use Filament\Actions\CreateAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -27,12 +28,16 @@ class MonitoresRelationManager extends RelationManager
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('cpf')
-                    ->label('CPF')
+                TextColumn::make('document_type')
+                    ->label('Documento')
+                    ->formatStateUsing(fn ($state) => $state?->getLabel() ?? '—'),
+
+                TextColumn::make('document_number')
+                    ->label('Número')
                     ->searchable(),
             ])
             ->headerActions([
-                \Filament\Tables\Actions\CreateAction::make(),
+                CreateAction::make(),
             ]);
     }
 
@@ -45,30 +50,23 @@ class MonitoresRelationManager extends RelationManager
                     ->required()
                     ->maxLength(150),
 
-                TextInput::make('cpf')
-                    ->label('CPF')
+                Select::make('document_type')
+                    ->label('Tipo do Documento')
+                    ->options(DocumentType::class)
                     ->required()
-                    ->maxLength(14)
-                    ->placeholder('000.000.000-00'),
+                    ->native(false),
 
-                Select::make('veiculo_id')
-                    ->label('Veículo')
-                    ->options(function (RelationManager $livewire) {
-                        $excursaoId = $livewire->getOwnerRecord()?->id;
-
-                        return Veiculo::where('excursao_id', $excursaoId)
-                            ->get()
-                            ->mapWithKeys(fn ($v) => [
-                                $v->id => $v->tipo->label().($v->placa ? ' ('.$v->placa.')' : ''),
-                            ]);
-                    })
-                    ->required(),
+                TextInput::make('document_number')
+                    ->label('Número do Documento')
+                    ->required()
+                    ->maxLength(20),
             ]);
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['event_id'] = session('selected_event_id');
+        $data['veiculo_id'] = $this->getOwnerRecord()->id;
         $data['criado_por'] = auth()->id();
 
         return $data;

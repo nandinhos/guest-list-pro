@@ -2,13 +2,18 @@
 
 namespace App\Filament\Excursionista\Resources\ExcursaoResource\RelationManagers;
 
+use App\Enums\DocumentType;
 use App\Enums\TipoVeiculo;
-use App\Models\Veiculo;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 
 class VeiculosRelationManager extends RelationManager
@@ -22,18 +27,33 @@ class VeiculosRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->with('monitores'))
+            ->headerActions([
+                CreateAction::make(),
+            ])
+            ->recordActions([
+                EditAction::make()
+                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+                DeleteAction::make()
+                    ->extraAttributes(['class' => 'hidden md:inline-flex']),
+            ])
             ->columns([
+                ViewColumn::make('mobile_card')
+                    ->view('filament.excursionista.resources.excursao-resource.relation-managers.veiculos.tables.columns.mobile_card')
+                    ->label('VEÍCULOS')
+                    ->hiddenFrom('md'),
+
                 TextColumn::make('tipo')
-                    ->label('Tipo')
-                    ->formatStateUsing(fn ($state) => TipoVeiculo::tryFrom($state)?->label() ?? $state),
+                    ->label('TIPO')
+                    ->visibleFrom('md'),
 
                 TextColumn::make('placa')
-                    ->label('Placa')
-                    ->placeholder('—'),
+                    ->label('PLACA')
+                    ->visibleFrom('md'),
 
                 TextColumn::make('monitores_count')
-                    ->label('Monitores')
-                    ->counts('monitores'),
+                    ->label('MONITORES')
+                    ->visibleFrom('md'),
             ]);
     }
 
@@ -41,16 +61,55 @@ class VeiculosRelationManager extends RelationManager
     {
         return $schema
             ->components([
-                Select::make('tipo')
-                    ->label('Tipo')
-                    ->options(TipoVeiculo::class)
-                    ->required()
-                    ->native(false),
+                \Filament\Schemas\Components\Section::make('Dados do Veículo')
+                    ->schema([
+                        Select::make('tipo')
+                            ->label('Tipo')
+                            ->options(TipoVeiculo::class)
+                            ->required()
+                            ->native(false),
 
-                TextInput::make('placa')
-                    ->label('Placa')
-                    ->placeholder('ABC-1234')
-                    ->maxLength(10),
+                        TextInput::make('placa')
+                            ->label('Placa')
+                            ->placeholder('ABC-1234')
+                            ->maxLength(10),
+                    ]),
+
+                Repeater::make('monitores')
+                    ->relationship()
+                    ->label('Monitores')
+                    ->schema([
+                        TextInput::make('nome')
+                            ->label('Nome Completo')
+                            ->required()
+                            ->maxLength(150),
+
+                        Select::make('document_type')
+                            ->label('Tipo do Documento')
+                            ->options(DocumentType::class)
+                            ->required()
+                            ->native(false),
+
+                        TextInput::make('document_number')
+                            ->label('Número do Documento')
+                            ->required()
+                            ->maxLength(20),
+                    ])
+                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
+                        $data['event_id'] = session('selected_event_id');
+                        $data['criado_por'] = auth()->id();
+
+                        return $data;
+                    })
+                    ->columns(3),
             ]);
+    }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['event_id'] = session('selected_event_id');
+        $data['criado_por'] = auth()->id();
+
+        return $data;
     }
 }

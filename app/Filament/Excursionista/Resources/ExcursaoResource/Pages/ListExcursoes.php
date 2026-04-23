@@ -3,6 +3,7 @@
 namespace App\Filament\Excursionista\Resources\ExcursaoResource\Pages;
 
 use App\Filament\Excursionista\Resources\ExcursaoResource;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListExcursoes extends ListRecords

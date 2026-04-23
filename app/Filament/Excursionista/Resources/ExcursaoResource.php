@@ -5,7 +5,6 @@ namespace App\Filament\Excursionista\Resources;
 use App\Filament\Excursionista\Resources\ExcursaoResource\Pages\CreateExcursao;
 use App\Filament\Excursionista\Resources\ExcursaoResource\Pages\EditExcursao;
 use App\Filament\Excursionista\Resources\ExcursaoResource\Pages\ListExcursoes;
-use App\Filament\Excursionista\Resources\ExcursaoResource\RelationManagers\MonitoresRelationManager;
 use App\Filament\Excursionista\Resources\ExcursaoResource\RelationManagers\VeiculosRelationManager;
 use App\Models\Excursao;
 use BackedEnum;
@@ -56,19 +55,27 @@ class ExcursaoResource extends Resource
     {
         return $table
             ->columns([
+                \Filament\Tables\Columns\ViewColumn::make('mobile_card')
+                    ->view('filament.excursionista.resources.excursao-resource.tables.columns.mobile_card')
+                    ->label('EXCURSÕES')
+                    ->hiddenFrom('md'),
+
                 \Filament\Tables\Columns\TextColumn::make('nome')
-                    ->label('Nome')
+                    ->label('NOME')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
 
                 \Filament\Tables\Columns\TextColumn::make('veiculos_count')
-                    ->label('Veículos')
-                    ->counts('veiculos'),
+                    ->label('VEÍCULOS')
+                    ->counts('veiculos')
+                    ->visibleFrom('md'),
 
                 \Filament\Tables\Columns\TextColumn::make('created_at')
-                    ->label('Criada em')
+                    ->label('CRIADA EM')
                     ->dateTime('d/m/Y H:i')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
             ])
             ->defaultSort('created_at', 'desc');
     }
@@ -77,7 +84,6 @@ class ExcursaoResource extends Resource
     {
         return [
             VeiculosRelationManager::class,
-            MonitoresRelationManager::class,
         ];
     }
 

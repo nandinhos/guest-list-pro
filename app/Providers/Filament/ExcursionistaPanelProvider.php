@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Excursionista\Pages\SelectEvent;
+use App\Filament\Excursionista\Widgets\ExcursionistaStatsWidget;
 use App\Http\Middleware\EnsureEventSelected;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -44,6 +45,7 @@ class ExcursionistaPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Excursionista/Widgets'), for: 'App\Filament\Excursionista\Widgets')
             ->widgets([
+                ExcursionistaStatsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
