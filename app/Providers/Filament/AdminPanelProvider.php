@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Admin\Pages\BackupManagement;
 use App\Filament\Admin\Pages\GuestsReport;
+use App\Filament\Admin\Pages\ProfilePage;
 use App\Filament\Widgets\AdminOverview;
 use App\Filament\Widgets\ApprovalMetricsChart;
 use App\Filament\Widgets\GuestsVsTicketsChart;
@@ -50,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
                 GuestsReport::class,
                 BackupManagement::class,
+                ProfilePage::class,
             ])
             // ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
@@ -79,6 +81,12 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->userMenuItems([
+                \Filament\Pages\Users\UserMenuItem::make()
+                    ->label('Meu Perfil')
+                    ->url(fn () => route('filament.admin.pages.profile'))
+                    ->icon('heroicon-o-user-circle'),
             ]);
     }
 }
