@@ -86,5 +86,24 @@ class BackupManagement extends Page
     {
         Artisan::call('backup:delete', ['filename' => $filename]);
         $this->dispatch('refreshBackups');
+
+        \Filament\Notifications\Notification::make()
+            ->title('Backup excluído')
+            ->success()
+            ->send();
+    }
+
+    public function restoreBackup(string $filename): void
+    {
+        if (auth()->user()->role !== \App\Enums\UserRole::ADMIN) {
+            abort(403);
+        }
+
+        Artisan::call('backup:restore', ['filename' => $filename]);
+
+        \Filament\Notifications\Notification::make()
+            ->title('Backup restaurado com sucesso')
+            ->success()
+            ->send();
     }
 }
