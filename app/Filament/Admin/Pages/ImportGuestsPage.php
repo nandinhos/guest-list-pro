@@ -70,12 +70,16 @@ class ImportGuestsPage extends Page
                     ->schema([
                         FileUpload::make('file')
                             ->label('Arquivo')
-                            ->acceptedFileTypes(['text/plain', '.md', '.txt'])
+                            ->acceptedFileTypes(['text/plain'])
                             ->maxSize(10240)
                             ->storeFileNamesIn('original_filename')
-                            ->afterStateUpdated(function ($state) {
+                            ->afterStateHydrated(function ($state, $component) {
                                 if ($state) {
-                                    $this->loadFileContent($state);
+                                    $file = $component->getFile();
+                                    if ($file) {
+                                        $this->fileContent = $file->getContents();
+                                        $this->parsePreview();
+                                    }
                                 }
                             }),
                     ]),
