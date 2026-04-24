@@ -18,13 +18,16 @@
                 <div class="p-6">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
-                             :class="modalAction === 'delete' ? 'bg-red-100 dark:bg-red-900/30' : 'bg-warning-100 dark:bg-warning-900/30'">
+                             :class="modalAction === 'delete' || modalAction === 'resetDatabase' ? 'bg-red-100 dark:bg-red-900/30' : 'bg-warning-100 dark:bg-warning-900/30'">
                             <x-filament::icon x-if="modalAction === 'delete'"
                                               icon="heroicon-o-trash"
                                               class="w-6 h-6 text-red-600 dark:text-red-400" />
                             <x-filament::icon x-if="modalAction === 'restore'"
                                               icon="heroicon-o-arrow-uturn-left"
                                               class="w-6 h-6 text-warning-600 dark:text-warning-400" />
+                            <x-filament::icon x-if="modalAction === 'resetDatabase'"
+                                              icon="heroicon-o-exclamation-triangle"
+                                              class="w-6 h-6 text-red-600 dark:text-red-400" />
                         </div>
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text="modalTitle"></h3>
                     </div>
@@ -34,9 +37,9 @@
                                 class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
                             Cancelar
                         </button>
-                        <button x-on:click="showModal = false; $wire[modalAction](modalActionParams.filename)"
+                        <button x-on:click="showModal = false; modalActionParams.filename ? $wire[modalAction](modalActionParams.filename) : $wire[modalAction]()"
                                 class="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors"
-                                :class="modalAction === 'delete' ? 'bg-red-600 hover:bg-red-700' : 'bg-warning-600 hover:bg-warning-700'">
+                                :class="modalAction === 'delete' || modalAction === 'resetDatabase' ? 'bg-red-600 hover:bg-red-700' : 'bg-warning-600 hover:bg-warning-700'">
                             Confirmar
                         </button>
                     </div>
@@ -255,6 +258,44 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Ferramentas de Desenvolvimento — só visível em dev --}}
+            @if(app()->environment(['local', 'development']))
+                <div class="mt-8">
+                    <x-filament::section variant="bordered" class="overflow-hidden border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/20">
+                        <x-slot name="header">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 rounded-lg bg-red-100 dark:bg-red-900/30">
+                                    <x-filament::icon icon="heroicon-o-exclamation-triangle" class="w-5 h-5 text-red-600 dark:text-red-400" />
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-semibold text-red-900 dark:text-red-300">Ferramentas de Desenvolvimento</h3>
+                                    <p class="text-sm text-red-700 dark:text-red-400">Ambiente de teste — ação irreversível</p>
+                                </div>
+                            </div>
+                        </x-slot>
+
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3 p-3 rounded-lg bg-red-100/50 dark:bg-red-900/20">
+                                <x-filament::icon icon="heroicon-o-shield-exclamation" class="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+                                <div>
+                                    <p class="text-sm font-medium text-red-800 dark:text-red-300">Zona de Perigo</p>
+                                    <p class="text-xs text-red-600 dark:text-red-400 mt-0.5">Esta ação não pode ser desfeita. Um backup automático será criado antes do reset.</p>
+                                </div>
+                            </div>
+
+                            <button
+                                type="button"
+                                x-on:click="showModal = true; modalTitle = 'Zerar Banco de Dados'; modalMessage = 'Tem certeza? Esta ação vai apagar TODOS os dados e recriar o banco com apenas o usuário admin. Um backup de segurança será criado automaticamente.'; modalAction = 'resetDatabase'; modalActionParams = {}"
+                                class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 dark:bg-red-700 dark:hover:bg-red-600 dark:focus:ring-red-400"
+                            >
+                                <x-filament::icon icon="heroicon-o-trash" class="w-5 h-5" />
+                                Zerar Banco de Dados
+                            </button>
+                        </div>
+                    </x-filament::section>
+                </div>
+            @endif
         </div>
     </div>
 </x-filament-panels::page>

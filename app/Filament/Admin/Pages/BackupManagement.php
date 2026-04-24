@@ -8,7 +8,6 @@ use Filament\Actions\Action;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
 use UnitEnum;
 
@@ -40,7 +39,7 @@ class BackupManagement extends Page
     {
         $backupDir = storage_path('app/backups');
 
-        if (!is_dir($backupDir)) {
+        if (! is_dir($backupDir)) {
             return [];
         }
 
@@ -48,8 +47,8 @@ class BackupManagement extends Page
             ->filter(fn ($f) => str_ends_with($f, '.sql') || str_ends_with($f, '.sqlite'))
             ->map(fn ($f) => [
                 'filename' => $f,
-                'size' => number_format(filesize($backupDir . '/' . $f) / 1024, 2) . ' KB',
-                'modified' => \Carbon\Carbon::createFromTimestamp(filemtime($backupDir . '/' . $f))->format('d/m/Y H:i:s'),
+                'size' => number_format(filesize($backupDir.'/'.$f) / 1024, 2).' KB',
+                'modified' => \Carbon\Carbon::createFromTimestamp(filemtime($backupDir.'/'.$f))->format('d/m/Y H:i:s'),
             ])
             ->sortByDesc('modified')
             ->values()
@@ -88,5 +87,39 @@ class BackupManagement extends Page
 
         Artisan::call('backup:restore', ['filename' => $filename, '--force' => true]);
         redirect('/admin/backups');
+    }
+
+    public function resetDatabase(): void
+    {
+        if (! app()->environment(['local', 'development'])) {
+            \Filament\Notifications\Notification::make()
+                ->title('Ação não permitida')
+                ->body('Esta ação só está disponível em ambiente de desenvolvimento.')
+                ->danger()
+                ->send();
+
+            return;
+        }
+
+        try {
+            $timestamp = now()->format('Y-m-d_His');
+            $backupFilename = "pre-reset-{$timestamp}.sql";
+
+            Artisan::call('backup:create', ['filename' => $backupFilename]);
+
+            Artisan::call('migrate:fresh', ['--seed' => true]);
+
+            \Filament\Notifications\Notification::make()
+                ->title('Banco de dados resetado!')
+                ->body("Backup de segurança salvo em: {$backupFilename}")
+                ->success()
+                ->send();
+        } catch (\Exception $e) {
+            \Filament\Notifications\Notification::make()
+                ->title('Erro ao resetar banco')
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 }
