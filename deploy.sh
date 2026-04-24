@@ -25,6 +25,11 @@ echo "🐳 Construindo e iniciando containers (modo daemon)..."
 # Usamos --build para garantir que qualquer mudança no Dockerfile seja aplicada
 docker compose up -d --build
 
+# 3.1. Garantir estrutura de diretórios do Storage
+echo "📁 Criando estrutura de diretórios do Storage..."
+docker compose exec -u sail -T laravel.test mkdir -p storage/framework/{views,cache,sessions} storage/logs bootstrap/cache
+docker compose exec -u sail -T laravel.test chmod -R 777 storage bootstrap/cache
+
 # 4. Dependências de Backend (Dentro do Container)
 echo "📦 Instalando dependências PHP (Otimizado)..."
 docker compose exec -u sail -T laravel.test composer install --optimize-autoloader --no-interaction
