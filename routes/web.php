@@ -11,7 +11,6 @@ Route::get('/login', \App\Livewire\Auth\Login::class)->name('login');
 
 Route::post('/logout', LogoutController::class)->name('logout')->middleware('auth');
 
-Route::middleware(['panel:admin'])->group(function () {
-    Route::get('/admin/backups/download/{filename}', BackupDownloadController::class)
-        ->name('admin.backups.download');
-});
+Route::get('/admin/backups/download/{filename}', BackupDownloadController::class)
+    ->name('admin.backups.download')
+    ->middleware('panel:admin');
