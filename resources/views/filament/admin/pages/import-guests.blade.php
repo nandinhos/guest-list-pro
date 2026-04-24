@@ -44,6 +44,30 @@
                     </div>
                 </x-slot>
 
+                {{-- Evento Detectado --}}
+                <div class="mb-5 grid grid-cols-2 gap-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-4">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-0.5">Evento</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">{{ $parsedEvent['name'] ?? '—' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-0.5">Data</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">
+                            {{ isset($parsedEvent['date']) ? \Carbon\Carbon::parse($parsedEvent['date'])->format('d/m/Y') : '—' }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-0.5">Local</p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300">{{ $parsedEvent['location'] ?? '—' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-0.5">Horário</p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300">
+                            {{ ($parsedEvent['start_time'] ?? '—') }} — {{ ($parsedEvent['end_time'] ?? '—') }}
+                        </p>
+                    </div>
+                </div>
+
                 {{-- Summary Cards --}}
                 <div class="grid grid-cols-2 gap-3 mb-6">
                     <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
@@ -196,27 +220,55 @@
                 </div>
             </x-slot>
 
-            <div class="space-y-4 text-sm text-gray-600 dark:text-gray-400">
+            <div class="space-y-5">
+                {{-- Code example --}}
                 <div>
-                    <p class="font-medium text-gray-700 dark:text-gray-300 mb-1">Estrutura do arquivo:</p>
-                    <pre class="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 overflow-x-auto text-xs">### Convidados Erick ###
-# BACKSTAGE #
-Wellington Miranda, 27589191841
-Priscilla Stocco, 22010456823
-
-# PISTA #
-LUCAS SÓGLIA LAROTONDA, 41813773858</pre>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Exemplo de arquivo</p>
+                    <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-4 text-xs font-mono leading-relaxed overflow-x-auto">
+                        <div class="text-gray-500"># Dados do Evento #</div>
+                        <div class="text-gray-300">**Evento:** Nome do Evento</div>
+                        <div class="text-gray-300">**Data:** 25/04/2026</div>
+                        <div class="text-gray-300">**Local:** Local do Evento</div>
+                        <div class="text-gray-300">**Horário:** 14:00 - 06:00</div>
+                        <div class="mt-3 text-gray-500"># Dados das Listas de Convidados #</div>
+                        <div class="mt-2 text-yellow-400">## Convidados Erick ##</div>
+                        <div class="mt-1 text-purple-400">### BACKSTAGE ###</div>
+                        <div class="text-gray-300">Wellington Miranda, 27589191841</div>
+                        <div class="text-gray-300">Priscilla Stocco, 22010456823</div>
+                        <div class="mt-2 text-blue-400">### PISTA ###</div>
+                        <div class="text-gray-300">LUCAS SÓGLIA LAROTONDA, 41813773858</div>
+                    </div>
                 </div>
 
+                {{-- Rules --}}
                 <div>
-                    <p class="font-medium text-gray-700 dark:text-gray-300 mb-1">Regras:</p>
-                    <ul class="list-disc list-inside space-y-1">
-                        <li><code>### Convidados [NOME] ###</code> - Define o responsável/promotor</li>
-                        <li><code># BACKSTAGE #</code> ou <code># PISTA #</code> - Define o setor</li>
-                        <li><code>Nome Completo, Documento</code> - Uma linha por convidado</li>
-                        <li>CPF: apenas números (11 dígitos)</li>
-                        <li>Passaporte: texto livre</li>
-                    </ul>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">Regras</p>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3 rounded-lg bg-green-50 dark:bg-green-900/10 px-3 py-2">
+                            <code class="shrink-0 rounded bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 text-xs font-mono text-green-700 dark:text-green-400"># Dados do Evento #</code>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Cabeçalho obrigatório com dados do evento</span>
+                        </div>
+                        <div class="flex items-center gap-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/10 px-3 py-2">
+                            <code class="shrink-0 rounded bg-yellow-100 dark:bg-yellow-900/30 px-1.5 py-0.5 text-xs font-mono text-yellow-700 dark:text-yellow-400">## Convidados [NOME] ##</code>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Define o responsável/promotor</span>
+                        </div>
+                        <div class="flex items-center gap-3 rounded-lg bg-blue-50 dark:bg-blue-900/10 px-3 py-2">
+                            <code class="shrink-0 rounded bg-blue-100 dark:bg-blue-900/30 px-1.5 py-0.5 text-xs font-mono text-blue-700 dark:text-blue-400">### BACKSTAGE ### ou ### PISTA ###</code>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Define o setor</span>
+                        </div>
+                        <div class="flex items-center gap-3 rounded-lg bg-gray-50 dark:bg-gray-800/50 px-3 py-2">
+                            <code class="shrink-0 rounded bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 text-xs font-mono text-gray-700 dark:text-gray-300">Nome Completo, Documento</code>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Uma linha por convidado</span>
+                        </div>
+                        <div class="flex items-center gap-3 rounded-lg bg-gray-50 dark:bg-gray-800/50 px-3 py-2">
+                            <span class="shrink-0 inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-xs font-medium text-green-700 dark:text-green-400">CPF</span>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Apenas números (11 dígitos)</span>
+                        </div>
+                        <div class="flex items-center gap-3 rounded-lg bg-gray-50 dark:bg-gray-800/50 px-3 py-2">
+                            <span class="shrink-0 inline-flex items-center rounded-full bg-orange-100 dark:bg-orange-900/30 px-2 py-0.5 text-xs font-medium text-orange-700 dark:text-orange-400">Passaporte</span>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Texto livre (ex: N07913844)</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </x-filament::section>

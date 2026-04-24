@@ -4,15 +4,17 @@ namespace App\Services;
 
 use App\Enums\DocumentType;
 use App\Models\Event;
+use App\Models\EventAssignment;
 use App\Models\Guest;
 use App\Models\Sector;
 use App\Models\User;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class GuestImportService
 {
     public array $parsedData = [];
+
+    public array $parsedEvent = [];
 
     public array $importResult = [
         'imported' => 0,
@@ -28,6 +30,8 @@ class GuestImportService
         $this->parsedData = [];
         $this->preview = [];
 
+        $this->parseEventData($content);
+
         $lines = explode("\n", $content);
         $currentPromoter = null;
         $currentSector = null;
@@ -42,11 +46,13 @@ class GuestImportService
             if (preg_match('/^#{1,3}\s*Convidados\s+(.+?)\s*#{1,3}$/i', $line, $matches)) {
                 $currentPromoter = trim($matches[1]);
                 $currentSector = null;
+
                 continue;
             }
 
             if (preg_match('/^#{1,3}\s*(BACKSTAGE|PISTA)\s*#{1,3}$/i', $line, $matches)) {
                 $currentSector = strtoupper(trim($matches[1]));
+
                 continue;
             }
 
@@ -77,23 +83,68 @@ class GuestImportService
         return $this->parsedData;
     }
 
-    public function import(int $eventId, int $adminUserId): array
+    protected function parseEventData(string $content): void
+    {
+        $this->parsedEvent = [];
+
+        if (preg_match('/\*\*Evento:\*\*\s*(.+)/u', $content, $m)) {
+            $this->parsedEvent['name'] = trim($m[1]);
+        }
+        if (preg_match('/\*\*Data:\*\*\s*(\d{2}\/\d{2}\/\d{4})/', $content, $m)) {
+            $this->parsedEvent['date'] = \Carbon\Carbon::createFromFormat('d/m/Y', trim($m[1]))->format('Y-m-d');
+        }
+        if (preg_match('/\*\*Local:\*\*\s*(.+)/u', $content, $m)) {
+            $this->parsedEvent['location'] = trim($m[1]);
+        }
+        if (preg_match('/\*\*Horário:\*\*\s*(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})/', $content, $m)) {
+            $this->parsedEvent['start_time'] = trim($m[1]);
+            $this->parsedEvent['end_time'] = trim($m[2]);
+        }
+    }
+
+    public function import(int $adminUserId): array
     {
         $this->importResult = [
             'imported' => 0,
             'duplicates' => 0,
             'errors' => [],
+            'warnings' => [],
             'promoters_created' => 0,
         ];
 
-        $event = Event::findOrFail($eventId);
-        $sectors = $this->getSectorsByEvent($eventId);
+        if (empty($this->parsedEvent['name']) || empty($this->parsedEvent['date'])) {
+            $this->importResult['errors'][] = 'Arquivo não contém cabeçalho de evento válido (Evento + Data são obrigatórios)';
 
-        $promoterCache = $this->getPromoterCache($eventId);
+            return $this->importResult;
+        }
+
+        $event = Event::firstOrCreate(
+            [
+                'name' => $this->parsedEvent['name'],
+                'date' => $this->parsedEvent['date'],
+                'location' => $this->parsedEvent['location'] ?? null,
+            ],
+            [
+                'location' => $this->parsedEvent['location'] ?? null,
+                'start_time' => $this->parsedEvent['start_time'] ?? null,
+                'end_time' => $this->parsedEvent['end_time'] ?? null,
+                'status' => \App\Enums\EventStatus::ACTIVE,
+            ]
+        );
 
         DB::beginTransaction();
-
         try {
+            $sectorsNeeded = collect($this->parsedData)->pluck('sector_name')->unique();
+            $sectors = [];
+            foreach ($sectorsNeeded as $sectorName) {
+                $sector = Sector::firstOrCreate(
+                    ['event_id' => $event->id, 'name' => $sectorName]
+                );
+                $sectors[$sectorName] = $sector;
+            }
+
+            $promoterCache = $this->getPromoterCache($event->id);
+
             foreach ($this->parsedData as $item) {
                 $result = $this->importGuest($event, $sectors, $promoterCache, $item, $adminUserId);
 
@@ -106,10 +157,29 @@ class GuestImportService
                 }
             }
 
+            $assignments = collect($this->parsedData)
+                ->map(fn ($i) => [$i['promoter_name'], $i['sector_name']])
+                ->unique(fn ($pair) => implode('|', $pair));
+
+            foreach ($assignments as [$promoterName, $sectorName]) {
+                $promoterId = $promoterCache[$promoterName] ?? null;
+                $sector = $sectors[$sectorName] ?? null;
+                if ($promoterId && $sector) {
+                    EventAssignment::firstOrCreate(
+                        [
+                            'user_id' => $promoterId,
+                            'event_id' => $event->id,
+                            'sector_id' => $sector->id,
+                        ],
+                        ['role' => 'promoter']
+                    );
+                }
+            }
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->importResult['errors'][] = 'Erro_transaction: ' . $e->getMessage();
+            $this->importResult['errors'][] = 'Erro_transaction: '.$e->getMessage();
         }
 
         return $this->importResult;
@@ -134,6 +204,7 @@ class GuestImportService
 
         $existingGuest = Guest::where('event_id', $event->id)
             ->where('document', $document)
+            ->with(['promoter', 'sector'])
             ->first();
 
         if ($existingGuest) {
@@ -141,7 +212,11 @@ class GuestImportService
                 'name' => $item['name'],
                 'document' => $item['document'],
                 'reason' => 'CPF já cadastrado',
+                'existing_name' => $existingGuest->name,
+                'existing_promoter' => $existingGuest->promoter?->name ?? '—',
+                'existing_sector' => $existingGuest->sector?->name ?? '—',
             ];
+
             return 'duplicate';
         }
 
@@ -153,14 +228,21 @@ class GuestImportService
                 ->first();
 
             if (! $promoter) {
-                $promoter = User::create([
-                    'name' => $promoterName,
-                    'email' => strtolower(str_replace(' ', '.', $promoterName)) . '@imported.local',
-                    'password' => bcrypt(bin2hex(random_bytes(8))),
-                    'role' => 'promoter',
-                    'is_active' => true,
-                ]);
-                $this->importResult['promoters_created']++;
+                $email = $this->generateEmail($promoterName);
+                $existingByEmail = User::whereRaw('LOWER(email) = ?', [strtolower($email)])->first();
+
+                if ($existingByEmail) {
+                    $promoter = $existingByEmail;
+                } else {
+                    $promoter = User::create([
+                        'name' => $promoterName,
+                        'email' => $email,
+                        'password' => bcrypt('password'),
+                        'role' => 'promoter',
+                        'is_active' => true,
+                    ]);
+                    $this->importResult['promoters_created']++;
+                }
             }
 
             $promoterCache[$promoterName] = $promoter->id;
@@ -186,7 +268,7 @@ class GuestImportService
         return Sector::where('event_id', $eventId)
             ->get()
             ->mapWithKeys(fn ($sector) => [strtoupper($sector->name) => $sector])
-            ->toArray();
+            ->all();
     }
 
     protected function getPromoterCache(int $eventId): array
@@ -194,7 +276,16 @@ class GuestImportService
         return User::where('role', 'promoter')
             ->get()
             ->mapWithKeys(fn ($user) => [$user->name => $user->id])
-            ->toArray();
+            ->all();
+    }
+
+    protected function generateEmail(string $name): string
+    {
+        $ascii = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $name);
+        $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '.', trim($ascii)));
+        $slug = trim($slug, '.');
+
+        return $slug.'@guestlist.pro';
     }
 
     public function getPreviewSummary(): array

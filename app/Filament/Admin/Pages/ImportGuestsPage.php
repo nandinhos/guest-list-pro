@@ -3,12 +3,10 @@
 namespace App\Filament\Admin\Pages;
 
 use App\Enums\NavigationGroup;
-use App\Models\Event;
 use App\Services\GuestImportService;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -42,6 +40,8 @@ class ImportGuestsPage extends Page
 
     public array $importResult = [];
 
+    public array $parsedEvent = [];
+
     public bool $showPreview = false;
 
     public bool $showResult = false;
@@ -57,29 +57,19 @@ class ImportGuestsPage extends Page
             ->columns(1)
             ->statePath('data')
             ->components([
-                Section::make('Configuração')
-                    ->schema([
-                        Select::make('event_id')
-                            ->label('Evento')
-                            ->options(fn () => Event::where('status', 'active')->pluck('name', 'id'))
-                            ->required(),
-                    ]),
-
                 Section::make('Arquivo')
                     ->description('Envie o arquivo .md ou .txt com a lista de convidados')
                     ->schema([
                         FileUpload::make('file')
                             ->label('Arquivo')
-                            ->acceptedFileTypes(['text/plain'])
+                            ->acceptedFileTypes(['text/plain', 'text/markdown', 'text/x-markdown'])
                             ->maxSize(10240)
+                            ->live()
                             ->storeFileNamesIn('original_filename')
-                            ->afterStateHydrated(function ($state, $component) {
+                            ->afterStateUpdated(function ($state) {
                                 if ($state) {
-                                    $file = $component->getFile();
-                                    if ($file) {
-                                        $this->fileContent = $file->getContents();
-                                        $this->parsePreview();
-                                    }
+                                    $this->fileContent = file_get_contents($state->getRealPath());
+                                    $this->parsePreview();
                                 }
                             }),
                     ]),
@@ -107,6 +97,7 @@ class ImportGuestsPage extends Page
 
         $this->preview = $service->preview;
         $this->previewSummary = $service->getPreviewSummary();
+        $this->parsedEvent = $service->parsedEvent;
         $this->showPreview = true;
         $this->showResult = false;
     }
@@ -125,28 +116,19 @@ class ImportGuestsPage extends Page
 
     public function import(): void
     {
-        $eventId = $this->data['event_id'] ?? null;
-
-        if (! $eventId) {
-            \Filament\Notifications\Notification::make()
-                ->title('Selecione um evento')
-                ->danger()
-                ->send();
-            return;
-        }
-
         if (empty($this->fileContent)) {
             \Filament\Notifications\Notification::make()
                 ->title('Nenhum arquivo carregado')
                 ->danger()
                 ->send();
+
             return;
         }
 
         $service = app(GuestImportService::class);
         $service->parseFile($this->fileContent);
 
-        $this->importResult = $service->import($eventId, auth()->id());
+        $this->importResult = $service->import(auth()->id());
 
         $this->showPreview = false;
         $this->showResult = true;
@@ -168,7 +150,7 @@ class ImportGuestsPage extends Page
 
     public function resetForm(): void
     {
-        $this->reset(['data', 'fileContent', 'preview', 'previewSummary', 'importResult']);
+        $this->reset(['data', 'fileContent', 'preview', 'previewSummary', 'importResult', 'parsedEvent']);
         $this->showPreview = false;
         $this->showResult = false;
         $this->form->fill();
