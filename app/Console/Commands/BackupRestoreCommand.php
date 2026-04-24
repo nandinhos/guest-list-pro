@@ -41,9 +41,7 @@ class BackupRestoreCommand extends Command
         }
         $importCmd .= " {$dbName} < {$filepath}";
 
-        $fullCmd = "docker compose exec -T laravel.test bash -c " . escapeshellarg($importCmd);
-
-        exec($fullCmd, $output, $returnCode);
+        exec($importCmd, $output, $returnCode);
 
         if ($returnCode !== 0) {
             $this->error('Failed to restore database.');

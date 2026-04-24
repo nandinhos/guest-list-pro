@@ -33,9 +33,9 @@ class BackupCreateCommand extends Command
         if ($dbPass) {
             $dumpCmd .= " -p" . escapeshellarg($dbPass);
         }
-        $dumpCmd .= " {$dbName} > {$filepath}";
+        $dumpCmd .= " {$dbName}";
 
-        $fullCmd = "docker compose exec -T laravel.test bash -c " . escapeshellarg($dumpCmd);
+        $fullCmd = $dumpCmd . " > {$filepath}";
 
         exec($fullCmd, $output, $returnCode);
 
