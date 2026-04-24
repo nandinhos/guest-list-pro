@@ -9,6 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('monitores', function (Blueprint $table) {
+            $table->dropUnique(['event_id', 'cpf']);
+        });
+
+        Schema::table('monitores', function (Blueprint $table) {
             $table->dropColumn('cpf');
         });
 
@@ -18,7 +22,6 @@ return new class extends Migration
         });
 
         Schema::table('monitores', function (Blueprint $table) {
-            $table->dropUnique(['event_id', 'cpf']);
             $table->unique(['event_id', 'document_number']);
         });
     }
