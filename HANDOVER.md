@@ -2,8 +2,8 @@
 
 > **Para agentes autônomos:** Leia este documento completamente antes de iniciar qualquer tarefa.
 
-**Última atualização:** 2026-04-21
-**Versão do Projeto:** 2.1.1
+**Última atualização:** 2026-04-24
+**Versão do Projeto:** 2.2.0
 **Stack:** Laravel 12 + Filament 4 + Livewire 3
 
 ---
@@ -216,10 +216,13 @@ docs/SPECS/implemented/
 
 ### 6.2 Pontos Importantes
 
-1. **Sempre usar `vendor/bin/sail`** para comandos Laravel
+1. **Sempre usar `vendor/bin/sail`** para comandos Laravel — nunca `php artisan` direto no host. Rodar no host corrompe o `bootstrap/cache/config.php` com paths errados, causando testes falhando com "Permission denied". Fix: `vendor/bin/sail artisan optimize:clear`
 2. **E2E Test Seeder** precisa criar EventAssignment para o validator
 3. **SQLite não tem função HOUR()** - usar `strftime('%H', col)` para compatibilidade
 4. **TicketType.price** removido em favor de `ticket_type_sector`
+5. **Migrations com índices únicos:** sempre `dropUnique()` ANTES de `dropColumn()` — SQLite não permite remover coluna referenciada em índice
+6. **Faker locale:** `APP_FAKER_LOCALE=pt_BR` no `.env.example` — necessário para `fake()->cpf()` nas factories
+7. **Testes de redirect:** sempre atualizar `assertRedirect()` ao adicionar middleware que altera fluxo de navegação
 
 ---
 
@@ -277,7 +280,7 @@ Se não houver evento selecionado, o middleware redireciona para `/select-event`
 ### 10.1 Unit Tests
 - **Local:** `tests/Unit/`
 - **Feature:** `tests/Feature/`
-- **Status:** 72 tests passing
+- **Status:** 73 tests passing (CI verde no GitHub Actions)
 
 ### 10.2 E2E Tests
 - **Local:** `e2e/smoke-tests.spec.ts`
@@ -309,7 +312,35 @@ DB_HOST=guestlist.fssdev.com.br
 DB_DATABASE=guestlist_pro
 ```
 
-### 11.2 Observações de Deploy
+### 11.2 CI/CD — GitHub Actions (configurado em 2026-04-24)
+
+- **Workflow:** `.github/workflows/deploy-check.yml`
+- **Gatilho:** Push e PR para `main`
+- **O que valida:** composer install → npm build → migrate → tests → optimize
+- **Banco no CI:** MySQL 8.4 (mesmo da produção)
+- **Status:** ✅ Verde — 73 testes passando
+
+### 11.3 Script Pós-Deploy na Plataforma PaaS
+
+A plataforma usa integração direta com GitHub. Script configurado no painel:
+
+```bash
+#!/bin/bash
+set -euo pipefail
+composer install --no-dev --optimize-autoloader --no-interaction
+npm ci --prefer-offline 2>/dev/null || npm install 2>/dev/null || true
+npm run build 2>/dev/null || true
+php artisan migrate --force
+php artisan optimize
+php artisan filament:cache-components
+php artisan storage:link 2>/dev/null || true
+```
+
+- **URL de produção:** `testeguestlist.fssdev.com.br`
+- **DNS:** Cloudflare (configurar ao criar novo subdomínio)
+- **Referência completa:** `docs/TD-002-2026-04-24-laravel-post-deploy-script.md`
+
+### 11.4 Observações de Deploy
 
 - Produção usa **MySQL** (não SQLite)
 - SQLite funciona localmente mas gráficos usam `HOUR()` que não existe no SQLite
@@ -319,24 +350,36 @@ DB_DATABASE=guestlist_pro
 
 ## 12. PRÓXIMOS PASSOS SUGERIDOS
 
-1. **Criar E2E Tests para Ticket Pricing** - Validar nova arquitetura
-2. **Investigar DEVORQ v3** - Versão atual é 2.1.1
+1. **Criar E2E Tests para Ticket Pricing** - Validar nova arquitetura (SPEC-0005)
+2. **Implementar SPEC-0007 Painel Excursionista** - Spec criada em 2026-04-22, plano em `.devorq/plans/2026-04-22-painel-excursionista.md`
 3. **Implementar notificações push** - Enhancement opcional
 4. **Relatórios exportáveis** - Enhancement opcional
+5. **Investigar DEVORQ v3** - Versão atual é 2.1.1
 
 ---
 
 ## 13. ARQUIVOS MODIFICADOS RECENTEMENTE
 
-| Arquivo | Data | Descrição |
-|---------|------|-----------|
-| `app/Models/TicketType.php` | 2026-04-21 | Removido price, adicionado is_visible |
-| `app/Services/TicketSaleService.php` | 2026-04-21 | Lança exceção se preço não encontrado |
-| `app/Filament/Resources/TicketType/Schemas/TicketTypeForm.php` | 2026-04-21 | setor_prices obrigatório |
-| `app/Filament/Bilheteria/Resources/TicketSales/Schemas/TicketSaleForm.php` | 2026-04-21 | Setor primeiro, filtra tipos |
-| `database/migrations/..._update_ticket_types_...` | 2026-04-21 | Nova migration |
-| `database/seeders/ShowcaseTestSeeder.php` | 2026-04-21 | Preços por setor |
-| `docs/SPECS/implemented/SPEC-0005-...` | 2026-04-21 | Atualizado com nova arquitetura |
+### Sessão 2026-04-24 — CI/CD e Deploy
+
+| Arquivo | Descrição |
+|---------|-----------|
+| `.github/workflows/deploy-check.yml` | **NOVO** — workflow GitHub Actions que simula deploy a cada push |
+| `database/migrations/2026_04_22_120000_update_monitores_add_document_fields.php` | **FIX** — `dropUnique` antes de `dropColumn` |
+| `.env.example` | `APP_FAKER_LOCALE=en_US` → `pt_BR` |
+| `tests/Feature/Auth/LoginTest.php` | Redirects atualizados para `/select-event` |
+| `docs/TD-002-2026-04-24-laravel-post-deploy-script.md` | **NOVO** — referência completa do script pós-deploy |
+
+### Sessão 2026-04-21 — Ticket Pricing
+
+| Arquivo | Descrição |
+|---------|-----------|
+| `app/Models/TicketType.php` | Removido price, adicionado is_visible |
+| `app/Services/TicketSaleService.php` | Lança exceção se preço não encontrado |
+| `app/Filament/Resources/TicketType/Schemas/TicketTypeForm.php` | setor_prices obrigatório |
+| `app/Filament/Bilheteria/Resources/TicketSales/Schemas/TicketSaleForm.php` | Setor primeiro, filtra tipos |
+| `database/migrations/..._update_ticket_types_...` | Nova migration |
+| `database/seeders/ShowcaseTestSeeder.php` | Preços por setor |
 
 ---
 
