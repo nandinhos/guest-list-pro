@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Admin\Pages\BackupManagement;
 use App\Filament\Admin\Pages\GuestsReport;
+use App\Filament\Admin\Pages\ImportGuestsPage;
 use App\Filament\Admin\Pages\ProfilePage;
 use Filament\Navigation\MenuItem;
 use App\Filament\Widgets\AdminOverview;
@@ -52,6 +53,7 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
                 GuestsReport::class,
                 BackupManagement::class,
+                ImportGuestsPage::class,
                 ProfilePage::class,
             ])
             // ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
