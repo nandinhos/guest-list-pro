@@ -1,5 +1,57 @@
 <x-filament-panels::page>
-    <div x-data="{ showModal: false, modalTitle: '', modalMessage: '', modalAction: null, modalActionParams: {} }">
+    <div x-data="{
+        showModal: false,
+        modalTitle: '',
+        modalMessage: '',
+        modalAction: null,
+        modalActionParams: {},
+        resetStatus: {
+            status: 'idle',
+            current_step: 0,
+            steps: [],
+            error_message: null,
+            error_trace: null
+        },
+        pollingInterval: null,
+
+        startPolling() {
+            this.pollingInterval = setInterval(() => {
+                fetch('/admin/reset-status')
+                    .then(r => r.json())
+                    .then(data => {
+                        this.resetStatus = data;
+                        if (this.resetStatus.status === 'success' || this.resetStatus.status === 'error') {
+                            this.stopPolling();
+                        }
+                    })
+                    .catch(() => {});
+            }, 500);
+        },
+
+        stopPolling() {
+            if (this.pollingInterval) {
+                clearInterval(this.pollingInterval);
+                this.pollingInterval = null;
+            }
+        },
+
+        triggerReset() {
+            this.resetStatus = {
+                status: 'running',
+                current_step: 0,
+                steps: [
+                    {id:1, label:'Limpando banco de dados...', status:'pending'},
+                    {id:2, label:'Criando backup de segurança...', status:'pending'},
+                    {id:3, label:'Recriando schema...', status:'pending'},
+                    {id:4, label:'Criando usuário admin...', status:'pending'}
+                ],
+                error_message: null,
+                error_trace: null
+            };
+            this.startPolling();
+            $wire.resetDatabase();
+        }
+    }">
         {{-- Modal --}}
         <div x-show="showModal"
              x-cloak
@@ -15,34 +67,149 @@
                  x-transition:leave="transition ease-in duration-150"
                  x-transition:leave-start="opacity-100 scale-100"
                  x-transition:leave-end="opacity-0 scale-95">
-                <div class="p-6">
+
+                {{-- Header --}}
+                <div class="p-6 pb-4">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
-                             :class="modalAction === 'delete' || modalAction === 'resetDatabase' ? 'bg-red-100 dark:bg-red-900/30' : 'bg-warning-100 dark:bg-warning-900/30'">
-                            <template x-if="modalAction === 'delete'">
-                                <x-filament::icon icon="heroicon-o-trash" class="w-6 h-6 text-red-600 dark:text-red-400" />
+                             :class="resetStatus.status === 'error' ? 'bg-red-100 dark:bg-red-900/30' : 'bg-primary-100 dark:bg-primary-900/30'">
+                            <template x-if="resetStatus.status !== 'success'">
+                                <template x-if="modalAction === 'resetDatabase'">
+                                    <x-filament::icon icon="heroicon-o-exclamation-triangle" class="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                                </template>
                             </template>
-                            <template x-if="modalAction === 'restore'">
-                                <x-filament::icon icon="heroicon-o-arrow-uturn-left" class="w-6 h-6 text-warning-600 dark:text-warning-400" />
+                            <template x-if="resetStatus.status === 'success'">
+                                <x-filament::icon icon="heroicon-o-check-circle" class="w-6 h-6 text-success-600 dark:text-success-400" />
                             </template>
-                            <template x-if="modalAction === 'resetDatabase'">
-                                <x-filament::icon icon="heroicon-o-exclamation-triangle" class="w-6 h-6 text-red-600 dark:text-red-400" />
+                            <template x-if="!modalAction || modalAction === 'delete'">
+                                <template x-if="modalAction === 'delete'">
+                                    <x-filament::icon icon="heroicon-o-trash" class="w-6 h-6 text-red-600 dark:text-red-400" />
+                                </template>
                             </template>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text="modalTitle"></h3>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text="modalTitle"></h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400" x-show="modalAction !== 'resetDatabase'">Não feche esta janela durante o processo</p>
+                        </div>
                     </div>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-6" x-text="modalMessage"></p>
-                    <div class="flex gap-3 justify-end">
-                        <button x-on:click="showModal = false"
-                                class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                            Cancelar
-                        </button>
-                        <button x-on:click="showModal = false; modalActionParams.filename ? $wire[modalAction](modalActionParams.filename) : $wire[modalAction]()"
-                                class="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors"
-                                :class="modalAction === 'delete' || modalAction === 'resetDatabase' ? 'bg-red-600 hover:bg-red-700' : 'bg-warning-600 hover:bg-warning-700'">
-                            Confirmar
-                        </button>
-                    </div>
+                </div>
+
+                {{-- Content based on action type --}}
+                <div class="px-6 pb-6">
+
+                    {{-- Simple confirm modal (delete/restore) --}}
+                    <template x-if="modalAction !== 'resetDatabase'">
+                        <div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-6" x-text="modalMessage"></p>
+                            <div class="flex gap-3 justify-end">
+                                <button x-on:click="showModal = false"
+                                        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                    Cancelar
+                                </button>
+                                <button x-on:click="showModal = false; modalActionParams.filename ? $wire[modalAction](modalActionParams.filename) : $wire[modalAction]()"
+                                        class="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors"
+                                        :class="modalAction === 'delete' ? 'bg-red-600 hover:bg-red-700' : 'bg-warning-600 hover:bg-warning-700'">
+                                    Confirmar
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+
+                    {{-- Step-by-step progress (resetDatabase running) --}}
+                    <template x-if="modalAction === 'resetDatabase' && (resetStatus.status === 'running' || resetStatus.status === 'pending')">
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Não feche esta janela durante o processo</p>
+                            <div class="space-y-3">
+                                <template x-for="step in resetStatus.steps" :key="step.id">
+                                    <div class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300"
+                                         :class="step.status === 'done' ? 'bg-success-50 dark:bg-success-900/20' :
+                                                 step.status === 'running' ? 'bg-warning-50 dark:bg-warning-900/20 animate-pulse' :
+                                                 step.status === 'error' ? 'bg-red-50 dark:bg-red-900/20' :
+                                                 'bg-gray-50 dark:bg-gray-800/50'">
+                                        <div class="w-6 h-6 flex items-center justify-center shrink-0">
+                                            <template x-if="step.status === 'done'">
+                                                <x-filament::icon icon="heroicon-o-check" class="w-5 h-5 text-success-600 dark:text-success-400" />
+                                            </template>
+                                            <template x-if="step.status === 'running'">
+                                                <div class="w-5 h-5 border-2 border-warning-500 border-t-transparent rounded-full animate-spin"></div>
+                                            </template>
+                                            <template x-if="step.status === 'error'">
+                                                <x-filament::icon icon="heroicon-o-x-circle" class="w-5 h-5 text-red-600 dark:text-red-400" />
+                                            </template>
+                                            <template x-if="step.status === 'pending'">
+                                                <div class="w-5 h-5 border-2 border-gray-300 dark:border-gray-600 rounded-full"></div>
+                                            </template>
+                                        </div>
+                                        <span class="text-sm font-medium"
+                                              :class="step.status === 'done' ? 'text-success-700 dark:text-success-300' :
+                                                      step.status === 'running' ? 'text-warning-700 dark:text-warning-300' :
+                                                      step.status === 'error' ? 'text-red-700 dark:text-red-300' :
+                                                      'text-gray-500 dark:text-gray-400'"
+                                              x-text="step.label"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+
+                    {{-- Success screen --}}
+                    <template x-if="modalAction === 'resetDatabase' && resetStatus.status === 'success'">
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-lg bg-success-50 dark:bg-success-900/20 border border-success-200 dark:border-success-800">
+                                <p class="text-sm text-success-800 dark:text-success-200 text-center font-medium">
+                                    Banco resetado com sucesso!
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Credenciais de acesso:</p>
+                                <div class="flex items-center gap-2">
+                                    <code class="flex-1 text-sm bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded-lg font-mono text-gray-800 dark:text-gray-200">
+                                        admin@guestlist.pro / password
+                                    </code>
+                                    <button
+                                        type="button"
+                                        x-on:click="navigator.clipboard.writeText('admin@guestlist.pro / password')"
+                                        class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                                        title="Copiar credenciais">
+                                        <x-filament::icon icon="heroicon-o-clipboard" class="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                                    </button>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                x-on:click="window.location.href = '/admin/logout'"
+                                class="w-full px-4 py-2.5 text-sm font-semibold text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors">
+                                Ir para Login
+                            </button>
+                        </div>
+                    </template>
+
+                    {{-- Error screen --}}
+                    <template x-if="modalAction === 'resetDatabase' && resetStatus.status === 'error'">
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                                <p class="text-sm text-red-800 dark:text-red-200 font-medium mb-1">Erro na execução:</p>
+                                <p class="text-xs text-red-600 dark:text-red-400"
+                                   x-text="resetStatus.steps.find(s => s.status === 'error')?.label || 'Erro desconhecido'"></p>
+                                <p class="text-xs text-red-600 dark:text-red-400 mt-2 font-mono"
+                                   x-text="resetStatus.error_message"></p>
+                            </div>
+                            <div class="flex gap-3">
+                                <button
+                                    type="button"
+                                    x-on:click="navigator.clipboard.writeText(resetStatus.error_trace || resetStatus.error_message || '')"
+                                    class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                    Copiar Log
+                                </button>
+                                <button
+                                    type="button"
+                                    x-on:click="stopPolling(); showModal = false"
+                                    class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-gray-600 rounded-lg hover:bg-gray-700 transition-colors">
+                                    Fechar
+                                </button>
+                            </div>
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -286,7 +453,7 @@
 
                             <button
                                 type="button"
-                                x-on:click="showModal = true; modalTitle = 'Zerar Banco de Dados'; modalMessage = 'Tem certeza? Esta ação vai apagar TODOS os dados e recriar o banco com apenas o usuário admin. Um backup de segurança será criado automaticamente.'; modalAction = 'resetDatabase'; modalActionParams = {}"
+                                x-on:click="showModal = true; modalTitle = 'Zerar Banco de Dados'; modalAction = 'resetDatabase'; triggerReset()"
                                 class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 dark:bg-red-700 dark:hover:bg-red-600 dark:focus:ring-red-400"
                             >
                                 <x-filament::icon icon="heroicon-o-trash" class="w-5 h-5" />

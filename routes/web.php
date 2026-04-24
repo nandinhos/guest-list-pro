@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ResetStatusController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\BackupDownloadController;
 use Illuminate\Support\Facades\Route;
@@ -13,4 +14,8 @@ Route::post('/logout', LogoutController::class)->name('logout')->middleware('aut
 
 Route::get('/admin/backups/download/{filename}', BackupDownloadController::class)
     ->name('admin.backups.download')
+    ->middleware('panel:admin');
+
+Route::get('/admin/reset-status', ResetStatusController::class)
+    ->name('admin.reset-status')
     ->middleware('panel:admin');

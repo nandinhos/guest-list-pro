@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Pages;
 
 use App\Enums\NavigationGroup;
+use App\Jobs\ResetDatabaseJob;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Pages\Page;
@@ -101,30 +102,8 @@ class BackupManagement extends Page
             return;
         }
 
-        try {
-            Artisan::call('backup:create');
+        session()->forget('reset_database_job');
 
-            $exitCode = Artisan::call('migrate:fresh');
-            if ($exitCode !== 0) {
-                throw new \Exception('migrate:fresh failed: '.Artisan::output());
-            }
-
-            $exitCode = Artisan::call('db:seed');
-            if ($exitCode !== 0) {
-                throw new \Exception('db:seed failed: '.Artisan::output());
-            }
-
-            \Filament\Notifications\Notification::make()
-                ->title('Banco de dados resetado!')
-                ->body('Backup criado e banco restaurado com sucesso.')
-                ->success()
-                ->send();
-        } catch (\Exception $e) {
-            \Filament\Notifications\Notification::make()
-                ->title('Erro ao resetar banco')
-                ->body($e->getMessage())
-                ->danger()
-                ->send();
-        }
+        dispatch_sync(new ResetDatabaseJob);
     }
 }
