@@ -1,12 +1,4 @@
-<div class="fi-page">
-    <div class="fi-header mb-6">
-        <h1 class="fi-title text-2xl font-bold">{{ $this->title }}</h1>
-    </div>
-
-    <div class="mb-4 flex gap-2">
-        {{ $this->registerHeaderActions }}
-    </div>
-
+<x-filament-panels::page>
     @if(count($this->backups) > 0)
         <div class="overflow-hidden rounded-xl bg-white shadow">
             <table class="min-w-full divide-y divide-gray-200">
@@ -58,4 +50,4 @@
             <p class="text-sm mt-1">Clique em "Criar Backup" para fazer o primeiro backup.</p>
         </div>
     @endif
-</div>
+</x-filament-panels::page>
