@@ -84,7 +84,7 @@ class BackupManagement extends Page
 
     public function deleteBackup(string $filename): void
     {
-        Artisan::call('backup:delete', ['filename' => $filename]);
+        Artisan::call('backup:delete', ['filename' => $filename, '--force' => true]);
         $this->dispatch('refreshBackups');
 
         \Filament\Notifications\Notification::make()
@@ -99,7 +99,7 @@ class BackupManagement extends Page
             abort(403);
         }
 
-        Artisan::call('backup:restore', ['filename' => $filename]);
+        Artisan::call('backup:restore', ['filename' => $filename, '--force' => true]);
 
         \Filament\Notifications\Notification::make()
             ->title('Backup restaurado com sucesso')

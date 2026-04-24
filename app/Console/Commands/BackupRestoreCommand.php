@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 
 class BackupRestoreCommand extends Command
 {
-    protected $signature = 'backup:restore {filename}';
+    protected $signature = 'backup:restore {filename} {--force : Skip confirmation}';
     protected $description = 'Restore a database backup';
 
     public function handle(): int
@@ -22,7 +22,7 @@ class BackupRestoreCommand extends Command
             return Command::FAILURE;
         }
 
-        if (!$this->confirm('This will overwrite the current database. Are you sure?')) {
+        if (! $this->option('force') && ! $this->confirm('This will overwrite the current database. Are you sure?')) {
             $this->info('Restore cancelled.');
             return Command::SUCCESS;
         }

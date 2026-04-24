@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class BackupDeleteCommand extends Command
 {
-    protected $signature = 'backup:delete {filename}';
+    protected $signature = 'backup:delete {filename} {--force : Skip confirmation}';
     protected $description = 'Delete a database backup';
 
     public function handle(): int
@@ -20,7 +20,7 @@ class BackupDeleteCommand extends Command
             return Command::FAILURE;
         }
 
-        if (!$this->confirm("Delete backup: {$filename}?")) {
+        if (! $this->option('force') && ! $this->confirm("Delete backup: {$filename}?")) {
             $this->info('Delete cancelled.');
             return Command::SUCCESS;
         }
