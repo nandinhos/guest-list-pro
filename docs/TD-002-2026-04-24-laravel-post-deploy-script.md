@@ -337,7 +337,58 @@ Ao iniciar um novo projeto Laravel com deploy em PaaS:
 
 ---
 
-## 10. Referências
+## 10. Lição Aprendida — Cache Corrompido por Rodar Artisan Fora do Container
+
+### Sintoma
+
+Testes passam no GitHub Actions (CI) mas falham localmente com:
+
+```
+There is no existing directory at "/home/user/projects/app/storage/logs" and it could not be created: Permission denied
+```
+
+O path no erro é o path do **host**, mas os testes rodam dentro do container Docker (onde o path correto seria `/var/www/html/storage/logs`).
+
+### Root Cause
+
+O `php artisan optimize` foi executado **diretamente no host** (fora do container Sail) em algum momento. Isso gerava o arquivo `bootstrap/cache/config.php` com paths do host hardcoded:
+
+```
+/home/user/projects/app/storage/logs   ← path do HOST gravado no cache
+```
+
+Quando os testes rodam dentro do container (que usa `/var/www/html/...`), Laravel carrega o cache corrompido e tenta acessar paths que não existem dentro do container — causando `Permission denied`.
+
+### Diagnóstico
+
+```bash
+grep -c "home/usuario" bootstrap/cache/config.php
+# Se retornar > 0, o cache foi gerado fora do container
+```
+
+### Solução
+
+```bash
+vendor/bin/sail artisan optimize:clear
+```
+
+Isso limpa todos os caches e na próxima execução dentro do container os paths são gravados corretamente como `/var/www/html/...`.
+
+### Regra de Ouro
+
+> **Nunca rodar `php artisan` diretamente no host em projetos Sail. Sempre usar `vendor/bin/sail artisan`.**
+
+| Errado | Certo |
+|--------|-------|
+| `php artisan optimize` | `vendor/bin/sail artisan optimize` |
+| `php artisan migrate` | `vendor/bin/sail artisan migrate` |
+| `php artisan test` | `vendor/bin/sail artisan test` |
+
+Adicionar ao checklist de novos projetos: se testes falharem com paths inesperados, rodar `vendor/bin/sail artisan optimize:clear` antes de investigar outros problemas.
+
+---
+
+## 11. Referências
 
 - [Laravel Deployment — documentação oficial](https://laravel.com/docs/deployment)
 - [Composer — install flags](https://getcomposer.org/doc/03-cli.md#install-i)
