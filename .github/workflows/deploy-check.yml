@@ -55,6 +55,7 @@ jobs:
           echo "" >> .env
           echo "DB_DATABASE=/tmp/test_guest_list.sqlite" >> .env
           touch /tmp/test_guest_list.sqlite
+          touch database/testing.sqlite
           php artisan key:generate --no-interaction
 
       - name: Run database migrations
