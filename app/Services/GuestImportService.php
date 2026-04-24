@@ -35,17 +35,22 @@ class GuestImportService
         foreach ($lines as $lineNumber => $line) {
             $line = trim($line);
 
-            if (preg_match('/^###\s*Convidados\s+(.+?)\s*###$/i', $line, $matches)) {
-                $currentPromoter = trim($matches[1]);
+            if (empty($line)) {
                 continue;
             }
 
-            if (preg_match('/^#\s*(BACKSTAGE|PISTA)\s*#$/i', $line, $matches)) {
+            if (preg_match('/^#{1,3}\s*Convidados\s+(.+?)\s*#{1,3}$/i', $line, $matches)) {
+                $currentPromoter = trim($matches[1]);
+                $currentSector = null;
+                continue;
+            }
+
+            if (preg_match('/^#{1,3}\s*(BACKSTAGE|PISTA)\s*#{1,3}$/i', $line, $matches)) {
                 $currentSector = strtoupper(trim($matches[1]));
                 continue;
             }
 
-            if (empty($line) || $currentPromoter === null || $currentSector === null) {
+            if ($currentPromoter === null || $currentSector === null) {
                 continue;
             }
 
