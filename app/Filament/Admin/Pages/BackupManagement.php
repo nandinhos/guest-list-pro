@@ -9,7 +9,6 @@ use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
-use Livewire\Attributes\Computed;
 use UnitEnum;
 
 class BackupManagement extends Page
@@ -35,7 +34,6 @@ class BackupManagement extends Page
         }
     }
 
-    #[Computed]
     public function backups(): array
     {
         $backupDir = storage_path('app/backups');
