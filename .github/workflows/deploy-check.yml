@@ -1,0 +1,64 @@
+name: Deploy Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  deploy-simulation:
+    name: Simulate Production Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo, pdo_sqlite, mbstring, xml, curl, zip, bcmath, intl
+          coverage: none
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
+
+      - name: Install PHP dependencies (no dev)
+        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build frontend assets
+        run: npm run build
+
+      - name: Prepare .env
+        run: |
+          cp .env.example .env
+          sed -i 's|DB_CONNECTION=.*|DB_CONNECTION=sqlite|' .env
+          echo "" >> .env
+          echo "DB_DATABASE=:memory:" >> .env
+          php artisan key:generate --no-interaction
+
+      - name: Run database migrations
+        run: php artisan migrate --force
+
+      - name: Cache config, routes and views
+        run: |
+          php artisan optimize
+          php artisan filament:cache-components
+
+      - name: Run test suite
+        run: php artisan test --compact
