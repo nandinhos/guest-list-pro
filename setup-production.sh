@@ -12,7 +12,7 @@ mkdir -p storage/logs
 mkdir -p bootstrap/cache
 
 echo "🔒 Ajustando permissões..."
-chmod -R 775 storage bootstrap/cache 2>/dev/null || chmod -R 777 storage bootstrap/cache
+chmod -R 777 storage bootstrap/cache 2>/dev/null || chmod -R 777 storage bootstrap/cache
 
 echo "⚡ Gerando caches..."
 php artisan optimize
