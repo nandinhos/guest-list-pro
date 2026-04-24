@@ -102,16 +102,21 @@ class BackupManagement extends Page
         }
 
         try {
-            $timestamp = now()->format('Y-m-d_His');
-            $backupFilename = "pre-reset-{$timestamp}.sql";
+            Artisan::call('backup:create');
 
-            Artisan::call('backup:create', ['filename' => $backupFilename]);
+            $exitCode = Artisan::call('migrate:fresh');
+            if ($exitCode !== 0) {
+                throw new \Exception('migrate:fresh failed: '.Artisan::output());
+            }
 
-            Artisan::call('migrate:fresh', ['--seed' => true]);
+            $exitCode = Artisan::call('db:seed');
+            if ($exitCode !== 0) {
+                throw new \Exception('db:seed failed: '.Artisan::output());
+            }
 
             \Filament\Notifications\Notification::make()
                 ->title('Banco de dados resetado!')
-                ->body("Backup de segurança salvo em: {$backupFilename}")
+                ->body('Backup criado e banco restaurado com sucesso.')
                 ->success()
                 ->send();
         } catch (\Exception $e) {
