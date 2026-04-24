@@ -30,7 +30,7 @@ class BackupManagement extends Page
 
     public function mount(): void
     {
-        if (!auth()->user()->can('backup')) {
+        if (auth()->user()->role !== \App\Enums\UserRole::ADMIN) {
             abort(403);
         }
     }
