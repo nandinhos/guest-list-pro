@@ -26,7 +26,7 @@ class LoginTest extends TestCase
 
         $response = $this->actingAs($user)->get('/login');
 
-        $response->assertRedirect('/');
+        $response->assertRedirect('/admin');
     }
 
     public function test_admin_is_redirected_to_admin_panel(): void
@@ -48,7 +48,7 @@ class LoginTest extends TestCase
             ->set('email', $user->email)
             ->set('password', 'password')
             ->call('authenticate')
-            ->assertRedirect('/promoter');
+            ->assertRedirect('/promoter/select-event');
     }
 
     public function test_validator_is_redirected_to_validator_panel(): void
@@ -59,7 +59,7 @@ class LoginTest extends TestCase
             ->set('email', $user->email)
             ->set('password', 'password')
             ->call('authenticate')
-            ->assertRedirect('/validator');
+            ->assertRedirect('/validator/select-event');
     }
 
     public function test_bilheteria_is_redirected_to_bilheteria_panel(): void
@@ -70,7 +70,7 @@ class LoginTest extends TestCase
             ->set('email', $user->email)
             ->set('password', 'password')
             ->call('authenticate')
-            ->assertRedirect('/bilheteria');
+            ->assertRedirect('/bilheteria/select-event');
     }
 
     public function test_excursionista_is_redirected_to_excursionista_panel(): void
@@ -81,7 +81,7 @@ class LoginTest extends TestCase
             ->set('email', $user->email)
             ->set('password', 'password')
             ->call('authenticate')
-            ->assertRedirect('/excursionista');
+            ->assertRedirect('/excursionista/select-event');
     }
 
     public function test_invalid_credentials_show_error(): void
