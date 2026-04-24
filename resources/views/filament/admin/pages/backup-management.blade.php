@@ -19,15 +19,15 @@
                     <div class="flex items-center gap-4 mb-4">
                         <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
                              :class="modalAction === 'delete' || modalAction === 'resetDatabase' ? 'bg-red-100 dark:bg-red-900/30' : 'bg-warning-100 dark:bg-warning-900/30'">
-                            <x-filament::icon x-if="modalAction === 'delete'"
-                                              icon="heroicon-o-trash"
-                                              class="w-6 h-6 text-red-600 dark:text-red-400" />
-                            <x-filament::icon x-if="modalAction === 'restore'"
-                                              icon="heroicon-o-arrow-uturn-left"
-                                              class="w-6 h-6 text-warning-600 dark:text-warning-400" />
-                            <x-filament::icon x-if="modalAction === 'resetDatabase'"
-                                              icon="heroicon-o-exclamation-triangle"
-                                              class="w-6 h-6 text-red-600 dark:text-red-400" />
+                            <template x-if="modalAction === 'delete'">
+                                <x-filament::icon icon="heroicon-o-trash" class="w-6 h-6 text-red-600 dark:text-red-400" />
+                            </template>
+                            <template x-if="modalAction === 'restore'">
+                                <x-filament::icon icon="heroicon-o-arrow-uturn-left" class="w-6 h-6 text-warning-600 dark:text-warning-400" />
+                            </template>
+                            <template x-if="modalAction === 'resetDatabase'">
+                                <x-filament::icon icon="heroicon-o-exclamation-triangle" class="w-6 h-6 text-red-600 dark:text-red-400" />
+                            </template>
                         </div>
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text="modalTitle"></h3>
                     </div>
