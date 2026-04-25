@@ -72,7 +72,7 @@
                 </div>
             </div>
 
-            {{-- Table View --}}
+            {{-- Responsive Report Section --}}
             <x-filament::section variant="bordered" class="overflow-hidden">
                 <x-slot name="header">
                     <div class="flex items-center gap-3">
@@ -86,7 +86,8 @@
                     </div>
                 </x-slot>
 
-                <div class="overflow-x-auto -m-5 mt-0">
+                {{-- DESKTOP: Table View (hidden on mobile) --}}
+                <div class="hidden md:block overflow-x-auto -m-5 mt-0">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
@@ -157,6 +158,118 @@
                             </tr>
                         </tfoot>
                     </table>
+                </div>
+
+                {{-- MOBILE: Cards View (hidden on tablet+) --}}
+                <div class="md:hidden space-y-3 -m-5 mt-0 p-5">
+                    @foreach($this->reportData as $row)
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm">
+                        {{-- Card Header --}}
+                        <div class="flex items-center gap-3 p-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50">
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-bold">
+                                {{ strtoupper(substr($row['promoter_name'], 0, 1)) }}
+                            </div>
+                            <span class="font-semibold text-gray-900 dark:text-white">{{ $row['promoter_name'] }}</span>
+                        </div>
+
+                        {{-- Card Body --}}
+                        <div class="p-4 space-y-3">
+                            {{-- PISTA Row --}}
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400">PISTA</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base font-bold text-blue-600 dark:text-blue-400">{{ $row['pista_total'] }}</span>
+                                    <span class="text-gray-400">/</span>
+                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-medium rounded-full bg-success-100 text-success-700 dark:bg-success-900/30 dark:text-success-400">
+                                        {{ $row['pista_validated'] }}
+                                    </span>
+                                    <span class="text-xs font-semibold text-blue-600 dark:text-blue-400 ml-2">
+                                        {{ $row['pista_total'] > 0 ? round(($row['pista_validated'] / $row['pista_total']) * 100) . '%' : '0%' }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {{-- BACKSTAGE Row --}}
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400">BACKSTAGE</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base font-bold text-purple-600 dark:text-purple-400">{{ $row['backstage_total'] }}</span>
+                                    <span class="text-gray-400">/</span>
+                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                                        {{ $row['backstage_validated'] }}
+                                    </span>
+                                    <span class="text-xs font-semibold text-purple-600 dark:text-purple-400 ml-2">
+                                        {{ $row['backstage_total'] > 0 ? round(($row['backstage_validated'] / $row['backstage_total']) * 100) . '%' : '0%' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Card Footer --}}
+                        <div class="px-4 py-3 bg-primary-50/50 dark:bg-primary-900/20 border-t border-gray-100 dark:border-gray-700">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">TOTAL</span>
+                                <span class="text-lg font-bold text-primary-600 dark:text-primary-400">{{ $row['total'] }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+
+                    {{-- Summary Card --}}
+                    <div class="bg-primary-50 dark:bg-primary-900/20 rounded-xl border-2 border-primary-200 dark:border-primary-800 overflow-hidden">
+                        <div class="p-4 border-b border-primary-100 dark:border-primary-800">
+                            <div class="flex items-center gap-2">
+                                <x-filament::icon icon="heroicon-o-chart-bar" class="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                                <span class="font-bold text-primary-700 dark:text-primary-300">TOTAL GERAL</span>
+                            </div>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400">PISTA</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base font-bold text-blue-600 dark:text-blue-400">{{ $this->totals['pista_total'] }}</span>
+                                    <span class="text-gray-400">/</span>
+                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-medium rounded-full bg-success-100 text-success-700 dark:bg-success-900/30 dark:text-success-400">
+                                        {{ $this->totals['pista_validated'] }}
+                                    </span>
+                                    <span class="text-xs font-bold text-blue-600 dark:text-blue-400 ml-2">
+                                        {{ $this->totals['pista_total'] > 0 ? round(($this->totals['pista_validated'] / $this->totals['pista_total']) * 100) . '%' : '0%' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400">BACKSTAGE</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base font-bold text-purple-600 dark:text-purple-400">{{ $this->totals['backstage_total'] }}</span>
+                                    <span class="text-gray-400">/</span>
+                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                                        {{ $this->totals['backstage_validated'] }}
+                                    </span>
+                                    <span class="text-xs font-bold text-purple-600 dark:text-purple-400 ml-2">
+                                        {{ $this->totals['backstage_total'] > 0 ? round(($this->totals['backstage_validated'] / $this->totals['backstage_total']) * 100) . '%' : '0%' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-4 py-3 bg-primary-100/50 dark:bg-primary-900/30 border-t border-primary-200 dark:border-primary-800">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-bold text-primary-700 dark:text-primary-300">TOTAL GERAL</span>
+                                <span class="text-xl font-bold text-primary-600 dark:text-primary-400">{{ $this->totals['grand_total'] }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </x-filament::section>
         @else
