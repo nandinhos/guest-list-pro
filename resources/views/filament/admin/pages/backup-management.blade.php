@@ -5,52 +5,7 @@
         modalMessage: '',
         modalAction: null,
         modalActionParams: {},
-        resetStatus: {
-            status: 'idle',
-            current_step: 0,
-            steps: [],
-            error_message: null,
-            error_trace: null
-        },
-        pollingInterval: null,
-
-        startPolling() {
-            this.pollingInterval = setInterval(() => {
-                fetch('/admin/reset-status')
-                    .then(r => r.json())
-                    .then(data => {
-                        this.resetStatus = data;
-                        if (this.resetStatus.status === 'success' || this.resetStatus.status === 'error') {
-                            this.stopPolling();
-                        }
-                    })
-                    .catch(() => {});
-            }, 500);
-        },
-
-        stopPolling() {
-            if (this.pollingInterval) {
-                clearInterval(this.pollingInterval);
-                this.pollingInterval = null;
-            }
-        },
-
-        triggerReset() {
-            this.resetStatus = {
-                status: 'running',
-                current_step: 0,
-                steps: [
-                    {id:1, label:'Limpando banco de dados...', status:'pending'},
-                    {id:2, label:'Criando backup de segurança...', status:'pending'},
-                    {id:3, label:'Recriando schema...', status:'pending'},
-                    {id:4, label:'Criando usuário admin...', status:'pending'}
-                ],
-                error_message: null,
-                error_trace: null
-            };
-            this.startPolling();
-            $wire.resetDatabase();
-        }
+        modalContent: 'confirm'
     }">
         {{-- Modal --}}
         <div x-show="showModal"
@@ -72,33 +27,32 @@
                 <div class="p-6 pb-4">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
-                             :class="resetStatus.status === 'error' ? 'bg-red-100 dark:bg-red-900/30' : 'bg-primary-100 dark:bg-primary-900/30'">
-                            <template x-if="resetStatus.status !== 'success'">
-                                <template x-if="modalAction === 'resetDatabase'">
-                                    <x-filament::icon icon="heroicon-o-exclamation-triangle" class="w-6 h-6 text-primary-600 dark:text-primary-400" />
-                                </template>
+                             :class="modalContent === 'processing' ? 'bg-warning-100 dark:bg-warning-900/30' : 'bg-red-100 dark:bg-red-900/30'">
+                            <template x-if="modalContent === 'processing'">
+                                <div class="w-6 h-6 border-2 border-warning-500 border-t-transparent rounded-full animate-spin"></div>
                             </template>
-                            <template x-if="resetStatus.status === 'success'">
-                                <x-filament::icon icon="heroicon-o-check-circle" class="w-6 h-6 text-success-600 dark:text-success-400" />
+                            <template x-if="modalContent !== 'processing' && modalAction === 'resetDatabase'">
+                                <x-filament::icon icon="heroicon-o-exclamation-triangle" class="w-6 h-6 text-red-600 dark:text-red-400" />
                             </template>
-                            <template x-if="!modalAction || modalAction === 'delete'">
-                                <template x-if="modalAction === 'delete'">
-                                    <x-filament::icon icon="heroicon-o-trash" class="w-6 h-6 text-red-600 dark:text-red-400" />
-                                </template>
+                            <template x-if="modalContent !== 'processing' && modalAction === 'delete'">
+                                <x-filament::icon icon="heroicon-o-trash" class="w-6 h-6 text-red-600 dark:text-red-400" />
+                            </template>
+                            <template x-if="modalContent !== 'processing' && modalAction === 'restore'">
+                                <x-filament::icon icon="heroicon-o-arrow-uturn-left" class="w-6 h-6 text-warning-600 dark:text-warning-400" />
                             </template>
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text="modalTitle"></h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400" x-show="modalAction !== 'resetDatabase'">Não feche esta janela durante o processo</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400" x-show="modalContent !== 'processing'">Não feche esta janela durante o processo</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400" x-show="modalContent === 'processing'">Processando, aguarde...</p>
                         </div>
                     </div>
                 </div>
 
-                {{-- Content based on action type --}}
+                {{-- Content --}}
                 <div class="px-6 pb-6">
-
-                    {{-- Simple confirm modal (delete/restore) --}}
-                    <template x-if="modalAction !== 'resetDatabase'">
+                    {{-- Confirm state (idle) --}}
+                    <template x-if="modalContent === 'confirm'">
                         <div>
                             <p class="text-sm text-gray-600 dark:text-gray-400 mb-6" x-text="modalMessage"></p>
                             <div class="flex gap-3 justify-end">
@@ -106,107 +60,27 @@
                                         class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
                                     Cancelar
                                 </button>
-                                <button x-on:click="showModal = false; modalActionParams.filename ? $wire[modalAction](modalActionParams.filename) : $wire[modalAction]()"
+                                <button x-on:click="modalAction === 'resetDatabase' ? (modalContent = 'processing', $wire.resetDatabase()) : (showModal = false, modalActionParams.filename ? $wire[modalAction](modalActionParams.filename) : $wire[modalAction]())"
                                         class="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors"
-                                        :class="modalAction === 'delete' ? 'bg-red-600 hover:bg-red-700' : 'bg-warning-600 hover:bg-warning-700'">
+                                        :class="modalAction === 'delete' || modalAction === 'resetDatabase' ? 'bg-red-600 hover:bg-red-700' : 'bg-warning-600 hover:bg-warning-700'">
                                     Confirmar
                                 </button>
                             </div>
                         </div>
                     </template>
 
-                    {{-- Step-by-step progress (resetDatabase running) --}}
-                    <template x-if="modalAction === 'resetDatabase' && (resetStatus.status === 'running' || resetStatus.status === 'pending')">
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Não feche esta janela durante o processo</p>
-                            <div class="space-y-3">
-                                <template x-for="step in resetStatus.steps" :key="step.id">
-                                    <div class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300"
-                                         :class="step.status === 'done' ? 'bg-success-50 dark:bg-success-900/20' :
-                                                 step.status === 'running' ? 'bg-warning-50 dark:bg-warning-900/20 animate-pulse' :
-                                                 step.status === 'error' ? 'bg-red-50 dark:bg-red-900/20' :
-                                                 'bg-gray-50 dark:bg-gray-800/50'">
-                                        <div class="w-6 h-6 flex items-center justify-center shrink-0">
-                                            <template x-if="step.status === 'done'">
-                                                <x-filament::icon icon="heroicon-o-check" class="w-5 h-5 text-success-600 dark:text-success-400" />
-                                            </template>
-                                            <template x-if="step.status === 'running'">
-                                                <div class="w-5 h-5 border-2 border-warning-500 border-t-transparent rounded-full animate-spin"></div>
-                                            </template>
-                                            <template x-if="step.status === 'error'">
-                                                <x-filament::icon icon="heroicon-o-x-circle" class="w-5 h-5 text-red-600 dark:text-red-400" />
-                                            </template>
-                                            <template x-if="step.status === 'pending'">
-                                                <div class="w-5 h-5 border-2 border-gray-300 dark:border-gray-600 rounded-full"></div>
-                                            </template>
-                                        </div>
-                                        <span class="text-sm font-medium"
-                                              :class="step.status === 'done' ? 'text-success-700 dark:text-success-300' :
-                                                      step.status === 'running' ? 'text-warning-700 dark:text-warning-300' :
-                                                      step.status === 'error' ? 'text-red-700 dark:text-red-300' :
-                                                      'text-gray-500 dark:text-gray-400'"
-                                              x-text="step.label"></span>
-                                    </div>
-                                </template>
+                    {{-- Processing state --}}
+                    <template x-if="modalContent === 'processing'">
+                        <div class="text-center py-6">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-warning-100 dark:bg-warning-900/30 mb-4">
+                                <div class="w-8 h-8 border-3 border-warning-500 border-t-transparent rounded-full animate-spin"></div>
                             </div>
-                        </div>
-                    </template>
-
-                    {{-- Success screen --}}
-                    <template x-if="modalAction === 'resetDatabase' && resetStatus.status === 'success'">
-                        <div class="space-y-4">
-                            <div class="p-4 rounded-lg bg-success-50 dark:bg-success-900/20 border border-success-200 dark:border-success-800">
-                                <p class="text-sm text-success-800 dark:text-success-200 text-center font-medium">
-                                    Banco resetado com sucesso!
-                                </p>
-                            </div>
-                            <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Credenciais de acesso:</p>
-                                <div class="flex items-center gap-2">
-                                    <code class="flex-1 text-sm bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded-lg font-mono text-gray-800 dark:text-gray-200">
-                                        admin@guestlist.pro / password
-                                    </code>
-                                    <button
-                                        type="button"
-                                        x-on:click="navigator.clipboard.writeText('admin@guestlist.pro / password')"
-                                        class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                                        title="Copiar credenciais">
-                                        <x-filament::icon icon="heroicon-o-clipboard" class="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                                    </button>
-                                </div>
-                            </div>
-                            <button
-                                type="button"
-                                x-on:click="window.location.href = '/admin/logout'"
-                                class="w-full px-4 py-2.5 text-sm font-semibold text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors">
-                                Ir para Login
-                            </button>
-                        </div>
-                    </template>
-
-                    {{-- Error screen --}}
-                    <template x-if="modalAction === 'resetDatabase' && resetStatus.status === 'error'">
-                        <div class="space-y-4">
-                            <div class="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
-                                <p class="text-sm text-red-800 dark:text-red-200 font-medium mb-1">Erro na execução:</p>
-                                <p class="text-xs text-red-600 dark:text-red-400"
-                                   x-text="resetStatus.steps.find(s => s.status === 'error')?.label || 'Erro desconhecido'"></p>
-                                <p class="text-xs text-red-600 dark:text-red-400 mt-2 font-mono"
-                                   x-text="resetStatus.error_message"></p>
-                            </div>
-                            <div class="flex gap-3">
-                                <button
-                                    type="button"
-                                    x-on:click="navigator.clipboard.writeText(resetStatus.error_trace || resetStatus.error_message || '')"
-                                    class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                                    Copiar Log
-                                </button>
-                                <button
-                                    type="button"
-                                    x-on:click="stopPolling(); showModal = false"
-                                    class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-gray-600 rounded-lg hover:bg-gray-700 transition-colors">
-                                    Fechar
-                                </button>
+                            <p class="text-base font-semibold text-gray-900 dark:text-white mb-1">Processando...</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Zerando banco de dados. Aguarde.</p>
+                            <div class="mt-4 flex justify-center gap-1">
+                                <div class="w-2 h-2 rounded-full bg-warning-500 animate-bounce" style="animation-delay: 0ms"></div>
+                                <div class="w-2 h-2 rounded-full bg-warning-500 animate-bounce" style="animation-delay: 150ms"></div>
+                                <div class="w-2 h-2 rounded-full bg-warning-500 animate-bounce" style="animation-delay: 300ms"></div>
                             </div>
                         </div>
                     </template>
@@ -286,33 +160,28 @@
                                             </span>
                                         @endif
                                     </div>
-                                    <div class="flex items-center gap-3 mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                        <span>{{ $backup['size'] }}</span>
-                                        <span>•</span>
-                                        <span>{{ $backup['modified'] }}</span>
-                                    </div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{{ $backup['size'] }}</p>
                                 </div>
                             </div>
                             <div class="flex gap-2">
-                                <a
-                                    href="{{ url('/admin/backups/download/' . $backup['filename']) }}"
-                                    class="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 dark:bg-primary-900/20 dark:text-primary-400 dark:hover:bg-primary-900/30"
-                                >
-                                    <x-filament::icon icon="heroicon-o-arrow-down-tray" class="w-4 h-4" />
+                                <a href="{{ route('admin.backups.download', ['filename' => $backup['filename']]) }}"
+                                   class="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                    <x-filament::icon icon="heroicon-o-arrow-down" class="w-4 h-4" />
                                     Baixar
                                 </a>
                                 <button
-                                    x-on:click="showModal = true; modalTitle = 'Restaurar Backup'; modalMessage = 'ATENÇÃO: Isso irá substituir o banco de dados atual pelo backup. Continuar?'; modalAction = 'restoreBackup'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
-                                    class="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 text-sm font-medium text-warning-600 bg-warning-50 rounded-lg hover:bg-warning-100 dark:bg-warning-900/20 dark:text-warning-400 dark:hover:bg-warning-900/30"
-                                >
+                                    type="button"
+                                    x-on:click="showModal = true; modalTitle = 'Restaurar Backup'; modalMessage = 'Tem certeza que deseja restaurar o backup \'{{ $backup['filename'] }}\'? Os dados atuais serão substituídos.'; modalAction = 'restore'; modalContent = 'confirm'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
+                                    class="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 text-xs font-medium text-warning-700 dark:text-warning-300 bg-warning-100 dark:bg-warning-900/30 rounded-lg hover:bg-warning-200 dark:hover:bg-warning-900/50 transition-colors">
                                     <x-filament::icon icon="heroicon-o-arrow-uturn-left" class="w-4 h-4" />
                                     Restaurar
                                 </button>
                                 <button
-                                    x-on:click="showModal = true; modalTitle = 'Excluir Backup'; modalMessage = 'Tem certeza que deseja excluir este backup?'; modalAction = 'deleteBackup'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
-                                    class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
-                                >
+                                    type="button"
+                                    x-on:click="showModal = true; modalTitle = 'Excluir Backup'; modalMessage = 'Tem certeza que deseja excluir o backup \'{{ $backup['filename'] }}\'? Esta ação não pode ser desfeita.'; modalAction = 'delete'; modalContent = 'confirm'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
+                                    class="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 text-xs font-medium text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/30 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
                                     <x-filament::icon icon="heroicon-o-trash" class="w-4 h-4" />
+                                    Excluir
                                 </button>
                             </div>
                         </div>
@@ -320,148 +189,91 @@
                 </div>
 
                 {{-- Desktop Table View (hidden below lg) --}}
-                <x-filament::section variant="bordered" class="hidden lg:block overflow-hidden">
-                    <x-slot name="header">
-                        <div class="flex items-center gap-3">
-                            <div class="p-2 rounded-lg bg-primary-500/10">
-                                <x-filament::icon icon="heroicon-o-document-text" class="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                            </div>
-                            <div>
-                                <h3 class="text-base font-semibold text-gray-900 dark:text-white">Arquivos de Backup</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Gerencie seus backups do banco de dados</p>
-                            </div>
-                        </div>
-                    </x-slot>
-
-                    <div class="divide-y divide-gray-100 dark:divide-gray-800">
-                        @foreach($this->backups as $index => $backup)
-                            <div class="flex items-center justify-between p-4 transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-gray-800/50 {{ $index === 0 ? 'bg-primary-50/30 dark:bg-primary-900/10' : '' }}">
-                                <div class="flex items-center gap-4">
-                                    <div class="flex items-center justify-center w-12 h-12 rounded-xl {{ $index === 0 ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400' }}">
-                                        <x-filament::icon icon="heroicon-o-circle-stack" class="w-6 h-6" />
-                                    </div>
-                                    <div>
+                <div class="hidden lg:block overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400">
+                            <tr>
+                                <th class="px-4 py-3 font-medium">Nome</th>
+                                <th class="px-4 py-3 font-medium">Tamanho</th>
+                                <th class="px-4 py-3 font-medium">Data</th>
+                                <th class="px-4 py-3 font-medium text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
+                            @foreach($this->backups as $index => $backup)
+                                <tr class="{{ $index === 0 ? 'bg-primary-50/50 dark:bg-primary-900/10' : '' }}">
+                                    <td class="px-4 py-3">
                                         <div class="flex items-center gap-2">
-                                            <p class="font-medium text-gray-900 dark:text-white">{{ $backup['filename'] }}</p>
                                             @if($index === 0)
-                                                <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400">
-                                                    Mais recente
+                                                <span class="inline-flex items-center px-1.5 py-0.5 text-xs font-medium rounded bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400">
+                                                    Novo
                                                 </span>
                                             @endif
+                                            <span class="font-medium text-gray-900 dark:text-white truncate max-w-[200px]">{{ $backup['filename'] }}</span>
                                         </div>
-                                        <div class="flex items-center gap-4 mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                            <span class="flex items-center gap-1">
-                                                <x-filament::icon icon="heroicon-o-folder" class="w-4 h-4" />
-                                                {{ $backup['size'] }}
-                                            </span>
-                                            <span class="flex items-center gap-1">
-                                                <x-filament::icon icon="heroicon-o-calendar" class="w-4 h-4" />
-                                                {{ $backup['modified'] }}
-                                            </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ $backup['size'] }}</td>
+                                    <td class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ $backup['modified'] }}</td>
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <a href="{{ route('admin.backups.download', ['filename' => $backup['filename']]) }}"
+                                               class="inline-flex items-center justify-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                                <x-filament::icon icon="heroicon-o-arrow-down" class="w-4 h-4" />
+                                                Baixar
+                                            </a>
+                                            <button
+                                                type="button"
+                                                x-on:click="showModal = true; modalTitle = 'Restaurar Backup'; modalMessage = 'Tem certeza que deseja restaurar o backup \'{{ $backup['filename'] }}\'? Os dados atuais serão substituídos.'; modalAction = 'restore'; modalContent = 'confirm'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
+                                                class="inline-flex items-center justify-center gap-1 px-3 py-1.5 text-xs font-medium text-warning-700 dark:text-warning-300 bg-warning-100 dark:bg-warning-900/30 rounded-lg hover:bg-warning-200 dark:hover:bg-warning-900/50 transition-colors">
+                                                <x-filament::icon icon="heroicon-o-arrow-uturn-left" class="w-4 h-4" />
+                                                Restaurar
+                                            </button>
+                                            <button
+                                                type="button"
+                                                x-on:click="showModal = true; modalTitle = 'Excluir Backup'; modalMessage = 'Tem certeza que deseja excluir o backup \'{{ $backup['filename'] }}\'? Esta ação não pode ser desfeita.'; modalAction = 'delete'; modalContent = 'confirm'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
+                                                class="inline-flex items-center justify-center gap-1 px-3 py-1.5 text-xs font-medium text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/30 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
+                                                <x-filament::icon icon="heroicon-o-trash" class="w-4 h-4" />
+                                                Excluir
+                                            </button>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <a
-                                        href="{{ url('/admin/backups/download/' . $backup['filename']) }}"
-                                        class="inline-flex items-center justify-center gap-1 px-3 py-2 text-sm font-medium text-primary-600 transition-colors bg-primary-50 rounded-lg hover:bg-primary-100 dark:bg-primary-900/20 dark:text-primary-400 dark:hover:bg-primary-900/30"
-                                        title="Baixar backup"
-                                    >
-                                        <x-filament::icon icon="heroicon-o-arrow-down-tray" class="w-4 h-4" />
-                                        <span class="hidden xl:inline">Baixar</span>
-                                    </a>
-                                    <button
-                                        x-on:click="showModal = true; modalTitle = 'Restaurar Backup'; modalMessage = 'ATENÇÃO: Isso irá substituir o banco de dados atual. Continuar?'; modalAction = 'restoreBackup'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
-                                        class="inline-flex items-center justify-center gap-1 px-3 py-2 text-sm font-medium text-warning-600 transition-colors bg-warning-50 rounded-lg hover:bg-warning-100 dark:bg-warning-900/20 dark:text-warning-400 dark:hover:bg-warning-900/30"
-                                        title="Restaurar backup"
-                                    >
-                                        <x-filament::icon icon="heroicon-o-arrow-uturn-left" class="w-4 h-4" />
-                                        <span class="hidden xl:inline">Restaurar</span>
-                                    </button>
-                                    <button
-                                        x-on:click="showModal = true; modalTitle = 'Excluir Backup'; modalMessage = 'Tem certeza que deseja excluir o backup?'; modalAction = 'deleteBackup'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
-                                        class="inline-flex items-center justify-center gap-1 px-3 py-2 text-sm font-medium text-red-600 transition-colors bg-red-50 rounded-lg hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
-                                        title="Excluir backup"
-                                    >
-                                        <x-filament::icon icon="heroicon-o-trash" class="w-4 h-4" />
-                                        <span class="hidden xl:inline">Excluir</span>
-                                    </button>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </x-filament::section>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             @else
                 {{-- Empty State --}}
-                <x-filament::section variant="bordered" class="overflow-hidden">
-                    <div class="flex flex-col items-center justify-center py-12 lg:py-16">
-                        <div class="p-4 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
-                            <x-filament::icon icon="heroicon-o-cloud-arrow-up" class="w-10 h-10 lg:w-12 lg:h-12 text-gray-400 dark:text-gray-600" />
-                        </div>
-                        <h3 class="text-base lg:text-lg font-semibold text-gray-900 dark:text-white mb-1">Nenhum backup encontrado</h3>
-                        <p class="text-xs lg:text-sm text-gray-500 dark:text-gray-400 text-center max-w-sm px-4 mb-4">
-                            Clique no botão "Criar Backup" acima para fazer o primeiro backup do banco de dados.
-                        </p>
-                        <div class="flex items-center gap-2 text-xs lg:text-sm text-gray-400 dark:text-gray-500">
-                            <x-filament::icon icon="heroicon-o-information-circle" class="w-4 h-4" />
-                            <span class="hidden sm:inline">Backups são salvos em</span>
-                            <code class="text-xs bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded">{{ storage_path('app/backups') }}</code>
-                        </div>
+                <div class="text-center py-12">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
+                        <x-filament::icon icon="heroicon-o-cloud-arrow-up" class="w-8 h-8 text-gray-400" />
                     </div>
-                </x-filament::section>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-1">Nenhum backup encontrado</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Crie seu primeiro backup para proteger seus dados.</p>
+                </div>
             @endif
 
-            {{-- Info Card --}}
-            <div class="rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-4">
-                <div class="flex gap-3">
-                    <div class="flex-shrink-0">
-                        <x-filament::icon icon="heroicon-o-information-circle" class="h-5 w-5 text-blue-400 dark:text-blue-400 mt-0.5" />
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="text-sm font-medium text-blue-800 dark:text-blue-300">Sobre Backups</h3>
-                        <p class="mt-1 text-xs lg:text-sm text-blue-700 dark:text-blue-400">
-                            Os backups são feitos em formato SQL e incluem toda a estrutura e dados do banco de dados. Recomendamos fazer backup regularmente e antes de qualquer manutenção importante.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Ferramentas de Desenvolvimento — só visível em dev --}}
+            {{-- Danger Zone --}}
             @if(app()->environment(['local', 'development']))
-                <div class="mt-8">
-                    <x-filament::section variant="bordered" class="overflow-hidden border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/20">
-                        <x-slot name="header">
-                            <div class="flex items-center gap-3">
-                                <div class="p-2 rounded-lg bg-red-100 dark:bg-red-900/30">
-                                    <x-filament::icon icon="heroicon-o-exclamation-triangle" class="w-5 h-5 text-red-600 dark:text-red-400" />
-                                </div>
-                                <div>
-                                    <h3 class="text-base font-semibold text-red-900 dark:text-red-300">Ferramentas de Desenvolvimento</h3>
-                                    <p class="text-sm text-red-700 dark:text-red-400">Ambiente de teste — ação irreversível</p>
-                                </div>
-                            </div>
-                        </x-slot>
+                <x-filament::section icon="heroicon-o-exclamation-triangle" icon-color="danger" class="mt-6">
+                    <x-slot name="heading">Zona de Perigo</x-slot>
+                    <x-slot name="description">Estas ações são irreversíveis. Tenha certeza antes de prosseguir.</x-slot>
 
-                        <div class="space-y-4">
-                            <div class="flex items-start gap-3 p-3 rounded-lg bg-red-100/50 dark:bg-red-900/20">
-                                <x-filament::icon icon="heroicon-o-shield-exclamation" class="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
-                                <div>
-                                    <p class="text-sm font-medium text-red-800 dark:text-red-300">Zona de Perigo</p>
-                                    <p class="text-xs text-red-600 dark:text-red-400 mt-0.5">Esta ação não pode ser desfeita. Um backup automático será criado antes do reset.</p>
-                                </div>
-                            </div>
-
-                            <button
-                                type="button"
-                                x-on:click="showModal = true; modalTitle = 'Zerar Banco de Dados'; modalAction = 'resetDatabase'; triggerReset()"
-                                class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 dark:bg-red-700 dark:hover:bg-red-600 dark:focus:ring-red-400"
-                            >
-                                <x-filament::icon icon="heroicon-o-trash" class="w-5 h-5" />
-                                Zerar Banco de Dados
-                            </button>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">Zerar Banco de Dados</p>
+                            <p class="text-xs text-red-600 dark:text-red-400 mt-0.5">Esta ação não pode ser desfeita. Um backup automático será criado antes do reset.</p>
                         </div>
-                    </x-filament::section>
-                </div>
+
+                        <button
+                            type="button"
+                            x-on:click="showModal = true; modalTitle = 'Zerar Banco de Dados'; modalMessage = 'Esta ação não pode ser desfeita. Todos os dados serão apagados e o banco será recriado com um usuário admin padrão.'; modalAction = 'resetDatabase'; modalContent = 'confirm'"
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 dark:bg-red-700 dark:hover:bg-red-600 dark:focus:ring-red-400">
+                            <x-filament::icon icon="heroicon-o-trash" class="w-5 h-5" />
+                            Zerar Banco de Dados
+                        </button>
+                    </div>
+                </x-filament::section>
             @endif
         </div>
     </div>

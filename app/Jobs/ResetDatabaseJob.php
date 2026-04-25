@@ -27,7 +27,7 @@ class ResetDatabaseJob implements ShouldQueue
         // Step 1: Limpando banco
         $this->updateStep(1, 'running', $steps);
         try {
-            $exitCode = Artisan::call('migrate:fresh', ['--no-seed' => true]);
+            $exitCode = Artisan::call('migrate:fresh');
             if ($exitCode !== 0) {
                 throw new \Exception('migrate:fresh falhou: '.Artisan::output());
             }

@@ -102,8 +102,14 @@ class BackupManagement extends Page
             return;
         }
 
-        session()->forget('reset_database_job');
-
         dispatch_sync(new ResetDatabaseJob);
+
+        \Filament\Notifications\Notification::make()
+            ->title('Banco resetado com sucesso!')
+            ->body('Redirecionando para login...')
+            ->success()
+            ->send();
+
+        redirect('/login');
     }
 }
