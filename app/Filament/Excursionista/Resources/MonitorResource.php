@@ -97,9 +97,9 @@ class MonitorResource extends Resource
                     ->sortable()
                     ->visibleFrom('md'),
 
-                \Filament\Tables\Columns\TextColumn::make('cpf')
-                    ->label('CPF')
-                    ->formatStateUsing(fn ($state) => $state)
+                \Filament\Tables\Columns\TextColumn::make('document_number')
+                    ->label('DOCUMENTO')
+                    ->formatStateUsing(fn ($record) => $record->document_type->getLabel().': '.$record->document_number)
                     ->searchable()
                     ->visibleFrom('md'),
 

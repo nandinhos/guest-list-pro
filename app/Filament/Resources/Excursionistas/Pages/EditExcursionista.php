@@ -20,6 +20,17 @@ class EditExcursionista extends EditRecord
         ];
     }
 
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['eventAssignments'] = $this->record
+            ->eventAssignments()
+            ->where('role', UserRole::EXCURSIONISTA->value)
+            ->pluck('event_id')
+            ->toArray();
+
+        return $data;
+    }
+
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $data['role'] = UserRole::EXCURSIONISTA;
@@ -42,7 +53,7 @@ class EditExcursionista extends EditRecord
         $record->save();
 
         if (isset($data['eventAssignments'])) {
-            $record->eventAssignments()->delete();
+            $record->eventAssignments()->where('role', UserRole::EXCURSIONISTA->value)->delete();
 
             foreach ($data['eventAssignments'] as $eventId) {
                 EventAssignment::create([

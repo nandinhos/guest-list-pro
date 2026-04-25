@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Excursionistas\Schemas;
 
-use App\Models\EventAssignment;
+use App\Models\Event;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -48,10 +48,8 @@ class ExcursionistaForm
                     ->schema([
                         Select::make('eventAssignments')
                             ->label('Eventos')
-                            ->relationship('eventAssignments', 'event_id')
-                            ->getOptionLabelFromRecordUsing(fn (EventAssignment $record) => $record->event?->name ?? 'Evento')
+                            ->options(fn () => Event::orderBy('name')->pluck('name', 'id'))
                             ->multiple()
-                            ->preload()
                             ->native(false),
                     ]),
             ]);
