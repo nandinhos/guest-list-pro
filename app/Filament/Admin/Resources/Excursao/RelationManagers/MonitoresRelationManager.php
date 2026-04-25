@@ -66,7 +66,13 @@ class MonitoresRelationManager extends RelationManager
                     ->color('info'),
             ])
             ->headerActions([
-                CreateAction::make(),
+                CreateAction::make()
+                    ->mutateDataUsing(function (array $data): array {
+                        $data['event_id'] = $this->getOwnerRecord()->event_id;
+                        $data['criado_por'] = auth()->id();
+
+                        return $data;
+                    }),
             ])
             ->recordActions([
                 EditAction::make(),
@@ -108,13 +114,5 @@ class MonitoresRelationManager extends RelationManager
                     ->required()
                     ->native(false),
             ]);
-    }
-
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        $data['event_id'] = $this->getOwnerRecord()->event_id;
-        $data['criado_por'] = auth()->id();
-
-        return $data;
     }
 }
