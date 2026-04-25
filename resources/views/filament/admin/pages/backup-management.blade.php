@@ -171,14 +171,14 @@
                                 </a>
                                 <button
                                     type="button"
-                                    x-on:click="showModal = true; modalTitle = 'Restaurar Backup'; modalMessage = 'Tem certeza que deseja restaurar o backup \'{{ $backup['filename'] }}\'? Os dados atuais serão substituídos.'; modalAction = 'restore'; modalContent = 'confirm'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
+                                    x-on:click="showModal = true; modalTitle = 'Restaurar Backup'; modalMessage = 'Tem certeza que deseja restaurar o backup \'{{ $backup['filename'] }}\'? Os dados atuais serão substituídos.'; modalAction = 'restoreBackup'; modalContent = 'confirm'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
                                     class="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 text-xs font-medium text-warning-700 dark:text-warning-300 bg-warning-100 dark:bg-warning-900/30 rounded-lg hover:bg-warning-200 dark:hover:bg-warning-900/50 transition-colors">
                                     <x-filament::icon icon="heroicon-o-arrow-uturn-left" class="w-4 h-4" />
                                     Restaurar
                                 </button>
                                 <button
                                     type="button"
-                                    x-on:click="showModal = true; modalTitle = 'Excluir Backup'; modalMessage = 'Tem certeza que deseja excluir o backup \'{{ $backup['filename'] }}\'? Esta ação não pode ser desfeita.'; modalAction = 'delete'; modalContent = 'confirm'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
+                                    x-on:click="showModal = true; modalTitle = 'Excluir Backup'; modalMessage = 'Tem certeza que deseja excluir o backup \'{{ $backup['filename'] }}\'? Esta ação não pode ser desfeita.'; modalAction = 'deleteBackup'; modalContent = 'confirm'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
                                     class="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 text-xs font-medium text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/30 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
                                     <x-filament::icon icon="heroicon-o-trash" class="w-4 h-4" />
                                     Excluir
@@ -223,14 +223,14 @@
                                             </a>
                                             <button
                                                 type="button"
-                                                x-on:click="showModal = true; modalTitle = 'Restaurar Backup'; modalMessage = 'Tem certeza que deseja restaurar o backup \'{{ $backup['filename'] }}\'? Os dados atuais serão substituídos.'; modalAction = 'restore'; modalContent = 'confirm'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
+                                                x-on:click="showModal = true; modalTitle = 'Restaurar Backup'; modalMessage = 'Tem certeza que deseja restaurar o backup \'{{ $backup['filename'] }}\'? Os dados atuais serão substituídos.'; modalAction = 'restoreBackup'; modalContent = 'confirm'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
                                                 class="inline-flex items-center justify-center gap-1 px-3 py-1.5 text-xs font-medium text-warning-700 dark:text-warning-300 bg-warning-100 dark:bg-warning-900/30 rounded-lg hover:bg-warning-200 dark:hover:bg-warning-900/50 transition-colors">
                                                 <x-filament::icon icon="heroicon-o-arrow-uturn-left" class="w-4 h-4" />
                                                 Restaurar
                                             </button>
                                             <button
                                                 type="button"
-                                                x-on:click="showModal = true; modalTitle = 'Excluir Backup'; modalMessage = 'Tem certeza que deseja excluir o backup \'{{ $backup['filename'] }}\'? Esta ação não pode ser desfeita.'; modalAction = 'delete'; modalContent = 'confirm'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
+                                                x-on:click="showModal = true; modalTitle = 'Excluir Backup'; modalMessage = 'Tem certeza que deseja excluir o backup \'{{ $backup['filename'] }}\'? Esta ação não pode ser desfeita.'; modalAction = 'deleteBackup'; modalContent = 'confirm'; modalActionParams = { filename: '{{ $backup['filename'] }}' }"
                                                 class="inline-flex items-center justify-center gap-1 px-3 py-1.5 text-xs font-medium text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/30 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
                                                 <x-filament::icon icon="heroicon-o-trash" class="w-4 h-4" />
                                                 Excluir
