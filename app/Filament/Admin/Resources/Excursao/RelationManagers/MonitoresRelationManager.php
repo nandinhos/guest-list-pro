@@ -96,17 +96,15 @@ class MonitoresRelationManager extends RelationManager
 
                 Select::make('veiculo_id')
                     ->label('Veículo')
-                    ->options(function (): array {
+                    ->options(function ($livewire): array {
                         return Veiculo::query()
-                            ->where('excursao_id', $this->getOwnerRecord()->id)
+                            ->where('excursao_id', $livewire->getOwnerRecord()->id)
                             ->get()
                             ->mapWithKeys(fn (Veiculo $v): array => [
                                 $v->id => $v->tipo->label().($v->placa ? ' — '.$v->placa : ''),
                             ])
                             ->all();
                     })
-                    ->searchable()
-                    ->preload()
                     ->required()
                     ->native(false),
             ]);

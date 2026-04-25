@@ -77,7 +77,7 @@ class MonitorResource extends Resource
                             })
                             ->searchable()
                             ->preload()
-                            ->required(),
+                            ->nullable(),
                     ]),
             ]);
     }
