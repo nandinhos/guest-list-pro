@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Enums\DocumentType;
 use App\Models\Guest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -64,13 +65,21 @@ class GuestObserver
     }
 
     /**
-     * Normalize the document field by removing all non-numeric characters.
+     * Normalize the document field.
+     * Passports keep alphanumeric. CPF/RG/CNH keep only digits.
+     * Placeholder values (sem documento, acompanhante) are preserved as-is.
      */
     protected function normalizeDocument(Guest $guest): void
     {
-        if ($guest->document) {
-            $guest->document = preg_replace('/\D/', '', $guest->document);
+        if (! $guest->document) {
+            return;
         }
+
+        if ($guest->document_type === null || $guest->document_type === DocumentType::PASSPORT) {
+            return;
+        }
+
+        $guest->document = preg_replace('/\D/', '', $guest->document);
     }
 
     /**
@@ -94,9 +103,12 @@ class GuestObserver
             $guest->name_normalized = strtolower(Str::ascii($guest->name));
         }
 
-        // Normaliza o documento: apenas números
         if ($guest->document) {
-            $guest->document_normalized = preg_replace('/\D/', '', $guest->document);
+            $guest->document_normalized = match ($guest->document_type) {
+                DocumentType::PASSPORT => strtoupper(preg_replace('/[^A-Z0-9]/i', '', $guest->document)),
+                null => '',
+                default => preg_replace('/\D/', '', $guest->document),
+            };
         }
     }
 }

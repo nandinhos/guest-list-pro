@@ -60,7 +60,7 @@ class GuestImportService
                 continue;
             }
 
-            if (preg_match('/^(.+?),\s*(.+)$/', $line, $matches)) {
+            if (preg_match('/^(.+?),\s*(.*)$/', $line, $matches)) {
                 $name = trim($matches[1]);
                 $document = trim($matches[2]);
 
@@ -199,25 +199,47 @@ class GuestImportService
             return "Setor {$sectorName} não encontrado para o evento";
         }
 
-        $document = preg_replace('/[^0-9Xx]/', '', $item['document']);
-        $documentType = strlen($document) > 11 ? DocumentType::PASSPORT : DocumentType::CPF;
+        $companionMatch = null;
+        if (preg_match('/\+(\d+)\s*$/', $item['name'], $cm)) {
+            $companionMatch = $cm[1];
+        }
 
-        $existingGuest = Guest::where('event_id', $event->id)
-            ->where('document', $document)
-            ->with(['promoter', 'sector'])
-            ->first();
+        $nameSlug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', \Illuminate\Support\Str::ascii($item['name'])));
 
-        if ($existingGuest) {
+        if ($companionMatch !== null) {
+            $document = "+{$companionMatch} acompanhante: {$nameSlug}";
+            $documentType = null;
+        } elseif (empty(trim($item['document']))) {
+            $document = "sem documento: {$nameSlug}";
+            $documentType = null;
             $this->importResult['warnings'][] = [
                 'name' => $item['name'],
-                'document' => $item['document'],
-                'reason' => 'CPF já cadastrado',
-                'existing_name' => $existingGuest->name,
-                'existing_promoter' => $existingGuest->promoter?->name ?? '—',
-                'existing_sector' => $existingGuest->sector?->name ?? '—',
+                'document' => '',
+                'reason' => 'Convidado sem documento — importado sem verificação de duplicidade',
             ];
+        } else {
+            $documentType = DocumentType::detectFromValue($item['document']) ?? DocumentType::RG;
+            $document = DocumentType::normalizeValue($item['document'], $documentType);
+        }
 
-            return 'duplicate';
+        if (! str_starts_with($document, '+') && ! str_starts_with($document, 'sem documento:')) {
+            $existingGuest = Guest::where('event_id', $event->id)
+                ->where('document', $document)
+                ->with(['promoter', 'sector'])
+                ->first();
+
+            if ($existingGuest) {
+                $this->importResult['warnings'][] = [
+                    'name' => $item['name'],
+                    'document' => $item['document'],
+                    'reason' => 'Documento já cadastrado',
+                    'existing_name' => $existingGuest->name,
+                    'existing_promoter' => $existingGuest->promoter?->name ?? '—',
+                    'existing_sector' => $existingGuest->sector?->name ?? '—',
+                ];
+
+                return 'duplicate';
+            }
         }
 
         $promoterName = $item['promoter_name'];

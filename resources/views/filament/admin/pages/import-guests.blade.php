@@ -136,14 +136,64 @@
 
         {{-- Result Section --}}
         @if($showResult)
+            @php
+                $logLines = ['=== RESULTADO DA IMPORTAÇÃO ==='];
+                $logLines[] = 'Importados : ' . ($importResult['imported'] ?? 0);
+                $logLines[] = 'Duplicados : ' . ($importResult['duplicates'] ?? 0);
+                $logLines[] = 'Erros      : ' . count($importResult['errors'] ?? []);
+                if (!empty($importResult['warnings'])) {
+                    $logLines[] = '';
+                    $logLines[] = '--- AVISOS ---';
+                    foreach ($importResult['warnings'] as $w) {
+                        $line = ($w['name'] ?? '') . ' - ' . ($w['document'] ?? '') . ' - ' . ($w['reason'] ?? '');
+                        if (!empty($w['existing_name'])) {
+                            $line .= ' (já existe: ' . $w['existing_name'] . ' / ' . ($w['existing_sector'] ?? '') . ')';
+                        }
+                        $logLines[] = $line;
+                    }
+                }
+                if (!empty($importResult['errors'])) {
+                    $logLines[] = '';
+                    $logLines[] = '--- ERROS ---';
+                    foreach ($importResult['errors'] as $e) {
+                        $logLines[] = is_array($e) ? json_encode($e, JSON_UNESCAPED_UNICODE) : $e;
+                    }
+                }
+                $logText = implode("\n", $logLines);
+            @endphp
+
             <x-filament::section variant="bordered" class="overflow-hidden">
                 <x-slot name="header">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 rounded-lg bg-success-500/10">
-                            <x-filament::icon icon="heroicon-o-check-circle" class="w-5 h-5 text-success-600 dark:text-success-400" />
+                    <div class="flex items-center justify-between w-full gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 rounded-lg bg-success-500/10">
+                                <x-filament::icon icon="heroicon-o-check-circle" class="w-5 h-5 text-success-600 dark:text-success-400" />
+                            </div>
+                            <div>
+                                <h3 class="text-base font-semibold text-gray-900 dark:text-white">Resultado da Importação</h3>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-base font-semibold text-gray-900 dark:text-white">Resultado da Importação</h3>
+                        <div x-data="{ copied: false }">
+                            <button
+                                type="button"
+                                @click="navigator.clipboard.writeText(@js($logText)); copied = true; setTimeout(() => copied = false, 2000)"
+                                class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium border transition-colors"
+                                :class="copied
+                                    ? 'border-success-300 bg-success-50 text-success-700 dark:border-success-600 dark:bg-success-900/20 dark:text-success-400'
+                                    : 'border-gray-300 bg-white text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'"
+                            >
+                                <x-filament::icon
+                                    x-show="!copied"
+                                    icon="heroicon-o-clipboard-document"
+                                    class="w-3.5 h-3.5"
+                                />
+                                <x-filament::icon
+                                    x-show="copied"
+                                    icon="heroicon-o-check"
+                                    class="w-3.5 h-3.5"
+                                />
+                                <span x-text="copied ? 'Copiado!' : 'Copiar Log'"></span>
+                            </button>
                         </div>
                     </div>
                 </x-slot>

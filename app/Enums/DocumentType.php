@@ -77,21 +77,51 @@ enum DocumentType: string implements \Filament\Support\Contracts\HasColor, \Fila
      */
     public static function detectFromValue(string $value): ?self
     {
-        $normalized = preg_replace('/\D/', '', $value);
-        $hasLetters = preg_match('/[a-zA-Z]/', $value);
+        $clean = trim($value);
 
-        if ($hasLetters) {
+        if (preg_match('/^Passaporte\s+/i', $clean)) {
             return self::PASSPORT;
         }
 
-        if (strlen($normalized) === 11) {
+        if (preg_match('/^RG\s*:?\s*/i', $clean)) {
+            return self::RG;
+        }
+
+        // Letras que não são X (dígito verificador do RG)
+        if (preg_match('/[a-wyzA-WYZ]/', $clean)) {
+            return self::PASSPORT;
+        }
+
+        $digits = preg_replace('/\D/', '', $clean);
+
+        if (strlen($digits) === 11) {
             return self::CPF;
         }
 
-        if (strlen($normalized) >= 7 && strlen($normalized) <= 9) {
+        if (strlen($digits) >= 1) {
             return self::RG;
         }
 
         return null;
+    }
+
+    /**
+     * Normaliza o valor do documento de acordo com o tipo detectado.
+     */
+    public static function normalizeValue(string $value, self $type): string
+    {
+        $clean = trim($value);
+
+        return match ($type) {
+            self::PASSPORT => strtoupper(preg_replace(
+                '/[^A-Z0-9]/i', '',
+                preg_replace('/^Passaporte\s+/i', '', $clean)
+            )),
+            self::RG => strtoupper(preg_replace(
+                '/[^0-9X]/i', '',
+                preg_replace('/^RG\s*:?\s*/i', '', $clean)
+            )),
+            self::CPF, self::CNH => preg_replace('/\D/', '', $clean),
+        };
     }
 }

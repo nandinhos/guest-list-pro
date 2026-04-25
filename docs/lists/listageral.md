@@ -9,9 +9,9 @@
 
 ## Convidados Erick ##
 
-### BACKSTAGE ### 
+### BACKSTAGE ###
 
-Wellington Miranda, 27589191841 
+Wellington Miranda, 27589191841
 Priscilla Stocco, 22010456823
 Ricardo Limoli, 25610904854
 Jaqueline Rodrigues Machado, 41126520896
@@ -20,7 +20,7 @@ Glaucio Camargo Chincho dos Santos, 20338607870
 Felipe Araújo Gaia Baia, 05926010136
 Cleisla Adriele Rocha de Moraes, 06952257152
 Victor Henrique Lopes, 01953749160
-Thiago Rocha Cardoso, 32754271805 
+Thiago Rocha Cardoso, 32754271805
 Flávio Carvalho Régis, 24908715874
 Leonardo Augusto Ziegler Paiva, 33790314889
 Priscila Zanchi Ocker, 04406070940
@@ -57,7 +57,7 @@ Bruno Henrique Novo, 41304184838
 Isabela Ravagnani, 41062765850
 William Marins, 41274449839
 Letícia Chagas, 27158612813
-Carlos julio buritica rueda, 24258578851 
+Carlos julio buritica rueda, 24258578851
 Renato Pauletti, 33196046869
 Paloma Taina da Silva ribeiro, 41807737837
 Luiz Fernando Moura Correa da Silva, 12899217763
@@ -103,8 +103,6 @@ Thalya de Alcântara Souza, 47284998806
 Paulo Bussamara, 10734232802
 Melissa Vianna de Oliveira, 21497547890
 Gisela Kaiser F Castanho, 32643952820
-Alan Salheb de Oliveira, 28588544830
-María da Conceição Maia Salheb, 58160221215
 Jhonatas William Gomes, 45613390860
 Jéssica Camargo Rocha, 39351674827
 Renato Luciano Silva, 25545855807
@@ -121,19 +119,98 @@ José Valdir Gonçalves Júnior, 22912743842
 Cleomara dos Santos Martins, 09778166994
 Benedito Gerson de Góes, 11325644846
 Leonardo de Lara e Silva, 27342709867
+Marcus Vinícius Marchini, 33112702824
+Fabiano Lima da Silva, Rg 1089168866
+Débora Cristina Michenin Mariz da Silva, RG 407067930
+Paulo Henrique Muczinski de Castro, 28362975814
+Cilene Di Genova, 16363497817
+Lucas Pavan do Rosario, 22169143807
+Daniela Gatinha de Castro, 30808501810
+José nunes Júnior, RG: 40886039X
+Driele pontes da silva, RG: 48007351X
+Jeniffer Vieira dos santos, RG: 637071530
+Cintia Nunes Cardoso, RG: 462516039
+Vinicius Alexander Vieira da Costa, RG: 368000187
+Isabelly Peres Nunes, RG: 571510097
+Alex sacomano Alvarez, RG: 20334103
+Gabrielle Francisca Camargo de Almeida, RG: 534803441
+Felipe Barbosa Branco, 04080590601
+Liliane Lara Novaes Branco, 05026272630
+Alexandre Barbosa Branco, 02990235671
+Ana Cecília Gondim Velloso Branco, 03415008606
+Giovane da Fonseca Edvirges, 44620663832
+Thiago Henrique de Almeida, 46701568882
+Carlos Alberto Pavani, 38566971876
+Camila Cristina Honório Pavani, 40406495831
+Carlos Alberto Nunes, 27535250807
+Thiago Menezes, 30361658869
+Yazmin Hatem, 39973814886
+Roberto Pimentel, 00707761999
+Poliana Bottaro Brito da Silva, 07463825965
+Gustavo Manesco, 413122487
+Bianca Groot, 437360064
+Jessica Carina Giampietro, 40482032820
+Fábio Antônio da Rocha, 21602455856
+Leonardo Real Scarfoni, 28239829813
+Ana Patrícia Ribeiro, 59344415153
+Lucas Eduardo Vischi, 29782677809
+Ryan Anthony Gibo, 359223552
+Hellen Salles de Freitas, 38525466808
+Pedro Pereira Cândido Júnior, 39921799827
+Thiago Luiz Simões, 460273000
+Gislaine Lima de Almeida, 361056102
+Maria Eduarda Gianini, 49490855812
+Giovana Gianini Ramos, 34437275810
+Plínio Carlos de Pierre Santana, 34228054862
+Dayane Bueno de Carvalho, 40701768886
+Josué Nunes Campanholi, 38831866869
+Luan Patrick Gonçalves, 46662083801
+Lucas Francisco Nascimento Gonçalves, 40070600880
+Letícia de Oliveira, 47346885830
+Jessica dos Santos, 40160665817
+Polyana Lauany de Oliveira da Silva, 57782449839
+Priscilla Alves Fanger, 37150547869
+Luís Gustavo Fanger, 32981555863
+Luiz Fernando Andrade Vargas de Souza, 32378221835
+Keila Regina Fedre Ferreira, 36170907886
+Vinicius Andrade Vargas da Cunha, 38454499857
+Letícia de Moraes Paulino, 50759847894
+Vinicius Silva, 47100870836
+Aurélio C Couto, 06010463823
+Renata Nascimento, 21265162883
+Thiago Henrique Oliveira de Paula, 44987754819
+Diego Rafael Mendes Sandoval, 35028411847
+Larissa Kerolyn dos Santos, 38253635893
+Paulo Rafael Ribeiro Sandoval, 40483891819
+Bruno Henrique Ribeiro Pereira, 50167925
+Ana Laura Brasil Basso, 36276527890
+Guilherme Augusto Silva Oliveira, 44528681854
+Tiago Kaltenegger de Oliveira, 35154658809
+Natali Faulin de Nadai, 38566379829
+Lucas Marques de Aguiar, 36210763871
+Thays Braga da Mota, 50313763844
+Thaina Aparecida de Almeida, 45147734848
+Marcelo Aparecido de Arruda, 16013780846
+Matheus Fregona Arruda, 44304141813
+Breno Quevedo Barbosa, 45763133803
+Natália Paes de Oliveira, 43535044871
+Pedro Cardoso dos Santos, 41684004845
+Pedro Souza Lima, 02459870370
+Thays Figueiredo, 31788163800
+Lukas Araújo Ehmke, 36520505846
 
-### PISTA ### 
+### PISTA ###
 
 LUCAS SÓGLIA LAROTONDA, 41813773858
 LARA VIEIRA CAMPOS, 45558881895
 JOÃO FREITAS, 18398904879
 KAUAN SHOITI MUROSAKI, 40734753802
 REGIANE HARUMI MUROSAKI, 26562696879
-Luciano Rogerio Verbel, 28133864801 
+Luciano Rogerio Verbel, 28133864801
 Sophia Latuf, 47838939852
-Ricardo Augusto ribeiro, 07136974909 
+Ricardo Augusto ribeiro, 07136974909
 Júlia lima Kühn, 84694190210
-Felipe Xavier dos Santos, 01343642019 
+Felipe Xavier dos Santos, 01343642019
 Maria do Carmo Nagy Prates, 85071196034
 Bruno Cardoso, 38245514896
 Carlos Eduardo Lopes, 28799370867
@@ -248,7 +325,7 @@ Ana Clara Rodrigues de Queiroz, 48868079844
 André Luiz de Aguiar, 25068109860
 Luana Aparecida Ramos de Aguiar, 30292792838
 Dirceu Francelino Junior, 44206530866
-Thaine de Souza Lemos,
+Thaine de Souza Lemos, 
 Camila Zilioti Santos, 40885972813
 Bruno Greatti, 32516716850
 Rafael Soares, 22226704892
@@ -256,9 +333,17 @@ Alisson Júnior de Souza, 42643648846
 Larissa Oliveira Monteiro, 47741093800
 Ariane Souza, 43630589863
 James Davidson Dorigan de Souza, 40402865880
+Millena Caroline Santos, 40141259809
+Welvis Magalhães Oliveira, 40294205837
+Larissa Paola Pereira Severino, 480711458
+Paula Carolina Severino de Almeida Brochado, 33710060850
+Rafael de Almeida Brochado, 31465362851
+Carolina Cardoso Santos, 28294159816
+Lucas de Campos, 40206305859
+David José Rodrigues de Araújo, 38648607841
+Gustavo Kiyoshi Takeuchi, 42673400800
 
-
-### Convidados Imprensa ###
+## Convidados Imprensa ##
 
 ### BACKSTAGE ###
 
@@ -292,8 +377,7 @@ Fernando Garcia Marinho, 08050940322
 Thiago Provasi Garcia Sampaio, 38038244869
 Millena Dellamora Paim, 82855366020
 
-
-### Convidados Miler ###
+## Convidados Miler ##
 
 ### BACKSTAGE ###
 
@@ -318,8 +402,7 @@ Nicole Salinas Pais, 40961182814
 Nicole Shimabukuro, 42951486871
 Nicolly Albano Mercemburg, 47700274860
 
-
-### PISTA ### 
+### PISTA ###
 
 Aimê Sprotte, 10511757980
 Amanda Cristina Da Silva, 46160193805
@@ -342,7 +425,7 @@ Eduarda Luzia Guimarães de Oliveira , 49426522867
 Evyla Arantes Drago, 40926781855
 Fernanda Regina Gomes Rocha, 44066952810
 Francine Vermeulen, 45774499863
-Gabriele Fonseca de Oliveira , 51469305895
+Gabriele Fonseca de Oliveira, 51469305895
 Gabrielle Alves, 45568327807
 Gabrielle Garcia De Melo, 55488286810
 Gabrielle Silva Lopes, 44567401832
@@ -359,7 +442,7 @@ Julia Mendes De Oliveira, 54583382863
 Júlia Scalet Boscardin Benevides, 57192612812
 Juliana Vaz Ribeiro Da Silva, 35165215890
 Julie Anne de Moura Souza , 54393602803
-Kimberlyn Kristyn Belarmino Morais Alves , 56308090832
+Kimberlyn Kristyn Belarmino Morais Alves, 56308090832
 Lauren Rodrigues Lorenzon, 45042623809
 Ludmili Aparecida De Carvalho, 55938688833
 Luiza Rafaela Tavares, 45727310806
@@ -368,7 +451,7 @@ Maria Paula Miranda Luz, 47262200801
 Mel Caroline Oliveira, 40934722897
 Mirele Cristina Gonçalves Dos Santos, 43392323861
 Monique Raveni Araujo Fernandes, 61373968354
-Nathalia Araújo Alves , 44902676818
+Nathalia Araújo Alves, 44902676818
 Nathália Azevedo Marques, 2555143017
 Nicolly De Assis Gomes, 45722911879
 Paula Caroline Furtado De Souza, 35761468816
@@ -383,8 +466,7 @@ Stephanie Rubino Passareti, 42209249813
 Vitoria Cristina Haro Rodrigues, 46551062806
 Yasmin Gabrielle Alvarez Souza, 50655928880
 
-
-### Convidados Angélica ###
+## Convidados Angélica ##
 
 ### BACKSTAGE ###
 
@@ -392,7 +474,7 @@ LUCAS GABRIEL DOS ANJOS SILVA, 11061718964
 Bruno Marcon, 28259671816
 Anna Carolina Ferreira, 46933605892
 
-### Convidados Eric Oliver ###
+## Convidados Eric Oliver ##
 
 ### BACKSTAGE ###
 
@@ -400,12 +482,7 @@ Maycon Douglas, 46787986840
 Izadhora Golin, 37232581823
 Thallita Almeida Nascimento, 04416386192
 Cristine Joyce Alves Ferreira, 85431370200
-Bruna Caroline de Paiva Lourenço, 47948864890
 Juliana Pinheiro de Oliveira, 51261573889
-Gabriela Moreira Cafalchi, 46801024892
-Andreza Cristina Camargo da Rocha, 47542828843
-Luana Stefany De Paiva Lourenço, 47948921877
-Beatriz Alves Andrade, 39684221800
 Thais Caroline Ferreira Aimone, 44416078811
 Ana Clara Silveira Antunes, 52087249873
 Drieli Ghirardi, 38736181846
@@ -415,7 +492,6 @@ Jessica Preto Ramos, 42908732866
 Bárbara Silva Santana, 42432459830
 Claudia Catarina Querce, 47048321806
 Lauren Rebeca Gomes Aguiar, 45589140838
-Maria Paula Moraes Miranda, 41470023822
 Viviane Priscila Almeida, 38455541857
 Gean Correa de Araujo, 41464722889
 Renan Enrico Fragozo Rodrigues, 50106315803
@@ -453,7 +529,6 @@ Alessandra Peixoto dos Santos, 27887862809
 Aline Vanzuita, 06137579980
 Ana Paula Silva Peixoto, 08630102616
 Bruna Tomazella, 37410579838
-Carlos Eduardo Lopes, 28799370867
 Cintia Sloboda de Souza, 03564488782
 Daniela Ferri de Paula e Silva, 41377236803
 Eduardo Moreira e Silva, 01352219190
@@ -481,12 +556,12 @@ Wagner Rocatele Vieira, 04976478939
 Weslley Adriano S F, 46391372810
 Weslley Samuel Alves Gonçalves, 09817036669
 Yuri Fernando de Faria Borat, 11811019641
+Ivanilda Rodrigues de Almeida, 03399225911
 
-### Convidados MDAccula ###
+## Convidados MDAccula ##
 
 ### BACKSTAGE ###
 
-Victor Hugo Lobo Pereira, 47119686879
 Caio Felipe Faria, 11527606619
 Carolina Veloso, 47486242800
 Gabriel Santana Moreira, 48386552824
@@ -503,8 +578,11 @@ Rafael Missaglia Ardito, 35777612881
 Ricardo Lopes Salomao, 27070558830
 Maicoln Douglas da Fonseca Gomes, 39364073800
 Maria Iza Mota, 39137220845
+Iran Gutemberg fabro, 14435653850
+Maria Alice Duarte Amaral, 44108436806
+Rafael Damini de Britov da Silva, 42165912806
 
-### PISTA ### 
+### PISTA ###
 
 Alejandro Rodrigues Dias Santos, 11645927695
 Amanda Martins Ferreira, 48702954826
@@ -528,7 +606,6 @@ Igor Bolsoni da Rocha, 36391122881
 Isabelli Ambrosio, 41582456893
 Jacqueline Kenedy da Silva, 09426946608
 Jenia Pimenta Costa Ciccarelli, 01703610636
-Jennifer Domingos Marques, 40607260874
 Julia Nascimento de Oliveira Carneiro, 52883541892
 Juliana Gabrielle Marques, 41780593864
 Juliana Razzo de Moraes, 45008545841
@@ -623,7 +700,6 @@ Keuremiriele Olivera Brito, 39863466867
 Larissa Andrea Moreno de Campos Faustino, 43158431807
 Larissa Aparecida Vieira Galvão, 49603796859
 Lilian Coqueiro, 32947478886
-Marcela Guizzardi, 40564707821
 Matheus Garcia Machado da Silva, 41964803810
 Matheus Naufel de Sá Rebelo, 42003035826
 Milena Pinheiro, 48490844860
@@ -644,21 +720,18 @@ Angelita de Oliveira Santos, 35779724830
 Brennda Carolina Alves, 06667563807
 Carla Vieira Campos, 01374870374
 Ingrid Souza da Silva, 46395158805
-Isabelli Ambrosio, 41584256893
 Jessica Fernanda da Silva, 41852143835
 Juliana Tanaka, 40913243809
 Laiane Vieira Santos, 43356144898
 Leticia Geisa de Moraes Rodrigues, 31744431809
 Letícia de França Neves, 40494908890
-Luana Guimarães Rodrigues Santos, 44530298884
 Luana Rocha Costa, 44973052876
 Monique Faria, 40530390884
 Natália da Cunha, 42515339840
-Priscila Rodrigues Porto Dietrich, 36538160840
 Wanessa de Souza Silva, 26754573880
+Lucas de Souza Barbosa, 44019196885
 
-
-### Convidados Bolinha ###
+## Convidados Bolinha ##
 
 ### BACKSTAGE ###
 
@@ -670,7 +743,7 @@ Andrey Cocati, 12270294890
 Chang Pauhwa, 25558849800
 Luciano dos Santos, 12999516860
 Alessandro De Oliveira Pinto, 33066314855
-Riolando Rocha Ribeiro Netto +1,
+Riolando Rocha Ribeiro Netto +1, 
 Rodrigo Bernardo, 25611000819
 Thays Bueno, 22249049831
 Nelson Henrique Ribeiro, 06347219840
@@ -684,7 +757,7 @@ Juliana Negriji Calis, 20489936806
 Rodrigo Dias Tarpinian, 27389523808
 Lilian Karoline Tarpinian, 28239927823
 Matheus Tarpinian, 54754957857
-Evandro Grili +1,
+Evandro Grili +1, 
 John Delfino, 16436882863
 Ana Julia Marcondes, 48949522896
 Bruna Paula Ramalho Gonçalves, 42632309816
@@ -697,11 +770,11 @@ Gustavo Borges Betti, 22276037806
 Elaine Moraes dos Santos, 42061393268
 Leonardo Nunes, 42483259855
 Luiza Capistrano Ribeiro de Souza, 35932904801
-Silvana Queiroz +1,
+Silvana Queiroz +1, 
 Luciana Cristine Vasconcellos de Souza, 39180475809
 Allan Cardoso Montrezol, 34645831801
 Reinaldo Vendramini, 22181165882
-Joaquim Paiffer +1,
+Joaquim Paiffer +1, 
 João Pedro Andreazza, 38638161883
 Guilherme dos Santos Castro, 33570988813
 Victor Hugo S F Bruni, 44830889802
@@ -782,8 +855,6 @@ Núbia Esther Gomes Rodrigues Paulino, 02884942297
 Valdir de Oliveira Filho, 38882969860
 Caio Renato Bedulli do Carmo, 36824815837
 Alana Rodrigues Duarte da Cruz, 455496110
-Sophia Latuf, 47838939852
-Luciano Rogerio Verbel, 28134864801
 Maria do Carmo Silva Santos, 45000626885
 Anabella Volpe, 37147975
 Caique Petrella dos Santos, 50419084860
@@ -799,3 +870,134 @@ Denny da Silva, 02129074251
 Romero Godoy Axel Javier, 38914915
 Thamires Milena Brandão Oliveira, 09457589602
 Vitória Maria Viana da Silva, 02865435245
+
+## Convidados Joãozinho ##
+
+### BACKSTAGE ###
+
+Adriano Cezar de Oliveira, 31284439801
+Aline Araujo Portes, 35728193854
+Ana Carolina Moreira Aguiar, 30058608842
+Andrea Barcellos, 14419248840
+Andrielly Eduarda Chaves Clemente, 13451512416
+Augusto Leite Junior, 36887317869
+Beatriz Kaieny dos Santos Pereira, 43317262826
+Bruno Medina Salata, 38227768822
+Caio Sergio Barbato Graciolli, 30408837802
+Cristiane Nascimento, 41020038861
+Diego Martins, 32717714804
+Felipe Leite Bordon, 37712973890
+Felipe Marques de Almeida Cunha, 36264659851
+Francis Carlos de Almeida Granero, 08117776936
+Gabriel Veronesi Tocchio, 21938832892
+Izabela Dolabela Simon, 08674610633
+Jaqueline de Santana Chaves, 04435497964
+Jean Mateus Gonçalves Souza, 43939014877
+Jefferson Pereira Alves Batista, 44674129809
+João Vitor Melgaço, 06766035641
+Jose Eduardo, 18107596
+Karine Messias da Silva, 37056265820
+Leandro de Souza Camara, 50148201822
+Leonardo Salema Biaseto, 42403086827
+Luiz Diego Mendes, 47600206838
+Marcelo Chaves, 04388819905
+Marta María de la Mata López, 84509031572
+Matheus Kiury Gomes Oliveira, 70098855409
+Matteo Kozakevic Nardi, 51865567850
+Mayara Melo Oliveira, 07031260400
+Nicole Cortez Pereira Bitencourt, 36201969829
+Nilton Gomes Galindo Neto, 34051158845
+Olivia Yassudo Faria, 28847857826
+Paulo Roberto de Oliveira Nascimento, 45739364833
+Rafael Rosa Rodrigues, 30249638800
+Robert Ariel Duarte Santechia, 46786310893
+Roberto Vieira, 72706430168
+Thaís Aparecida Ferreira de Souza, 39610089810
+Thomas Simon, 29507859802
+Tiago Viana Bitencourt, 37529233858
+Vania Nunes Konig, 30852958870
+Victor Eduardo Fernandes Barbosa, 06438886408
+Vinicius Rodrigues da Silva, 70101623445
+Vívian Barros de Assis Scheidt, 25265445803
+Wesley dos Santos Franco, 41764701860
+Yonara Garcez Novaes de Oliveira, 35037283841
+
+### PISTA ###
+
+Agatha Menegoni, 48922563826
+Aline Tavares, 22452283835
+Amanda Costa Mendes, 18225436733
+Ana Raissa Guilhon Barreto, 02654262359
+Andressa Cristina Tega Zorzi, 33894842806
+Antomat Avelino de Macedo Filho, 07099324489
+Arthur Emanuel dos Santos Nascimento, 03237159158
+Arthur Junkert Gisondi, 50049961802
+Bárbara Bomfim Muniz, 03232462570
+Beatriz Góis de Araújo da Silva, 46795300811
+Beatriz Raimundo dos Santos, 43904003801
+Bernardo Ferraz Damasceno Diniz, 11837147698
+Bruno Boldrin Ferreira, 33482279845
+Bruno Scheffel Piazza, 44749987824
+Camila Pilatti Tonello, 05825788921
+Camila Takeuchi, 47140731845
+Camila Tamiris Souza dos Santos, 45773141850
+Carlos Jader Rocha Chaves, 45514210812
+Cláudio do Carmo dos Santos, 79894054153
+Domingos Ribeiro Valente, 84144971953
+Edson Silva de Freitas Junior, 42566372810
+Elizamar Burato, 00323370276
+Enzo Taramelli, 50828336800
+Fabíola Torolho, 41357378890
+Farley Aires Colombani, 28803365893
+Felipe Campos Sestaro, 22039849882
+Fernanda Karen Damaceno Ribeiro, 27561557809
+Fernando Ebel Corbella, 55029303863
+Francisco Pereira de Mello Gomes, 37775983809
+Gabriel Martins Bessa, 24038565840
+Glauce Darug Casagrande, 29806613848
+Glauciane Firmino Cordeiro, 09878255425
+Guilherme Augusto Abud Farina, 35071473860
+Guilherme Augusto Zorzi, 31464615870
+Guilherme dos Santos, 47382528871
+Guilherme Gaspar de Novais Vieira, 51287040845
+Guilherme Pinheiro, 41153239817
+Henrique Pacheco Oliveira, 47865286848
+Jacqueline dos Santos, 05000276922
+Jonathan Alves do Nascimento, 00387114907
+Juliana de Fatima Mendes, 05898534903
+Karime Restum, 00413536786
+Leandro Schincariol Arrelaro, 35037338840
+Leide Mara Garcia, 32657733883
+Leonardo Casagrande da Silva, 21697208800
+Leonardo Pires, 17689213855
+Lorayne Martins dos Reis, 47522386837
+Marcos Vinicius Zanella, 06141183656
+Maria del Rosario Ojeda Acuña, 92868096
+Maria Eduarda Moraes Ferreira, 52613812826
+Marielle Bonafé Burin, 31856753808
+Marjorie Mayumi Mizumoto, 39151357801
+Matheus Alves de Pádua Silva, 41423875885
+Matheus Francelino Gomes, 44795071837
+Matias Roberto Bustamante, 29583020
+Mauro Mendonça Correa, 22532208848
+Murilo Mariozi, 00338607560
+Natália Olívia Cardoso, 47714173858
+Nicoly Alves Rocha Campos, 43443934811
+Otavio Augusto da Silva Lambert, 33955305821
+Paula Tiago Pires, 39655774848
+Paulo José Vieira Júnior, 22158749881
+Rafael Barajas Valenzuela, 13883268
+Rafael Carvalho Gomes, 37703853810
+Rafael Palma Lopes, 36872398884
+Raissa Stock, 39511692810
+Renata Santos Siqueira Gomes, 04297670640
+Sabrina Duarte, 48781913842
+Soraya Ahmed Saleh, 47651476816
+Thiago Henrique Chaves da Silva, 41719627819
+Thiago Rossi de Lara, 38397917829
+Victor Adriano de Almeida Souza, 48159230869
+Vitor Augusto de Souza Correa, 44868748890
+Vivian Pacheco de Toledo Farina, 33635093831
+Wantuil Andrade, 03685313843
+Wesley Anthony da Silva, 39975801897
+William Almeida Menegoni, 40600028879
