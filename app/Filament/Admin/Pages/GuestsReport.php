@@ -59,7 +59,7 @@ class GuestsReport extends Page
     #[Computed]
     public function reportData(): Collection
     {
-        if (!$this->selectedEventId) {
+        if (! $this->selectedEventId) {
             return collect();
         }
 
@@ -80,6 +80,7 @@ class GuestsReport extends Page
                 $pistaValidated = $pistaGuests->sum('validated');
                 $backstageTotal = $backstageGuests->sum('total');
                 $backstageValidated = $backstageGuests->sum('validated');
+                $grandTotal = $pistaTotal + $backstageTotal;
 
                 return [
                     'promoter_name' => $promoterName,
@@ -87,7 +88,7 @@ class GuestsReport extends Page
                     'pista_validated' => $pistaValidated,
                     'backstage_total' => $backstageTotal,
                     'backstage_validated' => $backstageValidated,
-                    'total' => $pistaTotal + $backstageTotal,
+                    'total' => $grandTotal,
                     'total_validated' => $pistaValidated + $backstageValidated,
                 ];
             })
@@ -98,6 +99,7 @@ class GuestsReport extends Page
     public function totals(): array
     {
         $data = $this->reportData;
+
         return [
             'pista_total' => $data->sum('pista_total'),
             'pista_validated' => $data->sum('pista_validated'),
@@ -152,8 +154,8 @@ class GuestsReport extends Page
         $pdf = Pdf::loadView('pdf.guests-report', $data);
 
         return response()->streamDownload(
-            fn () => print($pdf->output()),
-            'relatorio-cortesias-' . $event->id . '.pdf',
+            fn () => print ($pdf->output()),
+            'relatorio-cortesias-'.$event->id.'.pdf',
             ['Content-Type' => 'application/pdf']
         );
     }
@@ -168,6 +170,6 @@ class GuestsReport extends Page
             eventName: $event->name,
         );
 
-        return \Maatwebsite\Excel\Facades\Excel::download($export, 'relatorio-cortesias-' . $event->id . '.xlsx');
+        return \Maatwebsite\Excel\Facades\Excel::download($export, 'relatorio-cortesias-'.$event->id.'.xlsx');
     }
 }

@@ -67,49 +67,39 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width: 25%">RESPONSÁVEL</th>
-                    <th class="text-center">SETOR</th>
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">CHECK-INS</th>
-                    <th class="text-center">% POR SETOR</th>
+                    <th style="width: 20%">RESPONSÁVEL</th>
+                    <th class="text-center pista" style="width: 20%">PISTA (TOT/CHK)</th>
+                    <th class="text-center backstage" style="width: 20%">BACKSTAGE (TOT/CHK)</th>
+                    <th class="text-center" style="width: 15%">TOTAL</th>
+                    <th class="text-center" style="width: 25%">% POR SETOR</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($data as $row)
                 <tr>
-                    <td rowspan="2" class="promoter-cell font-bold">{{ $row['promoter_name'] }}</td>
-                    <td class="text-center pista font-semibold">PISTA</td>
-                    <td class="text-center">{{ $row['pista_total'] }}</td>
-                    <td class="text-center">{{ $row['pista_validated'] }}</td>
-                    <td class="text-center">{{ $row['pista_total'] > 0 ? round(($row['pista_validated'] / $row['pista_total']) * 100, 1) : 0 }}%</td>
-                </tr>
-                <tr>
-                    <td class="text-center backstage font-semibold">BACKSTAGE</td>
-                    <td class="text-center">{{ $row['backstage_total'] }}</td>
-                    <td class="text-center">{{ $row['backstage_validated'] }}</td>
-                    <td class="text-center">{{ $row['backstage_total'] > 0 ? round(($row['backstage_validated'] / $row['backstage_total']) * 100, 1) : 0 }}%</td>
+                    <td class="font-bold">{{ $row['promoter_name'] }}</td>
+                    <td class="text-center">{{ $row['pista_total'] }}/{{ $row['pista_validated'] }}</td>
+                    <td class="text-center">{{ $row['backstage_total'] }}/{{ $row['backstage_validated'] }}</td>
+                    <td class="text-center font-bold">{{ $row['total'] }}</td>
+                    <td class="text-center">
+                        <span class="pista">{{ $row['pista_total'] > 0 ? round(($row['pista_validated'] / $row['pista_total']) * 100) . '%' : '0%' }}</span>
+                        <span> / </span>
+                        <span class="backstage">{{ $row['backstage_total'] > 0 ? round(($row['backstage_validated'] / $row['backstage_total']) * 100) . '%' : '0%' }}</span>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
             <tfoot>
-                <tr class="total-row">
-                    <td rowspan="3" class="font-bold">TOTAL GERAL</td>
-                    <td class="text-center pista font-semibold">PISTA</td>
-                    <td class="text-center font-bold">{{ $totals['pista_total'] }}</td>
-                    <td class="text-center font-bold">{{ $totals['pista_validated'] }}</td>
-                    <td class="text-center font-bold">{{ $totals['pista_total'] > 0 ? round(($totals['pista_validated'] / $totals['pista_total']) * 100, 1) : 0 }}%</td>
-                </tr>
-                <tr class="total-row">
-                    <td class="text-center backstage font-semibold">BACKSTAGE</td>
-                    <td class="text-center font-bold">{{ $totals['backstage_total'] }}</td>
-                    <td class="text-center font-bold">{{ $totals['backstage_validated'] }}</td>
-                    <td class="text-center font-bold">{{ $totals['backstage_total'] > 0 ? round(($totals['backstage_validated'] / $totals['backstage_total']) * 100, 1) : 0 }}%</td>
-                </tr>
                 <tr class="grand-total">
-                    <td class="text-center font-bold">TOTAL</td>
+                    <td class="font-bold">TOTAL GERAL</td>
+                    <td class="text-center font-bold">{{ $totals['pista_total'] }}/{{ $totals['pista_validated'] }}</td>
+                    <td class="text-center font-bold">{{ $totals['backstage_total'] }}/{{ $totals['backstage_validated'] }}</td>
                     <td class="text-center font-bold">{{ $totals['grand_total'] }}</td>
-                    <td class="text-center font-bold">{{ $totals['grand_validated'] }}</td>
-                    <td class="text-center font-bold">{{ $totals['grand_total'] > 0 ? round(($totals['grand_validated'] / $totals['grand_total']) * 100, 1) : 0 }}%</td>
+                    <td class="text-center font-bold">
+                        <span class="pista">{{ $totals['pista_total'] > 0 ? round(($totals['pista_validated'] / $totals['pista_total']) * 100) . '%' : '0%' }}</span>
+                        <span> / </span>
+                        <span class="backstage">{{ $totals['backstage_total'] > 0 ? round(($totals['backstage_validated'] / $totals['backstage_total']) * 100) . '%' : '0%' }}</span>
+                    </td>
                 </tr>
             </tfoot>
         </table>

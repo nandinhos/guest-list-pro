@@ -91,90 +91,68 @@
                         <thead>
                             <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
                                 <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">RESPONSÁVEL</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">SETOR</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">PISTA (TOT/CHK)</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400">BACKSTAGE (TOT/CHK)</th>
                                 <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">TOTAL</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">CHECK-INS</th>
                                 <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">% POR SETOR</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                            @php $lastPromoter = null; @endphp
                             @foreach($this->reportData as $row)
-                                @if($row['promoter_name'] !== $lastPromoter)
-                                    <tr class="transition-colors duration-150 hover:bg-primary-50/50 dark:hover:bg-primary-900/10">
-                                        <td rowspan="2" class="px-4 py-3 align-middle">
-                                            <div class="flex items-center gap-3">
-                                                <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-bold">
-                                                    {{ strtoupper(substr($row['promoter_name'], 0, 1)) }}
-                                                </div>
-                                                <span class="font-medium text-gray-900 dark:text-white">{{ $row['promoter_name'] }}</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-3 text-center font-medium text-blue-600 dark:text-blue-400">PISTA</td>
-                                        <td class="px-4 py-3 text-center text-gray-600 dark:text-gray-300">{{ $row['pista_total'] }}</td>
-                                        <td class="px-4 py-3 text-center">
-                                            <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-medium rounded-full bg-success-100 text-success-700 dark:bg-success-900/30 dark:text-success-400">
-                                                {{ $row['pista_validated'] }}
-                                            </span>
-                                        </td>
-                                        <td class="px-4 py-3 text-center text-gray-600 dark:text-gray-300">
-                                            {{ $row['pista_total'] > 0 ? round(($row['pista_validated'] / $row['pista_total']) * 100, 1) : 0 }}%
-                                        </td>
-                                    </tr>
-                                    <tr class="transition-colors duration-150 hover:bg-primary-50/50 dark:hover:bg-primary-900/10">
-                                        <td class="px-4 py-3 text-center font-medium text-purple-600 dark:text-purple-400">BACKSTAGE</td>
-                                        <td class="px-4 py-3 text-center text-gray-600 dark:text-gray-300">{{ $row['backstage_total'] }}</td>
-                                        <td class="px-4 py-3 text-center">
-                                            <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
-                                                {{ $row['backstage_validated'] }}
-                                            </span>
-                                        </td>
-                                        <td class="px-4 py-3 text-center text-gray-600 dark:text-gray-300">
-                                            {{ $row['backstage_total'] > 0 ? round(($row['backstage_validated'] / $row['backstage_total']) * 100, 1) : 0 }}%
-                                        </td>
-                                    </tr>
-                                    @php $lastPromoter = $row['promoter_name']; @endphp
-                                @endif
+                            <tr class="transition-colors duration-150 hover:bg-primary-50/50 dark:hover:bg-primary-900/10">
+                                <td class="px-4 py-3 align-middle">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-bold">
+                                            {{ strtoupper(substr($row['promoter_name'], 0, 1)) }}
+                                        </div>
+                                        <span class="font-medium text-gray-900 dark:text-white">{{ $row['promoter_name'] }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="text-blue-600 dark:text-blue-400 font-medium">{{ $row['pista_total'] }}</span>
+                                    <span class="text-gray-400 dark:text-gray-500">/</span>
+                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-medium rounded-full bg-success-100 text-success-700 dark:bg-success-900/30 dark:text-success-400">
+                                        {{ $row['pista_validated'] }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="text-purple-600 dark:text-purple-400 font-medium">{{ $row['backstage_total'] }}</span>
+                                    <span class="text-gray-400 dark:text-gray-500">/</span>
+                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                                        {{ $row['backstage_validated'] }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-center font-bold text-gray-900 dark:text-white">{{ $row['total'] }}</td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="text-xs font-medium text-blue-600 dark:text-blue-400">{{ $row['pista_total'] > 0 ? round(($row['pista_validated'] / $row['pista_total']) * 100) . '%' : '0%' }}</span>
+                                    <span class="text-gray-400 dark:text-gray-500 mx-1">/</span>
+                                    <span class="text-xs font-medium text-purple-600 dark:text-purple-400">{{ $row['backstage_total'] > 0 ? round(($row['backstage_validated'] / $row['backstage_total']) * 100) . '%' : '0%' }}</span>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
-                            <tr class="border-t-2 border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800/70">
-                                <td rowspan="3" class="px-4 py-3 align-middle">
-                                    <span class="font-bold text-gray-900 dark:text-white">TOTAL GERAL</span>
-                                </td>
-                                <td class="px-4 py-3 text-center font-semibold text-blue-600 dark:text-blue-400">PISTA</td>
-                                <td class="px-4 py-3 text-center font-bold text-gray-900 dark:text-white">{{ $this->totals['pista_total'] }}</td>
+                            <tr class="border-t-2 border-gray-300 dark:border-gray-600 bg-primary-50 dark:bg-primary-900/20">
+                                <td class="px-4 py-3 font-bold text-gray-900 dark:text-white">TOTAL GERAL</td>
                                 <td class="px-4 py-3 text-center">
+                                    <span class="text-blue-600 dark:text-blue-400 font-bold">{{ $this->totals['pista_total'] }}</span>
+                                    <span class="text-gray-400 dark:text-gray-500">/</span>
                                     <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold rounded-full bg-success-100 text-success-700 dark:bg-success-900/30 dark:text-success-400">
                                         {{ $this->totals['pista_validated'] }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-center font-bold text-gray-900 dark:text-white">
-                                    {{ $this->totals['pista_total'] > 0 ? round(($this->totals['pista_validated'] / $this->totals['pista_total']) * 100, 1) : 0 }}%
-                                </td>
-                            </tr>
-                            <tr class="border-t border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800/70">
-                                <td class="px-4 py-3 text-center font-semibold text-purple-600 dark:text-purple-400">BACKSTAGE</td>
-                                <td class="px-4 py-3 text-center font-bold text-gray-900 dark:text-white">{{ $this->totals['backstage_total'] }}</td>
                                 <td class="px-4 py-3 text-center">
+                                    <span class="text-purple-600 dark:text-purple-400 font-bold">{{ $this->totals['backstage_total'] }}</span>
+                                    <span class="text-gray-400 dark:text-gray-500">/</span>
                                     <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                                         {{ $this->totals['backstage_validated'] }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-center font-bold text-gray-900 dark:text-white">
-                                    {{ $this->totals['backstage_total'] > 0 ? round(($this->totals['backstage_validated'] / $this->totals['backstage_total']) * 100, 1) : 0 }}%
-                                </td>
-                            </tr>
-                            <tr class="border-t-2 border-gray-300 dark:border-gray-600 bg-primary-50 dark:bg-primary-900/20">
-                                <td class="px-4 py-3 text-center font-bold text-primary-700 dark:text-primary-300">TOTAL</td>
                                 <td class="px-4 py-3 text-center font-bold text-xl text-primary-600 dark:text-primary-400">{{ $this->totals['grand_total'] }}</td>
                                 <td class="px-4 py-3 text-center">
-                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400">
-                                        {{ $this->totals['grand_validated'] }}
-                                    </span>
-                                </td>
-                                <td class="px-4 py-3 text-center font-bold text-xl text-primary-600 dark:text-primary-400">
-                                    {{ $this->totals['grand_total'] > 0 ? round(($this->totals['grand_validated'] / $this->totals['grand_total']) * 100, 1) : 0 }}%
+                                    <span class="text-xs font-bold text-blue-600 dark:text-blue-400">{{ $this->totals['pista_total'] > 0 ? round(($this->totals['pista_validated'] / $this->totals['pista_total']) * 100) . '%' : '0%' }}</span>
+                                    <span class="text-gray-400 dark:text-gray-500 mx-1">/</span>
+                                    <span class="text-xs font-bold text-purple-600 dark:text-purple-400">{{ $this->totals['backstage_total'] > 0 ? round(($this->totals['backstage_validated'] / $this->totals['backstage_total']) * 100) . '%' : '0%' }}</span>
                                 </td>
                             </tr>
                         </tfoot>
