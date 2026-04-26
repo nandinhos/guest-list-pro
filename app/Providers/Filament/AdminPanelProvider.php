@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Admin\Pages\BackupManagement;
+use App\Filament\Admin\Pages\ExcursoesReport;
 use App\Filament\Admin\Pages\GuestsReport;
 use App\Filament\Admin\Pages\ImportGuestsPage;
 use App\Filament\Admin\Pages\ProfilePage;
@@ -53,6 +54,7 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
                 GuestsReport::class,
+                ExcursoesReport::class,
                 BackupManagement::class,
                 ImportGuestsPage::class,
                 ProfilePage::class,
