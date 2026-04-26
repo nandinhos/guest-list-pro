@@ -1,79 +1,54 @@
 {
-  "project": "guest-list-pro",
-  "created": "2026-04-23T12:00:00Z",
+  "project": "/home/nandodev/projects/guest-list-pro",
+  "created": "2026-04-26T07:08:38Z",
   "stories": [
     {
       "id": "feat-001",
-      "title": "Corrigir N+1 queries no AdminPromoterQuotaWidget",
-      "description": "Substituir getStateUsing() com queries individuais por subquery em addSelect. Impacto: ~80 queries para ≤5 queries.",
-      "acceptanceCriteria": [
-        "Widget carrega com ≤5 queries",
-        "Contadores de guests corretos",
-        "E2E tests passando"
-      ],
-      "priority": 1,
-      "passes": true,
-      "notes": "P0 - CRÍTICO. Commit: 100f4bb"
+      "title": "Specs Ativas",
+      "description": "Seção: Specs Ativas",
+      "acceptanceCriteria": [],
+      "priority": 50,
+      "passes": false
     },
     {
       "id": "feat-002",
-      "title": "Adicionar veiculo_id no VeiculosRelationManager repeater",
-      "description": "No mutateRelationshipDataBeforeCreateUsing do Repeater de monitores, adicionar veiculo_id.",
+      "title": "SPEC-0007 — Painel Excursionista",
+      "description": "Seção: SPEC-0007 — Painel Excursionista",
       "acceptanceCriteria": [
-        "Monitor criado via repeater tem veiculo_id preenchido",
-        "ListMonitores mostra monitores do veículo correto"
+        "CA-01: Usuário EXCURSIONISTA acessa /excursionista",
+        "CA-02: Dashboard com contadores",
+        "CA-03: CRUD Excursão + Veículos",
+        "CA-04: CRUD Monitor com Select reativo",
+        "CA-05: Criação inline de Excursão via modal",
+        "CA-06: Validação CPF",
+        "CA-07: Validação Placa Mercosul",
+        "CA-08: Admin gerencia excursionistas",
+        "CA-09: Cascade delete",
+        "CA-10: Tests passando",
+        "CA-11: Pint clean",
+        "CA-12: E2E smoke tests"
       ],
-      "priority": 2,
-      "passes": true,
-      "notes": "P1 - BUG. Commit: f34cc5a"
+      "priority": 50,
+      "passes": false
     },
     {
       "id": "feat-003",
-      "title": "Adicionar authorization nos RelationManagers",
-      "description": "Implementar canCreate(), canEdit(), canDelete() em VeiculosRelationManager e MonitoresRelationManager.",
+      "title": "SPEC-0008 — Central de Gestão de Excursionistas (CRUD)",
+      "description": "Seção: SPEC-0008 — Central de Gestão de Excursionistas (CRUD)",
       "acceptanceCriteria": [
-        "Usuário não consegue criar/editar/deletar recursos de outros",
-        "Retorna 403 quando negado"
+        "CA-01: Página acessível em /admin/reports/excursoes",
+        "CA-02: 3 abas com contador de registros do evento selecionado",
+        "CA-03: Criar excursão salva event_id e criado_por automaticamente",
+        "CA-04: Editar excursão abre modal com dados preenchidos",
+        "CA-05: Excluir excursão remove cascade (veículos + monitores)",
+        "CA-06: Select de excursão no formulário de veículo filtra por evento",
+        "CA-07: Monitor sem veículo exibe Sem veículo na tabela",
+        "CA-08: Unique constraint de documento exibe validação amigável",
+        "CA-09: Trocar aba recarrega tabela corretamente",
+        "CA-10: Todos os testes passando + Pint clean"
       ],
-      "priority": 3,
-      "passes": true,
-      "notes": "P1 - SECURITY. Commit: bb4eb61"
-    },
-    {
-      "id": "feat-004",
-      "title": "Corrigir mass assignment em Guest model",
-      "description": "Remover is_checked_in, checked_in_at, checked_in_by do $fillable. Check-in via método dedicado.",
-      "acceptanceCriteria": [
-        "is_checked_in não pode ser setado via fill()",
-        "Check-in funciona via GuestService ou Observer"
-      ],
-      "priority": 4,
-      "passes": true,
-      "notes": "P1 - SECURITY. Commit: c3c9a5a"
-    },
-    {
-      "id": "feat-005",
-      "title": "Adicionar validação no ValidatorGuestForm",
-      "description": "Seguir padrão do PromoterGuestForm: maxLength, placeholder, labels.",
-      "acceptanceCriteria": [
-        "Todos campos com validação adequada",
-        "Consistência com PromoterGuestForm"
-      ],
-      "priority": 5,
-      "passes": true,
-      "notes": "P2 - BUG. Commit: 2863c91"
-    },
-    {
-      "id": "feat-006",
-      "title": "Corrigir unique constraint em monitores",
-      "description": "Constraint única em [event_id, document_type, document_number].",
-      "acceptanceCriteria": [
-        "Constraint única com 3 colunas",
-        "Dados migrados corretamente"
-      ],
-      "priority": 6,
-      "passes": true,
-      "notes": "P2 - DATA INTEGRITY. Commit: c11d036"
+      "priority": 50,
+      "passes": false
     }
   ]
 }

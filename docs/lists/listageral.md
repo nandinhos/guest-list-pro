@@ -832,6 +832,30 @@ Paola Mulazani, 39765723814
 Fábio Batista Ribeiro Massagli, 21427059870
 Pedro Jordan Planchon Sader, 07197139511
 Sara Núbia Miranda da Costa, 41565746287
+Thaís da Silveira, 28070553898
+Thiago Cortes Simões Nunes, 31937239837
+Ana Luísa Sevegnani (Red), 29815340840
+Anna Paula Wirz (Red), 28521091826
+Beatriz Bezerra dos Santos (Red), 36216091808
+Bernard Sena Souza (Red), 44053743842
+Guilherme Augusto Barbosa do Carmo (Red), 417682311
+Thiago Ferraz do Amaral, 02814983938
+Jonas Eduardo de Andrade Carneiro, 22050074832
+Lara Leite Barbosa, 25858795854
+Caio Jun Takahashi, 47002591835
+João Gabriel Guimarães Coelho, 03410533176
+Kerolaine Moreira de Oliveira, 47260694890
+Patrícia Fernandes Pereira Silva, 26800595810
+Rogério Demonte de Castilho, 32156401802
+Fabíola Ediane Rodrigues, 09767157670
+Juan José Buitrago Zuluaga, 13254636805
+Elaine da Silva, 10187373914
+Paulo Henrique Sampaio, 19564268842
+Michele Grossi Sampaio, 27525834865
+Jhonny Verzolla, 06430507874
+Keila Silva, 46948588824
+Ruth Elionai Dória da Silva, 37787481811
+Anderson Pereira Rossi, 43843818835
 
 ### PISTA ###
 
@@ -870,6 +894,8 @@ Denny da Silva, 02129074251
 Romero Godoy Axel Javier, 38914915
 Thamires Milena Brandão Oliveira, 09457589602
 Vitória Maria Viana da Silva, 02865435245
+Maurilio Simões de Paula, 39160185821
+Mariana Pires da Silva, 37570163869
 
 ## Convidados Joãozinho ##
 
