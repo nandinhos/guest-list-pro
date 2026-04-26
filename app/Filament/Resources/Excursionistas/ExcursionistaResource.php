@@ -30,6 +30,8 @@ class ExcursionistaResource extends Resource
 
     protected static ?int $navigationSort = 102;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function canCreate(): bool
     {
         return true;
