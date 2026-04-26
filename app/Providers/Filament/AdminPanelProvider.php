@@ -7,6 +7,7 @@ use App\Filament\Admin\Pages\ExcursoesGestao;
 use App\Filament\Admin\Pages\GuestsReport;
 use App\Filament\Admin\Pages\ImportGuestsPage;
 use App\Filament\Admin\Pages\ProfilePage;
+use App\Filament\Resources\Events\Pages\ImportExcursoes;
 use App\Filament\Widgets\AdminOverview;
 use App\Filament\Widgets\ApprovalMetricsChart;
 use App\Filament\Widgets\GuestsVsTicketsChart;
@@ -57,6 +58,7 @@ class AdminPanelProvider extends PanelProvider
                 ExcursoesGestao::class,
                 BackupManagement::class,
                 ImportGuestsPage::class,
+                ImportExcursoes::class,
                 ProfilePage::class,
             ])
             // ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')

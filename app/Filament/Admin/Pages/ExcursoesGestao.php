@@ -140,6 +140,12 @@ class ExcursoesGestao extends Page implements HasTable
                     ->sortable(),
             ])
             ->headerActions([
+                TableAction::make('importExcursoes')
+                    ->label('Importar')
+                    ->icon('heroicon-o-arrow-up-tray')
+                    ->color('gray')
+                    ->url('/admin/import-excursoes'),
+
                 TableAction::make('createExcursao')
                     ->label('Nova Excursão')
                     ->icon('heroicon-o-plus')
