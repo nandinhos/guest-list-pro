@@ -13,7 +13,7 @@
         "Label Gestão de Excursionistas, grupo EXCURSIONISTAS"
       ],
       "priority": 1,
-      "passes": false
+      "passes": true
     },
     {
       "id": "feat-002",
@@ -25,7 +25,7 @@
         "Excluir remove com confirmação"
       ],
       "priority": 2,
-      "passes": false
+      "passes": true
     },
     {
       "id": "feat-003",
@@ -37,7 +37,7 @@
         "Veículos sem placa exibem traço"
       ],
       "priority": 3,
-      "passes": false
+      "passes": true
     },
     {
       "id": "feat-004",
@@ -49,7 +49,7 @@
         "event_id e criado_por auto-preenchidos"
       ],
       "priority": 4,
-      "passes": false
+      "passes": true
     },
     {
       "id": "feat-005",
@@ -61,7 +61,7 @@
         "Filtros funcionam em todas as abas"
       ],
       "priority": 5,
-      "passes": false
+      "passes": true
     },
     {
       "id": "feat-006",
@@ -73,7 +73,7 @@
         "Pint clean sem erros"
       ],
       "priority": 6,
-      "passes": false
+      "passes": true
     }
   ]
 }
