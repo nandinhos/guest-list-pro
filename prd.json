@@ -4,50 +4,75 @@
   "stories": [
     {
       "id": "feat-001",
-      "title": "Specs Ativas",
-      "description": "Seção: Specs Ativas",
-      "acceptanceCriteria": [],
-      "priority": 50,
+      "title": "Converter ExcursoesReport em ExcursoesGestao com HasTable e 3 abas",
+      "description": "Renomear classe, adicionar traits HasTable/InteractsWithTable/HasActions/InteractsWithActions, $activeTab, switchTab(). Manter slug e filtros.",
+      "acceptanceCriteria": [
+        "Página acessível em /admin/reports/excursoes",
+        "Propriedade $activeTab com default excursoes",
+        "Método switchTab($tab) chama resetTable()",
+        "Label Gestão de Excursionistas, grupo EXCURSIONISTAS"
+      ],
+      "priority": 1,
       "passes": false
     },
     {
       "id": "feat-002",
-      "title": "SPEC-0007 — Painel Excursionista",
-      "description": "Seção: SPEC-0007 — Painel Excursionista",
+      "title": "CRUD Excursões — CreateAction, EditAction, DeleteAction",
+      "description": "Tabela Filament para aba excursoes: colunas, CreateAction com modal (nome, event_id/criado_por auto), EditAction, DeleteAction com confirmação.",
       "acceptanceCriteria": [
-        "CA-01: Usuário EXCURSIONISTA acessa /excursionista",
-        "CA-02: Dashboard com contadores",
-        "CA-03: CRUD Excursão + Veículos",
-        "CA-04: CRUD Monitor com Select reativo",
-        "CA-05: Criação inline de Excursão via modal",
-        "CA-06: Validação CPF",
-        "CA-07: Validação Placa Mercosul",
-        "CA-08: Admin gerencia excursionistas",
-        "CA-09: Cascade delete",
-        "CA-10: Tests passando",
-        "CA-11: Pint clean",
-        "CA-12: E2E smoke tests"
+        "Criar excursão salva event_id e criado_por automaticamente",
+        "Editar abre modal com dados preenchidos",
+        "Excluir remove com confirmação"
       ],
-      "priority": 50,
+      "priority": 2,
       "passes": false
     },
     {
       "id": "feat-003",
-      "title": "SPEC-0008 — Central de Gestão de Excursionistas (CRUD)",
-      "description": "Seção: SPEC-0008 — Central de Gestão de Excursionistas (CRUD)",
+      "title": "CRUD Veículos — CreateAction, EditAction, DeleteAction",
+      "description": "Tabela Filament para aba veiculos. CreateAction com tipo Select, placa opcional, excursao_id Select filtrado por event_id.",
       "acceptanceCriteria": [
-        "CA-01: Página acessível em /admin/reports/excursoes",
-        "CA-02: 3 abas com contador de registros do evento selecionado",
-        "CA-03: Criar excursão salva event_id e criado_por automaticamente",
-        "CA-04: Editar excursão abre modal com dados preenchidos",
-        "CA-05: Excluir excursão remove cascade (veículos + monitores)",
-        "CA-06: Select de excursão no formulário de veículo filtra por evento",
-        "CA-07: Monitor sem veículo exibe Sem veículo na tabela",
-        "CA-08: Unique constraint de documento exibe validação amigável",
-        "CA-09: Trocar aba recarrega tabela corretamente",
-        "CA-10: Todos os testes passando + Pint clean"
+        "Select de excursão filtra por evento",
+        "Tipo exibe label correto",
+        "Veículos sem placa exibem traço"
       ],
-      "priority": 50,
+      "priority": 3,
+      "passes": false
+    },
+    {
+      "id": "feat-004",
+      "title": "CRUD Monitores — CreateAction, EditAction, DeleteAction",
+      "description": "Tabela Filament para aba monitores. CreateAction com nome, document_type, document_number, veiculo_id opcional.",
+      "acceptanceCriteria": [
+        "Monitor sem veículo exibe Sem veículo",
+        "Unique constraint exibe validação amigável",
+        "event_id e criado_por auto-preenchidos"
+      ],
+      "priority": 4,
+      "passes": false
+    },
+    {
+      "id": "feat-005",
+      "title": "View Blade com abas clicáveis e contadores",
+      "description": "Criar excursoes-gestao.blade.php com abas, wire:click=switchTab, aba ativa destacada, contador de registros e {{ $this->table }}.",
+      "acceptanceCriteria": [
+        "Clicar em aba muda tabela exibida",
+        "Contador reflete dados do evento",
+        "Filtros funcionam em todas as abas"
+      ],
+      "priority": 5,
+      "passes": false
+    },
+    {
+      "id": "feat-006",
+      "title": "Testes — CRUD das 3 entidades + Pint clean",
+      "description": "Atualizar testes cobrindo create/edit/delete em cada aba, auto-preenchimento de event_id e criado_por.",
+      "acceptanceCriteria": [
+        "Todos os testes passam",
+        "Cobertura happy path e validação",
+        "Pint clean sem erros"
+      ],
+      "priority": 6,
       "passes": false
     }
   ]

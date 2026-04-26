@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Filament\Admin\Pages;
 
+use App\Enums\DocumentType;
+use App\Enums\TipoVeiculo;
 use App\Enums\UserRole;
-use App\Filament\Admin\Pages\ExcursoesReport;
+use App\Filament\Admin\Pages\ExcursoesGestao;
 use App\Models\Event;
 use App\Models\Excursao;
 use App\Models\Monitor;
@@ -38,7 +40,7 @@ class ExcursoesReportTest extends TestCase
     public function test_shows_empty_state_without_event(): void
     {
         Livewire::actingAs($this->admin)
-            ->test(ExcursoesReport::class)
+            ->test(ExcursoesGestao::class)
             ->set('selectedEventId', null)
             ->assertSee('Selecione um evento');
     }
@@ -52,7 +54,7 @@ class ExcursoesReportTest extends TestCase
         ]);
 
         Livewire::actingAs($this->admin)
-            ->test(ExcursoesReport::class)
+            ->test(ExcursoesGestao::class)
             ->set('selectedEventId', $this->event->id)
             ->assertSee('Excursão Teste ABC');
     }
@@ -67,36 +69,12 @@ class ExcursoesReportTest extends TestCase
         ]);
 
         Livewire::actingAs($this->admin)
-            ->test(ExcursoesReport::class)
+            ->test(ExcursoesGestao::class)
             ->set('selectedEventId', $this->event->id)
             ->assertDontSee('Excursão de Outro Evento');
     }
 
-    public function test_filter_by_criado_por(): void
-    {
-        $other = User::factory()->create();
-
-        Excursao::factory()->create([
-            'event_id' => $this->event->id,
-            'nome' => 'Excursão do Admin',
-            'criado_por' => $this->admin->id,
-        ]);
-
-        Excursao::factory()->create([
-            'event_id' => $this->event->id,
-            'nome' => 'Excursão do Outro',
-            'criado_por' => $other->id,
-        ]);
-
-        Livewire::actingAs($this->admin)
-            ->test(ExcursoesReport::class)
-            ->set('selectedEventId', $this->event->id)
-            ->set('criadoPorId', $this->admin->id)
-            ->assertSee('Excursão do Admin')
-            ->assertDontSee('Excursão do Outro');
-    }
-
-    public function test_totais_count_correctly(): void
+    public function test_tab_count_returns_correct_values(): void
     {
         $excursao = Excursao::factory()->create([
             'event_id' => $this->event->id,
@@ -112,11 +90,115 @@ class ExcursoesReportTest extends TestCase
         ]);
 
         $component = Livewire::actingAs($this->admin)
-            ->test(ExcursoesReport::class)
+            ->test(ExcursoesGestao::class)
             ->set('selectedEventId', $this->event->id);
 
-        $this->assertEquals(1, $component->instance()->totais['excursoes']);
-        $this->assertEquals(1, $component->instance()->totais['veiculos']);
-        $this->assertEquals(1, $component->instance()->totais['monitores']);
+        $instance = $component->instance();
+        $this->assertEquals(1, $instance->getTabCount('excursoes'));
+        $this->assertEquals(1, $instance->getTabCount('veiculos'));
+        $this->assertEquals(1, $instance->getTabCount('monitores'));
+    }
+
+    public function test_switch_tab_changes_active_tab(): void
+    {
+        Livewire::actingAs($this->admin)
+            ->test(ExcursoesGestao::class)
+            ->set('selectedEventId', $this->event->id)
+            ->call('switchTab', 'veiculos')
+            ->assertSet('activeTab', 'veiculos')
+            ->call('switchTab', 'monitores')
+            ->assertSet('activeTab', 'monitores')
+            ->call('switchTab', 'excursoes')
+            ->assertSet('activeTab', 'excursoes');
+    }
+
+    public function test_create_excursao_saves_with_event_and_user(): void
+    {
+        Livewire::actingAs($this->admin)
+            ->test(ExcursoesGestao::class)
+            ->set('selectedEventId', $this->event->id)
+            ->callTableAction('createExcursao', data: ['nome' => 'Nova Excursão']);
+
+        $this->assertDatabaseHas('excursoes', [
+            'nome' => 'Nova Excursão',
+            'event_id' => $this->event->id,
+            'criado_por' => $this->admin->id,
+        ]);
+    }
+
+    public function test_edit_excursao_updates_nome(): void
+    {
+        $excursao = Excursao::factory()->create([
+            'event_id' => $this->event->id,
+            'nome' => 'Nome Original',
+            'criado_por' => $this->admin->id,
+        ]);
+
+        Livewire::actingAs($this->admin)
+            ->test(ExcursoesGestao::class)
+            ->set('selectedEventId', $this->event->id)
+            ->callTableAction('editExcursao', $excursao, data: ['nome' => 'Nome Atualizado']);
+
+        $this->assertDatabaseHas('excursoes', ['id' => $excursao->id, 'nome' => 'Nome Atualizado']);
+    }
+
+    public function test_delete_excursao_removes_record(): void
+    {
+        $excursao = Excursao::factory()->create([
+            'event_id' => $this->event->id,
+            'criado_por' => $this->admin->id,
+        ]);
+
+        Livewire::actingAs($this->admin)
+            ->test(ExcursoesGestao::class)
+            ->set('selectedEventId', $this->event->id)
+            ->callTableAction('deleteExcursao', $excursao);
+
+        $this->assertDatabaseMissing('excursoes', ['id' => $excursao->id]);
+    }
+
+    public function test_create_veiculo_saves_correctly(): void
+    {
+        $excursao = Excursao::factory()->create([
+            'event_id' => $this->event->id,
+            'criado_por' => $this->admin->id,
+        ]);
+
+        Livewire::actingAs($this->admin)
+            ->test(ExcursoesGestao::class)
+            ->set('selectedEventId', $this->event->id)
+            ->call('switchTab', 'veiculos')
+            ->callTableAction('createVeiculo', data: [
+                'tipo' => TipoVeiculo::ONIBUS->value,
+                'placa' => 'ABC-1234',
+                'excursao_id' => $excursao->id,
+            ]);
+
+        $this->assertDatabaseHas('veiculos', [
+            'tipo' => TipoVeiculo::ONIBUS->value,
+            'placa' => 'ABC-1234',
+            'excursao_id' => $excursao->id,
+        ]);
+    }
+
+    public function test_create_monitor_saves_with_event_and_user(): void
+    {
+        Livewire::actingAs($this->admin)
+            ->test(ExcursoesGestao::class)
+            ->set('selectedEventId', $this->event->id)
+            ->call('switchTab', 'monitores')
+            ->callTableAction('createMonitor', data: [
+                'nome' => 'Monitor Teste',
+                'document_type' => DocumentType::CPF->value,
+                'document_number' => '12345678901',
+                'veiculo_id' => null,
+            ]);
+
+        $this->assertDatabaseHas('monitores', [
+            'nome' => 'Monitor Teste',
+            'document_number' => '12345678901',
+            'event_id' => $this->event->id,
+            'criado_por' => $this->admin->id,
+        ]);
     }
 }
