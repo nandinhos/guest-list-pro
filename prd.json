@@ -1,79 +1,79 @@
 {
-  "project": "guest-list-pro",
-  "created": "2026-04-23T12:00:00Z",
+  "project": "/home/nandodev/projects/guest-list-pro",
+  "created": "2026-04-26T07:08:38Z",
   "stories": [
     {
       "id": "feat-001",
-      "title": "Corrigir N+1 queries no AdminPromoterQuotaWidget",
-      "description": "Substituir getStateUsing() com queries individuais por subquery em addSelect. Impacto: ~80 queries para ≤5 queries.",
+      "title": "Converter ExcursoesReport em ExcursoesGestao com HasTable e 3 abas",
+      "description": "Renomear classe, adicionar traits HasTable/InteractsWithTable/HasActions/InteractsWithActions, $activeTab, switchTab(). Manter slug e filtros.",
       "acceptanceCriteria": [
-        "Widget carrega com ≤5 queries",
-        "Contadores de guests corretos",
-        "E2E tests passando"
+        "Página acessível em /admin/reports/excursoes",
+        "Propriedade $activeTab com default excursoes",
+        "Método switchTab($tab) chama resetTable()",
+        "Label Gestão de Excursionistas, grupo EXCURSIONISTAS"
       ],
       "priority": 1,
-      "passes": true,
-      "notes": "P0 - CRÍTICO. Commit: 100f4bb"
+      "passes": true
     },
     {
       "id": "feat-002",
-      "title": "Adicionar veiculo_id no VeiculosRelationManager repeater",
-      "description": "No mutateRelationshipDataBeforeCreateUsing do Repeater de monitores, adicionar veiculo_id.",
+      "title": "CRUD Excursões — CreateAction, EditAction, DeleteAction",
+      "description": "Tabela Filament para aba excursoes: colunas, CreateAction com modal (nome, event_id/criado_por auto), EditAction, DeleteAction com confirmação.",
       "acceptanceCriteria": [
-        "Monitor criado via repeater tem veiculo_id preenchido",
-        "ListMonitores mostra monitores do veículo correto"
+        "Criar excursão salva event_id e criado_por automaticamente",
+        "Editar abre modal com dados preenchidos",
+        "Excluir remove com confirmação"
       ],
       "priority": 2,
-      "passes": true,
-      "notes": "P1 - BUG. Commit: f34cc5a"
+      "passes": true
     },
     {
       "id": "feat-003",
-      "title": "Adicionar authorization nos RelationManagers",
-      "description": "Implementar canCreate(), canEdit(), canDelete() em VeiculosRelationManager e MonitoresRelationManager.",
+      "title": "CRUD Veículos — CreateAction, EditAction, DeleteAction",
+      "description": "Tabela Filament para aba veiculos. CreateAction com tipo Select, placa opcional, excursao_id Select filtrado por event_id.",
       "acceptanceCriteria": [
-        "Usuário não consegue criar/editar/deletar recursos de outros",
-        "Retorna 403 quando negado"
+        "Select de excursão filtra por evento",
+        "Tipo exibe label correto",
+        "Veículos sem placa exibem traço"
       ],
       "priority": 3,
-      "passes": true,
-      "notes": "P1 - SECURITY. Commit: bb4eb61"
+      "passes": true
     },
     {
       "id": "feat-004",
-      "title": "Corrigir mass assignment em Guest model",
-      "description": "Remover is_checked_in, checked_in_at, checked_in_by do $fillable. Check-in via método dedicado.",
+      "title": "CRUD Monitores — CreateAction, EditAction, DeleteAction",
+      "description": "Tabela Filament para aba monitores. CreateAction com nome, document_type, document_number, veiculo_id opcional.",
       "acceptanceCriteria": [
-        "is_checked_in não pode ser setado via fill()",
-        "Check-in funciona via GuestService ou Observer"
+        "Monitor sem veículo exibe Sem veículo",
+        "Unique constraint exibe validação amigável",
+        "event_id e criado_por auto-preenchidos"
       ],
       "priority": 4,
-      "passes": true,
-      "notes": "P1 - SECURITY. Commit: c3c9a5a"
+      "passes": true
     },
     {
       "id": "feat-005",
-      "title": "Adicionar validação no ValidatorGuestForm",
-      "description": "Seguir padrão do PromoterGuestForm: maxLength, placeholder, labels.",
+      "title": "View Blade com abas clicáveis e contadores",
+      "description": "Criar excursoes-gestao.blade.php com abas, wire:click=switchTab, aba ativa destacada, contador de registros e {{ $this->table }}.",
       "acceptanceCriteria": [
-        "Todos campos com validação adequada",
-        "Consistência com PromoterGuestForm"
+        "Clicar em aba muda tabela exibida",
+        "Contador reflete dados do evento",
+        "Filtros funcionam em todas as abas"
       ],
       "priority": 5,
-      "passes": true,
-      "notes": "P2 - BUG. Commit: 2863c91"
+      "passes": true
     },
     {
       "id": "feat-006",
-      "title": "Corrigir unique constraint em monitores",
-      "description": "Constraint única em [event_id, document_type, document_number].",
+      "title": "Testes — CRUD das 3 entidades + Pint clean",
+      "description": "Atualizar testes cobrindo create/edit/delete em cada aba, auto-preenchimento de event_id e criado_por.",
       "acceptanceCriteria": [
-        "Constraint única com 3 colunas",
-        "Dados migrados corretamente"
+        "Todos os testes passam",
+        "Cobertura happy path e validação",
+        "Pint clean sem erros"
       ],
       "priority": 6,
-      "passes": true,
-      "notes": "P2 - DATA INTEGRITY. Commit: c11d036"
+      "passes": true
     }
   ]
 }

@@ -1,0 +1,40 @@
+<h2>Como estruturar a gestão de excursionistas?</h2>
+<p class="subtitle">Três abordagens diferentes — cada uma com trade-offs de UX e complexidade</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Tabelas com ações inline + modais</h3>
+      <p>Mantém o layout atual de relatório. Cada linha ganha botões <strong>Editar</strong> e <strong>Excluir</strong>. Um botão <strong>+ Novo</strong> em cada seção abre um modal de cadastro. Tudo acontece sem sair da página.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Prós</h4><ul><li>Fluxo rápido, sem navegação</li><li>Contexto visual permanece</li><li>Leve de implementar</li></ul></div>
+        <div class="cons"><h4>Contras</h4><ul><li>Formulários de modal têm espaço limitado</li><li>Sem ordenação/busca nas colunas</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Página com abas — tabela Filament por entidade</h3>
+      <p>Três abas: <strong>Excursões</strong>, <strong>Veículos</strong>, <strong>Monitores</strong>. Cada aba é uma tabela Filament nativa com busca, ordenação, filtros e ações completas (criar, editar, excluir). Modais de formulário do próprio Filament.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Prós</h4><ul><li>Busca e ordenação por coluna</li><li>Formulários espaçosos nos modais</li><li>Padrão Filament nativo — consistente</li></ul></div>
+        <div class="cons"><h4>Contras</h4><ul><li>Perde a visão simultânea das 3 entidades</li><li>Mais código para configurar</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Painel de gestão hierárquico</h3>
+      <p>Seleciona uma <strong>Excursão</strong> na lista principal. Ao clicar, expande inline mostrando seus <strong>Veículos</strong> e, dentro de cada veículo, seus <strong>Monitores</strong>. Botões de ação contextuais em cada nível da hierarquia.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Prós</h4><ul><li>Reflete a hierarquia real dos dados</li><li>Navegação intuitiva Excursão → Veículo → Monitor</li><li>Evita confusão de qual veículo pertence a qual excursão</li></ul></div>
+        <div class="cons"><h4>Contras</h4><ul><li>Mais complexo de implementar</li><li>Difícil buscar monitores sem saber a excursão</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
