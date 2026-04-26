@@ -107,11 +107,11 @@ class MonitoresRelationManager extends RelationManager
                             ->where('excursao_id', $livewire->getOwnerRecord()->id)
                             ->get()
                             ->mapWithKeys(fn (Veiculo $v): array => [
-                                $v->id => $v->tipo->label().($v->placa ? ' — '.$v->placa : ''),
+                                $v->id => $v->tipo->label(),
                             ])
                             ->all();
                     })
-                    ->required()
+                    ->nullable()
                     ->native(false),
             ]);
     }
