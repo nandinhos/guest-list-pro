@@ -23,6 +23,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use UnitEnum;
 
 class ExcursoesGestao extends Page implements HasTable
@@ -382,7 +383,13 @@ class ExcursoesGestao extends Page implements HasTable
                         TextInput::make('document_number')
                             ->label('Número do Documento')
                             ->required()
-                            ->maxLength(20),
+                            ->maxLength(20)
+                            ->rules(fn (callable $get) => [
+                                Rule::unique('monitores', 'document_number')
+                                    ->where('event_id', $this->selectedEventId)
+                                    ->where('document_type', $get('document_type')),
+                            ])
+                            ->validationMessages(['unique' => 'Este documento já está cadastrado para este evento.']),
 
                         Select::make('veiculo_id')
                             ->label('Veículo')
@@ -426,7 +433,14 @@ class ExcursoesGestao extends Page implements HasTable
                         TextInput::make('document_number')
                             ->label('Número do Documento')
                             ->required()
-                            ->maxLength(20),
+                            ->maxLength(20)
+                            ->rules(fn (callable $get, ?Monitor $record) => [
+                                Rule::unique('monitores', 'document_number')
+                                    ->where('event_id', $this->selectedEventId)
+                                    ->where('document_type', $get('document_type'))
+                                    ->ignore($record?->id),
+                            ])
+                            ->validationMessages(['unique' => 'Este documento já está cadastrado para este evento.']),
 
                         Select::make('veiculo_id')
                             ->label('Veículo')

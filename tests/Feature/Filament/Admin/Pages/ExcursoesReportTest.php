@@ -201,4 +201,27 @@ class ExcursoesReportTest extends TestCase
             'criado_por' => $this->admin->id,
         ]);
     }
+
+    public function test_create_monitor_rejects_duplicate_document_same_event(): void
+    {
+        Monitor::factory()->create([
+            'event_id' => $this->event->id,
+            'document_type' => DocumentType::CPF,
+            'document_number' => '12345678901',
+            'criado_por' => $this->admin->id,
+        ]);
+
+        Livewire::actingAs($this->admin)
+            ->test(ExcursoesGestao::class)
+            ->set('selectedEventId', $this->event->id)
+            ->call('switchTab', 'monitores')
+            ->callTableAction('createMonitor', data: [
+                'nome' => 'Outro Monitor',
+                'document_type' => DocumentType::CPF->value,
+                'document_number' => '12345678901',
+                'veiculo_id' => null,
+            ]);
+
+        $this->assertDatabaseCount('monitores', 1);
+    }
 }
